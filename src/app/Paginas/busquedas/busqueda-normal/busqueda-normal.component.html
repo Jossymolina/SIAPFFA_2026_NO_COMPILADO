@@ -1,0 +1,216 @@
+<ng-container *ngIf="formularioBuscar === 0">
+
+  <div class="form-wrapper">
+    <div class="card form-card p-3">
+
+      <!-- HEADER -->
+      <div class="form-header mb-2">
+        <!-- Botón Atrás -->
+        <button type="button" class="btn btn-sm btn-back-modern" title="Atrás"
+          (click)="atrasLink('menu/menu-busqueda')">
+          <i class="fa fa-fast-backward"></i>
+          <span>Atrás</span>
+        </button>
+        <div class="form-title">
+          Consulta simple
+          <div class="form-subtitle">
+            Búsqueda rápida por identidad o nombre
+          </div>
+        </div>
+
+        <!-- espacio derecho (por si luego agregás algo) -->
+        <div class="d-none d-sm-block">
+          <!-- vacío por ahora -->
+        </div>
+      </div>
+
+      <!-- BODY -->
+      <div class="mt-1">
+
+        <label class="form-label" style="color: #dc3545;">
+          * Consulta más rápida que la personalizada
+        </label>
+
+        <form class="row g-3 mt-1" #formBuscar="ngForm" (ngSubmit)="busquedaSimple(formBuscar)">
+
+          <!-- IDENTIDAD / NOMBRE -->
+          <div class="col-12 col-md-5">
+            <label class="form-label">Identidad / Nombre</label>
+            <input type="text" class="form-control" name="nombre_id" #nombre_id="ngModel" ngModel required
+              placeholder="Escriba identidad o nombre..." />
+          </div>
+
+          <!-- ESTADO -->
+          <div class="col-12 col-md-3">
+            <label class="form-label d-block">Estado</label>
+
+            <div class="d-flex flex-column gap-1">
+
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" [checked]="estado.activos" id="chkActivos"
+                  (click)="activofn()" />
+                <label class="form-check-label" for="chkActivos">
+                  Activos
+                </label>
+              </div>
+
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" [checked]="estado.bajas" id="chkBajas"
+                  (click)="bajafn()" />
+                <label class="form-check-label" for="chkBajas">
+                  Bajas
+                </label>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- BOTÓN BUSCAR -->
+          <div class="col-12 col-md-2 d-flex align-items-end">
+            <button class="btn-back-modern w-100" pButton type="submit" [disabled]="!formBuscar.valid">
+              <i class="pi pi-search me-1"></i>
+              <span>Buscar</span>
+            </button>
+          </div>
+
+        </form>
+
+      </div>
+
+    </div>
+  </div>
+
+</ng-container>
+
+<ng-container *ngIf="formularioBuscar === 1">
+
+  <div class="form-wrapper">
+    <div class="card form-card p-3">
+
+      <!-- HEADER -->
+      <div class="form-header mb-3">
+
+        <!-- Botón Atrás -->
+        <button type="button" class="btn btn-sm btn-back-modern" title="Atrás" (click)="atras(0)">
+          <i class="fa fa-fast-backward"></i>
+          <span>Atrás</span>
+        </button>
+
+        <div class="form-title">
+          Resultados avanzados
+          <div class="form-subtitle">
+            Lista detallada del personal consultado
+          </div>
+        </div>
+
+        <div class="d-none d-sm-block"></div>
+      </div>
+
+      <!-- BODY -->
+      <div class="mt-1">
+
+        <!-- BARRA DE FILTRO + EXPORTAR -->
+        <div class="row g-2 align-items-end mb-2">
+
+          <!-- FILTRO -->
+          <div class="col-12 col-md-4">
+            <label class="form-label mb-1">Filtrar</label>
+            <input pInputText type="text" class="w-100" placeholder="Filtrar por identidad, nombre, grado..."
+              [(ngModel)]="filtroTexto" (ngModelChange)="aplicarFiltro()" />
+          </div>
+
+          <!-- RESUMEN / CONTADOR -->
+          <div class="col-12 col-md-4">
+            <label class="form-label mb-1 d-block">Registros</label>
+            <span>
+              {{ (arregloResultadoFiltrado?.length || arregloResultado_?.length || 0) }}
+              resultados
+            </span>
+          </div>
+
+          <!-- BOTÓN EXPORTAR EXCEL -->
+          <div class="col-12 col-md-4 d-flex justify-content-md-end">
+            <button type="button" class="btn-back-modern w-100 w-md-auto" pButton (click)="exportarExcel()">
+              <i class="pi pi-file-excel me-1"></i>
+              <span>Exportar a Excel</span>
+            </button>
+          </div>
+
+        </div>
+
+        <!-- TABLA -->
+        <div class="table-responsive" style="max-height: 600px; min-height: 400px; overflow-y: auto;">
+          <table class="table table-sm table-hover align-middle">
+
+            <thead class="table-light">
+              <tr>
+                <th>Opt</th>
+                <th>Foto</th>
+                <th>Identidad</th>
+                <th>Grado</th>
+                <th>Categoría</th>
+                <th>Nombres</th>
+                <th>Apellidos</th>
+                <th>Serie</th>
+                <th>Estado</th>
+                <th>Combatiente</th>
+                <th>Tiempo Asignación</th>
+                <th>Pasaporte</th>
+                <th>Religión</th>
+                <th>Sangre</th>
+                <th>Género</th>
+                <th>Fecha Nacimiento</th>
+                <th>Edad</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <!-- usa el filtrado si existe, si no, el arreglo original -->
+              <tr *ngFor="let i of (arregloResultadoFiltrado || arregloResultado_)">
+
+                <!-- OPT -->
+                <td>
+                  <i class="pi pi-eye" style="cursor: pointer;" (click)="verPerfil(i)" title="Ver perfil"></i>
+                </td>
+
+                <!-- FOTO -->
+                <td>
+                  <img class="profile-list-photo" [src]="_ServiciosSiapffaaService.url2 + 'sacarfoto/' + i?.foto"
+                    alt="Foto" />
+                </td>
+
+                <td>{{ i.identidad }}</td>
+                <td>{{ i.grado }}</td>
+                <td>{{ i.categoria }}</td>
+                <td>{{ i.nombre }}</td>
+                <td>{{ i.apellido }}</td>
+                <td>{{ i.serie }}</td>
+
+                <td [style.color]="i.activo === 1 ? 'blue' : 'red'">
+                  {{ i.activo === 1 ? 'Activo' : 'Baja' }}
+                </td>
+
+                <td>{{ i.combatiente === 1 ? 'Si' : 'No' }}</td>
+                <td>{{ i.unidad_asignado }}</td>
+                <td>{{ i.pasaporte }}</td>
+                <td>{{ i.religion }}</td>
+                <td>{{ i.sangre }}</td>
+                <td>{{ i.sexo }}</td>
+                <td>{{ i.fecha_nacimiento | date : 'yyyy-MM-dd' : 'UTC' }}</td>
+                <td>{{ i.edad }}</td>
+
+              </tr>
+            </tbody>
+
+          </table>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+</ng-container>
+<ng-container *ngIf="formularioBuscar === 3">
+<app-visualizar-perfil [identidad]="personaSelecionada.identidad" ></app-visualizar-perfil>
+</ng-container>

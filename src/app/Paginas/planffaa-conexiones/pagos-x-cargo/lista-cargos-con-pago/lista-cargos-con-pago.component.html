@@ -1,0 +1,102 @@
+@if (permisoPersonal) {
+  <div class="card shadow-lg border-0 rounded-4 mt-3">
+    <!-- HEADER -->
+    <div class="card-header bg-danger text-white rounded-top-4 d-flex justify-content-between align-items-center px-4">
+      <h5 class="mb-0 d-flex align-items-center gap-2">
+        <i class="pi pi-briefcase me-2"></i>
+        Lista de cargos con pago
+      </h5>
+
+      <button
+        pButton
+        type="button"
+        class="p-button-sm p-button-success p-button-rounded d-flex align-items-center gap-2"
+        (click)="exportar('tabla_pxc')">
+        <i class="pi pi-file-excel"></i>
+        <span>Exportar</span>
+      </button>
+    </div>
+
+    <!-- BODY -->
+    <div class="card-body px-4 pb-4 pt-3">
+      <!-- FILTRO -->
+      <div class="row justify-content-end mb-3">
+        <div class="col-md-6 col-lg-4">
+          <div class="input-group input-group-sm">
+            <span class="input-group-text">
+              <i class="pi pi-search"></i>
+            </span>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Buscar por fuerza, unidad, cargo, grados..."
+              [(ngModel)]="filtroCargos"
+              name="filtroCargos"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTADOR -->
+      <div class="mb-2 small text-muted d-flex justify-content-between px-1">
+        <span *ngIf="!filtroCargos">
+          Total: <strong>{{ arregloLista?.length || 0 }}</strong> cargos
+        </span>
+
+        <span *ngIf="filtroCargos">
+          Mostrando <strong>{{ listaFiltradaCargos().length }}</strong> de
+          <strong>{{ arregloLista?.length || 0 }}</strong> cargos
+        </span>
+      </div>
+
+      <!-- TABLA -->
+      <div class="tabla-wrapper">
+        <table
+          id="tabla_pxc"
+          class="table tabla-cargos-pago table-hover align-middle mb-0"
+        >
+          <thead>
+            <tr>
+              <th class="col-num">#</th>
+              <th>Fuerza / Dependencia</th>
+              <th>Dirección / Unidad</th>
+              <th>Dirección / Sección</th>
+              <th>Cargo</th>
+              <th>Grados</th>
+              <th class="col-monto">Monto</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (item of listaFiltradaCargos(); track i; let i = $index) {
+              <tr>
+                <td class="text-center">{{ i + 1 }}</td>
+                <td>{{ item.nombre }}</td>
+                <td>{{ item.unidad }}</td>
+                <td>{{ item.descripcion }}</td>
+                <td>{{ item.Nombre_Puesto }}</td>
+                <td class="text-center">{{ item.grados }}</td>
+                <td class="text-end">
+                  {{ (((item.monto | currency : "":"").replace(',','_').replace(".",","))).replace("_",".") }}
+                </td>
+              </tr>
+            }
+
+            @if (!arregloLista || listaFiltradaCargos().length === 0) {
+              <tr>
+                <td colspan="7" class="text-center text-muted py-3">
+                  <i class="pi pi-info-circle me-1"></i>
+                  No hay cargos que coincidan con el filtro.
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+} @else {
+  <div class="alert alert-danger mt-3 mb-0">
+    No cuenta con los permisos
+  </div>
+}

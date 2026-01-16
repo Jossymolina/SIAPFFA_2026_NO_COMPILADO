@@ -1,0 +1,53 @@
+ <div class="card">
+  <div class="top">
+    <div>
+      <h2>SQL Editor</h2>
+      <p class="muted">Las palabras clave se resaltan en azul.</p>
+    </div>
+
+    <div class="btns">
+      <button class="btn" type="button" (click)="capturarTexto()">Consultar</button>
+      <button class="btn btn-ghost" type="button" (click)="limpiar()">Limpiar</button>
+       
+
+      
+    </div>
+  </div>
+
+  <div class="editor-wrap">
+    <pre #pre class="hl" [innerHTML]="highlighted()"></pre>
+
+    <!-- podés dejar clases PrimeNG -->
+    <textarea
+      #ta
+      class="ta p-inputtextarea p-inputtext"
+      spellcheck="false"
+      [value]="sql()"
+      (input)="onInput(ta.value)"
+      (scroll)="onScroll()"
+    ></textarea>
+  </div>
+
+  <div class="meta">
+    <span class="muted">{{ chars() }} caracteres</span>
+    <span class="muted">{{ lines() }} líneas</span>
+  </div>
+</div>
+
+
+ 
+
+
+<p-dialog
+  header="Resultado de la consulta"
+  [(visible)]="visible"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="true"
+  [maximizable]="true"
+  [style]="{ width: '95vw', height: '90vh' }"
+  [contentStyle]="{ height: 'calc(90vh - 60px)', overflow: 'auto' }"
+  [baseZIndex]="10000"
+>
+  <app-resultado-query [response]="resultadoConsulta"></app-resultado-query>
+</p-dialog>

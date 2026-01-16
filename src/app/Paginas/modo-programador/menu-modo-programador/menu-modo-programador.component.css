@@ -1,0 +1,239 @@
+  
+
+/* Fondo general y layout a pantalla completa */
+.dashboard-root {
+  height: 100%;
+  background: #f5f7fb;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Contenedor principal centrado */
+.dashboard-wrapper {
+  padding: 0.75rem;
+  padding-top: 1rem;
+  max-width: 100%;
+  margin: 0 auto 1.5rem auto;
+  flex: 1; /* ocupa todo el alto restante entre top-bar y bottom */
+  display: flex;
+  flex-direction: column;
+}
+
+/* === TOP BAR === */
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+  border-radius: 1rem;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid #e3e6ec;
+}
+
+.top-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.top-bar-text .welcome {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.top-bar-text .subtitle {
+  font-size: 0.75rem;
+  color: #6c757d;
+}
+
+/* Lado derecho: estado + botón menú */
+.top-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  background-color: #e0f9ea;
+  color: #137333;
+  font-size: 0.7rem;
+}
+
+.status-pill .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #34a853;
+}
+
+/* Botón hamburguesa visible */
+.top-menu-btn {
+  width: 2.3rem;
+  height: 2.3rem;
+  border-color: #d0d7ff;
+  background-color: #f7f8ff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.top-menu-btn .p-button-icon {
+  font-size: 1.2rem;
+  color: #0d6efd;
+}
+
+.top-menu-btn:hover {
+  background-color: #e9edff;
+  border-color: #bcc6ff;
+}
+
+/* === GRID DE MÓDULOS === */
+.modules-container {
+  margin-top: 1.2rem;
+
+  /* IMPORTANTE: que use el alto restante y pueda hacer scroll si hay muchos módulos */
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 0.1rem;
+}
+
+/* Tarjeta de módulo */
+.module-card {
+  border-radius: 1.5rem !important;
+  border: none;
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.06);
+  transition: transform 0.12s ease-out, box-shadow 0.12s ease-out;
+  cursor: pointer;
+}
+
+.module-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
+}
+
+/* Contenido interno */
+.module-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0.9rem 0.9rem 1rem;
+}
+
+/* Icono grande */
+.module-icon-wrapper {
+  width: 48px;
+  height: 48px;
+  border-radius: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.7rem;
+  background: #f1f5f9;
+}
+
+.module-icon {
+  font-size: 1.4rem;
+  color: #0d6efd;
+}
+
+.module-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0 0 0.25rem;
+}
+
+.module-description {
+  font-size: 0.8rem;
+  color: #6c757d;
+  margin: 0;
+}
+
+/* === DRAWER (menú hamburguesa) === */
+.menu-sidebar {
+  width: 270px;
+  max-width: 80vw;
+  padding: 0;
+}
+
+.menu-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.9rem 1rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.menu-header-text .name {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.menu-header-text .role {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.menu-items {
+  padding: 0.5rem 0.4rem 0.8rem;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.55rem 0.8rem;
+  border-radius: 0.8rem;
+  cursor: pointer;
+  transition: background-color 0.12s ease-out, transform 0.08s ease-out;
+}
+
+.menu-item:hover {
+  background-color: #eef2ff;
+  transform: translateX(-2px);
+}
+
+.menu-item-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 0.9rem;
+  background-color: #e0ebff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-item-icon i {
+  font-size: 1.1rem;
+  color: #0d6efd;
+}
+
+.menu-item-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Ajustes móviles */
+@media (max-width: 575.98px) {
+  .dashboard-wrapper {
+    padding: 0.6rem;
+    margin-bottom: 0;
+  }
+
+  .top-bar {
+    border-radius: 0.9rem;
+    padding: 0.5rem 0.7rem;
+  }
+
+  .module-card {
+    border-radius: 1.2rem !important;
+  }
+
+  .module-content {
+    padding: 0.85rem 0.85rem 0.95rem;
+  }
+}

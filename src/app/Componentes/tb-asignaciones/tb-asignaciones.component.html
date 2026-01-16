@@ -1,0 +1,517 @@
+<!-- ENCABEZADO + BOTÓN ACCIÓN -->
+<div class="dashboard-section-card">
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <h5 class="top-bar-title">
+        Asignaciones y situación del personal
+      </h5>
+      <p class="top-bar-subtitle">
+        Gestión de fuerza, unidad, direcciones y situaciones especiales.
+      </p>
+    </div>
+    <!---  *ngIf="_DatospersonalesService.verificarPermisos(1) 
+             || _DatospersonalesService.verificarPermisos(2) 
+             || _DatospersonalesService.verificarPermisos(3)  
+             || _DatospersonalesService.verificarPermisos(4)"-->
+
+    <div class="top-bar-right"
+    *ngIf="permisoTrnsferencia"
+       >
+      <button class="btn btn-main-action btn-dashboard-action"
+              (click)="sacarFuerza(); mostrarModalAsignaciones = true"
+              title="Reasignar personal">
+        <i class="fa fa-exchange" aria-hidden="true"></i>
+        <span>Reasignar personal</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- TABLA: ASIGNACIONES -->
+  <div class="card table-card mt-2">
+    <div class="card-body p-2">
+      <table class="table table-bordered table-hover table-sm table-striped mb-0">
+        <thead class="bg-header-soft">
+          <tr>
+            <th style="width: 40px;">#</th>
+            <th>Fuerza</th>
+            <th>Unidad</th>
+            <th>Fecha de Asignación</th>
+            <th>Observación</th>
+            <th>Tiempo Asignado</th>
+            <th style="width: 70px;">Opt</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let f of arregloAsignaciones; let index = index">
+            <!-- Asignación actual -->
+            <tr *ngIf="f.actual === 1" class="fila-actual">
+              <td>{{ index + 1 }}</td>
+              <td>{{ f.nombre }}</td>
+              <td>{{ f.unidad }}</td>
+              <td>{{ f.fecha_asignacionFormat }}</td>
+              <td>
+                <span class="badge badge-actual">
+                  Asignación actual
+                </span>
+              </td>
+              <td>{{ f.SERVICIO }} años</td>
+              <td class="text-center">
+                @if(permisoTrnsferencia){
+         <button type="button"
+               
+                        class="btn btn-outline-primary btn-sm btn-icon-only"
+                        title="Dirección a la que pertenece"
+                        (click)="Sacar_Direcciones(f); mostrarModalDirecciones = true">
+                  <i class="pi pi-plus" aria-hidden="true"></i>
+                </button>
+                }@else {
+                  <p>No Administrador</p>
+                }
+               
+              </td>
+            </tr>
+
+            <!-- Asignaciones anteriores -->
+            <tr *ngIf="f.actual !== 1">
+              <td>{{ index + 1 }}</td>
+              <td>{{ f.nombre }}</td>
+              <td>{{ f.unidad }}</td>
+              <td>{{ f.fecha_asignacionFormat }}</td>
+              <td class="text-muted small">Anterior</td>
+              <td class="text-muted"></td>
+              <td></td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <p class="mt-1 text-danger small fw-semibold">
+    * Situación del personal
+  </p>
+
+  <!-- TABLA: SITUACIÓN PERSONAL -->
+  <div class="card table-card mt-2">
+    <div class="card-body p-2">
+      <table class="table table-bordered table-hover table-sm table-striped mb-0">
+        <thead class="bg-header-soft">
+          <tr>
+            <th>Situación</th>
+            <th>Asignación</th>
+            <th>Desde</th>
+            <th>Hasta</th>
+            <th>Estado</th>
+            <th style="width: 55px;">Opt</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of arrgloSituacioPersonal">
+            <td>{{ item.situacion }}</td>
+            <td>{{ item.asignacion }}</td>
+            <td>{{ item.desde | date : 'yyyy/MM/dd' : 'UTC' }}</td>
+            <td>{{ item.hasta | date : 'yyyy/MM/dd' : 'UTC' }}</td>
+            <td>
+              <span class="estado-chip"
+                    [ngClass]="item.estado === 'activo' ? 'estado-activo' : 'estado-inactivo'">
+                {{ item.estado }}
+              </span>
+            </td>
+            <td class="text-center">
+               @if(permisoTrnsferencia){
+   <i class="estado-icon"
+                 (click)="desactivarSituacion(item)"
+                 [class]="item.estado === 'activo' ? 'pi pi-thumbs-up-fill' : 'pi pi-thumbs-down-fill'"
+                 aria-hidden="true"></i>
+               }@else {
+   <p>No Administrador</p>
+               }
+           
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<!-- MODAL DIRECCIONES -->
+<p-dialog
+  header="Asignación de Dirección | Sección"
+  [(visible)]="mostrarModalDirecciones"
+  [modal]="true"
+  [style]="{ width: '90vw', maxWidth: '1100px' }"
+  [contentStyle]="{ 'max-height': '70vh', 'overflow': 'auto' }"
+  [dismissableMask]="true"
+  appendTo="body"
+  class="dialog-dashboard">
+
+  <div class="row g-2 modal-body-grid">
+    <!-- Controles solo si tiene permiso s *ngIf="_DatospersonalesService.verificarPermisos(1) 
+                      || _DatospersonalesService.verificarPermisos(2) 
+                      || _DatospersonalesService.verificarPermisos(3)  
+                      || _DatospersonalesService.verificarPermisos(4)" -->
+    <ng-container >
+
+      <div class="col-md-8">
+        <label class="form-label fw-semibold">
+          Seleccione la Dirección | Sección
+        </label>
+        <select name="direccionSelected"
+                [(ngModel)]="direccionSelected"
+                class="form-control">
+          <option [ngValue]="i" *ngFor="let i of ArregloNombramiento">
+            {{ i.descripcion }}
+          </option>
+        </select>
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label fw-semibold">
+          Fecha Asignación
+        </label>
+        <input type="date"
+               class="form-control"
+               [(ngModel)]="fechaSelected"
+               name="fechaSelected">
+      </div>
+    </ng-container>
+
+    <!-- Tabla de asignaciones -->
+    <div class="col-md-12 mt-2">
+      <div class="table-wrapper-scroll-y my-custom-scrollbar">
+        <table class="table table-bordered table-striped table-sm mb-0 text-center">
+          <thead class="bg-header-soft">
+            <tr>
+              <th>Unidad</th>
+              <th>Dir.</th>
+              <th>Fecha Asig.</th>
+              <th>Fecha Salida</th>
+              <th>Act.</th>
+              <th>Obs.</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Actual  *ngIf="_DatospersonalesService.verificarPermisos(1) 
+                              || _DatospersonalesService.verificarPermisos(2) 
+                              || _DatospersonalesService.verificarPermisos(3)  
+                              || _DatospersonalesService.verificarPermisos(4)"-->
+            <ng-container *ngFor="let item of arreglosDeMisAsignacionesDirecciones">
+              <tr *ngIf="item.activo === 1" class="fila-actual-direccion">
+                <td>{{ item.unidad }}</td>
+                <td>{{ item.descripcion }}</td>
+                <td>{{ item.fechaInicio }}</td>
+                <td>{{ item.fechaFin }}</td>
+                <td><span class="badge badge-actual">Actual</span></td>
+                <td class="text-center">
+                  <button class="btn btn-outline-danger btn-sm btn-icon-only"
+                          
+                          title="Desactivar la asignación de esta dirección"
+                          (click)="desactivarAsignacionDireccion(item)">
+                    <i class="pi pi-times-circle" aria-hidden="true"></i>
+                  </button>
+
+                  <button class="btn btn-success btn-sm btn-icon-only ms-1"
+                          title="Dirección a la que pertenece"
+                          (click)="selecionardireccion(item); mostrarModalCargo = true">
+                    <i class="pi pi-plus-circle" aria-hidden="true"></i>
+                  </button>
+                </td>
+              </tr>
+            </ng-container>
+
+            <!-- No actuales -->
+            <ng-container *ngFor="let item of arreglosDeMisAsignacionesDirecciones">
+              <tr *ngIf="item.activo !== 1">
+                <td>{{ item.unidad }}</td>
+                <td>{{ item.descripcion }}</td>
+                <td>{{ item.fechaInicio }}</td>
+                <td>{{ item.fechaFin }}</td>
+                <td>No</td>
+                <td></td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="mostrarModalDirecciones = false">
+      Cerrar
+    </button>
+    <!--*ngIf="_DatospersonalesService.verificarPermisos(1) 
+                || _DatospersonalesService.verificarPermisos(2) 
+                || _DatospersonalesService.verificarPermisos(3)  
+                || _DatospersonalesService.verificarPermisos(4)"-->
+    <button 
+            type="button"
+            class="btn btn-primary"
+            (click)="guardarAsignacionDireccion()">
+      Guardar
+    </button>
+  </ng-template>
+</p-dialog>
+
+
+<!-- MODAL CARGO -->
+<p-dialog
+  header="Cargo"
+  [(visible)]="mostrarModalCargo"
+  [modal]="true"
+  [style]="{ width: '85vw', maxWidth: '1000px' }"
+  appendTo="body"
+  class="dialog-dashboard">
+  <app-tb-cargo
+    *ngIf="direccionSelected"
+    [persona]="objetoConsultado"
+    [direccion]="direccionSelected">
+  </app-tb-cargo>
+
+  <ng-template pTemplate="footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="mostrarModalCargo = false">
+      Cerrar
+    </button>
+  </ng-template>
+</p-dialog>
+
+
+<!-- MODAL ASIGNACIONES -->
+<p-dialog
+  header="Asignaciones"
+  [(visible)]="mostrarModalAsignaciones"
+  [modal]="true"
+  [style]="{ width: '90vw', maxWidth: '1100px' }"
+  [contentStyle]="{ 'max-height': '75vh', 'overflow': 'auto' }"
+  appendTo="body"
+  class="dialog-dashboard">
+
+  <div class="row">
+    <p-tabs [(value)]="activeTab" class="tabs-dashboard">
+      <!-- LISTA DE TABS (ENCABEZADOS) -->
+      <p-tablist>
+        <p-tab value="asignar">
+          Asignar
+        </p-tab>
+        <p-tab value="situacion">
+          Situación
+        </p-tab>
+      </p-tablist>
+
+      <!-- CONTENIDO DE LOS TABS -->
+      <p-tabpanels>
+
+        <!-- TAB: Asignar -->
+        <p-tabpanel value="asignar">
+          <div class="row g-2">
+            <div class="col-md-12">
+              <label class="form-label fw-semibold">
+                Seleccione la Fuerza:
+              </label>
+              <select class="form-control"
+                      (change)="sacarunidades()"
+                      [(ngModel)]="fuerzaSelected"
+                      name="fuerzaSelected">
+                <ng-container *ngFor="let y of arregloFuerzas">
+                  <option [ngValue]="y">{{ y.nombre }}</option>
+                </ng-container>
+              </select>
+            </div>
+
+            <div class="col-md-12">
+              <label class="form-label fw-semibold">
+                Seleccione la unidad:
+              </label>
+              <select [(ngModel)]="unidadSelected"
+                      name="unidadSelected"
+                      class="form-control">
+                <option *ngFor="let y of ArregloUnidades" [ngValue]="y">
+                  {{ y.unidad }}
+                </option>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">
+                Seleccione la Fecha de Asignación:
+              </label>
+              <input [(ngModel)]="fechaSelected"
+                     class="form-control"
+                     type="date"
+                     name="fechaSelected">
+            </div>
+
+            <div class="col-md-12 mt-3 d-flex justify-content-end gap-2">
+              <button type="button"
+                      class="btn btn-outline-secondary"
+                      (click)="mostrarModalAsignaciones = false">
+                <i class="fa fa-times-circle" aria-hidden="true"></i>
+                Cerrar
+              </button>
+              <button type="button"
+                      class="btn btn-primary"
+                      (click)="reasignar()">
+                <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                Guardar
+              </button>
+            </div>
+          </div>
+        </p-tabpanel>
+
+        <!-- TAB: Situación -->
+        <p-tabpanel value="situacion">
+          <form #ngFromsituacion="ngForm" class="row g-2">
+            <div class="col-md-4">
+              <label class="form-label fw-semibold">
+                Situación:
+              </label>
+              <select (change)="sacarDetalleSicuacion(ngFromsituacion)"
+                      name="situacion"
+                      #situacion="ngModel"
+                      ngModel
+                      required
+                      class="form-control">
+                <option *ngFor="let y of arregloSituacion" [ngValue]="y">
+                  {{ y.descripcion }}
+                </option>
+              </select>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label fw-semibold">
+                Detalle:
+              </label>
+              <select name="detalleSituacion"
+                      #detalleSituacion="ngModel"
+                      ngModel
+                      required
+                      class="form-control">
+                <option *ngFor="let y of arregloSituacionDetalle" [ngValue]="y">
+                  {{ y.descripcion }}
+                </option>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">
+                Seleccione la Fuerza:
+              </label>
+              <select class="form-control"
+                      required
+                      (change)="sacarunidades()"
+                      [(ngModel)]="fuerzaSelected"
+                      name="fuerzaSelected">
+                <ng-container *ngIf="objetoConsultado?.idfuerza === 2">
+                  <ng-container *ngFor="let y of arregloFuerzas">
+                    <option [ngValue]="y" *ngIf="y.idfuerza !== 3 && y.idfuerza !== 4">
+                      {{ y.nombre }}
+                    </option>
+                  </ng-container>
+                </ng-container>
+                <ng-container *ngIf="objetoConsultado?.idfuerza === 3">
+                  <ng-container *ngFor="let y of arregloFuerzas">
+                    <option [ngValue]="y" *ngIf="y.idfuerza !== 2 && y.idfuerza !== 4">
+                      {{ y.nombre }}
+                    </option>
+                  </ng-container>
+                </ng-container>
+                <ng-container *ngIf="objetoConsultado?.idfuerza === 4">
+                  <ng-container *ngFor="let y of arregloFuerzas">
+                    <option [ngValue]="y" *ngIf="y.idfuerza !== 2 && y.idfuerza !== 3">
+                      {{ y.nombre }}
+                    </option>
+                  </ng-container>
+                </ng-container>
+                <ng-container *ngIf="objetoConsultado?.idfuerza === 6">
+                  <ng-container *ngFor="let y of arregloFuerzas">
+                    <option [ngValue]="y" *ngIf="y.idfuerza === 6">
+                      {{ y.nombre }}
+                    </option>
+                  </ng-container>
+                </ng-container>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">
+                Seleccione la unidad:
+              </label>
+              <select [(ngModel)]="unidadSelected"
+                      required
+                      name="unidadSelected"
+                      class="form-control">
+                <option *ngFor="let y of ArregloUnidades" [ngValue]="y">
+                  {{ y.unidad }}
+                </option>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">
+                Fecha Inicio:
+              </label>
+              <input type="date"
+                     class="form-control"
+                     required
+                     #fechaInicio="ngModel"
+                     ngModel
+                     name="fechaInicio">
+            </div>
+
+            <!-- Fecha fin obligatoria si idsituacion === 17 -->
+            <div class="col-md-2" *ngIf="ngFromsituacion.value.situacion?.idsituacion === 17">
+              <label class="form-label fw-semibold">
+                Fecha Fin:
+              </label>
+              <input type="date"
+                     class="form-control"
+                     #fechaFin="ngModel"
+                     ngModel
+                     name="fechaFin"
+                     required>
+            </div>
+
+            <div class="col-md-4 d-flex align-items-end"
+                 *ngIf="ngFromsituacion.value.situacion?.idsituacion === 17">
+              <span class="fw-semibold">
+                Disponibles:
+                <strong class="text-danger">{{ dias_vaca_disponible }}</strong>
+              </span>
+            </div>
+
+            <!-- Fecha fin NO obligatoria -->
+            <div class="col-md-6" *ngIf="ngFromsituacion.value.situacion?.idsituacion !== 17">
+              <label class="form-label fw-semibold">
+                Fecha Fin:
+              </label>
+              <input type="date"
+                     class="form-control"
+                     #fechaFin="ngModel"
+                     ngModel
+                     name="fechaFin">
+            </div>
+
+            <div class="col-md-12 mt-3 d-flex justify-content-end gap-2">
+              <button class="btn btn-primary"
+                      *ngIf="ngFromsituacion.value.situacion?.idsituacion === 17"
+                      [disabled]="!ngFromsituacion.valid"
+                      (click)="guardarSituacion_vacaciones(ngFromsituacion)">
+                Guardar
+              </button>
+
+              <button class="btn btn-success"
+                      *ngIf="ngFromsituacion.value.situacion?.idsituacion !== 17"
+                      [disabled]="!ngFromsituacion.valid"
+                      (click)="guardarSituacion(ngFromsituacion)">
+                Guardar
+              </button>
+            </div>
+          </form>
+        </p-tabpanel>
+
+      </p-tabpanels>
+    </p-tabs>
+  </div>
+</p-dialog>

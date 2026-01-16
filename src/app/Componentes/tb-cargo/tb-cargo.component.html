@@ -1,0 +1,224 @@
+<!-- CONTENEDOR GENERAL DE CARGOS / PUESTOS -->
+<div class="dashboard-section-card mt-3">
+
+  <!-- TOP BAR: TÍTULO + BOTÓN NUEVO/CANCELAR *ngIf="_DatospersonalesService.verificarPermisos(1) 
+           || _DatospersonalesService.verificarPermisos(2) 
+           || _DatospersonalesService.verificarPermisos(3)  
+           || _DatospersonalesService.verificarPermisos(4)" -->
+  <div class="top-bar"
+       >
+
+    <div class="top-bar-left">
+      <h5 class="top-bar-title mb-0">
+        Cargos / Puestos
+      </h5>
+      <p class="top-bar-subtitle mb-0">
+        Asignación de cargos según dirección, sección o departamento.
+      </p>
+    </div>
+
+    <div class="top-bar-right d-flex align-items-center">
+      <!-- Botón Agregar -->
+      <button class="btn btn-dashboard-action"
+              *ngIf="!desplegarFormulario"
+              title="Agregar nuevo cargo"
+              (click)="desplegar(true)"
+              style="background-color: black;color: white;"
+              >
+        <i class="far fa-plus-square"></i>
+        <span>Nuevo cargo</span>
+      </button>
+
+      <!-- Botón Cancelar -->
+      <button class="btn btn-outline-danger btn-dashboard-action"
+              *ngIf="desplegarFormulario"
+              title="Cancelar"
+              (click)="desplegar(false)">
+        <i class="fa fa-times-circle" aria-hidden="true"></i>
+        <span>Cancelar</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- FORMULARIO DE NUEVO CARGO / PUESTO -->
+  <form class="card mt-2" *ngIf="desplegarFormulario">
+    <div class="card-body row g-2">
+
+      <!-- Mensaje de sección -->
+      <div class="col-12" *ngIf="seccionselected?.mensaje">
+        <div class="alert alert-danger py-1 px-2 mb-2">
+          {{ seccionselected.mensaje }}
+        </div>
+      </div>
+
+      <!-- Selector de puesto – con pagos (incluye todos) -->
+   
+      <ng-container *ngIf="permisoPagoCargo; else soloSinPagos">
+        <div class="col-md-4 col-lg-3">
+          <label class="form-label fw-semibold">
+            Cargo | Puesto (Incluyendo los de pago)
+          </label>
+          <select [(ngModel)]="puestoSelected"
+                  name="puestoSelected"
+                  class="form-control">
+            <ng-container *ngFor="let y of arregloPuestos">
+              <!-- Ocupado -->
+              <option *ngIf="y.activo === 1; else opcionLibreConPago"
+                      [ngValue]="y"
+                      [ngStyle]="{ color: 'red' }">
+                {{ y.Nombre_Puesto }} - (Ocupado)
+              </option>
+              <!-- Libre -->
+              <ng-template #opcionLibreConPago>
+                <option [ngValue]="y"
+                        [ngStyle]="{ color: 'blue' }">
+                  {{ y.Nombre_Puesto }} - (Libre)
+                </option>
+              </ng-template>
+            </ng-container>
+          </select>
+        </div>
+      </ng-container>
+
+      <!-- Selector de puesto – sin pagos (solo Bloqueado = 0) -->
+      <ng-template #soloSinPagos>
+        <div class="col-md-4 col-lg-3">
+          <label class="form-label fw-semibold">
+            Cargo | Puesto (Sin pagos)
+          </label>
+          <select [(ngModel)]="puestoSelected"
+                  name="puestoSelected"
+                  class="form-control">
+            <ng-container *ngFor="let y of arregloPuestos">
+              <!-- solo si no está bloqueado -->
+              <ng-container *ngIf="y.Bloqueado === 0">
+                <!-- Ocupado -->
+                <option *ngIf="y.activo === 1; else opcionLibreSinPago"
+                        [ngValue]="y"
+                        [ngStyle]="{ color: 'red' }">
+                  {{ y.Nombre_Puesto }} - (Ocupado)
+                </option>
+                <!-- Libre -->
+                <ng-template #opcionLibreSinPago>
+                  <option [ngValue]="y"
+                          [ngStyle]="{ color: 'blue' }">
+                    {{ y.Nombre_Puesto }} - (Libre)
+                  </option>
+                </ng-template>
+              </ng-container>
+            </ng-container>
+          </select>
+        </div>
+      </ng-template>
+
+      <!-- Acuerdo -->
+      <div class="col-md-3 col-lg-2">
+        <label class="form-label fw-semibold">
+          Acuerdo:
+        </label>
+        <input type="text"
+               [(ngModel)]="numeroAcuerdo"
+               class="form-control"
+               name="numeroAcuerdo">
+      </div>
+
+      <!-- Fecha -->
+      <div class="col-md-3 col-lg-2">
+        <label class="form-label fw-semibold">
+          Fecha:
+        </label>
+        <input [(ngModel)]="fechaSelected"
+               class="form-control"
+               type="date"
+               name="fechaSelected">
+      </div>
+
+      <!-- Botón Guardar  *ngIf="_DatospersonalesService.verificarPermisos(1) 
+                    || _DatospersonalesService.verificarPermisos(2) 
+                    || _DatospersonalesService.verificarPermisos(3)  
+                    || _DatospersonalesService.verificarPermisos(4)" -->
+      <div class="col-md-3 col-lg-2 d-flex align-items-end">
+        <button
+                type="button"
+                class="btn btn-success w-100"
+                title="Guardar cambios"
+                (click)="guardarCargo()">
+          <i class="fa fa-floppy-o" aria-hidden="true"></i>
+          <span class="ms-1">Guardar</span>
+        </button>
+      </div>
+
+      <div class="col-12 mt-2">
+        <hr class="mb-0">
+      </div>
+    </div>
+  </form>
+
+  <!-- TABLA DE CARGOS / HISTÓRICO -->
+  <div class="card mt-2">
+    <div class="card-body p-0">
+      <div class="my-custom-scrollbar-500">
+        <table class="table table-bordered table-hover table-sm table-striped mb-0" style="font-size: 13.5px;">
+          <thead class="bg-header-soft">
+            <tr>
+              <th style="width: 40px;">#</th>
+              <th>Grado</th>
+              <th>Unidad</th>
+              <th>Dirección | Sección | Depto.</th>
+              <th>Cargo</th>
+              <th>Acuerdo</th>
+              <th>Desde</th>
+              <th>Hasta</th>
+              <th style="width: 80px;">Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of arreglosRam; let index = index">
+              <td>{{ index + 1 }}</td>
+              <td>{{ item.nombre_grado }}</td>
+              <td>{{ item.unidad }}</td>
+              <td>{{ item.descripcion }}</td>
+              <td>{{ item.Nombre_Puesto }}</td>
+              <td>{{ item.acuerdo }}</td>
+
+              <!-- Fecha fin / Activo -->
+              <td>{{ item.fechaInicio | date:'yyyy/MM/dd':'UTCS' }}</td>
+              <td *ngIf="item.fechaFin; else bloqueActivo">
+                {{ item.fechaFin | date:'yyyy/MM/dd':'UTCS' }}
+              </td>
+              <ng-template #bloqueActivo>
+                <td class="texto-activo">
+                  Activo
+                </td>
+              </ng-template>
+
+              <!-- Botón estado -->
+              <td *ngIf="!item.fechaFin; else bloqueNoActivo" class="text-center">
+                <!-- *ngIf="_DatospersonalesService.verificarPermisos(1) 
+                            || _DatospersonalesService.verificarPermisos(2) 
+                            || _DatospersonalesService.verificarPermisos(3)  
+                            || _DatospersonalesService.verificarPermisos(4)"-->
+                <button (click)="desactivrPuesto()"
+                       
+                        data-placement="top"
+                        title="Puesto activo"
+                        class="btn btn-success btn-sm btn-estado-puesto">
+                  <i class="pi pi-circle-fill" aria-hidden="true"></i>
+                </button>
+              </td>
+              <ng-template #bloqueNoActivo>
+                <td class="text-center">
+                  <button title="Puesto no activo"
+                          class="btn btn-danger btn-sm btn-estado-puesto">
+                      <i class="pi pi-times-circle" aria-hidden="true"></i>
+                  </button>
+                </td>
+              </ng-template>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>

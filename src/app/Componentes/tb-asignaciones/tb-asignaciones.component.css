@@ -1,0 +1,159 @@
+.dashboard-section-card {
+  margin-top: 0.75rem;
+}
+
+/* Top bar general de tu dashboard */
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+  border-radius: 1rem;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid #e3e6ec;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.top-bar-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.top-bar-subtitle {
+  font-size: 0.78rem;
+  color: #7a8194;
+  margin-bottom: 0;
+}
+
+/* Botón grande principal */
+.btn-dashboard-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border-radius: 0.9rem;
+  padding: 0.35rem 0.9rem;
+  font-size: 0.85rem;
+}
+
+.btn-main-action {
+  background: #111827;
+  color: #ffffff;
+  border: none;
+}
+
+.btn-main-action:hover {
+  background: #020617;
+  color: #ffffff;
+}
+
+/* Botón icon-only chiquito */
+.btn-icon-only {
+  padding: 0.2rem 0.45rem;
+  border-radius: 0.5rem;
+}
+
+/* Tarjetas de tablas */
+.table-card {
+  border-radius: 0.9rem;
+  border: 1px solid #e3e6ec;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.05);
+}
+
+/* Encabezado tabla azul suave */
+.bg-header-soft {
+  background: #91a8e5 !important;
+  color: #ffffff;
+}
+
+/* Fila actual en tabla de asignaciones */
+.fila-actual {
+  background: #1f2937;
+  color: #f9fafb;
+}
+
+.fila-actual td {
+  border-color: #111827 !important;
+}
+
+/* Fila actual en tabla de direcciones */
+.fila-actual-direccion {
+  background: #ecfdf3;
+}
+
+.badge-actual {
+  background: #22c55e;
+  color: #052e16;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+/* Estado activo/inactivo tipo “chip” */
+.estado-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.1rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.estado-activo {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.estado-inactivo {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+/* Icono de cambiar estado */
+.estado-icon {
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+/* Scroll tabla dentro de diálogo */
+.my-custom-scrollbar {
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+/* Diálogos PrimeNG integrados al dashboard */
+:host ::ng-deep .dialog-dashboard .p-dialog {
+  border-radius: 1rem;
+}
+
+:host ::ng-deep .dialog-dashboard .p-dialog-header {
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+:host ::ng-deep .dialog-dashboard .p-dialog-content {
+  padding: 0.9rem 1rem;
+}
+
+:host ::ng-deep .dialog-dashboard .p-dialog-footer {
+  padding: 0.6rem 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* Tabs PrimeNG modernos */
+:host ::ng-deep .tabs-dashboard .p-tablist {
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 0.75rem;
+}
+
+:host ::ng-deep .tabs-dashboard .p-tab {
+  padding: 0.4rem 0.9rem;
+  font-size: 0.85rem;
+}
+
+:host ::ng-deep .tabs-dashboard .p-tab.p-highlight {
+  border-bottom: 2px solid #4f46e5;
+  color: #111827;
+  font-weight: 600;
+}

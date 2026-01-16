@@ -1,0 +1,595 @@
+<div  *ngIf="objetoConsultado" class="dashboard-root">
+  <div class="dashboard-wrapper">
+
+
+
+    <!-- CONTENIDO -->
+    <div class="  row">
+      
+       
+      <!-- IZQUIERDA: FOTO -->
+      <div class="  col-md-2">
+       
+<div class="photo-menu-wrapper d-flex position-relative">
+
+  <button
+    type="button"
+    class="photo-menu-btn ms-auto"
+    style="width:50px; height:50px"
+    (click)="togglePhotoMenu($event)">
+    <i class="pi pi-bars"></i>
+  </button>
+
+  <!-- MENÚ POPUP -->
+  <div class="photo-menu" *ngIf="photoMenuOpen">
+    <button class="photo-menu-item" (click)="cambiarFoto()">
+      <i class="bi bi-image"></i>
+      Cambiar foto
+    </button>
+    <button class="photo-menu-item" (click)="abrirConstanciaVacaciones()">
+      <i class="bi bi-image"></i>
+       Constancia Vacaciones
+    </button>
+  </div>
+
+</div>
+        <div class="perfil-photo-card">
+  
+          <img src="{{_DatospersonalesService.url2 + 'sacarfoto/' + objetoConsultado?.foto}}" alt="Foto de {{ objetoConsultado.nombre }}" 
+          class="perfil-photo" />
+
+        
+       
+
+
+          <div class="perfil-photo-info">
+            <h2 class="perfil-nombre">
+              {{ objetoConsultado.nombres }} {{ objetoConsultado.apellidos }}
+            </h2>
+            @if(objetoConsultado.idfuerza===2){
+            <div class="perfil-tag-grado">
+              {{ objetoConsultado.equivalente }}
+            </div>
+            }@else {
+            <div class="perfil-tag-grado">
+              {{ objetoConsultado.nombre_grado }}
+            </div>
+            }
+            <div class="perfil-tag-grado">
+              {{ objetoConsultado.categoria }}
+            </div>
+            <div class="perfil-tag-grado">
+              {{ objetoConsultado.codigo }}-{{ objetoConsultado.numeroSerie }}
+            </div>
+             
+            <div class="perfil-tag-estado" [ngClass]="objetoConsultado.activo === 1 ? 'activo'  : 'inactivo'">
+              <i class="bi bi-circle-fill estado-icon" ></i>
+              <p style="font-size: 20px;">{{objetoConsultado.activo === 1 ? 'Activo' : 'Inactivo' }}</p>
+              
+            </div>
+          </div>
+
+          <div class="perfil-basic-list">
+            <div class="perfil-basic-row">
+              <span class="label">Identidad</span>
+              <span class="value">{{ objetoConsultado.identidad }}</span>
+            </div>
+            <div class="perfil-basic-row">
+              <span class="label">Cuenta</span>
+              <span class="value">{{ objetoConsultado.cuenta_banco }}</span>
+            </div>
+            <div class="perfil-basic-row">
+              <span class="label">Religion</span>
+              <span class="value">{{ objetoConsultado.religion }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DERECHA: FOLDERS TIPO CARPETA -->
+      <div class="col-md-9"  >
+
+        <div class="folders-container">
+
+          <!-- PESTAÑAS TIPO CARPETA -->
+          <div class="folders-tabs">
+            <div *ngFor="let tab of tabs; let i = index" class="folder-tab" [class.active]="tab.id === activeTab"
+              [style.zIndex]="tabs.length - i" (click)="setActiveTab(tab.id, $event)">
+              <span class="folder-tab-label">
+                <i class="bi" [ngClass]="tab.icon"></i>
+                {{ tab.titulo }}
+              </span>
+            </div>
+          </div>
+
+          <!-- CUERPO DEL FOLDER ACTIVO -->
+          <div class="folder-body">
+
+            <ng-container [ngSwitch]="activeTab">
+
+              <!-- TAB: FICHA GENERAL -->
+              <div *ngSwitchCase="'generales'">
+                <div class="form-wrapper" *ngIf="objetoConsultado">
+                  <div class="card form-card p-3">
+
+                    <!-- HEADER --> 
+                    <div class="form-header mb-3">
+                      <div class="form-title">
+                        {{ objetoConsultado.nombres }} {{ objetoConsultado.apellidos }}
+                        <div class="form-subtitle">
+                          {{ objetoConsultado?.idfuerza===2 ? objetoConsultado.equivalente : objetoConsultado.nombre_grado }}  • {{
+                          objetoConsultado.categoria }}
+                        </div>
+                      </div>
+
+                      <div class="d-none d-sm-flex align-items-center gap-2">
+                        <span class="badge px-3 py-1"
+                          [ngClass]="objetoConsultado.activo === 1 ? 'bg-success text-white' : 'bg-secondary text-white'">
+                          {{ objetoConsultado.activo === 1 ? 'ACTIVO' : 'INACTIVO' }}
+                        </span>
+                      </div>
+                    </div>
+
+                    <!-- BODY COMPACTO -->
+                    <div class="row g-3 ficha-compacta">
+
+                      <!-- COLUMNA IZQUIERDA -->
+                      <div class="col-12 col-md-6">
+                        <div class="mini-block">
+                          <div class="mini-label">Identidad</div>
+                          <div class="mini-value">{{ objetoConsultado.identidad }}</div>
+                        </div>
+
+                 
+
+                       
+                    <!--  <div class="mini-block">
+                          <div class="mini-label">Unidad</div>
+                          <div class="mini-value">
+                            {{ objetoConsultado.unidad }}
+                            <span class="badge bg-light text-secondary border ms-1">
+                              {{ objetoConsultado.corto }}
+                            </span>
+                          </div>
+                        </div>--> 
+
+                        <div class="mini-block">
+                          <div class="mini-label">Estado civil</div>
+                          <div class="mini-value">{{ objetoConsultado.estado_civil }}</div>
+                        </div>
+
+                        <div class="mini-block">
+                          <div class="mini-label">Municipio</div>
+                          <div class="mini-value">{{ objetoConsultado.municipio }}</div>
+                        </div>
+
+                        <div class="mini-block">
+                          <div class="mini-label">Dirección</div>
+                          <div class="mini-value multi-line">
+                            {{ objetoConsultado.direccion }}
+                          </div>
+                        </div>
+ 
+                         <div class="mini-block" style="background-color: rgb(143, 143, 228);">
+                          <div class="mini-label">Arma</div>
+                          <div class="mini-value">{{ armaobjetoConsultado?.NombreArma ? armaobjetoConsultado.NombreArma:"Sin Arma" }}</div>
+                        </div>  
+                          <div class="mini-block">
+                          <div class="mini-label">Pasaporte</div>
+                          <div class="mini-value">
+                            {{ objetoConsultado.numero_pasaporte }}
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- COLUMNA DERECHA -->
+                      <div class="col-12 col-md-6">
+
+                        <div class="mini-block">
+                          <div class="mini-label">Fecha nacimiento</div>
+                          <div class="mini-value">
+                            {{ objetoConsultado.fecha_nacimiento | date:'yyyy-MM-dd' }}
+                          </div>
+                        </div>
+
+                        <div class="mini-block">
+                          <div class="mini-label">Primer ingreso</div>
+                          <div class="mini-value">
+                            {{ objetoConsultado.fechaPrimerIngreso | date:'yyyy-MM-dd' }}
+                          </div>
+                        </div>
+
+                        <div class="mini-block">
+                          <div class="mini-label">Planilla referencia</div>
+                          <div class="mini-value">
+                            {{ objetoConsultado.fecha_planilla | date:'yyyy-MM-dd' }}
+                          </div>
+                        </div>
+
+                        <div class="mini-block">
+                          <div class="mini-label">Sexo / Sangre</div>
+                          <div class="mini-value">
+                            {{ objetoConsultado.sexo }} • {{ objetoConsultado.tipo_sangre }}
+                          </div>
+                        </div>
+
+                        <div class="mini-block">
+                          <div class="mini-label">Combatiente</div>
+                          <div class="mini-value">
+                            {{ objetoConsultado.combatiente === 1 ? 'Sí' : 'No' }}
+                          </div>
+                        </div>
+
+                        <div class="mini-block">
+                          <div class="mini-label">Cuenta bancaria</div>
+                          <div class="mini-value">
+                            {{ objetoConsultado.cuenta_banco }}
+                            <div class="mini-hint">
+                              Banco: {{ objetoConsultado.banco }} • RTN: {{ objetoConsultado.rtn }}
+                            </div>
+                          </div>
+                        </div>
+
+                      
+
+                      </div>
+                      <div class="col-12">
+                    
+                     <div class="mini-block" style="background-color: rgb(221, 101, 101);" *ngIf="objetoConsultado.activo !== 1">
+                          <div class="mini-label">Observacion de la Baja
+                            <button
+  pButton
+  type="button"
+  icon="pi pi-download"
+  label="Descargar documento"
+  class="p-button-rounded p-button-success"
+  (click)="sacarDocumentosBajas()" >Doc. Baja
+</button>
+                          
+
+                          </div>
+                          <div class="mini-value">{{ objetoConsultado?.observacion }}</div>
+                        </div>
+                          <li *ngIf="objetoConsultado?.activo ===2" class="list-group-item">
+
+                       
+                      </li>
+                      </div>
+
+                    </div>
+
+                    <!-- FOOTER TÉCNICO COMPACTO -->
+                    <div class="mt-3 ficha-footer">
+                      <span>Jerarquía: <strong>{{ objetoConsultado.jerarquia }}</strong></span>
+                      <span class="dot">•</span>
+                      <span>Clasificación: <strong>{{ objetoConsultado.clasificacion }}</strong></span>
+                      <span class="dot d-none d-sm-inline">•</span>
+                      <span class="d-block d-sm-inline">
+                        Código: <strong>{{ objetoConsultado.codigo }}</strong>
+                      </span>
+                    </div>
+
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- TAB: SERVICIO -->
+              <div *ngSwitchCase="'educacion'">
+                <div class="section-title">
+                  <span class="section-line"></span>
+                  <span>Educacion Militar y Civil</span>
+                </div>
+                 <app-tb-educacion-civil [identidad]="objetoConsultado.identidad"  ></app-tb-educacion-civil>
+                 <br>
+                 <app-tb-educacion-militar [Identidad]="objetoConsultado.identidad" ></app-tb-educacion-militar>
+              </div>
+
+              <!-- TAB: CONTACTO -->
+              <div *ngSwitchCase="'familiares'">
+                <div class="section-title">
+                  <span class="section-line"></span>
+                  <span>Familiares</span>
+                </div>
+                  <app-tb-familiares  [identidad]="objetoConsultado.identidad"  ></app-tb-familiares>
+              </div>
+
+              <!-- TAB: DOCUMENTOS -->
+              <div *ngSwitchCase="'telefonoCorreo'">
+                <div class="section-title">
+                  <span class="section-line"></span>
+                  <span>Correo, Paises he idiomas</span>
+                </div>
+                  <app-tb-correos-telefono-idiomas    [identidad]="objetoConsultado.identidad" ></app-tb-correos-telefono-idiomas>
+           
+              </div>
+
+                <div *ngSwitchCase="'ascensos'">
+                <div class="section-title">
+                  <span class="section-line"></span>
+                  <span>Ascensos</span>
+                </div>
+                  <app-tb-ascensos    [identidad]="objetoConsultado.identidad" ></app-tb-ascensos>
+           
+              </div>
+                 <div *ngSwitchCase="'controlDisciplinario'">
+                <div class="section-title">
+                  <span class="section-line"></span>
+                  <span>Ascensos</span>
+                </div>
+                  <app-tb-control-disciplinario    [identidad]="objetoConsultado.identidad" ></app-tb-control-disciplinario>
+           
+              </div>
+                <div *ngSwitchCase="'asignaciones'">
+                <div class="section-title">
+                  <span class="section-line"></span>
+                  <span>Asignaciones</span>
+                </div>
+                <app-tb-asignaciones    [persona]="objetoConsultado" ></app-tb-asignaciones>
+                 
+              </div>
+                 <div *ngSwitchCase="'logistica'">
+                <div class="section-title">
+                  <span class="section-line"></span>
+                  <span>Asignaciones</span>
+                </div>
+               <app-tb-logistica [identidad]="objetoConsultado.identidad"></app-tb-logistica>
+                 
+              </div>
+                 <div *ngSwitchCase="'archivos'">
+                <div class="section-title">
+                  <span class="section-line"></span>
+                  <span>Archivos</span>
+                </div>
+               <app-tarjeta-carpetas [identidad]="objetoConsultado.identidad"></app-tarjeta-carpetas>
+                 
+              </div>
+
+
+              
+           
+            </ng-container>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- PrimeNG Dialog (compatible con PrimeNG v17+ / Angular 17+) -->
+<!-- Reemplaza tu modal de Bootstrap por esto -->
+
+<p-dialog
+  [(visible)]="mostrarModalFoto"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [closable]="true"
+  [dismissableMask]="true"
+  [style]="{ width: '650px' }"
+  [contentStyle]="{ height: '800px', overflow: 'auto' }"
+  header="Cambiar foto"
+  styleClass="modal-futurista"
+  (onHide)="onCerrarModalFoto()"
+>
+  <div class="w-100 contenedor-foto">
+    <div class="card card-futurista">
+      <div class="card-body cuerpo-futurista">
+
+        <img
+          *ngIf="imgURL"
+          [src]="imgURL"
+          alt="Preview"
+          class="img-fluid img-thumbnail img-preview-futurista"
+        />
+
+        <div class="mt-4 text-center acciones-foto">
+          <input
+            #file
+            type="file"
+            accept="image/*"
+            class="btn btn-primary btn-futurista"
+            (change)="preview(file.files, $event)"
+          />
+
+          <hr class="separador-futurista" />
+
+          <button
+            type="button"
+            class="btn btn-success btn-futurista-success"
+            (click)="verificarImagen()"
+          >
+            Guardar
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <button
+      type="button"
+      class="btn btn-secondary btn-futurista-cerrar"
+      (click)="mostrarModalFoto = false"
+    >
+      Cerrar
+    </button>
+  </ng-template>
+</p-dialog>
+
+
+
+
+
+ 
+<!-- MODAL -->
+<p-dialog
+  header="Descargar Documentos de Baja"
+  [(visible)]="verDocumentoBaja"
+  [modal]="true"
+  [closable]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '450px' }">
+
+  <!-- CONTENIDO -->
+   <table class="table table-bordered tabls-sm">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Opt</th>
+              <th>Nombre</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of arregloDocumentosBajas;let i = index;">
+              <td>{{i+1}}</td>
+              <td>
+
+                <a class="dropdown-item" 
+               style="color: blue;"
+                 href="{{_DatospersonalesService.url2 + 'sacarfoto/' + item?.dir}}"
+                  target="_blank" download> <i class="pi pi-arrow-down" style="cursor: pointer;" aria-hidden="true">
+
+                  Desca.</i>  </a>
+              </td>
+              <td>{{item.nombre_documento}}</td>
+            </tr>
+          </tbody>
+        </table>
+ 
+
+</p-dialog>
+
+
+<!-- MODAL constancia de vacaciones -->
+<p-dialog
+  header="Documento de vacaciones"
+  [(visible)]="verconstanciaVacaciones"
+  [modal]="true"
+  [closable]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '750px' }">
+<button  class="btn btn-danger" (click)="constanciaVacaciones()" >Descargar</button>
+    <div class="page tipoLetra" #paginaPdf style="color: #000000 !important;">
+
+          <div class=" row" id="Constancia_caja">
+            <div class="col-md-2">
+              <img src="fuerzasArmadas2.gif" class="img-thumbnail" style="border: 0;" alt="">
+            </div>
+            <div class="col-md-8" style="text-align: center;  margin: auto; font-weight: bold;">
+              <p style="text-transform: uppercase; font-size: 15px; line-height: 1.5px;">FUERZAS ARMADAS DE HONDURAS
+                </p>
+              <p style="text-transform: uppercase;font-size: 15px;line-height: 1.5px;" >Sistema de Administración de Personal</p>
+
+            </div>
+            <div class="col-md-2">
+              <img src="fuerzasArmadas2.jpg" class="img-thumbnail" style="border: 0;" alt="">
+            </div>
+          </div>
+          <!--Cuerpo de la constacians-->
+          <br>
+           
+         
+         
+
+          <div class="row">
+            <br>
+            <div class="col-md-12" style="text-align: center; ">
+              <h6 style="text-decoration: underline;font-weight: bold; ">REPORTE VACACIONES</h6>
+
+
+            </div>
+            <br>
+            <br>
+
+            <div class="col-md-12 sinMargenes2"
+              style="text-align: justify; font-size: 13px;  color: #000000 !important;" #cuerpoTexto>
+              <!--{{firmante?.titulo_doc}}-->
+               <p>
+              
+              Por este medio hace constar que: <strong>{{objetoConsultado?.nombres}} {{objetoConsultado?.apellidos}}</strong>,
+              desempeñando el cargo de: <strong>{{cargoParaConstanciaVacaciones}}</strong>, quien ingresó el {{objetoConsultado?.fecha | date :"yyyy-MM-dd" :"UTC-6"}} ,
+              actualmente cuenta con {{dia_vacacion_ley-objetoConsultado?.dias_vacacion_gozado}} días disponibles de vacaciones para goce, de los <strong>{{dia_vacacion_ley}}</strong> dias
+               que le corresponde en base a su antigüedad, segun el <strong> Articulo 69 de la Ley de Personal para Miembros de Fuerzas Armadas.</strong><br>
+              Los cuales se detallan a continuación:
+             </p>
+           
+              <p> Dias gozados: <strong>{{objetoConsultado?.dias_vacacion_gozado}}</strong></p>
+              <p *ngIf="ArregloVacacionesTomadas.length!==0">Periodos de vacaciones gozados</p>
+              <ng-container *ngFor="let item of ArregloVacacionesTomadas" >
+                      <p style="line-height: 0.10px;" >Del {{item.fecha_inicio | date:"yyyy-MM-dd":"UTC-6"}} al {{item.fecha_fin | date:"yyyy-MM-dd":"UTC-6"}} -> {{getDiasLaboralesEntreFechas(item.fecha_inicio,item.fecha_fin)}} dias</p>
+              </ng-container>
+                       
+                       
+              <p><strong> Días disponibles de vacaciones: <strong>{{dia_vacacion_ley-objetoConsultado?.dias_vacacion_gozado}}</strong> días</strong></p>
+              <p>Y para los fines que al interesado(a) convenga, se le extiende la presente constancia, en la ciudad de
+                Tegucigalpa M.D.C., {{getFechaFormateada()}}</p>
+
+            </div>
+
+ 
+
+
+          </div>
+<br>
+<br>
+
+            <div class="col-md-12 row"  
+                 >
+                <div class="col-md-12 row" style="text-align: center; font-size: 13px; line-height: 0.40;">
+
+                    <div class="col-md-12">
+                        <br><br><br>
+                        <br><br><br>
+
+
+
+                        <label for="">
+                          {{firmante?.grado}}
+                        </label>
+                        <br><br><br>
+                        <br><br><br>
+                        <br>
+
+
+                        <label for=""> {{firmante?.nombre}}</label><br>
+                        <label for="">{{firmante?.cargo}}</label><br>
+                        <label for="">{{firmante?.serie}}</label>
+
+                    </div>
+
+                </div>
+               
+
+            </div>
+
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+
+
+
+            <div class="col-md-12"
+            style="text-align: left; font-size: 12px; line-height: 0.05px;padding: 0px 0px 0px 0px;">
+          
+         
+
+        </div>
+
+
+
+        </div>
+ 
+
+</p-dialog>

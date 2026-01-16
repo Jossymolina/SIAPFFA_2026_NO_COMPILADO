@@ -1,0 +1,6 @@
+@import "bootstrap/dist/css/bootstrap.min.css";
+@import "primeicons/primeicons.css";
+@import "primeflex/primeflex.css";
+.swal2-container {
+  z-index: 999999 !important;
+}

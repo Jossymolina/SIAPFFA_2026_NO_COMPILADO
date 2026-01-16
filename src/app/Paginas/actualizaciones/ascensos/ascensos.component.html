@@ -1,0 +1,207 @@
+<!-- ================================
+  BLOQUE 1: BUSCAR POR IDENTIDAD
+===================================-->
+<div class="container-fluid py-4" *ngIf="ventanasegundaria === 1">
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-6">
+
+      <p-card styleClass="shadow-sm">
+        <ng-template pTemplate="header">
+          <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
+            <span class="text-muted small">
+              Seleccionaste:
+              <strong>{{ tarjetaSelected?.Grado }}</strong>
+            </span>
+          </div>
+        </ng-template>
+
+        <!-- ✅ Al hacer Enter dentro del input, se dispara buscarporidentidad() -->
+        <form
+          [formGroup]="formIdentidad"
+          class="row g-3"
+          (ngSubmit)="buscarporidentidad()">
+
+          <!-- IDENTIDAD -->
+          <div class="col-12 col-md-6">
+            <label class="form-label">ID</label>
+            <input
+              pInputText
+              type="text"
+              class="w-100"
+              formControlName="identidad"
+              maxlength="13"
+              minlength="13"
+              pattern="^[0-9]*$"
+              required
+              name="identidadpersona"
+            />
+          </div>
+
+          <!-- BOTÓN BUSCAR -->
+          <div class="col-12 col-md-3">
+            <label class="form-label d-block">Buscar</label>
+            <button
+              pButton
+              type="submit"
+              class="w-100"
+              icon="pi pi-search"
+              [disabled]="formIdentidad.invalid">
+            </button>
+          </div>
+
+          <!-- BOTÓN ATRÁS -->
+          <div class="col-12 col-md-3">
+            <label class="form-label d-block">Atrás</label>
+            <button
+              pButton
+              type="button"
+              class="w-100"
+              icon="pi pi-arrow-left"
+              (click)="atras()">
+            </button>
+          </div>
+
+        </form>
+      </p-card>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ================================
+  BLOQUE 2: FORMULARIO DE ASCENSO
+===================================-->
+<div class="container-fluid py-4" *ngIf="ventanasegundaria === 2  ">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
+
+            <p-card styleClass="shadow-sm">
+                <ng-template pTemplate="header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h3 class="mb-0">Formulario de ascenso</h3>
+                        <span class="text-muted small">
+                            Unidad: {{ usuarioLogin?.unidad }}
+                        </span>
+                    </div>
+                </ng-template>
+
+                <form class="row g-3">
+
+                    <!-- NOMBRE -->
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Nombre</label>
+                        <div class="p-2 border rounded-2 text-start">
+                            <strong>{{ objetoConsultado?.nombres }} {{ objetoConsultado?.apellidos }}</strong>
+                        </div>
+                    </div>
+
+                    <!-- IDENTIDAD -->
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Identidad</label>
+                        <div class="p-2 border rounded-2 text-start">
+                            <strong>{{ objetoConsultado?.identidad }}</strong>
+                        </div>
+                    </div>
+
+                    <!-- GRADO / RANGO ACTUAL -->
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Grado / Rango actual</label>
+
+                        <div class="p-2 border rounded-2 text-start">
+                            <strong *ngIf="objetoConsultado?.nombre === 'Naval'; else gradoNoNaval">
+                                {{ objetoConsultado?.equivalente }}
+                            </strong>
+                            <ng-template #gradoNoNaval>
+                                <strong>{{ objetoConsultado?.nombre_grado }}</strong>
+                            </ng-template>
+                        </div>
+                    </div>
+
+                    <!-- FECHA DE ASCENSO -->
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Fecha de ascenso</label>
+                        <div class="p-2 border rounded-2 text-start">
+                            <strong>{{ tarjetaSelected?.FechaAutorizada }}</strong>
+                        </div>
+                    </div>
+
+                    <!-- NUEVO GRADO -->
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Nuevo grado</label>
+                        <div class="p-2 border rounded-2 text-start">
+                            <strong class="text-danger">{{ tarjetaSelected?.Grado }}</strong>
+                        </div>
+                    </div>
+
+                    <!-- BOTONES / SPINNER -->
+                    <div class="col-12 col-md-3 d-flex align-items-end" *ngIf="banderaEspiner === 0">
+                        <button pButton type="button" class="w-100" label="Ascender" icon="pi pi-save"
+                            (click)="ascender()">
+                        </button>
+                    </div>
+
+                    <div class="col-12 col-md-3 d-flex align-items-center justify-content-center"
+                        *ngIf="banderaEspiner === 1">
+                        <p-progressSpinner></p-progressSpinner>
+                    </div>
+
+                    <div class="col-12 col-md-3 d-flex align-items-end">
+                        <button pButton type="button" class="w-100" label="Cancelar" icon="pi pi-times"
+                            (click)="atras()">
+                        </button>
+                    </div>
+
+                </form>
+            </p-card>
+
+        </div>
+    </div>
+</div>
+
+<!-- ================================
+  BLOQUE 3: TARJETAS DE CUPOS ASCENSO
+===================================-->
+<div class="container-fluid py-4" *ngIf="tipoConsulta === '1'">
+    <div class="row mb-3">
+        <div class="col-12 d-flex justify-content-between align-items-center">
+            <h3 class="mb-0">Unidad Autorizada: {{ usuarioLogin?.unidad }}</h3>
+
+            <button pButton type="button" icon="pi pi-refresh" class="ms-2" (click)="buscarCuposAscenso()"
+                title="Actualizar">
+            </button>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3" *ngFor="let item of arregloCupos">
+
+            <p-card styleClass="h-100 shadow-sm" [header]="'Categoría: ' + item.Categoria">
+
+                <div class="text-center">
+                    <img src="ascenso.jpg" alt="Ascenso" class="img-fluid rounded mb-3" />
+
+                    <h4 class="mb-1">{{ item.Grado }}</h4>
+
+                    <p class="mb-1 text-muted">
+                        <strong class="text-dark">Cupos: {{ item.Cupos }}</strong>
+                        &nbsp;|&nbsp; {{ item.Codigo }} &nbsp;|&nbsp; {{ item.Corto }}
+                    </p>
+
+                    <p class="mb-2 text-muted">
+                        {{ item.Unidad }}
+                    </p>
+
+                    <p class="mb-3 text-muted small">
+                        Cualquier consulta comunicarse al C-1
+                    </p>
+
+                    <button pButton type="button" label="Siguiente" icon="pi pi-arrow-right" class="w-100"
+                        (click)="siguiente(item)">
+                    </button>
+                </div>
+
+            </p-card>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,215 @@
+ 
+
+<div class="form-wrapper">
+  <div class="card form-card p-3">
+
+    <!-- HEADER -->
+    <div class="form-header mb-2">
+      <div class="form-title">
+     
+        <div class="form-subtitle">
+          Historial educacion Militar
+        </div>
+      </div>
+
+      <!-- Botón Agregar (abre p-dialog) -->
+      <button
+        type="button"
+        class="btn btn-sm btn-back-modern"
+        style="white-space: nowrap;background-color: black;color: white;"
+        (click)="abrirModalCurso()"
+        title="Agregar curso militar"
+      >
+        <i class="pi pi-plus"></i>
+        <span>Agregar</span>
+      </button>
+    </div>
+
+    <!-- BODY -->
+    <div class="card-body px-0 pt-2 pb-0">
+
+      <!-- Mensaje sin datos -->
+      <p
+        class="form-subtitle mb-2"
+        style="color: #dc3545;"
+        *ngIf="arregloCursosPersonal.length === 0"
+      >
+        * No contiene datos que mostrar
+      </p>
+
+      <!-- TABLA -->
+      <div class="table-responsive">
+        <table class="table table-sm table-hover table-striped align-middle">
+          <thead class="table-light">
+            <tr>
+              <th style="width: 50px;">#</th>
+              <th>País</th>
+              <th>Centro militar</th>
+              <th>Curso</th>
+              <th>Fecha inicio</th>
+              <th>Fecha fin</th>
+              <th style="width: 80px;">Opciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of arregloCursosPersonal; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ item.Pais }}</td>
+              <td>{{ item.Unidad }}</td>
+              <td>{{ item.Curso }}</td>
+              <td>{{ item.Fecha_inicio }}</td>
+              <td>{{ item.fecha_fin }}</td>
+              <td>
+                <button
+                  title="Eliminar"
+                  type="button"
+                  class="btn btn-sm btn-outline-danger"
+                  (click)="eliminar(item)"
+                >
+                  <i class="pi pi-trash" aria-hidden="true"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- DIALOG PRIME NG PARA AGREGAR CURSO -->
+<p-dialog
+  header="Cursos de las FFAA"
+  [(visible)]="mostrarModalCurso"
+  [modal]="true"
+  [style]="{ width: '650px', maxWidth: '95vw' }"
+  [draggable]="false"
+  [resizable]="false"
+  [closable]="false"
+>
+  <form
+    class="row g-3"
+    #FormularioCursoMilitar="ngForm"
+  >
+    <!-- País -->
+    <div class="col-md-6 col-12">
+      <label class="form-label">País</label>
+      <select
+        class="form-control"
+        name="paisSelected"
+        required
+        [(ngModel)]="paisSelected"
+        (change)="sacarFuezasCursos()"
+      >
+        <option
+          [ngValue]="item"
+          *ngFor="let item of arregloPaises"
+        >
+          {{ item.nombrepaises }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Fuerza -->
+    <div class="col-md-6 col-12">
+      <label class="form-label">Fuerza</label>
+      <select
+        class="form-control"
+        name="fuerzaSelected"
+        required
+        [(ngModel)]="fuerzaSelected"
+        (change)="sacarCentroMilitares()"
+      >
+        <option
+          [ngValue]="item"
+          *ngFor="let item of arregloFuerza"
+        >
+          {{ item.nombre }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Centro Militar -->
+    <div class="col-md-6 col-12">
+      <label class="form-label">Centro militar</label>
+      <select
+        class="form-control"
+        name="centroSelected"
+        required
+        [(ngModel)]="centroSelected"
+        (change)="sacarCursosdeCentros()"
+      >
+        <option
+          [ngValue]="item"
+          *ngFor="let item of arregloCentro"
+        >
+          {{ item.nombre_unidad }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Curso -->
+    <div class="col-md-6 col-12">
+      <label class="form-label">Curso</label>
+      <select
+        class="form-control"
+        name="cursoSelected"
+        required
+        [(ngModel)]="cursoSelected"
+      >
+        <option
+          [ngValue]="item"
+          *ngFor="let item of arregloCursos"
+        >
+          {{ item.nombre_cursos }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Fecha inicio -->
+    <div class="col-md-6 col-12">
+      <label class="form-label">Fecha inicio</label>
+      <input
+        type="date"
+        class="form-control"
+        name="fechaInicio"
+        required
+        ngModel
+      />
+    </div>
+
+    <!-- Fecha fin -->
+    <div class="col-md-6 col-12">
+      <label class="form-label">Fecha finalización</label>
+      <input
+        type="date"
+        class="form-control"
+        name="FechaFin"
+        required
+        ngModel
+      />
+    </div>
+  </form>
+
+  <!-- FOOTER DEL DIALOG -->
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      class="p-button-text"
+      label="Cerrar"
+      (click)="cerrarModalCurso()"
+    ></button>
+
+    <button
+      pButton
+      type="button"
+      label="Guardar"
+      icon="pi pi-check"
+      [disabled]="!FormularioCursoMilitar.valid"
+      (click)=" guardar()"
+    ></button>
+  </ng-template>
+</p-dialog>

@@ -1,0 +1,316 @@
+/********************************
+ * LAYOUT GENERAL
+ ********************************/
+.consulta-wrapper {
+  height: 100%;
+  padding: 0.75rem;
+  background: #f5f7fb;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Tarjeta base */
+.panel-card {
+  background: #ffffff;
+  border-radius: 0.9rem;
+  border: 1px solid #dde3f0;
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.06);
+  padding: 0.85rem 1rem;
+}
+
+.panel-card--warning {
+  border-top: 3px solid #fbbf24;
+}
+
+.panel-card--danger {
+  border-top: 3px solid #f97373;
+}
+
+.panel-header {
+  padding-bottom: 0.55rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.panel-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.panel-title-tag {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: #9ca3af;
+}
+
+.panel-subtitle {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+/********************************
+ * TEXTOS DE AYUDA
+ ********************************/
+.form-hint {
+  font-size: 0.8rem;
+}
+
+.form-hint--warning {
+  color: #b91c1c;
+}
+
+.form-hint--info {
+  color: #2563eb;
+}
+
+/********************************
+ * FORMULARIO
+ ********************************/
+.consulta-form {
+  font-size: 0.85rem;
+}
+
+.form-group-custom {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.form-label-custom {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.form-control-sm {
+  border-radius: 0.6rem;
+  border-color: #d1d5db;
+  font-size: 0.8rem;
+  padding: 0.28rem 0.5rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.form-control-sm:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 0.12rem rgba(37, 99, 235, 0.2);
+}
+
+/* Estado (Activos / Bajas) */
+.estado-toggle-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.estado-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  cursor: pointer;
+  font-size: 0.8rem;
+  padding: 0.18rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.estado-toggle:hover {
+  background: #eef2ff;
+  border-color: #c7d2fe;
+}
+
+/********************************
+ * PRIME NG CONTROLES
+ ********************************/
+/* MultiSelect más compacto */
+:host ::ng-deep .p-multiselect {
+  width: 100%;
+  min-height: 2.35rem;
+  border-radius: 0.6rem;
+  font-size: 0.78rem;
+}
+
+:host ::ng-deep .p-multiselect-label {
+  padding-top: 0.25rem !important;
+  padding-bottom: 0.25rem !important;
+}
+
+/********************************
+ * BOTONES PERSONALIZADOS
+ ********************************/
+/* No tocamos .p-button global, solo nuestras clases */
+:host ::ng-deep .btn-pill {
+  border-radius: 999px !important;
+  font-size: 0.8rem;
+  padding: 0.25rem 0.9rem !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* Primario (Buscar) */
+:host ::ng-deep .btn-pill-primary {
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  border: none;
+  color: #f9fafb;
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.35);
+}
+
+:host ::ng-deep .btn-pill-primary:hover {
+  filter: brightness(1.05);
+}
+
+/* Rojo (Limpiar) */
+:host ::ng-deep .btn-pill-danger {
+  background: linear-gradient(135deg, #dc2626, #f97373);
+  border: none;
+  color: #fef2f2;
+  box-shadow: 0 4px 10px rgba(220, 38, 38, 0.35);
+}
+
+:host ::ng-deep .btn-pill-danger:hover {
+  filter: brightness(1.05);
+}
+
+/* Verde (Exportar) */
+:host ::ng-deep .btn-pill-success {
+  background: linear-gradient(135deg, #16a34a, #22c55e);
+  border: none;
+  color: #ecfdf3;
+  box-shadow: 0 4px 10px rgba(22, 163, 74, 0.35);
+}
+
+:host ::ng-deep .btn-pill-success:hover {
+  filter: brightness(1.05);
+}
+
+/* Ghost (65 años) */
+:host ::ng-deep .btn-pill-ghost {
+  background: rgba(37, 99, 235, 0.06);
+  border: 1px solid rgba(37, 99, 235, 0.22);
+  color: #1d4ed8;
+  box-shadow: none;
+}
+
+/* Botón icono atrás */
+:host ::ng-deep .btn-icon-ghost {
+  border-radius: 999px !important;
+  background: transparent !important;
+  border: 1px solid #e5e7eb !important;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+:host ::ng-deep .btn-icon-ghost .pi {
+  font-size: 0.9rem;
+  color: #4b5563;
+}
+
+:host ::ng-deep .btn-icon-ghost:hover {
+  background: #e5f0ff !important;
+  border-color: #bfdbfe !important;
+}
+
+/********************************
+ * RESULTADOS / TABLA
+ ********************************/
+.result-count {
+  font-size: 0.8rem;
+  color: #4b5563;
+}
+
+.results-table-wrapper {
+  border-radius: 0.85rem;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  padding: 0.4rem;
+  overflow: auto;
+  max-height: 400px;
+}
+
+.table-resultados {
+  font-size: 0.78rem;
+}
+
+.table-resultados thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: #f3f4f6;
+  color: #111827;
+  border-color: #e5e7eb;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.table-resultados tbody td {
+  white-space: nowrap;
+}
+
+.table-resultados tbody tr:nth-child(even) {
+  background: #f9fafb;
+}
+
+.table-resultados tbody tr:hover {
+  background: #e0edff;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+/* Icono ojo */
+.table-resultados i.pi-eye {
+  font-size: 1rem;
+  transition: transform 0.12s ease, color 0.12s ease;
+}
+
+.table-resultados i.pi-eye:hover {
+  transform: scale(1.1);
+  color: #1d4ed8;
+}
+
+/* Foto mini */
+.foto-mini {
+  height: 70px;
+  width: 70px;
+  border-radius: 0.8rem;
+  border: 3px solid #111827;
+  object-fit: cover;
+  box-shadow: 0 7px 18px rgba(15, 23, 42, 0.4);
+}
+
+/********************************
+ * RESPONSIVE
+ ********************************/
+@media (max-width: 768px) {
+  .panel-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.45rem;
+  }
+
+  .results-table-wrapper {
+    max-height: 320px;
+  }
+}
+
+.filtro-box {
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+  max-width: 280px;
+}
+
+:host ::ng-deep .filtro-box input.p-inputtext {
+  width: 100%;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  padding: 0.25rem 0.9rem 0.25rem 2.1rem;
+}

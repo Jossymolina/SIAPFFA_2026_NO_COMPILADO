@@ -1,0 +1,330 @@
+<!-- ============================= -->
+<!-- VENTANA 0: SELECCIONAR FUERZA / UNIDAD -->
+<!-- ============================= -->
+@if (ventana === 0) {
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-6 col-md-8">
+        <div class="card shadow-lg border-0 rounded-4">
+          <div class="card-header bg-success text-white rounded-top-4 d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">
+              <i class="fas fa-user-shield me-2"></i>
+              Habilitar cupos para ascensos
+            </h5>
+          </div>
+
+          <div class="card-body">
+            <p class="text-muted mb-3">
+              Selecciona la <strong>Fuerza</strong> y la <strong>Unidad</strong> a la que deseas habilitar nuevos cupos.
+            </p>
+
+            <hr />
+
+            <form #forma="ngForm" novalidate class="row g-3">
+              <!-- Fuerza -->
+              <div class="col-12">
+                <label class="form-label fw-semibold small text-muted mb-1">
+                  Fuerza
+                </label>
+                <p-select
+                  class="w-100"
+                  [options]="arregloFuerzas"
+                  optionLabel="nombre"
+                  [(ngModel)]="fuerzaSelected"
+                  name="fuerzaSelected"
+                  placeholder="Seleccione una fuerza"
+                  (onChange)="sacarunidades()"
+                  [showClear]="true"
+                  [filter]="true"
+                  required>
+                </p-select>
+              </div>
+
+              <!-- Unidad -->
+              <div class="col-12">
+                <label class="form-label fw-semibold small text-muted mb-1">
+                  Unidad
+                </label>
+                <p-select
+                  class="w-100"
+                  [options]="ArregloUnidades"
+                  optionLabel="unidad"
+                  [(ngModel)]="unidadSelected"
+                  name="unidadSelected"
+                  placeholder="Seleccione una unidad"
+                  [showClear]="true"
+                  [filter]="true"
+                  required>
+                </p-select>
+              </div>
+
+              <!-- Botón / Spinner -->
+              <div class="col-12 d-flex justify-content-end align-items-center mt-3">
+                @if (banderaEspiner === 0) {
+                  <button
+                    pButton
+                    type="button"
+                    label="Siguiente"
+                    icon="pi pi-angle-double-right"
+                    class="p-button-danger"
+                    (click)="buscarCupos(forma)">
+                  </button>
+                } @else {
+                  <div class="d-flex align-items-center gap-2">
+                    <div class="spinner-border text-primary" role="status">
+                      <span class="visually-hidden">Cargando...</span>
+                    </div>
+                    <span class="text-muted small">Buscando cupos...</span>
+                  </div>
+                }
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- ============================= -->
+<!-- VENTANA 1: TARJETAS DE CUPOS -->
+<!-- ============================= -->
+@if (ventana === 1) {
+  <div class="container-fluid py-4">
+    <div class="card shadow border-0 rounded-4">
+      <div class="card-header bg-success text-white rounded-top-4 d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center gap-2">
+          <button
+            pButton
+            type="button"
+            class="p-button-rounded   p-button-text me-2"
+            style="background-color: white;"
+            (click)="atras(0)"
+            [text]="true"
+            [rounded]="true"
+            [raised]="false">
+            <i class="pi pi-arrow-left  "></i>
+          </button>
+          <h5 class="mb-0">
+            Habilitar ascensos a: <strong>{{ unidadSelected?.unidad }}</strong>
+          </h5>
+        </div>
+
+        <button
+          pButton
+          type="button"
+          class="p-button-rounded p-button-danger"
+          icon="pi pi-plus"
+          (click)="limpiar(); mostrarAgregarAscenso = true"
+          title="Agregar nuevo ascenso">
+        </button>
+      </div>
+
+      <div class="card-body">
+        <div class="container py-3">
+          <div class="row justify-content-center">
+            <div class="col-12 col-xl-10">
+              <div class="row row-cols-1 row-cols-md-3 g-4">
+                @for (item of arregloCupos; track item.IdCupo) {
+               <div class="col">
+  <div class="card asc-card h-100 shadow-lg border-0 rounded-4 overflow-hidden">
+
+    <!-- Imagen -->
+    <div class="asc-img-wrapper">
+      <img
+        src="cupoascenso.jpg"
+        alt="Cupo ascenso"
+        class="asc-img" />
+      <div class="asc-img-overlay">
+        <span class="badge bg-warning text-dark shadow-sm asc-badge">
+          <i class="pi pi-star-fill me-1"></i> Ascenso
+        </span>
+      </div>
+    </div>
+
+    <div class="card-body px-4 py-3">
+      <h6 class="text-uppercase text-muted fw-bold small mb-3 d-flex align-items-center gap-2">
+        <i class="pi pi-id-card text-warning"></i>
+        Detalle de cupo
+      </h6>
+
+      <ul class="list-unstyled asc-list">
+        <li><strong>Fuerza:</strong> {{ fuerzaSelected?.nombre }}</li>
+        <li><strong>Unidad:</strong> {{ item.Corto }}</li>
+        <li><strong>Categoría:</strong> {{ item.Categoria }}</li>
+        <li><strong>Grado / Rango:</strong> {{ item.Grado }}</li>
+        <li><strong>Fecha ascenso:</strong> {{ item.FechaAutorizada }}</li>
+        <li><strong>Cupos:</strong> {{ item.Cupos }}</li>
+      </ul>
+    </div>
+
+    <div class="card-footer asc-footer d-flex justify-content-between align-items-center">
+      <button
+        pButton
+        type="button"
+        class="p-button-sm p-button-rounded p-button-warning"
+        (click)="seleccionarTarjeta(item); mostrarCambiarCupos = true">
+        <i class="pi pi-pencil"></i> Cupos
+      </button>
+
+      <button
+        pButton
+        type="button"
+        class="p-button-sm p-button-rounded p-button-danger p-button-outlined"
+        (click)="eliminarAscenso(item)">
+        <i class="pi pi-trash"></i> Eliminar
+      </button>
+    </div>
+
+  </div>
+</div>
+
+                }
+              </div>
+
+              @if (!arregloCupos || arregloCupos.length === 0) {
+                <div class="text-center text-muted py-4">
+                  <i class="pi pi-info-circle mb-2" style="font-size: 2rem;"></i>
+                  <p class="mb-0">No hay cupos registrados para esta unidad aún.</p>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- ============================= -->
+<!-- DIALOG: AGREGAR ASCENSO -->
+<!-- ============================= -->
+<p-dialog
+  header="Agregar ascenso"
+  [(visible)]="mostrarAgregarAscenso"
+  [modal]="true"
+  [style]="{ width: '450px' }"
+  [draggable]="false"
+  [resizable]="false"
+  [closable]="true">
+
+  <form #FormularioCupos="ngForm" class="row g-3" novalidate>
+    <!-- Categoría -->
+    <div class="col-12">
+      <label class="form-label fw-semibold small text-muted mb-1">
+        Categoría
+      </label>
+      <p-select
+        class="w-100"
+        [options]="arregloControlGrados"
+        optionLabel="nombreGrado"
+        [(ngModel)]="idgradoControlSelected"
+        name="idgradoControlSelected"
+        placeholder="Seleccione una categoría"
+        (onChange)="sacarGrados()"
+        [filter]="true"
+        required>
+      </p-select>
+    </div>
+
+    <!-- Grado -->
+    <div class="col-12">
+      <label class="form-label fw-semibold small text-muted mb-1">
+        Grado
+      </label>
+      <p-select
+        class="w-100"
+        [options]="arregloGrados"
+        optionLabel="Grado"
+        [(ngModel)]="gradoSelected"
+        name="gradoSelected"
+        placeholder="Seleccione un grado"
+        [filter]="true"
+        required>
+        <ng-template let-opt pTemplate="item">
+          {{ opt.codigo }} - {{ opt.Grado }}
+        </ng-template>
+      </p-select>
+    </div>
+
+    <!-- Fecha Ingreso -->
+    <div class="col-12">
+      <label class="form-label fw-semibold small text-muted mb-1">
+        Fecha de ascenso
+      </label>
+      <p-datepicker
+      class="w-100"
+  [(ngModel)]="fechaAscenso"
+  name="fechaAscenso"
+  [showIcon]="true"
+  dateFormat="yy-mm-dd"
+  [appendTo]="'body'"
+  required>
+      </p-datepicker>
+    </div>
+
+    <!-- Cupos -->
+    <div class="col-12">
+      <label class="form-label fw-semibold small text-muted mb-1">
+        Autorizar cupos
+      </label>
+      <input
+        type="number"
+        class="form-control"
+        name="cupos"
+        [(ngModel)]="cupos"
+        min="1"
+        required />
+    </div>
+
+    <div class="col-12 mt-2">
+      <button
+        pButton
+        type="button"
+        label="Guardar"
+        icon="pi pi-save"
+        class="p-button-primary w-100"
+        (click)="guardarCupos(FormularioCupos); mostrarAgregarAscenso = false">
+      </button>
+    </div>
+  </form>
+</p-dialog>
+
+<!-- ============================= -->
+<!-- DIALOG: CAMBIAR CUPOS -->
+<!-- ============================= -->
+<p-dialog
+  header="Cambiar cupos de ascenso"
+  [(visible)]="mostrarCambiarCupos"
+  [modal]="true"
+  [style]="{ width: '380px' }"
+  [draggable]="false"
+  [resizable]="false"
+  [closable]="true">
+
+  <form #formulario="ngForm" class="row g-3" novalidate>
+    <div class="col-12">
+      <label class="form-label fw-semibold small text-muted mb-1">
+        # de cupos
+      </label>
+      <input
+        class="form-control"
+        name="cupos"
+        type="number"
+        [(ngModel)]="cuposEdit"
+        required
+        min="0" />
+    </div>
+
+    <div class="col-12">
+      <button
+        pButton
+        type="button"
+        label="Guardar cambios"
+        icon="pi pi-save"
+        class="p-button-primary w-100"
+        (click)="modificarCantidadCupos(formulario); mostrarCambiarCupos = false">
+      </button>
+    </div>
+  </form>
+</p-dialog>

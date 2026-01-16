@@ -1,0 +1,109 @@
+<div class="dashboard-section-card mt-3">
+
+  <!-- SECCIÓN ARMAS -->
+  <div class="card table-card mb-3">
+    <div class="card-header d-flex justify-content-between align-items-center py-2">
+      <div>
+        <h6 class="mb-0">Armas asignadas</h6>
+        <small class="text-muted">Detalle de armas registradas al personal.</small>
+      </div>
+
+      <div class="d-flex align-items-center gap-2">
+        <span class="section-counter"
+              [ngClass]="arregloArmas.length > 0 ? 'section-counter-filled' : 'section-counter-empty'">
+          {{ arregloArmas.length }}
+        </span>
+      </div>
+    </div>
+
+    <div class="card-body p-2">
+      <!-- Mensajes -->
+      <p class="mb-1 text-danger small fw-semibold">
+        * Armas asignadas: {{ arregloArmas.length }}
+      </p>
+      <p class="mb-2 text-primary small" *ngIf="arregloArmas.length === 0">
+        * No tiene armas asignadas
+      </p>
+
+      <!-- Tabla -->
+      <table class="table table-bordered table-hover table-sm mb-0">
+        <thead class="bg-header-soft">
+          <tr>
+            <th>Tipo arma</th>
+            <th>Modelo</th>
+            <th>Marca</th>
+            <th>Serie</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of arregloArmas">
+            <td>{{ item.tipo_arma }}</td>
+            <td>{{ item.modelo }}</td>
+            <td>{{ item.marca }}</td>
+            <td>{{ item.serie_arma }}</td>
+          </tr>
+
+          <!-- Si no hay armas, fila vacía opcional -->
+          <tr *ngIf="arregloArmas.length === 0">
+            <td colspan="4" class="text-center text-muted small">
+              Sin registros de armas asignadas.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SECCIÓN ACCESORIOS -->
+  <div class="card table-card">
+    <div class="card-header d-flex justify-content-between align-items-center py-2">
+      <div>
+        <h6 class="mb-0">Accesorios asignados</h6>
+        <small class="text-muted">Equipos adicionales vinculados al arma o al personal.</small>
+      </div>
+
+      <div class="d-flex align-items-center gap-2">
+        <span class="section-counter"
+              [ngClass]="arregloAccesorio.length > 0 ? 'section-counter-filled' : 'section-counter-empty'">
+          {{ arregloAccesorio.length }}
+        </span>
+      </div>
+    </div>
+
+    <div class="card-body p-2">
+      <!-- Mensajes -->
+      <p class="mb-1 text-danger small fw-semibold">
+        * Accesorios asignados: {{ arregloAccesorio.length }}
+      </p>
+      <p class="mb-2 text-primary small" *ngIf="arregloAccesorio.length === 0">
+        * No tiene accesorios asignados
+      </p>
+
+      <!-- Tabla -->
+      <table class="table table-bordered table-hover table-sm mb-0">
+        <thead class="bg-header-soft">
+          <tr>
+            <th>Descripción</th>
+            <th style="width: 90px;">Cantidad</th>
+            <th>Observación</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of arregloAccesorio">
+            <td>{{ item.descrip_equipo }}</td>
+            <td class="text-center">{{ item.cant_equipo }}</td>
+            <td>{{ item.observ_equipo }}</td>
+          </tr>
+
+          <!-- Si no hay accesorios -->
+          <tr *ngIf="arregloAccesorio.length === 0">
+            <td colspan="3" class="text-center text-muted small">
+              Sin registros de accesorios asignados.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>

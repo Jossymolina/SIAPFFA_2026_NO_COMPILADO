@@ -1,0 +1,114 @@
+/* ===== GRID DE CARPETAS ===== */
+.folder-grid {
+  margin: 0 -0.25rem;
+  overflow: visible;  
+}
+
+/* Tarjeta de carpeta */
+.folder-card {
+  border: none;
+  border-radius: 1rem;
+  background: linear-gradient(145deg, #ffffff, #f5f7ff);
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.08);
+  cursor: pointer;
+  overflow: visible;  
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  position: relative;   
+}
+
+.folder-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.12);
+}
+
+/* Cuando tiene un menú abierto, esta card pasa encima de las vecinas */
+.folder-card--active {
+  position: relative;
+  z-index: 20;    
+}
+
+/* Botón de acciones (3 puntos) arriba a la derecha */
+.folder-card-actions {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.45rem;
+  z-index: 30;   
+}
+
+.folder-card-actions .btn {
+  border-radius: 999px;
+  padding: 0.15rem 0.45rem;
+  font-size: 0.75rem;
+}
+
+/* El dropdown en sí bien arriba y alineado hacia dentro de la card */
+.folder-card-actions .dropdown-menu {
+  z-index: 3000;
+  left: auto;      /* anclar a la derecha */
+  right: 0;        /* evita que se meta bajo la carpeta vecina */
+  transform: none; /* por si alguna clase de bootstrap mete transform */
+}
+
+/* ===== ICONO DE CARPETA ===== */
+.folder-icon-wrapper {
+  height: 170px;
+  padding: 0.75rem 0.75rem 0.25rem 0.75rem;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+
+  background: linear-gradient(180deg, #eef3ff 0%, #dde7ff 60%, #cfd9ff 100%);
+  position: relative;
+  overflow: hidden;  
+}
+
+/* Línea de base para simular repisa */
+.folder-icon-wrapper::after {
+  content: "";
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  bottom: 0.4rem;
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.08);
+}
+
+/* Imagen de carpeta: nunca se sale del div */
+.folder-icon {
+  max-width: 100%;
+  max-height: 100%;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 6px rgba(15, 23, 42, 0.18));
+}
+
+/* ===== TEXTO DE LA CARPETA ===== */
+.folder-card-body {
+  padding: 0.5rem 0.75rem 0.75rem 0.75rem;
+}
+
+.folder-title {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #1f2937;
+  text-align: center;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Footer opcional */
+.card-footer.mt-2 {
+  border-radius: 0.75rem;
+  border: 1px dashed #d1d5db;
+  background: #f9fafb;
+}
+
+/* Contenedor grande: que no recorte el dropdown */
+.dashboard-section-card {
+  overflow: visible;
+}

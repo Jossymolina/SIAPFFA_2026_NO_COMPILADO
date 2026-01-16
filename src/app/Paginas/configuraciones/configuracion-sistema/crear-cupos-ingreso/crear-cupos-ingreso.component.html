@@ -1,0 +1,399 @@
+ 
+@if (desplegar ===1) {
+<div class="container-fluid py-4" >
+  <div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8">
+
+      <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-header bg-success text-white rounded-top-4 d-flex justify-content-between align-items-center">
+          <h5 class="card-title mb-0">
+            <i class="fas fa-user-shield me-2"></i> Habilitar cupos
+          </h5>
+        </div>
+
+        <div class="card-body">
+          <p class="text-muted mb-3">
+            Selecciona la <strong>Fuerza</strong> y la <strong>Unidad</strong> a la que deseas habilitar nuevos cupos.
+          </p>
+
+          <hr />
+
+          <form #forma="ngForm" novalidate>
+            <!-- Fuerza -->
+            <div class="mb-3 row align-items-center">
+              <label class="col-sm-3 col-form-label fw-semibold">Fuerza</label>
+              <div class="col-sm-9">
+                <select
+                  class="form-control"
+                  name="fuerzaSelected"
+                  [(ngModel)]="fuerzaSelected"
+                  (change)="sacarunidades()"
+                  required
+                >
+                  <option [ngValue]="i" *ngFor="let i of arregloFuerzas">
+                    {{ i.nombre }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Unidad -->
+            <div class="mb-3 row align-items-center">
+              <label class="col-sm-3 col-form-label fw-semibold">Unidad</label>
+              <div class="col-sm-9">
+                <select
+                  class="form-control"
+                  name="unidadSelected"
+                  [(ngModel)]="unidadSelected"
+                  required
+                >
+                  <option [ngValue]="i" *ngFor="let i of ArregloUnidades">
+                    {{ i.unidad }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Botón / Spinner -->
+            <div class="row mt-4">
+              <div class="offset-sm-3 col-sm-9 d-flex align-items-center">
+                <ng-container *ngIf="banderaEspiner === 0; else loading">
+                  <button
+                    type="button"
+                    class="btn btn-danger w-100 d-flex justify-content-center align-items-center"
+                    (click)="buscarCupos()"
+                    [disabled]="!forma.valid"
+                  >
+                    <i class="fas fa-plus-circle me-2"></i>
+                    Agregar cupos
+                  </button>
+                </ng-container>
+
+                <ng-template #loading>
+                  <div class="d-flex align-items-center">
+                    <div class="spinner-border text-primary me-2" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                    <span class="text-muted">Procesando, por favor espere...</span>
+                  </div>
+                </ng-template>
+              </div>
+            </div>
+
+          </form>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+}
+
+@if (desplegar ===2) {
+    <div class="col-md-12" style="margin-top: 20px;" >
+  <div class="card shadow-lg border-0 rounded-4">
+    <div class="card-header bg-success text-white rounded-top-4 d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center">
+        <button class="btn btn-warning btn-sm me-2" (click)="atras(1)">
+          <i class="pi pi-arrow-left fa-lg"></i>
+        </button>
+        <h5 class="card-title mb-0">
+          Cupos de: <strong>{{ unidadSelected?.unidad }}</strong>
+        </h5>
+      </div>
+
+      <!-- BOTÓN FLOTANTE: AGREGAR NUEVO GRADO -->
+      <button
+        class="btn btn-danger   "
+      
+        title="Agregar nuevo grado"
+        (click)="limpiarArreglos(); mostrarDialogNuevoCupo()"
+      >
+        <i class="pi pi-plus fa-lg"></i>Crear cupo
+      </button>
+    </div>
+
+    <div class="card-body">
+      <div class="container py-4">
+        <div class="d-flex justify-content-center">
+          <div class="col-lg-8 col-md-10">
+
+            <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+              <div class="col" *ngFor="let item of arregloCupos">
+                <div class="card h-100 border-warning shadow-sm card-wr-bg rounded-4">
+
+                  <!-- HEADER IMAGEN -->
+                  <div class="position-relative">
+                    <img
+                      src="registro.png"
+                      class="card-img-top rounded-top-4"
+                      alt="Logo"
+                      style="max-height: 120px; object-fit: contain; padding: 10px;"
+                    />
+                  </div>
+
+                  <!-- BODY DATOS -->
+                  <div class="card-body d-grid gap-2">
+                    <label class="col-12 m-0">
+                      Fuerza:
+                      <strong>{{ item?.NombreFuerza }}</strong>
+                    </label>
+
+                    <label class="col-12 m-0">
+                      Unidad:
+                      <strong>{{ item?.corto }}</strong>
+                    </label>
+
+                    <label class="col-12 m-0">
+                      Grado / Rango:
+                      <strong *ngIf="item.FuerzaIngresar !== 2; else gradoEquivalente">
+                        {{ item?.nombre_grado }}
+                      </strong>
+                      <ng-template #gradoEquivalente>
+                        <strong>{{ item?.equivalente }}</strong>
+                      </ng-template>
+                    </label>
+
+                    <label class="col-12 m-0">
+                      Combatiente:
+                      <strong *ngIf="item.combatiente === 0; else esCombatiente">
+                        No
+                      </strong>
+                      <ng-template #esCombatiente>
+                        <strong>Sí</strong>
+                      </ng-template>
+                    </label>
+
+                    <label class="col-12 m-0">
+                      Cupos:
+                      <strong>{{ item?.autorizado }}</strong>
+                    </label>
+                  </div>
+
+                  <!-- FOOTER ACCIONES -->
+                  <div class="card-footer bg-warning text-light d-flex justify-content-around align-items-center rounded-bottom-4">
+                    <!-- Cambiar cupos -->
+                    <button
+                      class="btn btn-sm btn-light rounded-circle"
+                      title="Cambiar cupos"
+                      (click)="selecionarTarjeta(item); abrirDialogCupos()"
+                    >
+                      <i class="pi pi-plus"></i>
+                    </button>
+
+                    <!-- Cambiar combatiente -->
+                    <button
+                      class="btn btn-sm btn-light rounded-circle"
+                      title="Cambio de combatiente"
+                      (click)="guardarCambioCombatiente(item)"
+                    >
+                      <i class="pi pi-arrow-right-arrow-left"></i>
+                    </button>
+
+                    <!-- Activar / Desactivar cupos -->
+                    <button
+                      class="btn btn-sm btn-light rounded-circle"
+                      title="Activar / Desactivar cupos"
+                      (click)="desactivarCupos(item)"
+                    >
+                      <i
+                        [class]="item.activo === 1 ? 'pi pi-check text-success' : 'pi pi-times text-secondary'"
+                      ></i>
+                    </button>
+
+                    <!-- Eliminar tarjeta -->
+                    <button
+                      class="btn btn-sm btn-light rounded-circle"
+                      title="Eliminar tarjeta"
+                      (click)="eliminarTarjetaIngreso(item)"
+                    >
+                      <i class="pi pi-trash text-danger"></i>
+                    </button>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <!-- Si no hay cupos -->
+            <div *ngIf="arregloCupos?.length === 0" class="text-center text-muted mt-4">
+              No hay cupos configurados para esta unidad.
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div> <!-- card-body -->
+  </div>   <!-- card -->
+</div>
+
+}
+<!-- ... aquí tu HTML de tarjetas de cupos ... -->
+ <p-dialog
+  [(visible)]="displayCupos"
+  [modal]="true"
+  [closable]="true"
+  [dismissableMask]="true"
+  [style]="{ width: '420px' }"
+  header="Cambiar cupos"
+>
+  <!-- CONTENIDO (CUERPO) -->
+  <div class="mb-3">
+    <p class="mb-2">
+      Ingrese la nueva cantidad de cupos autorizados para este grado/rango.
+    </p>
+
+    <form [formGroup]="cupos" class="row">
+      <label class="col-md-12">
+        # Cupos
+        <input
+          class="form-control mt-2"
+          formControlName="numero"
+          type="number"
+          required
+        />
+      </label>
+    </form>
+  </div>
+   <button
+      type="button"
+      class="btn btn-secondary me-2"
+      (click)="displayCupos = false"
+    >
+      Cerrar
+    </button>
+
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="guardarCuponuevo(); displayCupos = false"
+    >
+      Cambiar
+    </button>
+ 
+</p-dialog>
+
+ <p-dialog 
+    header="Agregar cupos"
+    [(visible)]="mostrarModalGrado"
+    [modal]="true"
+    [draggable]="true"
+    [resizable]="true"
+    [style]="{ width: '550px' }"
+    [dismissableMask]="true"
+    [closeOnEscape]="true">
+
+    <div class="text-muted mb-3">
+        Complete la siguiente información para autorizar nuevos cupos.
+    </div>
+
+    <form #formularioIngresoCupos="ngForm" (ngSubmit)="GuardarCupos(formularioIngresoCupos)">
+        <div class="grid">
+
+            <!-- Cantidad -->
+            <div class="col-12 md:col-6">
+                <label class="text-600 text-sm font-semibold mb-1 block">Cantidad a autorizar</label>
+                <input type="number"
+                       pInputText
+                       class="w-full"
+                       [(ngModel)]="agregarNuevoCupo.cantidadAutorizada"
+                       name="cantidadAutorizada"
+                       required />
+            </div>
+
+            <!-- Combatiente -->
+            <div class="col-12 md:col-6">
+                <label class="text-600 text-sm font-semibold mb-1 block">Combatiente</label>
+                <p-select
+                    class="w-full"
+                    [options]="[{ label: 'Sí', value: 1 }, { label: 'No', value: 0 }]"
+                    optionLabel="label"
+                    optionValue="value"
+                    [(ngModel)]="agregarNuevoCupo.combatiente"
+                    name="combatiente"
+                    placeholder="Seleccione"
+                    required>
+                </p-select>
+            </div>
+
+            <!-- Categoría -->
+            <div class="col-12 md:col-6">
+                <label class="text-600 text-sm font-semibold mb-1 block">Categoría</label>
+                <p-select
+                    class="w-full"
+                    [options]="arregloControlGrados"
+                    optionLabel="nombreGrado"
+                    [(ngModel)]="ordencategoriaSelected"
+                    (onChange)="buscarGRados()"
+                    name="ordencategoriaSelected"
+                    placeholder="Seleccione"
+                    required>
+                </p-select>
+            </div>
+
+            <!-- Grado / Rango -->
+            <div class="col-12 md:col-6">
+                <label class="text-600 text-sm font-semibold mb-1 block">Grado / Rango</label>
+                <p-select
+                    class="w-full"
+                    [options]="arreglosRam"
+                    [(ngModel)]="objetoSelecionado"
+                    name="objetoSelecionado"
+                    optionLabel="Grado"
+                    placeholder="Seleccione"
+                    required>
+                    <ng-template pTemplate="item" let-item>
+                        {{ item.codigo }} - {{ item.Grado }}
+                    </ng-template>
+                    <ng-template pTemplate="selectedItem" let-item>
+                        {{ item?.codigo }} - {{ item?.Grado }}
+                    </ng-template>
+                </p-select>
+            </div>
+
+            <!-- Fecha ingreso (p-datepicker) -->
+            <div class="col-12 md:col-6">
+                <label class="text-600 text-sm font-semibold mb-1 block">Fecha para ingreso</label>
+                <p-datepicker
+                    class="w-full"
+                    [(ngModel)]="agregarNuevoCupo.fechaIngreso"
+                    name="fechaIngreso"
+                    dateFormat="yy-mm-dd"
+                    [showIcon]="true"
+                    required>
+                </p-datepicker>
+            </div>
+
+            <!-- Unidad ejecutora (condicional con @if) -->
+            @if (formularioIngresoCupos.value.ordencategoriaSelected?.idControl_Grado === 7 ||
+                 formularioIngresoCupos.value.ordencategoriaSelected?.idControl_Grado === 8) {
+                <div class="col-12 md:col-6">
+                    <label class="text-600 text-sm font-semibold mb-1 block">Unidad ejecutora</label>
+                    <p-select
+                        class="w-full"
+                        [options]="arreglounidadEjecutora"
+                        optionLabel="ue"
+                        [(ngModel)]="ueSeleccionada"
+                        name="ue"
+                        placeholder="Seleccione"
+                        required>
+                    </p-select>
+                </div>
+            }
+
+            <!-- Botón Guardar -->
+            <div class="col-12 mt-3">
+                <button
+                    pButton
+                    type="submit"
+                    label="Guardar"
+                    class="w-full"
+                    [disabled]="formularioIngresoCupos.invalid">
+                </button>
+            </div>
+
+        </div>
+    </form>
+
+</p-dialog>

@@ -1,0 +1,735 @@
+ 
+
+<div class="registro-wrapper container-fluid">
+   
+    @if(arregloRegistros.length===0){
+        <div  class="no-registros-wrapper text-center p-4 my-4">
+        <div class="no-registros-card mx-auto">
+            <i class="pi pi-inbox no-registros-icon" style="font-size: 100px;"></i>
+            <h4 class="no-registros-title" style="color: blue;">Sin registros pendientes</h4>
+            <p class="no-registros-text">
+            Todo está al día. No se encontraron registros para mostrar.
+            </p>
+        </div>
+        </div>
+    }
+
+  <!-- =========================
+       VENTANA PRINCIPAL 1  && verificarPermiso(7)
+  ========================== -->
+  <div
+    class="mt-3"
+    *ngIf="banderaVentanaPrincipal === '1'">
+
+    <div class="panel-card panel-card--success h-100 d-flex flex-column">
+
+    
+
+      <!-- BODY -->
+      <div class="panel-body">
+
+        <!-- =========================
+             PASO 1: LISTA DE CUPOS / REGISTROS
+        ========================== -->
+        <div  *ngIf="banderaPersonal===1" class="row g-3">
+          <div
+            class="col-12 col-sm-6 col-md-4 col-lg-3"
+            *ngFor="let i of arregloRegistros">
+
+            <div class="card registro-card h-100 shadow-sm">
+              <img
+                class="card-img-top registro-card-img"
+                src="imagenregistro.jpg"
+                alt="Imagen registro">
+              <div class="card-body registro-card-body d-flex flex-column">
+
+                <!-- Grado / Rango -->
+                <h5 class="card-title mb-2" *ngIf="i.FuerzaIngresar === 2; else gradoNormal">
+                  Grado / Rango:
+                  <strong class="text-primary d-block mt-1">{{ i.equivalente }}</strong>
+                </h5>
+                <ng-template #gradoNormal>
+                  <h5 class="card-title mb-2">
+                    Grado / Rango:
+                    <strong class="text-primary d-block mt-1">{{ i.nombre_grado }}</strong>
+                  </h5>
+                </ng-template>
+
+                <!-- Autorizados -->
+                <p class="mb-1 text-sm">
+                  Autorizados:
+                  <strong class="text-primary">{{ i.autorizado }}</strong>
+                </p>
+
+                <!-- Fuerza -->
+                <p class="mb-1 text-sm">
+                  Fuerza:
+                  <strong
+                    *ngIf="i.NombreFuerzaIngresar === 'Error'; else fuerzaOk"
+                    class="text-danger">
+                    {{ i.NombreFuerzaIngresar }}
+                  </strong>
+                  <ng-template #fuerzaOk>
+                    <strong class="text-primary">
+                      {{ i.NombreFuerzaIngresar }}
+                    </strong>
+                  </ng-template>
+                </p>
+
+                <!-- Unidad -->
+                <p class="mb-1 text-sm">
+                  Unidad:
+                  <strong class="text-primary">{{ i.unidad }}</strong>
+                </p>
+
+                <!-- Combatiente -->
+                <p class="mb-3 text-sm">
+                  Combatiente:
+                  <strong
+                    *ngIf="i.combatiente === 1; else noCombatiente"
+                    class="text-primary">
+                    Sí
+                  </strong>
+                  <ng-template #noCombatiente>
+                    <strong class="text-warning">
+                      No
+                    </strong>
+                  </ng-template>
+                </p>
+
+                <div class="mt-auto">
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-primary w-100"
+                    (click)="registrarPaso_1(i, 2)">
+                    <i class="pi pi-user-plus me-2"></i>
+                    Registrar
+                  </button>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+    <div *ngIf="banderaPersonal===2">
+      
+        <!-- =========================
+             PASO 2: FORMULARIO PRIMER INGRESO
+        ========================== -->
+        <div [hidden]="pasosFormulario.p1 !== 1"  class="row justify-content-center">
+          <div class="col-12 col-lg-10">
+            <div class="card shadow-sm rounded-4">
+              <div class="card-body p-4">
+
+                <h2 class="form-step-title text-center mb-3">
+                  FORMULARIO DE PRIMER INGRESO
+                </h2>
+                <hr class="mb-4">
+
+                <form
+                   #formIngreso="ngForm"
+                  class="row g-3">
+
+                  <!-- Nombre completo -->
+                  <div class="col-12">
+                    <div class="row align-items-center">
+                      <label class="col-sm-3 col-form-label col-form-label-sm">
+                        Nombre completo:
+                      </label>
+                      <div class="col-sm-9">
+                        <input
+                          type="text"
+                          name="nombre"
+                          #nombre="ngModel"
+                          ngModel
+                          required
+                          class="form-control form-control-sm">
+                        
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Apellidos -->
+                  <div class="col-12">
+                    <div class="row align-items-center">
+                      <label class="col-sm-3 col-form-label col-form-label-sm">
+                        Apellidos:
+                      </label>
+                      <div class="col-sm-9">
+                        <input
+                          type="text"
+                          name="apellidos"
+                          #apellidos="ngModel"
+                          ngModel
+                          required
+                          class="form-control form-control-sm">
+                      
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Tipo de sangre -->
+                  <div class="col-12">
+                    <div class="row align-items-center">
+                      <label class="col-sm-3 col-form-label col-form-label-sm">
+                        Tipo de sangre:
+                      </label>
+                      <div class="col-sm-9">
+                        <select
+                          name="tipo_sangre"
+                          #tipo_sangre="ngModel"
+                          ngModel
+                          required=""
+                          class="form-select form-select-sm">
+                          <option value="A+">A+</option>
+                          <option value="A-">A-</option>
+                          <option value="O+">O+</option>
+                          <option value="O-">O-</option>
+                          <option value="B+">B+</option>
+                          <option value="B-">B-</option>
+                          <option value="AB+">AB+</option>
+                          <option value="AB-">AB-</option>
+                        </select>
+                      
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Fecha nacimiento -->
+                  <div class="col-12">
+                    <div class="row align-items-center">
+                      <label class="col-sm-3 col-form-label col-form-label-sm">
+                        Fecha de nacimiento:
+                      </label>
+                      <div class="col-sm-9">
+                        <input
+                          type="date"
+                         name="fecha_nacimiento"
+                         #fecha_nacimiento="ngModel"
+                         ngModel
+                         required
+                          class="form-control form-control-sm">
+                        
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Género -->
+                  <div class="col-12">
+                    <div class="row align-items-center">
+                      <label class="col-sm-3 col-form-label col-form-label-sm">
+                        Género:
+                      </label>
+                      <div class="col-sm-9">
+                        <select
+                          name="sexo"
+                          #sexo="ngModel"
+                          ngModel
+                          required
+                          class="form-select form-select-sm">
+                          <option value="M">Masculino</option>
+                          <option value="F">Femenino</option>
+                        </select>
+                       
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Departamento -->
+                  <div class="col-12">
+                    <div class="row align-items-center">
+                      <label class="col-sm-3 col-form-label col-form-label-sm">
+                        Departamento:
+                      </label>
+                      <div class="col-sm-9">
+                        <select
+                          (change)="sacarmunicipio(formIngreso)"
+                          name="departamentoselected"
+                          #departamentoselected="ngModel"
+                          ngModel
+                          required
+                          
+                          class="form-select form-select-sm">
+                          <option
+                            *ngFor="let i of arregloDepartamento"
+                            [ngValue]="i">
+                            {{ i.departamento }}
+                          </option>
+                        </select>
+                       
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Lugar nacimiento (municipio) -->
+                  <div class="col-12">
+                    <div class="row align-items-center">
+                      <label class="col-sm-3 col-form-label col-form-label-sm">
+                        Lugar de nacimiento (municipio):
+                      </label>
+                      <div class="col-sm-9">
+                        <select
+                           name="lugar_nacimiento"
+                           #lugar_nacimiento="ngModel"
+                           ngModel
+                           required
+                           class="form-select form-select-sm">
+                          <option
+                            *ngFor="let i of arreglomunicipio"
+                            [ngValue]="i.idmunicipio">
+                            {{ i.municipio }}
+                          </option>
+                        </select>
+                      
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Estado civil -->
+                  <div class="col-12">
+                    <div class="row align-items-center">
+                      <label class="col-sm-3 col-form-label col-form-label-sm">
+                        Estado civil:
+                      </label>
+                      <div class="col-sm-9">
+                        <select
+                           name="estado_civil"
+                           #estado_civil="ngModel"
+                           ngModel
+                           required
+                          class="form-select form-select-sm">
+                          <option value="Soltero(a)">Soltero(a)</option>
+                          <option value="Casado(a)">Casado(a)</option>
+                          <option value="Viudo(a)">Viudo(a)</option>
+                          <option value="Divorciado(a)">Divorciado(a)</option>
+                          <option value="Union Libre">Unión libre</option>
+                        </select>
+                        
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Identidad -->
+                  <div class="col-12">
+                    <div class="row align-items-center">
+                      <label class="col-sm-3 col-form-label col-form-label-sm">
+                        Identidad:
+                      </label>
+                      <div class="col-sm-9">
+                        <input
+                          type="text"
+                          name="identidad"
+                          #identidad="ngModel"
+                          ngModel
+                          required
+                          class="form-control form-control-sm"
+                          pattern="^[0-9]*$"
+                          maxlength="13"
+                          minlength="13"
+                          required>
+                       
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- RTN -->
+                  <div class="col-12">
+                    <div class="row align-items-center">
+                      <label class="col-sm-3 col-form-label col-form-label-sm">
+                        RTN:
+                      </label>
+                      <div class="col-sm-9">
+                        <input
+                          type="text"
+                          name="rtn"
+                          #rtn="ngModel"
+                          ngModel
+                          required
+                          class="form-control form-control-sm"
+                          pattern="^[0-9]*$">
+                        
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Nivel educativo -->
+                  <div class="col-12">
+                    <div class="row align-items-center">
+                      <label class="col-sm-3 col-form-label col-form-label-sm">
+                        Nivel educativo:
+                      </label>
+                      <div class="col-sm-9">
+                        <select
+                          name="nivel_educativo"
+                          #nivel_educativo="ngModel"
+                          ngModel
+                          required
+                          class="form-select form-select-sm">
+                          <option value="Prebásica">Prebásica</option>
+                          <option value="Básica">Básica</option>
+                          <option value="Media ">Media</option>
+                          <option value="Superior">Superior</option>
+                          <option value="No aplica">No aplica</option>
+                        </select>
+                     
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Religión -->
+                  <div class="col-12">
+                    <div class="row align-items-center">
+                      <label class="col-sm-3 col-form-label col-form-label-sm">
+                        Religión:
+                      </label>
+                      <div class="col-sm-9">
+                        <select
+                           name="religion"
+                           #religion="ngModel"
+                           ngModel
+                           required
+                          class="form-select form-select-sm">
+                          <option value="Catolica">Católica</option>
+                          <option value="Evangelico">Evangélico</option>
+                          <option value="Mormon">Mormón</option>
+                          <option value="Sin Religion">Sin religión</option>
+                        </select>
+                     
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Dirección exacta -->
+                  <div class="col-12">
+                    <div class="row align-items-center">
+                      <label class="col-sm-3 col-form-label col-form-label-sm">
+                        Dirección exacta:
+                      </label>
+                      <div class="col-sm-9">
+                        <input
+                          type="text"
+                          #direccion_exacta="ngModel"
+                          ngModel
+                          name="direccion_exacta"
+                          required
+                          class="form-control form-control-sm">
+                     
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Cuenta de banco -->
+                  <div class="col-12">
+                    <div class="row align-items-center">
+                      <label class="col-sm-3 col-form-label col-form-label-sm">
+                        Cuenta de banco:
+                      </label>
+                      <div class="col-sm-9">
+                        <input
+                          type="text"
+                           required
+                           #cuenta_banco="ngModel"
+                           ngModel
+                           name="cuenta_banco"
+                          class="form-control form-control-sm">
+                    
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Tipo de banco -->
+                  <div class="col-12">
+                    <div class="row align-items-center">
+                      <label class="col-sm-3 col-form-label col-form-label-sm">
+                        Tipo de banco:
+                      </label>
+                      <div class="col-sm-9">
+                        <select
+                           name="banco"
+                           #banco="ngModel"
+                           ngModel
+                           required
+                          class="form-select form-select-sm">
+                          <ng-container *ngFor="let u of arregloBancos">
+                            <option
+                        
+                              [ngValue]="u.idbanco">
+                              {{ u.nombre }}
+                            </option>
+                          </ng-container>
+                        </select>
+                       
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Número pasaporte -->
+                  <div class="col-12">
+                    <div class="row align-items-center">
+                      <label class="col-sm-3 col-form-label col-form-label-sm">
+                        Número de pasaporte:
+                      </label>
+                      <div class="col-sm-9">
+                        <input
+                          type="text"
+                         #numero_pasaporte="ngModel"
+                         ngModel
+                         name="numero_pasaporte"
+                          class="form-control form-control-sm">
+                       
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Botones navegación -->
+                  <div class="col-12 mt-3 d-flex justify-content-center gap-3">
+                    <button
+                      type="button"
+                      class="btn btn-outline-secondary btn-lg px-4"
+                     (click)="atrasFormularioPersona(1,0,0)">
+                      <i class="pi pi-arrow-left me-2"></i>
+                      Atrás
+                    </button>
+
+                    <button
+                      type="button"
+                      [disabled]="!formIngreso.valid"
+                      class="btn btn-success btn-lg px-4"
+                      (click)="guardarPersonal(2)"
+                     
+                      >
+                      <i class="pi pi-arrow-right me-2"></i>
+                      Siguiente
+                    </button>
+                  </div>
+
+                </form>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- =========================
+             PASO 3: FORMULARIO ASCENSO
+        ========================== -->
+        <div [hidden]="pasosFormulario.p2 !== 1" class="row justify-content-center mt-3">
+          <div class="col-12 col-lg-10">
+            <div class="card shadow-sm rounded-4">
+              <div class="card-body p-4">
+                <button    (click)="ver2()"  >VErrrr</button>
+                <h2 class=  "form-step-title text-center mb-3">
+                  FORMULARIO ASCENSO
+                </h2>
+                <hr class="mb-4">
+
+                <form class="row g-3">
+
+                  <!-- Fechas -->
+                  <div class="col-12">
+                    <div class="row">
+                      <div class="col-sm-6 mb-2 mb-sm-0">
+                        <label class="form-label form-label-sm">Fecha de ingreso</label>
+                        <p class="form-control form-control-sm-plain">
+                          {{ ingresoAscenso.fecha_ingreso }}
+                        </p>
+                      </div>
+                      <div class="col-sm-6">
+                        <label class="form-label form-label-sm">Fecha de ascenso</label>
+                        <p class="form-control form-control-sm-plain">
+                          {{ ingresoAscenso.fecha_ingreso }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Nombre + identidad -->
+                  <div class="col-12">
+                    <div class="row g-2">
+                      <div class="col-sm-6">
+                        <label class="form-label form-label-sm">Nombre completo</label>
+                        <p class="form-control form-control-sm-plain">
+                          {{ ingresoAscenso.nombre_Completo }}
+                        </p>
+                      </div>
+                      <div class="col-sm-6">
+                        <label class="form-label form-label-sm">Identidad</label>
+                        <p class="form-control form-control-sm-plain">
+                          {{ ingresoAscenso.identidad }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Categoría + Grado -->
+                  <div class="col-12">
+                    <div class="row g-2">
+                      <div class="col-sm-6">
+                        <label class="form-label form-label-sm">Categoría</label>
+                        <p class="form-control form-control-sm-plain">
+                          Código: {{ ingresoAscenso?.categoria }} - {{ categoriaAsignar?.categoria }}
+                        </p>
+                      </div>
+                      <div class="col-sm-6">
+                        <label class="form-label form-label-sm">Grado</label>
+                        <p class="form-control form-control-sm-plain">
+                          Código: {{ ingresoAscenso.grado }} - {{ gradoSelected.nombre_grado }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Fuerza + Unidad ingreso -->
+                  <div class="col-12">
+                    <div class="row g-2">
+                      <div class="col-sm-6">
+                        <label class="form-label form-label-sm">Fuerza</label>
+                        <p class="form-control form-control-sm-plain">
+                          Código: {{ ingresoAscenso.fuerza }} - {{ fuerzaSelected.NombreFuerza }}
+                        </p>
+                      </div>
+                      <div class="col-sm-6">
+                        <label class="form-label form-label-sm">Unidad de ingreso</label>
+                        <p class="form-control form-control-sm-plain">
+                          Código: {{ ingresoAscenso.unidad }} - {{ unidadDelIngreso.corto }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Número de acuerdo -->
+                  <div class="col-12">
+                    <label class="form-label form-label-sm">Número de acuerdo</label>
+                    <input
+                      type="text"
+                      class="form-control form-control-sm"
+                      [(ngModel)]="ingresoAscenso.numeroAcuerdo"
+                      name="numeroAcuerdo"
+                      [readonly]="banderabloqContrado">
+                  </div>
+
+                  <!-- Botones -->
+                  <div class="col-12 mt-3 d-flex justify-content-center gap-3">
+                    <button
+                      type="button"
+                      class="btn btn-outline-secondary"
+                      (click)="atrasFormularioPersona(1,0,0)">
+                      <i class="pi pi-arrow-left me-2"></i>
+                      Atrás
+                    </button>
+
+                    <button
+                      type="button"
+                      class="btn btn-warning"
+                      (click)="siguienteAsignacion()">
+                      <i class="pi pi-arrow-right me-2"></i>
+                      Siguiente
+                    </button>
+                  </div>
+
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- =========================
+             PASO 4: FORMULARIO ASIGNACIÓN
+        ========================== -->
+        <div [hidden]="pasosFormulario.p3 !== 1" class="row justify-content-center mt-3">
+          <div class="col-12 col-lg-10">
+            <div class="card shadow-sm rounded-4">
+              <div class="card-body p-4">
+                <h2 class="form-step-title text-center mb-3">
+                  FORMULARIO PARA ASIGNACIÓN
+                </h2>
+                <hr class="mb-4">
+
+                <form class="row g-3">
+
+                  <!-- Fechas -->
+                  <div class="col-12">
+                    <div class="row">
+                      <div class="col-sm-6 mb-2 mb-sm-0">
+                        <label class="form-label form-label-sm">Fecha de ingreso</label>
+                        <p class="form-control form-control-sm-plain">
+                          {{ ingresoAscenso.fecha_ingreso }}
+                        </p>
+                      </div>
+                      <div class="col-sm-6">
+                        <label class="form-label form-label-sm">Fecha de ascenso</label>
+                        <p class="form-control form-control-sm-plain">
+                          {{ ingresoAscenso.fecha_ingreso }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Nombre + identidad -->
+                  <div class="col-12">
+                    <div class="row g-2">
+                      <div class="col-sm-6">
+                        <label class="form-label form-label-sm">Nombre completo</label>
+                        <p class="form-control form-control-sm-plain">
+                          {{ ingresoAscenso.nombre_Completo }}
+                        </p>
+                      </div>
+                      <div class="col-sm-6">
+                        <label class="form-label form-label-sm">Identidad</label>
+                        <p class="form-control form-control-sm-plain">
+                          {{ ingresoAscenso.identidad }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Unidad asignación -->
+                  <div class="col-12">
+                    <label class="form-label form-label-sm">Unidad de asignación</label>
+                    <p class="form-control form-control-sm-plain">
+                      Código: {{ ingresoAscenso.unidad }} - {{ unidadDelIngreso.corto }}
+                    </p>
+                  </div>
+
+                  <!-- Botones -->
+                  <div class="col-12 mt-3 d-flex justify-content-center gap-3">
+                    <button
+                      type="button"
+                      class="btn btn-outline-secondary"
+                     (click)="atrasFormularioPersona(0,1,0)">
+                      <i class="pi pi-arrow-left me-2"></i>
+                      Atrás
+                    </button>
+
+                    <div class="d-flex align-items-center gap-2">
+                      <div *ngIf="spinner === 1" class="spinner-border text-dark" role="status">
+                        <span class="visually-hidden">Cargando...</span>
+                      </div>
+                      <button
+                        *ngIf="spinner === 0"
+                        type="button"
+                        class="btn btn-warning"
+                        (click)="guardar_personal_nuevo()">
+                        <i class="pi pi-cloud-upload me-2"></i>
+                        Guardar
+                      </button>
+                    </div>
+                  </div>
+
+                </form>
+
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+
+      </div>  
+    </div>    
+  </div>      
+
+ 
+ 
+ 
+</div>

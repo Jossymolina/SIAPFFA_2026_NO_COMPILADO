@@ -1,0 +1,83 @@
+@if(permisoPersonal){
+<div class="dashboard-root">
+  <div class="dashboard-wrapper container-fluid">
+
+    <!-- TOP BAR -->
+    <header class="top-bar shadow-sm">
+      <div class="top-bar-left">
+    <p-avatar
+  [image]="_ServicioBackendService.url2 + 'sacarfoto/' + usuariologuiado?.foto"
+  shape="circle"
+  size="large"
+  style="width:70px;height:70px">
+</p-avatar>
+
+        <div class="top-bar-text">
+          <div class="welcome">Hola, {{usuariologuiado.nombres}}</div>
+          <div class="subtitle">Sistema de Administración</div>
+        </div>
+      </div>
+
+      <div class="top-bar-right">
+        <span class="status-pill">
+          <span class="dot"></span>
+          En línea
+        </span>
+
+        <button pButton type="button" class="p-button-rounded p-button-outlined top-menu-btn btn-back-modern"
+          (click)="openMenu()"><i class="pi pi-align-justify"></i>
+        </button>
+      </div>
+    </header>
+<div style="margin: 10px 0;">
+  <p-button
+    label="Atrás"
+    icon="pi pi-angle-double-left"
+    (onClick)="volverAtras()">
+  </p-button>
+</div>
+
+    <!-- GRID DE MÓDULOS   <app-cuerpo-principal></app-cuerpo-principal>
+       <app-visualizar-perfil></app-visualizar-perfil>
+        <router-outlet></router-outlet>-->
+
+    <router-outlet></router-outlet>
+  </div>
+  <!-- MENÚ HAMBURGUESA (SIDEBAR) -->
+  <p-drawer [(visible)]="menuVisible" position="right" [modal]="true" [dismissible]="true" [showCloseIcon]="false"
+    styleClass="menu-sidebar">
+
+    <div class="menu-header">
+      <p-avatar [image]="_ServicioBackendService.url2 + 'sacarfoto/' + usuariologuiado?.foto"
+        shape="circle" size="large">
+      </p-avatar>
+      <div class="menu-header-text">
+        <div class="name">{{usuariologuiado.nombres}}</div>
+        <div class="role">Administrador</div>
+      </div>
+    </div>
+
+    <div class="menu-items">
+      <div class="menu-item" *ngFor="let item of menuItems" (click)="openModule(item)">
+        <div class="menu-item-icon">
+          <i [class]="item.icon"></i>
+        </div>
+        <div class="menu-item-text">
+          <div class="menu-item-label">{{ item.label }}</div>
+        </div>
+      </div>
+    </div>
+
+  </p-drawer>
+
+</div>
+
+}@else{
+<div style="margin: 20px;" *ngIf="this.usuariologuiado">
+  <button pButton (click)="cerrarSesion('/autenticarse')">
+    <i class="pi pi-sign-out" pButtonIcon></i>
+    <span pButtonLabel>Salir</span>
+  </button>
+  <app-visualizar-perfil [identidad]="this.usuariologuiado.identidad"></app-visualizar-perfil>
+</div>
+}

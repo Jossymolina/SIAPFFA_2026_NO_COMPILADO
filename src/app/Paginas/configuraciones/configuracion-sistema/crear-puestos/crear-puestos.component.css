@@ -1,0 +1,123 @@
+.card-header {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.p-select {
+  border-radius: 10px !important;
+}
+
+.p-button-rounded {
+  border-radius: 20px !important;
+  padding: .6rem 1.5rem !important;
+  background-color: rgb(243, 176, 176) !important;
+  color: white !important;
+}
+
+
+
+ .p-button-rounded1 {
+  border-radius: 20px !important;
+  padding: .6rem 1.5rem !important;
+  background-color: rgb(104, 100, 100) !important;
+  color: white !important;
+}
+
+ 
+/* Tabla específica */
+.tabla-nombramientos tbody tr > th,
+.tabla-nombramientos tbody tr > td {
+  padding: 0.25rem 0.5rem;   /* filas más bajitas */
+  font-size: 0.85rem;
+}
+
+/* Columna de acciones: NO saltar de línea */
+.tabla-nombramientos .acciones-nombramiento {
+  white-space: nowrap;
+}
+
+/* Botones de acciones compactos */
+.tabla-nombramientos .acciones-nombramiento .p-button {
+  padding: 0.2rem 0.4rem !important;
+}
+
+.tabla-nombramientos .acciones-nombramiento .p-button .pi {
+  font-size: 0.85rem;
+}
+
+
+
+/************* TABLA MODERNA *************/
+.tabla-puestos {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 6px !important; /* ESPACIO ENTRE FILAS */
+}
+
+.tabla-puestos thead tr {
+  background: #f5f7fa !important;
+  border-bottom: 2px solid #e2e6ea;
+}
+
+.tabla-puestos thead th {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #495057;
+  text-transform: uppercase;
+  padding: 0.55rem;
+  text-align: center;
+}
+
+/************* COLUMNAS *************/
+.col-num { width: 50px; text-align: center; }
+.col-orden { width: 80px; text-align: center; }
+.col-acciones { width: 120px; text-align: center; }
+
+/************* FILAS *************/
+.tabla-puestos tbody tr {
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.tabla-puestos tbody td {
+  padding: 0.55rem 0.65rem;
+  font-size: 0.88rem;
+  border-top: none !important;
+}
+
+/************* ACCIONES *************/
+.acciones-puestos {
+  white-space: nowrap;
+  text-align: center;
+}
+
+/************* BOTONES *************/
+.action-btn {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 6px !important;
+  margin: 0 3px;
+  border: none !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 !important;
+  font-size: 0.9rem !important;
+}
+
+.action-btn.delete {
+  background-color: #ffeded !important;
+  color: #c62828 !important;
+}
+
+.action-btn.edit {
+  background-color: #e8f5e9 !important;
+  color: #1b5e20 !important;
+}
+
+.action-btn:hover {
+  filter: brightness(0.92);
+  transform: scale(1.05);
+  transition: 0.15s;
+}

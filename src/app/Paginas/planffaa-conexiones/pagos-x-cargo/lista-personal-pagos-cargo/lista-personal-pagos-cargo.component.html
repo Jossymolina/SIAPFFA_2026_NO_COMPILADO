@@ -1,0 +1,121 @@
+@if (permisoPersonal) {
+  <div class="card shadow-lg border-0 rounded-4 mt-3">
+    <!-- HEADER -->
+    <div class="card-header bg-success text-white rounded-top-4 d-flex justify-content-between align-items-center px-4">
+      <h5 class="mb-0 d-flex align-items-center gap-2">
+        <i class="pi pi-list-check me-2"></i>
+        Lista de personas con pagos por cargo
+      </h5>
+
+      <button
+        pButton
+        type="button"
+        class="p-button-sm p-button-success p-button-rounded d-flex align-items-center gap-2"
+        (click)="exportar('tabla_pxc')">
+        <i class="pi pi-file-excel"></i>
+        <span>Exportar</span>
+      </button>
+    </div>
+
+    <!-- BODY -->
+    <div class="card-body px-4 pb-4 pt-3">
+
+      <!-- ALERTA -->
+      <div class="alert alert-warning border-0 rounded-3 small mb-3">
+        <div class="d-flex">
+          <i class="pi pi-info-circle me-2 mt-1"></i>
+          <div>
+            <div class="fw-semibold mb-1">Importante</div>
+            <ul class="mb-0 ps-3">
+              <li>Para añadir a alguien a la tabla, debe agregar el cargo a la persona; la lista se actualizará automáticamente.</li>
+              <li>Cuando elimine el cargo de una persona, la lista se actualizará automáticamente.</li>
+              <li>Una vez la planilla generada y guardada en la SEDENA, los cambios ejecutados en la organización de personal posteriores a dicha acción no se reflejarán en la planilla guardada.</li>
+              <li>Por lo tanto, todas las actualizaciones deben realizarse en tiempo y forma.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- FILTRO -->
+      <div class="row justify-content-end mb-3">
+        <div class="col-md-6 col-lg-4">
+          <div class="input-group input-group-sm">
+            <span class="input-group-text">
+              <i class="pi pi-search"></i>
+            </span>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Buscar por fuerza, unidad, persona, grado..."
+              [(ngModel)]="filtroPxc"
+              name="filtroPxc"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- TABLA -->
+      <div class="tabla-wrapper">
+        <div class="mb-2 small text-muted d-flex justify-content-between px-1">
+  <span *ngIf="!filtroPxc">
+    Total: <strong>{{ arregloLista?.length || 0 }}</strong> registros
+  </span>
+
+  <span *ngIf="filtroPxc">
+    Mostrando <strong>{{ listaFiltradaPxc().length }}</strong> de 
+    <strong>{{ arregloLista?.length }}</strong> registros
+  </span>
+</div>
+        <table
+          id="tabla_pxc"
+          class="table tabla-pagos-cargo table-hover align-middle mb-0"
+        >
+          <thead>
+            <tr>
+              <th class="col-num">#</th>
+              <th>Fuerza / Dependencia</th>
+              <th>Unidad</th>
+              <th>Dirección / Sección</th>
+              <th>Puesto</th>
+              <th>Identidad</th>
+              <th>Persona</th>
+              <th>Grado</th>
+              <th class="col-monto">Monto</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (item of listaFiltradaPxc(); track item.identidad; let i = $index) {
+              <tr>
+                <td class="text-center">{{ i + 1 }}</td>
+                <td>{{ item.fuerza }}</td>
+                <td>{{ item.unidad }}</td>
+                <td>{{ item.descripcion }}</td>
+                <td>{{ item.Nombre_Puesto }}</td>
+                <td class="text-center">{{ item.identidad }}</td>
+                <td>{{ item.nombre }}</td>
+                <td class="text-center">{{ item.grado }}</td>
+                <td class="text-end">
+                  {{ (((item.monto | currency : "":"").replace(',','_').replace(".",","))).replace("_",".") }}
+                </td>
+              </tr>
+            }
+
+            @if (!arregloLista || listaFiltradaPxc().length === 0) {
+              <tr>
+                <td colspan="9" class="text-center text-muted py-3">
+                  <i class="pi pi-info-circle me-1"></i>
+                  No hay registros que coincidan con el filtro.
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+} @else {
+  <div class="alert alert-danger mt-3 mb-0">
+    Permisos no autorizados
+  </div>
+}

@@ -1,0 +1,24 @@
+<main>
+  <div class="row g-3 justify-content-center">
+    <div
+      class="col-12 col-sm-6 col-lg-3"
+      *ngFor="let m of modules"
+    >
+      <p-card class="module-card h-100" (click)="openModule(m)" >
+        <div class="module-content">
+          <div class="module-icon-wrapper">
+            <i class="module-icon" [class]="m.icon"></i>
+          </div>
+
+          <h3 class="module-title">
+            {{ m.title }}
+          </h3>
+
+          <p class="module-description">
+            {{ m.description }}
+          </p>
+        </div>
+      </p-card>
+    </div>
+  </div>
+</main>

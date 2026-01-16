@@ -1,0 +1,387 @@
+ 
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-7 col-md-9">
+
+        <div class="card shadow-lg border-0 rounded-4">
+          <!-- Header -->
+          <div class="card-header bg-success text-white rounded-top-4 d-flex align-items-center px-4">
+            <i class="pi pi-building me-2"></i>
+            <h5 class="mb-0">Crear Organización</h5>
+          </div>
+
+          <!-- Body -->
+          <div class="card-body px-4 py-4">
+            <form #orgForm="ngForm" novalidate class="row g-4">
+
+              <!-- Fuerza -->
+              <div class="col-12">
+                <label class="form-label fw-semibold text-muted small mb-1">Fuerza</label>
+                <p-select
+                  class="w-100"
+                  [options]="arregloFuerzas"
+                  optionLabel="nombre"
+                  [(ngModel)]="fuerzaSelected"
+                  name="fuerzaSelected"
+                  placeholder="Seleccione una fuerza"
+                  (onChange)="sacarunidades()"
+                  [filter]="true"
+                  [showClear]="true"
+                  required>
+                </p-select>
+              </div>
+
+              <!-- Unidad -->
+              <div class="col-12">
+                <label class="form-label fw-semibold text-muted small mb-1">Unidad</label>
+                <p-select
+                  class="w-100"
+                  [options]="ArregloUnidades"
+                  optionLabel="unidad"
+                  [(ngModel)]="unidadSelected"
+                  name="unidadSelected"
+                  placeholder="Seleccione una unidad"
+                  [filter]="true"
+                  [showClear]="true"
+                  required>
+                </p-select>
+              </div>
+
+              <!-- Botón -->
+              <div class="col-12 d-flex justify-content-end mt-2">
+                <button
+                  pButton
+                  type="button"
+                  label="+ Dirección / Sección"
+             
+                  class="p-button-success p-button-rounded"
+                  [disabled]="!unidadSelected || !fuerzaSelected"
+                  (click)="sacarNombranmiento(); mostrarModalDireccion = true"> 
+                  <i class="pi pi-search me-2"></i> Siguiente
+                </button>
+              </div>
+
+            </form>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+ 
+  <p-dialog
+  header="Control de organización"
+  [(visible)]="mostrarModalDireccion"
+  [modal]="true"
+  [blockScroll]="true"
+  [style]="{ width: '900px', maxHeight: '80vh' }"
+  [draggable]="false"
+  [resizable]="false"
+  [closable]="true"
+>
+  <!-- CABECERA RESUMEN -->
+  <div class="mb-3">
+    <div class="row g-2">
+      <div class="col-md-4">
+        <label class="form-label small text-muted mb-1">Fuerza</label>
+        <div class="form-control-plaintext fw-semibold bg-light rounded-3 px-3 py-2">
+          {{ fuerzaSelected?.nombre || '-' }}
+        </div>
+      </div>
+      <div class="col-md-8">
+        <label class="form-label small text-muted mb-1">Unidad</label>
+        <div class="form-control-plaintext fw-semibold bg-light rounded-3 px-3 py-2">
+          {{ unidadSelected?.unidad || '-' }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="my-3" />
+
+  <!-- FORMULARIO NUEVA SECCIÓN / DEPTO / DIR -->
+  <form #formNombramiento="ngForm" class="row g-3 mb-3" novalidate>
+    <div class="col-md-10">
+      <label class="form-label small text-muted mb-1">
+        Nombre de la nueva Sección / Dept. / Dir.
+      </label>
+      <input
+        type="text"
+        pInputText
+        [(ngModel)]="data.nombramiento"
+        name="nombramiento"
+        class="form-control"
+        placeholder="Ej: Dirección de Personal"
+        required
+      />
+    </div>
+
+    <div class="col-md-2">
+      <label class="form-label small text-muted mb-1">Orden</label>
+      <input
+        type="number"
+        pInputText
+        [(ngModel)]="data.orden"
+        name="orden"
+        class="form-control text-center"
+        min="1"
+        required
+      />
+    </div>
+
+    <div class="col-12 mt-1">
+      <button
+        pButton
+        type="button"
+        label="Guardar nombramiento"
+        icon="pi pi-save"
+        class="p-button-success w-25"
+        (click)="guardar_Nombramiento()"
+        [disabled]="!data?.nombramiento || !data?.orden"
+      >Guardar</button>
+    </div>
+  </form>
+
+  <!-- TABLA DE NOMBRAMIENTOS -->
+  <div class="mt-3">
+    <h6 class="text-muted text-uppercase small mb-2">Listado de nombramientos</h6>
+
+    <div class="table-responsive" style="max-height: 45vh; overflow-y: auto;">
+    <table class="table table-sm table-bordered table-hover align-middle mb-0 tabla-nombramientos">
+  <thead class="table-light text-center">
+    <tr>
+      <th style="width: 40px;">#</th>
+      <th>Nombre</th>
+      <th style="width: 70px;">Orden</th>
+      <th style="width: 90px;">Acciones</th>
+    </tr>
+  </thead>
+  <tbody class="text-center">
+    @for (item of ArregloNombramiento; track item.idNombramiento; let index = $index) {
+      <tr>
+        <th scope="row">{{ index + 1 }}</th>
+        <td class="text-start">{{ item.descripcion }}</td>
+        <td>{{ item.orden }}</td>
+        <td class="acciones-nombramiento">
+          <button
+            pButton
+            type="button"
+            class="p-button-rounded1 p-button-success p-button-sm me-1"
+            icon=""
+            title="Agregar puestos"
+            (click)="sacarPuestos_delNombramiento(item.idNombramiento); mostrarModalPuesto = true">
+            <i class="pi pi-clone"></i> Puestos
+          </button>
+
+          <button
+            pButton
+            type="button"
+            class="p-button-rounded p-button-danger p-button-sm p-button-outlined"
+          
+            title="Eliminar nombramiento"
+            (click)="eliminarNombramiento(item.idNombramiento)">
+            <i class="pi pi-trash"></i> Eliminar
+          </button>
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <ng-template pTemplate="footer">
+    <div class="d-flex justify-content-end">
+      <button
+        pButton
+        type="button"
+        label="Cerrar"
+        class="p-button-text"
+        icon="pi pi-times"
+        (click)="mostrarModalDireccion = false"
+      ></button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+
+
+<!-- DIALOG: CONTROL DE PUESTOS -->
+<p-dialog
+  header="Control de puestos"
+  [(visible)]="mostrarModalPuesto"
+  [modal]="true"
+  [blockScroll]="true"
+  [style]="{ width: '800px', maxHeight: '80vh' }"
+  [draggable]="false"
+  [resizable]="false"
+  [closable]="true"
+>
+  <!-- FORM NUEVO PUESTO -->
+  <form #formPuesto="ngForm" class="row g-3 mb-3" novalidate>
+    <div class="col-md-8">
+      <label class="form-label small text-muted mb-1">
+        Nombre del puesto
+      </label>
+      <input
+        type="text"
+        pInputText
+        [(ngModel)]="dataPuesto.Nombre_Puesto"
+        name="Nombre_Puesto"
+        class="form-control"
+        placeholder="Ej: Jefe de Sección"
+        required
+      />
+    </div>
+
+    <div class="col-md-4">
+      <label class="form-label small text-muted mb-1">
+        Orden jerárquico
+      </label>
+      <input
+        type="number"
+        pInputText
+        [(ngModel)]="dataPuesto.orden"
+        name="orden"
+        class="form-control text-center"
+        min="0"
+        required
+      />
+    </div>
+
+    <div class="col-12 mt-1">
+      <button
+        pButton
+        type="button"
+        label="Guardar puesto"
+        icon="pi pi-save"
+        style="cursor: pointer;"
+        class="p-button-success w-25"
+        (click)="guardarPuesto()"
+        [disabled]="!dataPuesto?.Nombre_Puesto || dataPuesto?.orden === undefined"
+      >Guardar</button>
+    </div>
+  </form>
+
+  <!-- TABLA DE PUESTOS -->
+  <div class="mt-3">
+    <h6 class="text-muted text-uppercase small mb-2">Listado de puestos</h6>
+
+    <div class="table-responsive" style="max-height: 45vh; overflow-y: auto;">
+     <table class="table tabla-puestos table-hover align-middle mb-0">
+  <thead>
+    <tr>
+      <th class="col-num">#</th>
+      <th class="col-nombre">Nombre</th>
+      <th class="col-orden">Orden</th>
+      <th class="col-acciones">Acciones</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    @for (item of ArregloPuestos; track item.idPuesto; let index = $index) {
+      <tr>
+        <td>{{ index + 1 }}</td>
+
+        <td class="text-start">{{ item.Nombre_Puesto }}</td>
+
+        <td>{{ item.dependenciaArbol }}</td>
+
+        <td class="acciones-puestos">
+          <button
+            pButton
+            class="action-btn delete"
+            (click)="eliminarPuesto(item.idPuesto)"
+            title="Eliminar puesto">
+            <i class="pi pi-trash"></i>
+          </button>
+
+          <button
+            pButton
+            class="action-btn edit"
+            (click)="puestoseleccionado(item); mostrarCambioNombrePuesto = true"
+            title="Cambiar nombre">
+            <i class="pi pi-pencil"></i>
+          </button>
+        </td>
+      </tr>
+    }
+
+    @if (!ArregloPuestos || ArregloPuestos.length === 0) {
+      <tr>
+        <td colspan="4" class="text-center text-muted py-3">
+          <i class="pi pi-info-circle me-1"></i>
+          No hay puestos registrados
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <ng-template pTemplate="footer">
+    <div class="d-flex justify-content-end">
+      <button
+        pButton
+        type="button"
+        label="Cerrar"
+        class="p-button-text"
+        icon="pi pi-times"
+        (click)="mostrarModalPuesto = false">
+      </button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+
+<p-dialog
+  header="Cambiar nombre del puesto"
+  [(visible)]="mostrarCambioNombrePuesto"
+  [modal]="true"
+  [blockScroll]="true"
+  [style]="{ width: '420px' }"
+  [draggable]="false"
+  [resizable]="false"
+  [closable]="true"
+>
+  <form #formModificar="ngForm" class="row g-3" novalidate>
+    <div class="col-12">
+      <label class="form-label small text-muted mb-1">
+        Nuevo nombre
+      </label>
+      <input
+        type="text"
+        pInputText
+        class="form-control"
+        name="nombre"
+        [(ngModel)]="nuevoNombrePuesto"
+        #nombre="ngModel"
+        required
+        placeholder="Ej: Jefe de Sección"
+      />
+    </div>
+
+    <div class="col-12 mt-2">
+      <button
+        pButton
+         style="background-color: black; color: white;"
+        type="button"
+        label="Guardar"
+        icon="pi pi-save"
+        class="p-button-success w-50"
+        [disabled]="!formModificar.valid"
+        (click)="cambiarNombrePuesto(nuevoNombrePuesto, formModificar)"
+      >Guardar</button>
+    </div>
+  </form>
+
+  
+  
+ 
+</p-dialog>

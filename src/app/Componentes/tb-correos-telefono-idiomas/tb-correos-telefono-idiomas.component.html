@@ -1,0 +1,478 @@
+ 
+
+
+<div    class="form-wrapper">
+  <div class="card form-card p-3">
+
+ 
+    <div class="form-header mb-2">
+      <div class="form-title">
+        Telefonos
+        <div class="form-subtitle">
+          Gestione los numero de telefono registrados para notificaciones
+        </div>
+      </div>
+
+      <button
+        type="button"
+        class="btn btn-sm btn-back-modern"
+        style="white-space: nowrap; margin-top: 4px; background-color: black;color: white;"
+        (click)="mostrarModalTelefono = true"
+        title="Agregar correo"
+      >
+        <i class="pi pi-plus" aria-hidden="true"></i>
+        <span>Agregar</span>
+      </button>
+    </div>
+
+    <!-- LISTA -->
+    <div class="card-body px-0 pt-2 pb-0">
+
+      <label
+        *ngIf="arregloTelefono.length === 0"
+        style="color: red; font-size: 0.8rem;"
+      >
+        *No tiene telefonos registrados*
+      </label>
+
+      <div class="table-responsive" style="margin-top: 10px;">
+  
+
+         <table class="table table-sm table-hover table-bordered align-middle">
+          <thead class="table-light">
+            <tr>
+              <th style="width: 40px">#</th>
+              <th>Correo</th>
+              <th style="width: 80px;">Opción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let i of arregloTelefono; let index = index">
+              <td>{{ index + 1 }}</td>
+              <td>{{ i.numero }}</td>
+              <td>
+                <button
+                  class="btn btn-sm btn-danger"
+                  (click)="eliminarnumero(i.numero)"
+                  title="Eliminar Telefono"
+                >
+                  <i class="pi pi-trash" aria-hidden="true"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+
+
+
+<!-- dialogo Telefonos-->
+<p-dialog
+  header="Agregar mi Telefono"
+  [(visible)]="mostrarModalTelefono"
+  [modal]="true"
+  [style]="{ width: '450px', maxWidth: '95vw' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+<form  #formtelefono="ngForm" class="row"> 
+  <div class="modal-body p-12">
+   
+            <label class="col-md-12">
+              Numero de celular (Formato:9766-6826):
+              <input class="form-control" pattern="[9|8|3|2]{1}\d{3}[-]\d{4}"
+               required #numeroTelefono="ngModel" ngModel type="text" name="numeroTelefono" id="" maxlength="9">
+           </label>
+          
+  </div>
+
+  
+   <div class="row" style="margin-top: 10px;" >
+    
+ <button
+      type="button"
+      pButton
+      class="p-button-text col-md-4 offset-md-4 "
+      label="Cancelar"
+      (click)="mostrarModalCorreo = false"
+    ></button>
+
+    <button
+      type="button"
+      pButton
+      label="Guardar"
+      icon="pi pi-check"
+      class="col-md-4"
+      (click)="guardarTelefono(formtelefono); mostrarModalCorreo = false"
+    ></button>
+ 
+   </div>
+  </form>
+</p-dialog>
+
+
+
+
+
+
+
+<div class="form-wrapper" style="margin-top: 10px;">
+  <div class="card form-card p-3">
+
+ 
+    <div class="form-header mb-2">
+      <div class="form-title">
+        Correos personales AA
+        <div class="form-subtitle">
+          Gestione los correos registrados para notificaciones
+        </div>
+      </div>
+
+      <button
+        type="button"
+        class="btn btn-sm btn-back-modern"
+        style="white-space: nowrap; margin-top: 4px; background-color: black;color: white;"
+        (click)="mostrarModalCorreo = true"
+        title="Agregar correo"
+      >
+        <i class="pi pi-plus" aria-hidden="true"></i>
+        <span>Agregar</span>
+      </button>
+    </div>
+
+    <!-- LISTA -->
+    <div class="card-body px-0 pt-2 pb-0">
+
+      <label
+        *ngIf="arregloCorreos.length === 0"
+        style="color: red; font-size: 0.8rem;"
+      >
+        *No tiene correos registrados*
+      </label>
+
+      <div class="table-responsive" style="margin-top: 10px;">
+        <table class="table table-sm table-hover table-bordered align-middle">
+          <thead class="table-light">
+            <tr>
+              <th style="width: 40px">#</th>
+              <th>Correo</th>
+              <th style="width: 80px;">Opción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let i of arregloCorreos; let index = index">
+              <td>{{ index + 1 }}</td>
+              <td>{{ i.correo }}</td>
+              <td>
+                <button
+                  class="btn btn-sm btn-danger"
+                  (click)="eliminarCorreo(i)"
+                  title="Eliminar correo"
+                >
+                  <i class="pi pi-trash" aria-hidden="true"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- DIALOG PRIME NG: AGREGAR CORREO -->
+<p-dialog
+  header="Agregar mi correo"
+  [(visible)]="mostrarModalCorreo"
+  [modal]="true"
+  [style]="{ width: '450px', maxWidth: '95vw' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <div class="modal-body p-0">
+    <form [formGroup]="formularioCorreo" class="row g-2">
+      <div class="col-12">
+        <label class="form-label">
+          Correo:
+        </label>
+        <input
+          class="form-control"
+          formControlName="correo"
+          type="text"
+          (keyup.enter)="guardarCorreo()"
+        />
+        <div
+          class="alert-danger mt-1"
+          *ngIf="getCorreos?.invalid && (getCorreos?.dirty || getCorreos?.touched)"
+        >
+         
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <button
+      type="button"
+      pButton
+      class="p-button-text"
+      label="Cancelar"
+      (click)="mostrarModalCorreo = false"
+    ></button>
+
+    <button
+      type="button"
+      pButton
+      label="Guardar"
+      icon="pi pi-check"
+      (click)="guardarCorreo(); mostrarModalCorreo = false"
+    ></button>
+  </ng-template>
+</p-dialog>
+
+
+
+<div class="form-wrapper" style="margin-top: 10px;">
+  <div class="card form-card p-3">
+
+    <!-- ====== PAISES ====== -->
+    <div class="mb-3">
+      <div class="form-header mb-2">
+        <div>
+          <div class="form-title" style="text-align: left;">
+            Países que conoce
+          </div>
+          <div class="form-subtitle">
+            Registre los países donde ha estado o que conoce
+          </div>
+        </div>
+
+        <button
+          type="button"
+          class="btn btn-sm btn-back-modern"
+          (click)="sacarpaises(); mostrarModalPaises = true"
+          title="Agregar país"
+          style="background-color: black;color: white;"
+        >
+          <i class="pi pi-plus" aria-hidden="true"></i>
+          <span>Agregar</span>
+        </button>
+      </div>
+
+      <label
+        *ngIf="arregloMisPaises.length === 0"
+        style="color: red; font-size: 0.8rem;"
+      >
+        No contiene países conocidos
+      </label>
+
+      <div class="table-responsive" style="margin-top: 10px;">
+        <table class="table table-sm table-hover table-bordered align-middle">
+          <thead class="table-light">
+            <tr>
+              <th style="width: 40px;">#</th>
+              <th>Países</th>
+              <th style="width: 80px;">Opción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let i of arregloMisPaises; let index = index">
+              <td>{{ index + 1 }}</td>
+              <td>{{ i.nombrepaises }}</td>
+              <td>
+                <button
+                  (click)="EliminarPais(i)"
+                  class="btn btn-sm btn-warning"
+                  title="Eliminar país"
+                >
+                  <i class="pi pi-trash" aria-hidden="true"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- ====== IDIOMAS ====== -->
+    <div class="mb-2">
+      <div class="form-header mb-2">
+        <div>
+          <div class="form-title" style="text-align: left;">
+            Idiomas que domina
+          </div>
+          <div class="form-subtitle">
+            Registre los idiomas y el nivel de dominio
+          </div>
+        </div>
+
+        <button
+          type="button"
+          class="btn btn-sm btn-back-modern"
+          (click)="sacarIdiomas(); mostrarModalIdiomas = true"
+          title="Agregar idioma"
+        style="background-color: black;color: white;"
+        >
+          <i class="pi pi-plus" aria-hidden="true"></i>
+          <span>Agregar</span>
+        </button>
+      </div>
+
+      <label
+        *ngIf="arregloMisIdiomas.length === 0"
+        style="color: red; font-size: 0.8rem;"
+      >
+        No contiene idiomas que domina.
+      </label>
+
+      <div class="table-responsive" style="margin-top: 10px;">
+        <table class="table table-sm table-hover table-bordered align-middle">
+          <thead class="table-light">
+            <tr>
+              <th style="width: 40px;">#</th>
+              <th>Idiomas</th>
+              <th>Nivel</th>
+              <th style="width: 80px;">Opción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let i of arregloMisIdiomas; let index = index">
+              <td>{{ index + 1 }}</td>
+              <td>{{ i.descripcion }}</td>
+              <td>{{ i.nivel }}%</td>
+              <td>
+                <button
+                  class="btn btn-sm btn-success"
+                  (click)="eliminarIdioma(i)"
+                  title="Eliminar idioma"
+                >
+                  <i class="pi pi-trash" aria-hidden="true"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ====== DIALOG PRIME NG: AGREGAR PAISES ====== -->
+<p-dialog
+  header="Agregar países que conoce"
+  [(visible)]="mostrarModalPaises"
+  [modal]="true"
+  [style]="{ width: '450px', maxWidth: '95vw' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <div class="modal-body p-0">
+    <div class="row g-2">
+      <div class="col-12">
+        <label class="form-label">Seleccione el país</label>
+        <select
+          [(ngModel)]="paisSelected"
+          name="paisSelected"
+          class="form-control"
+        >
+          <option
+            *ngFor="let i of arregloPaises; let index = index"
+            [ngValue]="i"
+          >
+            {{ i.nombrepaises }}
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <button
+      type="button"
+      pButton
+      class="p-button-text"
+      label="Cancelar"
+      (click)="mostrarModalPaises = false"
+    ></button>
+
+    <button
+      type="button"
+      pButton
+      label="Guardar"
+      icon="pi pi-check"
+      (click)="agregarPaises(); mostrarModalPaises = false"
+    ></button>
+  </ng-template>
+</p-dialog>
+
+<!-- ====== DIALOG PRIME NG: AGREGAR IDIOMAS ====== -->
+<p-dialog
+  header="Agregar idiomas que domina"
+  [(visible)]="mostrarModalIdiomas"
+  [modal]="true"
+  [style]="{ width: '500px', maxWidth: '95vw' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <div class="modal-body p-0">
+    <div class="row g-2" *ngIf="arregloIdiomas">
+      <div class="col-md-6 col-12">
+        <label class="form-label">Seleccione el idioma</label>
+        <select
+          [(ngModel)]="idiomaSelected.idmisidiomas"
+          name="idmisidiomas"
+          class="form-control"
+        >
+          <option
+            *ngFor="let i of arregloIdiomas; let index = index"
+            [ngValue]="i.ididioma"
+          >
+            {{ i.descripcion }}
+          </option>
+        </select>
+      </div>
+
+      <div class="col-md-6 col-12">
+        <label class="form-label">Porcentaje (Max 100)</label>
+        <input
+          [(ngModel)]="idiomaSelected.nivel"
+          name="nivel"
+          maxlength="3"
+          max="3"
+          type="number"
+          class="form-control"
+        />
+      </div>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <button
+      type="button"
+      pButton
+      class="p-button-text"
+      label="Cancelar"
+      (click)="mostrarModalIdiomas = false"
+    ></button>
+
+    <button
+      type="button"
+      pButton
+      label="Guardar"
+      icon="pi pi-check"
+      (click)="agrgarIdioma(); mostrarModalIdiomas = false"
+    ></button>
+  </ng-template>
+</p-dialog>

@@ -1,0 +1,310 @@
+<div class="form-wrapper">
+  <div class="card form-card p-3">
+
+    <!-- HEADER -->
+    <div class="form-header mb-2">
+      <div>
+        <div class="form-title" style="text-align: left;">
+          Control disciplinario
+        </div>
+        <div class="form-subtitle">
+          Registro de arrestos y documentos asociados
+        </div>
+      </div>
+<!-- *ngIf="
+          _DatospersonalesService.verificarPermisos(1) ||
+          _DatospersonalesService.verificarPermisos(2) ||
+          _DatospersonalesService.verificarPermisos(3) ||
+          _DatospersonalesService.verificarPermisos(4)
+        "-->
+      <button
+       *ngIf="permisoBotonAdminArresto"
+        type="button"
+        class="btn btn-sm btn-back-modern"
+        title="Ingresar arresto"
+        (click)="mostrarModalAresto = true"
+        style="background-color: black;color: white;"
+      >
+        <i class="pi pi-plus" aria-hidden="true"></i>
+        <span>Nuevo arresto</span>
+      </button>
+    </div>
+
+    <!-- MENSAJE SIN REGISTROS -->
+    <label
+      *ngIf="arregloArestos.length === 0"
+      style="color: red; font-size: 0.8rem;"
+    >
+      *No tiene control disciplinario*
+    </label>
+
+    <!-- TABLA -->
+    <div class="table-responsive mt-2">
+      <table
+        class="table table-sm table-hover table-bordered table-striped align-middle"
+        style="font-size: 13.5px;"
+      >
+        <thead class="table-light">
+          <tr>
+            <th style="width: 40px">#</th>
+            <th>Fecha</th>
+            <th>Concepto</th>
+            <th>Tiempo</th>
+            <th>Por orden de</th>
+            <th style="width: 120px;">Archivo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let f of arregloArestos; let index = index">
+            <tr>
+              <td>{{ index + 1 }}</td>
+              <td>{{ f.fecha }}</td>
+              <td>{{ f.motivo }}</td>
+              <td>{{ f.horas }}</td>
+              <td>{{ f.nombres }} {{ f.apellidos }}</td>
+              <td>
+                <!-- SIN ARCHIVO: SUBIR       *ngIf="
+                    _DatospersonalesService.verificarPermisos(1) ||
+                    _DatospersonalesService.verificarPermisos(2) ||
+                    _DatospersonalesService.verificarPermisos(3) ||
+                    _DatospersonalesService.verificarPermisos(4)
+                  " -->
+                <ng-container
+            
+                >
+                  <button
+                    *ngIf="f.archivo === null; else archivoCargado"
+                    type="button"
+                    class="btn btn-sm btn-warning"
+                    title="Subir documento"
+                    style="margin-left: 3px;"
+                    (click)="ver(f); mostrarModalDocumentoArresto = true"
+                  >
+                    <i class="pi pi-folder" aria-hidden="true"></i>
+                  </button>
+                </ng-container>
+
+                <!-- CON ARCHIVO: VER / ELIMINAR -->
+                <ng-template #archivoCargado>
+                  <a
+                    *ngIf="f.archivo !== null"
+                    title="Ver el documento"
+                    target="_blank"
+                    download
+                    class="btn btn-sm btn-danger"
+                    [href]="_DatospersonalesService.url2 + 'sacarfoto/' + f?.archivo"
+                  >
+                    <i class="pi pi-eye" aria-hidden="true"></i>
+                  </a>
+<!--    *ngIf="
+                      _DatospersonalesService.verificarPermisos(1) ||
+                      _DatospersonalesService.verificarPermisos(2) ||
+                      _DatospersonalesService.verificarPermisos(3) ||
+                      _DatospersonalesService.verificarPermisos(4)
+                    "-->
+                  <ng-container
+                
+                  >
+                    <button
+                      *ngIf="f.archivo !== null"
+                      type="button"
+                      title="Eliminar el documento"
+                      class="btn btn-sm btn-success"
+                      style="margin-left: 2px;"
+                      (click)="deleteDocumentoArresto(f.idarrestos, f.archivo)"
+                    >
+                      <i class="fa fa-trash-o" aria-hidden="true"></i>
+                    </button>
+                  </ng-container>
+                </ng-template>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<!-- DIALOG: CARGAR DOCUMENTO ARRESTO -->
+<p-dialog
+  header="Control de documentos"
+  [(visible)]="mostrarModalDocumentoArresto"
+  [modal]="true"
+  [style]="{ width: '450px', maxWidth: '95vw' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <div class="modal-body p-0">
+    <label class="form-label">
+      Seleccione el archivo a cargar
+      <input
+        #file
+        type="file"
+        class="form-control mt-1"
+        (change)="preview(file.files, $event)"
+      />
+    </label>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <button
+      type="button"
+      pButton
+      class="p-button-text"
+      label="Cerrar"
+      (click)="mostrarModalDocumentoArresto = false"
+    ></button>
+    <button
+      type="button"
+      pButton
+      label="Guardar"
+      icon="pi pi-check"
+      (click)="guardardocumentoDElArresto(); mostrarModalDocumentoArresto = false"
+    ></button>
+  </ng-template>
+</p-dialog>
+
+<!-- DIALOG: AGREGAR ARRESTO -->
+<p-dialog
+  header="Control disciplinario"
+  [(visible)]="mostrarModalAresto"
+  [modal]="true"
+  [style]="{ width: '600px', maxWidth: '95vw' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <div class="modal-body p-0">
+    <form [formGroup]="formularioAresto" class="row g-2">
+      <div class="col-12">
+        <label class="form-label">Fecha</label>
+        <input
+          formControlName="fecha"
+          class="form-control"
+          type="date"
+        />
+      </div>
+
+      <div class="col-12">
+        <label class="form-label">Motivo</label>
+        <textarea
+          formControlName="motivo"
+          class="form-control"
+          rows="3"
+        ></textarea>
+      </div>
+
+      <div class="col-md-4 col-12">
+        <label class="form-label">Horas</label>
+        <input
+          formControlName="hora"
+          class="form-control"
+          type="number"
+        />
+      </div>
+
+      <div class="col-md-8 col-12">
+        <label class="form-label">Por orden de</label>
+        <strong class="form-control">
+          {{ personaQueAreasta?.nombres }} {{ personaQueAreasta?.apellidos }}
+        </strong>
+      </div>
+
+      <div class="col-md-4 col-12">
+        <label class="form-label">Buscar</label>
+        <button
+          type="button"
+          class="btn btn-success w-100"
+          (click)="mostrarModalBuscarPersona = true"
+        >
+          ..
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <button
+      type="button"
+      pButton
+      class="p-button-text"
+      label="Cerrar"
+      (click)="mostrarModalAresto = false"
+    ></button>
+    <button
+      type="button"
+      pButton
+      label="Agregar"
+      icon="pi pi-check"
+      (click)="guardarAresto(); mostrarModalAresto = false"
+    ></button>
+  </ng-template>
+</p-dialog>
+
+<!-- DIALOG: BUSCAR PERSONA QUE ORDENA EL ARRESTO -->
+<p-dialog
+  header="Buscar persona"
+  [(visible)]="mostrarModalBuscarPersona"
+  [modal]="true"
+  [style]="{ width: '550px', maxWidth: '95vw' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <div class="modal-body p-0">
+    <form [formGroup]="formularioAresto" class="row g-2">
+      <div class="col-md-8 col-12">
+        <label class="form-label">Identidad</label>
+        <input
+          formControlName="identidadAcusador"
+          class="form-control"
+          maxlength="15"
+          type="text"
+          (keyup.enter)="buscarPersonaParaOrdenarAresto()"
+        />
+        <div
+          class="alert-danger mt-1"
+          *ngIf="
+            identidadAcusador?.invalid &&
+            (identidadAcusador?.dirty || identidadAcusador?.touched)
+          "
+        >
+         
+        </div>
+      </div>
+
+      <div class="col-md-4 col-12 d-flex align-items-end">
+        <button
+          type="button"
+          class="btn btn-warning w-100"
+          (click)="buscarPersonaParaOrdenarAresto()"
+        >
+          ..
+        </button>
+      </div>
+
+      <div class="col-12">
+        <label class="form-label">Nombre</label>
+        <div class="form-control">
+          {{ personaQueAreasta?.nombres }}
+        </div>
+      </div>
+
+      <div class="col-12">
+        <label class="form-label">Apellidos</label>
+        <div class="form-control">
+          {{ personaQueAreasta?.apellidos }}
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <button
+      type="button"
+      pButton
+      label="Aceptar"
+      (click)="mostrarModalBuscarPersona = false"
+    ></button>
+  </ng-template>
+</p-dialog>

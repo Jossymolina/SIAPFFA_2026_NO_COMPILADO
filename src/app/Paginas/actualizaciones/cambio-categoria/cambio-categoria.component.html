@@ -1,0 +1,324 @@
+<!-- BUSCAR POR IDENTIDAD -->
+<div class="row justify-content-center" *ngIf="bandera === 0  ">
+  <div class="col-lg-6 col-md-8">
+    <div class="card shadow-lg border-0 rounded-4 mt-5">
+      <div class="card-header bg-info text-white rounded-top-4">
+        <h5 class="card-title mb-0">Formulario | Cambio de Categoría</h5>
+      </div>
+      <div class="card-body">
+        <div class="input-group">
+          <span class="input-group-text">
+            <i class="fas fa-id-card-alt me-1"></i> Identidad
+          </span>
+          <input
+            type="text"
+            class="form-control"
+            maxlength="15"
+            [(ngModel)]="consulta.identidad"
+            name="identidad"
+            placeholder="Identidad..."
+            (keyup.enter)="buscarPorIdentidad()"
+          />
+          <button
+            class="btn btn-success"
+            type="button"
+            (click)="buscarPorIdentidad()"
+          >
+            <i class="pi pi-search"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DETALLE PERSONA + CAMBIO CATEGORÍA -->
+<div class="row" *ngIf="bandera === 1  ">
+  <div class="col-md-12">
+    <div class="card shadow-lg border-0 rounded-4 mt-4">
+      <div class="card-header d-flex justify-content-between align-items-center bg-info text-white rounded-top-4">
+        <button class="btn btn-light btn-sm" (click)="tras(0)">
+          <i class="pi pi-angle-double-left"></i>
+        </button>
+        <h6 class="mb-0">Datos del personal</h6>
+        <span></span>
+      </div>
+
+      <div class="card-body row g-3">
+
+        <!-- FOTO -->
+        <div class="col-md-3 d-flex justify-content-center mb-3">
+          <div class="box caja" style="width: 220px; height: 280px;">
+            <img
+              class="sombra img-fluid rounded-4 shadow-sm"
+              [src]="_DatospersonalesService.url2 + 'sacarfoto/' + objetoConsultado?.foto"
+              style="border: solid black 2px; width: 220px; height: 280px; object-fit: cover;"
+              alt="Image did not load..."
+            />
+          </div>
+        </div>
+
+        <!-- DATOS -->
+        <div class="col-md-9">
+          <div class="row g-2">
+            <div class="col-md-6">
+              <div class="input-group mb-2">
+                <span class="input-group-text">Nombres</span>
+                <label class="form-control">{{ objetoConsultado.nombres }}</label>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="input-group mb-2">
+                <span class="input-group-text">Apellidos</span>
+                <label class="form-control">{{ objetoConsultado.apellidos }}</label>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="input-group mb-2">
+                <span class="input-group-text">Grado | Rango (Actual)</span>
+                <label class="form-control">{{ objetoConsultado.nombre_grado }}</label>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="input-group mb-2">
+                <span class="input-group-text">Fecha Ascenso</span>
+                <label class="form-control">
+                  {{ objetoConsultado.fechaPrimerIngreso | date }}
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <hr />
+
+          <div class="d-flex justify-content-center mt-2">
+            <button class="btn btn-outline-secondary me-2" (click)="tras(0)">
+              Cancelar
+            </button>
+            <button
+              class="btn btn-danger"
+              (click)="abrirModalCambioCategoria()"
+              title="Cambiar categoría"
+            >
+              <i class="fas fa-exchange-alt me-1"></i> Cambiar Categoría
+            </button>
+          </div>
+        </div>
+      </div> <!-- card-body -->
+    </div> <!-- card -->
+  </div>
+</div>
+
+<!-- DIALOG PRIME-NG: CAMBIO DE CATEGORÍA -->
+<p-dialog
+  [(visible)]="displayCambioCategoria"
+  [modal]="true"
+  [closable]="true"
+  [dismissableMask]="true"
+  [style]="{ width: '650px' }"
+>
+  <ng-template pTemplate="header">
+    <h5 class="m-0">Cambio de categoría</h5>
+  </ng-template>
+
+  <ng-template pTemplate="content">
+    <!-- Mensaje automático según categoría actual -->
+    <form>
+      <ng-container *ngIf="objetoConsultado?.categoria_idcategoria === 2; else second">
+        <label style="color: rgb(37, 94, 40);">
+          (Automático) Su cambio de categoría es de Tropa a Auxiliar.
+        </label>
+      </ng-container>
+
+      <ng-template #second>
+        <ng-container *ngIf="objetoConsultado?.categoria_idcategoria === 3; else third">
+          <label style="color: rgb(37, 94, 40);">
+            (Automático) Su cambio de categoría es de Estudiante a Sub Oficial.
+          </label>
+        </ng-container>
+
+        <ng-template #third>
+          <ng-container *ngIf="objetoConsultado?.categoria_idcategoria === 4; else cuarto">
+            <label style="color: rgb(37, 94, 40);">
+              (Automático) Su cambio de categoría es de Cadete a Oficial.
+            </label>
+          </ng-container>
+
+          <ng-template #cuarto>
+            <label style="color: rgb(37, 94, 40);">
+              (Automático) No soportado el cambio.
+            </label>
+          </ng-template>
+        </ng-template>
+      </ng-template>
+    </form>
+
+    <hr />
+
+    <!-- Formulario para Tropa (categoria_idcategoria === 2) -->
+    <form *ngIf="objetoConsultado?.categoria_idcategoria === 2" class="row">
+      <div class="input-group mb-3 col-md-12">
+        <span class="input-group-text">Fuerza</span>
+        <label class="form-control">{{ objetoConsultado.nombre }}</label>
+      </div>
+
+      <div class="input-group mb-3 col-md-12">
+        <span class="input-group-text">Categoría</span>
+        <select
+          class="form-control"
+          name="categoria"
+          [(ngModel)]="cambiarcategoria.categoria"
+          (change)="cambio(objetoConsultado)"
+        >
+          <ng-container *ngFor="let item of Arreglocategoria">
+            <option [ngValue]="item.idcategoria">
+              {{ item.categoria }} => {{ item.codigo }}
+            </option>
+          </ng-container>
+        </select>
+      </div>
+
+      <div class="input-group mb-3 col-md-12">
+        <span class="input-group-text">Fecha de cambio</span>
+        <input
+          type="date"
+          name="fechaAscenso"
+          class="form-control"
+          [(ngModel)]="cambiarcategoria.fechaAscenso"
+        />
+      </div>
+
+      <div class="input-group mb-3 col-md-12">
+        <span class="input-group-text">Número Acuerdo</span>
+        <input
+          type="text"
+          name="numeroAcuerdo"
+          class="form-control"
+          [(ngModel)]="cambiarcategoria.numeroAcuerdo"
+        />
+      </div>
+
+      <div class="input-group mb-3 col-md-12">
+        <span class="input-group-text">Unidad Ejecutora</span>
+        <select
+          class="form-control"
+          name="unidadEjecutoraSelecionada"
+          [(ngModel)]="cambiarcategoria.unidadEjecutoraSelecionada"
+          required
+        >
+          <option
+            *ngFor="let i of arreglounidadEjecutora"
+            [ngValue]="i"
+          >
+            {{ i.ue }}
+          </option>
+        </select>
+      </div>
+    </form>
+
+    <!-- Formulario para Cadetes / Estudiantes (categoria_idcategoria === 3 o 4) -->
+    <form
+      *ngIf="objetoConsultado?.categoria_idcategoria === 3 || objetoConsultado?.categoria_idcategoria === 4"
+      class="row"
+    >
+      <div class="input-group mb-3 col-md-12">
+        <span class="input-group-text">Fuerza</span>
+        <label class="form-control">{{ objetoConsultado.nombre }}</label>
+      </div>
+
+      <div class="input-group mb-3 col-md-12">
+        <span class="input-group-text">Categoría</span>
+        <select
+          class="form-control"
+          name="categoria"
+          [(ngModel)]="cambiarcategoria.categoria"
+          (change)="cambio(objetoConsultado)"
+        >
+          <ng-container *ngFor="let item of Arreglocategoria">
+            <option
+              [ngValue]="item.idcategoria"
+              *ngIf="objetoConsultado.idfuerza === 2 && item.idcategoria === 8"
+            >
+              {{ item.categoria }} => {{ item.codigo }}
+            </option>
+
+            <option
+              [ngValue]="item.idcategoria"
+              *ngIf="objetoConsultado.idfuerza === 3 && item.idcategoria === 6"
+            >
+              {{ item.categoria }} => {{ item.codigo }}
+            </option>
+
+            <option
+              [ngValue]="item.idcategoria"
+              *ngIf="objetoConsultado.idfuerza === 4 && item.idcategoria === 10"
+            >
+              {{ item.categoria }} => {{ item.codigo }}
+            </option>
+
+            <option
+              [ngValue]="item.idcategoria"
+              *ngIf="objetoConsultado.idfuerza === 2 && (item.idcategoria === 15 || item.idcategoria === 18)"
+            >
+              {{ item.categoria }} => {{ item.codigo }}
+            </option>
+
+            <option
+              [ngValue]="item.idcategoria"
+              *ngIf="objetoConsultado.idfuerza === 3 && (item.idcategoria === 14 || item.idcategoria === 17)"
+            >
+              {{ item.categoria }} => {{ item.codigo }}
+            </option>
+
+            <option
+              [ngValue]="item.idcategoria"
+              *ngIf="objetoConsultado.idfuerza === 4 && (item.idcategoria === 16 || item.idcategoria === 19)"
+            >
+              {{ item.categoria }} => {{ item.codigo }}
+            </option>
+          </ng-container>
+        </select>
+      </div>
+
+      <div class="input-group mb-3 col-md-12">
+        <span class="input-group-text">Fecha de cambio</span>
+        <input
+          type="date"
+          name="fechaAscenso"
+          class="form-control"
+          [(ngModel)]="cambiarcategoria.fechaAscenso"
+        />
+      </div>
+
+      <div class="input-group mb-3 col-md-12">
+        <span class="input-group-text">Número Acuerdo</span>
+        <input
+          type="text"
+          name="numeroAcuerdo"
+          class="form-control"
+          [(ngModel)]="cambiarcategoria.numeroAcuerdo"
+        />
+      </div>
+    </form>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button
+      type="button"
+      class="btn btn-secondary"
+      (click)="displayCambioCategoria = false"
+    >
+      Cancelar
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="guardarcategoriaNueva(); displayCambioCategoria = false"
+    >
+      Guardar cambio
+    </button>
+  </ng-template>
+</p-dialog>

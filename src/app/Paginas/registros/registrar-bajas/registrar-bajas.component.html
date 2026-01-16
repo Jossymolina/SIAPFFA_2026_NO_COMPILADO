@@ -1,0 +1,363 @@
+ <!-- ================================
+  VENTANA 0: IDENTIDAD (PARA DAR DE BAJA)
+================================ -->
+<div class="container h-100"
+     *ngIf="sacarPermisoPersonal(['R_00202'])  && sacarPermisoPersonal(['User_admin'])">
+  <div class="row justify-content-center h-100">
+    <div class="col-sm-8 align-self-center text-center" style="margin-top: 100px;">
+      <div class="card shadow">
+        <div class="card-body">
+          <h1>IDENTIDAD (PARA DAR DE BAJA)</h1>
+
+          <form [formGroup]="formIdentidad"
+                #formbusquedaId="ngForm"
+                class="row">
+
+            <label class="col-md-6 text-start">
+              Identidad:
+              <input (keyup.enter)="buscarporidentidad()"
+                     formControlName="identidad"
+                     maxlength="13"
+                     minlength="13"
+                     pattern="^[0-9]*$"
+                     required
+                     type="text"
+                     name="identidadpersona"
+                     class="form-control">
+            </label>
+
+           
+
+            <label *ngIf="banderaspiner===0" class="col-md-3 text-start">
+              Buscar:
+              <button class="btn btn-success form-control"
+                      [disabled]="!formbusquedaId.valid"
+                      (click)="buscarporidentidad()">
+                <i class="fab fa-500px"></i>
+              </button>
+            </label>
+
+            <label *ngIf="banderaspiner===1" class="col-md-3 text-start">
+              Cargando....
+              <div class="spinner-border form-control" role="status"></div>
+            </label>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================
+  VENTANA 1: FORMULARIO DE BAJA (UNIDADES)
+================================ -->
+ 
+<div class="container h-100" *ngIf="  sacarPermisoPersonal(['R_0002'])  && sacarPermisoPersonal(['User_admin01'])">
+  <div class="row justify-content-center h-100">
+    <div class="col-sm-8 align-self-center text-center" style="margin-top: 100px;">
+      <div class="card shadow">
+        <div class="card-body">
+          <h1>FORMULARIO DE BAJA (UNIDADES)</h1>
+
+          <form [formGroup]="formBAJA" class="row">
+
+            <label class="col-md-6 text-start">
+              Nombre:
+              <label class="form-control">
+                <strong>{{ personaseleccionada?.nombres }} {{ personaseleccionada?.apellidos }}</strong>
+              </label>
+            </label>
+
+            <label class="col-md-6 text-start">
+              Identidad:
+              <label class="form-control">
+                <strong>{{ personaseleccionada?.identidad }}</strong>
+              </label>
+            </label>
+
+            <!-- TIPO DE BAJA - AHORA CON p-select (PrimeNG 20) -->
+            <label class="col-md-6 text-start">
+              Tipo de Baja
+              <p-select
+                formControlName="tipoBaja"
+                [options]="arregloTiposBaja"
+                optionLabel="nombreBaja"
+                optionValue="idtiposBaja"
+                placeholder="Seleccione un tipo de baja"
+                class="w-100">
+              </p-select>
+            </label>
+
+            <label class="col-md-6 text-start">
+              Fecha de registro (fecha Actual)
+              <input class="form-control"
+                     type="text"
+                     disabled
+                     [(ngModel)]="fechaActual"
+                     name="fechaActual"
+                     [ngModelOptions]="{standalone: true}">
+            </label>
+
+            <label class="col-md-6 text-start">
+              Fecha de baja:
+              <input required
+                     (change)="verificarfecha()"
+                     [(ngModel)]="fechabajaseleccionada"
+                     name="fechabajaseleccionada"
+                     [ngModelOptions]="{standalone: true}"
+                     class="form-control"
+                     type="date">
+            </label>
+
+            <label class="col-md-12 text-start">
+              Observación
+              <textarea required
+                        class="form-control"
+                        type="text"
+                        formControlName="observacion"
+                        cols="30"
+                        rows="10">
+              </textarea>
+            </label>
+
+          </form>
+
+          <!-- ARCHIVOS -->
+          <label class="col-md-6 text-start">
+            <br>
+            <input type="file"
+                   class="form-control"
+                   id="inputGroupFile01"
+                   accept="application/pdf"
+                   (change)="AgregarArchivos($event)"
+                   #subirArchivo
+                   multiple
+                   name="archivosFile"
+                   #archivosFile="ngModel"
+                   ngModel
+                   required>
+          </label>
+
+          <label class="col-md-1 text-start" style="margin-left: 5px;">
+            <br>
+            <button class="btn btn-danger"
+                    (click)="limpiarBandejaArregloArchivos()"
+                    title="Limpiar los archivos">
+              <i class="pi pi-trash" aria-hidden="true">  </i>
+            </button>
+          </label>
+
+          <div class="col-md-12 row">
+            <p style="color: red; font-size: 12px; text-align: justify;">
+              Estimado usuario,<br>
+              Le informamos que los documentos que se carguen en este sistema son de carácter confidencial y tienen un propósito específico para la justificación de la causa de despido de una persona.
+              <br>Por tal motivo, le advertimos que no se permite borrar ni modificar estos documentos una vez cargados.
+              Cualquier alteración o eliminación de los mismos podrá afectar la validez y la integridad del proceso, así como generar consecuencias legales.
+              <br>Es fundamental que los documentos sean cargados correctamente y de manera completa, ya que servirán como base para la justificación del despido y para cualquier procedimiento posterior que se derive del mismo.
+            </p>
+          </div>
+
+          <label class="col-md-3 text-start">
+            Agregar Baja 1
+            <button [disabled]="!formBAJA.valid"
+                    class="btn btn-success form-control"
+                    (click)="agregarBaja()"> 
+              <i class="pi-user-minus"></i>
+            </button>
+          </label>
+
+          <label class="col-md-3 text-start">
+            Atrás
+            <button class="btn btn-warning form-control"
+                    (click)="atras()">
+              <i class="pi pi-arrow-left"></i>
+            </button>
+          </label>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================
+  VENTANA 3: FORMULARIO DE BAJA (EMC)
+================================ -->
+<div class="container h-100" *ngIf="cambiodeVEntanas===3">
+  <div class="row justify-content-center h-100">
+    <div class="col-sm-8 align-self-center text-center" style="margin-top: 100px;">
+      <div class="card shadow">
+        <div class="card-body">
+          <h1>FORMULARIO DE BAJA (EMC)</h1>
+
+          <form [formGroup]="formBAJA" class="row">
+
+            <label class="col-md-6 text-start">
+              Nombre:
+              <label class="form-control">
+                <strong>{{ personaseleccionada?.nombres }} {{ personaseleccionada?.apellidos }}</strong>
+              </label>
+            </label>
+
+            <label class="col-md-6 text-start">
+              Identidad:
+              <label class="form-control">
+                <strong>{{ personaseleccionada?.identidad }}</strong>
+              </label>
+            </label>
+
+            <!-- TIPO DE BAJA - p-select -->
+            <label class="col-md-6 text-start">
+              Tipo de Baja
+              <p-select
+                formControlName="tipoBaja"
+                [options]="arregloTiposBaja"
+                optionLabel="nombreBaja"
+                optionValue="idtiposBaja"
+                placeholder="Seleccione un tipo de baja"
+                class="w-100">
+              </p-select>
+            </label>
+
+            <label class="col-md-6 text-start">
+              Fecha de registro (fecha Actual)
+              <input class="form-control"
+                     required
+                     type="text"
+                     disabled
+                     [(ngModel)]="fechaActual"
+                     name="fechaActual"
+                     [ngModelOptions]="{standalone: true}">
+            </label>
+
+            <label class="col-md-6 text-start">
+              Fecha de baja:
+              <input class="form-control"
+                     type="date"
+                     required
+                     (change)="verificarfecha()"
+                     [(ngModel)]="fechabajaseleccionada"
+                     name="fechabajaseleccionada"
+                     [ngModelOptions]="{standalone: true}">
+            </label>
+
+            <label class="col-md-12 text-start">
+              Observación
+              <textarea class="form-control"
+                        type="text"
+                        formControlName="observacion"
+                        cols="15"
+                        rows="5"
+                        required>
+              </textarea>
+            </label>
+
+          </form>
+
+          <label class="col-md-6 text-start">
+            <br>
+            <input type="file"
+                   class="form-control"
+                   id="inputGroupFile01"
+                   accept="application/pdf"
+                   (change)="AgregarArchivos($event)"
+                   #subirArchivo
+                   multiple
+                   name="archivosFile"
+                   #archivosFile="ngModel"
+                   ngModel
+                   required>
+          </label>
+
+          <label class="col-md-1 text-start" style="margin-left: 5px;">
+            <br>
+            <button class="btn btn-danger"
+                    (click)="limpiarBandejaArregloArchivos()"
+                    title="Limpiar los archivos">
+              <i class="pi pi-trash" aria-hidden="true"></i>
+            </button>
+          </label>
+
+          <div class="col-md-12 row">
+            <p style="color: red; font-size: 12px; text-align: justify;">
+              Estimado usuario,<br>
+              Le informamos que los documentos que se carguen en este sistema son de carácter confidencial y tienen un propósito específico para la justificación de la causa de despido de una persona.
+              <br>Por tal motivo, le advertimos que no se permite borrar ni modificar estos documentos una vez cargados.
+              Cualquier alteración o eliminación de los mismos podrá afectar la validez y la integridad del proceso, así como generar consecuencias legales.
+              <br>Es fundamental que los documentos sean cargados correctamente y de manera completa, ya que servirán como base para la justificación del despido y para cualquier procedimiento posterior que se derive del mismo.
+            </p>
+          </div>
+
+          <div class="col-md-12 row">
+            <label class="col-md-3 text-start">
+              Atrás
+              <button class="btn btn-warning form-control"
+                      (click)="atras2()">
+                <i class="pi pi-arrow-left"></i>
+              </button>
+            </label>
+
+            <label class="col-md-3 text-start">
+              Agregar Baja 2
+              <button [disabled]="formBAJA.invalid"
+                      class="btn btn-success form-control"
+                      (click)="nuevaFuncionRegistrarBajaEMC()">
+                <i class="pi pi-user-minus"></i> 
+              </button>
+            </label>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================
+  VENTANA: IDENTIDAD (EMC BAJAS)
+================================ -->
+<div class="container h-100"
+     *ngIf="sacarPermisoPersonal(['R_0002'])  && sacarPermisoPersonal(['User_admin']) && cambiodeVEntanas===0">
+  <div class="row justify-content-center h-100">
+      
+    <div class="col-sm-8 align-self-center text-center" style="margin-top: 100px;">
+   
+        <div class="card shadow">
+        
+
+        <div class="card-body">
+             <button type="button" class="btn btn-sm btn-back-modern" (click)="atrasMenu('/menu/menu-registro')"  title="Atrás">
+                            <i class="fa fa-fast-backward" aria-hidden="true"></i>
+                            <span>Atrás</span>
+                        </button>
+          <h1>IDENTIDAD (EMC BAJAS)</h1>
+
+          <form [formGroup]="formIdentidad" class="row">
+
+            <label class="col-md-6 text-start">
+              Identidad:
+              <input formControlName="identidad"
+                     maxlength="15"
+                     type="text"
+                     name="identidad"
+                     class="form-control">
+            </label>
+
+           
+            <label  class="col-md-3 text-start">
+              Buscar:
+              <button class="btn btn-success form-control"
+                      (click)="buscarporidentidadParaEMc()">
+                <i class="pi pi-search"></i>
+              </button>
+            </label>
+
+           
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

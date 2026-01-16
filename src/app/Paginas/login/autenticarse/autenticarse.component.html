@@ -1,0 +1,429 @@
+<div class="home-root">
+
+  <!-- NAV -->
+  <header class="home-header">
+    <div class="brand">
+      <img
+        src="https://static.vecteezy.com/system/resources/previews/014/487/769/non_2x/minimal-modern-clean-bear-logo-simple-logo-template-icon-vector.jpg"
+        class="brand-logo"
+        alt="Logo"
+      />
+      <div class="brand-text">
+        <div class="brand-title">SIAPFFAA</div>
+        <div class="brand-subtitle">Sistema de Administración de Personal</div>
+      </div>
+    </div>
+
+    <nav class="home-nav-links">
+     <!--<a href="#inicio">Inicio</a>
+      <a href="#metas">Metas</a>
+      <a href="#logros">Logros</a>
+      <a href="#colaboradores">Colaboradores</a>
+      <a href="#noticias">Noticias</a>--> 
+    </nav>
+
+    <div class="header-actions">
+      <button type="button" class="btn btn-primary btn-login-home" (click)="mostrarLoginModal = true">
+        <i class="pi pi-sign-in"></i>
+        Iniciar sesión
+      </button>
+    </div>
+  </header>
+
+  <!-- CONTENIDO -->
+  <main class="home-content">
+
+    <!-- CARRUSEL -->
+    <section id="inicio" class="section"  >
+      <div class="section-title-row">
+        <h2 class="section-title">Bienvenido a SIAPFFAA 2026 - Dirección de Recursos Humanos</h2>
+        <span class="section-subtitle">Acceso seguro • Gestión moderna • Mejora continua</span>
+      </div>
+
+      <p-carousel
+        [value]="slidesHome"
+        [numVisible]="1"
+        [numScroll]="1"
+        [circular]="true"
+        [autoplayInterval]="3000"
+        [showIndicators]="true"
+        [showNavigators]="true"
+        styleClass="home-carousel"
+      >
+        <ng-template let-s pTemplate="item">
+          <div class="carousel-card">
+            <div class="carousel-media">
+              <img [src]="s.img" alt="Slide" />
+              <div class="carousel-overlay"></div>
+            </div>
+            <div class="carousel-content">
+              <div class="carousel-kicker">{{ s.kicker }} </div>
+              <div class="carousel-title">{{ s.title }}</div>
+              <div class="carousel-text">{{ s.text }}</div>
+            </div>
+          </div>
+        </ng-template>
+      </p-carousel>
+    </section>
+
+    <!-- METAS -->
+    <section id="metas" class="section">
+      <h2 class="section-title">Metas 2026</h2>
+
+      <div class="grid-3">
+        <div class="cardx">
+          <div class="cardx-title">Seguridad</div>
+          <div class="cardx-text">Fortalecer el control de acceso y validaciones.</div>
+        </div>
+        <div class="cardx">
+          <div class="cardx-title">Eficiencia</div>
+          <div class="cardx-text">Simplificar procesos y mejorar la trazabilidad.</div>
+        </div>
+        <div class="cardx">
+          <div class="cardx-title">Modernización</div>
+          <div class="cardx-text">Actualizaciones progresivas orientadas a resultados.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LOGROS -->
+    <section id="logros" class="section">
+      <h2 class="section-title">Logros</h2>
+
+      <div class="grid-4">
+        <div class="statx">
+          <div class="statx-num">2026</div>
+          <div class="statx-label">Nueva versión</div>
+        </div>
+        <div class="statx">
+          <div class="statx-num">100%</div>
+          <div class="statx-label">Acceso autorizado</div>
+        </div>
+        <div class="statx">
+          <div class="statx-num">24/7</div>
+          <div class="statx-label">Disponibilidad</div>
+        </div>
+        <div class="statx">
+          <div class="statx-num">+</div>
+          <div class="statx-label">Mejoras continuas</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COLABORADORES -->
+    <section id="colaboradores" class="section">
+      <h2 class="section-title">Colaboradores</h2>
+
+      <div class=" row">
+        <div class="chipx col-md-3">Direcciones / Departamentos</div>
+        <div class="chipx col-md-3">Unidades</div>
+        <div class="chipx col-md-3">
+          Soporte Técnico
+          <hr>
+          Soporte VPN: 2276-3400 Ext: 2405
+          <hr>
+          Soporte SIAPFFAA: Grupo de whatsap
+        </div>
+        <div class="chipx col-md-3">Usuarios Autorizados</div>
+      </div>
+    </section>
+
+    <!-- NOTICIAS -->
+    <section id="noticias" class="section">
+      <h2 class="section-title">Noticias</h2>
+
+      <div class="grid-3">
+        <article class="newscard">
+          <div class="newscard-title">Comunicado</div>
+          <div class="newscard-text">
+            Se habilitarán mejoras y ajustes del sistema durante el periodo 2026.
+          </div>
+          <div class="newscard-date">Actualización: 2026</div>
+        </article>
+
+        <article class="newscard">
+          <div class="newscard-title">Mantenimiento</div>
+          <div class="newscard-text">
+            Se publicarán ventanas de mantenimiento en los canales oficiales.
+          </div>
+          <div class="newscard-date">Planificado</div>
+        </article>
+
+        <article class="newscard">
+          <div class="newscard-title">Soporte</div>
+          <div class="newscard-text">
+            Reporte incidencias y sugerencias por los medios autorizados.
+          </div>
+          <div class="newscard-date">Disponible</div>
+        </article>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER / COPYRIGHT -->
+  <footer class="home-footer">
+    <div class="footer-left">
+      <b>© Fuerzas Armadas</b> — SIAPFFAA
+    </div>
+    <div class="footer-right">
+      <span>Uso institucional • Acceso restringido</span>
+    </div>
+  </footer>
+
+</div>
+
+<!-- MODAL LOGIN (se queda como lo tenías) -->
+<p-dialog
+  header="Iniciar sesión"
+  [(visible)]="mostrarLoginModal"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [dismissableMask]="true"
+  [style]="{ width: '1000px', maxWidth: '100vw' }"
+  [contentStyle]="{ overflow: 'auto' }"
+>
+ <div class="login-root">
+  <div class="login-wrapper">
+
+    <!-- Top bar similar a tu estilo -->
+    <div class="login-top-bar">
+      <div class="login-top-left">
+
+        <!-- ========== LOGO REAL AQUÍ ========== -->
+        <div class="app-logo">
+          <img
+            src="https://static.vecteezy.com/system/resources/previews/014/487/769/non_2x/minimal-modern-clean-bear-logo-simple-logo-template-icon-vector.jpg"
+            alt="Logo" class="logo-img" />
+        </div>
+        <!-- ==================================== -->
+
+        <div class="app-info">
+          <div class="app-title">SIAPFFAA</div>
+          <div class="app-subtitle">CONTROL DE ACCESO</div>
+        </div>
+      </div>
+
+      <div class="login-top-right"></div>
+    </div>
+
+    <!-- Tarjeta principal de login -->
+    <div class="login-card">
+      <div class="login-card-header">
+        <h1>Iniciar sesión</h1>
+        <p>Use sus credenciales autorizadas para entrar al sistema.</p>
+      </div>
+      @if(!solicitarToken){
+      <form #formLogin="ngForm" novalidate>
+
+        @if(this.banderaCambioContrasena === 0){
+        <!-- Usuario -->
+        <div class="mb-3">
+          <label class="form-label">Usuario</label>
+          <div class="input-group">
+            <span class="input-group-text">
+              <i class="pi pi-user"></i>
+            </span>
+
+            <input type="text" class="form-control" [class.is-invalid]=" " placeholder="Usuario" name="usuario"
+              #usuario="ngModel" ngModel />
+          </div>
+
+        </div>
+
+        <!-- Password -->
+        <div class="mb-3">
+          <label class="form-label">Contraseña</label>
+          <div class="input-group">
+            <span class="input-group-text">
+              <i class="pi pi-unlock"></i>
+            </span>
+
+            <input [type]="passwordVisible ? 'text' : 'password'" class="form-control" [class.is-invalid]=" "
+              #contrasena="ngModel" ngModel name="contrasena" placeholder="Contraseña" />
+
+            <button type="button" class="btn btn-outline-secondary btn-eye" (click)="togglePassword()">
+              <i class="bi" [ngClass]="passwordVisible ? 'pi pi-eye-slash' : 'pi pi-eye'"></i>
+            </button>
+          </div>
+
+
+
+        </div>
+
+        <!-- Opciones extras  
+        <div class="login-options d-flex justify-content-between align-items-center mb-3">
+          
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="recordar">
+            <label class="form-check-label" for="recordar">
+              Recordar usuario
+            </label>
+          </div> 
+
+          <a href="javascript:void(0)" class="link-olvide">
+            ¿Recuperar contraseña?
+          </a>
+        </div> -->
+
+        <!-- Botones -->
+        <div class="d-flex gap-2 mt-3">
+
+
+          <button (click)="autenticarse(formLogin)" type="submit" class="btn btn-primary flex-grow-1">
+            <span>
+              <i class="bi bi-box-arrow-in-right"></i>
+              Ingresar
+            </span>
+
+
+          </button>
+        </div>
+        }@else {
+
+        <div class="mb-3">
+          <label class="form-label">Nueva contraseña</label>
+          <div class="input-group">
+            <span class="input-group-text">
+              <i class="pi pi-unlock"></i>
+            </span>
+
+            <input [type]="passwordVisible ? 'text' : 'password'" class="form-control" [class.is-invalid]=" "
+              #nuevaContrasena="ngModel" ngModel name="nuevaContrasena" placeholder="Nueva contraseña" />
+
+            <button type="button" class="btn btn-outline-secondary btn-eye" (click)="togglePassword()">
+              <i class="bi" [ngClass]="passwordVisible ? 'pi pi-eye-slash' : 'pi pi-eye'"></i>
+            </button>
+          </div>
+
+
+        </div>
+
+        <!-- Password -->
+        <div class="mb-3">
+          <label class="form-label">Confirmar contraseña</label>
+          <div class="input-group">
+            <span class="input-group-text">
+              <i class="pi pi-unlock"></i>
+            </span>
+
+            <input [type]="passwordVisible ? 'text' : 'password'" class="form-control" [class.is-invalid]=" "
+              #confirmarContrasena="ngModel" ngModel name="confirmarContrasena" placeholder="Confirmar contraseña" />
+
+            <button type="button" class="btn btn-outline-secondary btn-eye" (click)="togglePassword()">
+              <i class="bi" [ngClass]="passwordVisible ? 'pi pi-eye-slash' : 'pi pi-eye'"></i>
+            </button>
+          </div>
+
+
+
+        </div>
+
+
+        <div class="d-flex gap-2 mt-3">
+
+
+          <button (click)="actualizarContrasena(formLogin)" type="submit" class="btn btn-primary flex-grow-1">
+            <span>
+              <i class="bi bi-box-arrow-in-right"></i>
+              Actualizar contraseña
+            </span>
+
+
+          </button>
+        </div>
+        }
+      </form>
+      }@else {
+        <form #formToken="ngForm">
+ 
+        <!-- Usuario -->
+        <div class="mb-3">
+          <label class="form-label">Token</label>
+          <div class="input-group">
+            <span class="input-group-text">
+              <i class="pi pi-lock"></i>
+            </span>
+
+            <input type="text" class="form-control" [class.is-invalid]=" " placeholder="Token del celular" name="token"
+              #token="ngModel" ngModel />
+          </div>
+
+        </div>
+
+          
+        <div class="d-flex gap-2 mt-3">
+
+
+          <button (click)="validarToken(formToken)" type="submit" class="btn btn-primary flex-grow-1">
+            <span>
+              <i class="bi bi-box-arrow-in-right"></i>
+              Validar Token
+            </span>
+
+
+          </button>
+        </div>
+       
+      </form>
+      }
+
+    </div>
+    <!-- Footer -->
+    <div class="login-footer">
+      <span>© Fuerzas Armadas</span>
+    </div>
+
+  </div>
+</div>
+
+<p-dialog header="🔐 Doble Factor de Autenticación" [(visible)]="showModal" [modal]="true"
+  [style]="{ width: '50vw', maxWidth: '720px' }" [draggable]="false" [resizable]="false" [dismissableMask]="false"
+  [closeOnEscape]="false">
+
+  <form #form2FA="ngForm" class="p-fluid p-formgrid p-grid text-center">
+
+    <!-- Instrucción -->
+    <div class="p-col-12 mb-3">
+      <p class="text-secondary">
+        Escanee el siguiente código QR con su aplicación de autenticación
+        (Google Authenticator, Authy, Microsoft Authenticator).
+      </p>
+    </div>
+
+    <!-- QR -->
+    <div class="p-col-12 mb-4" *ngIf="qr">
+      <img [src]="qr.qr" alt="Código QR 2FA"
+        style="width: 220px; height: 220px; border: 1px solid #ddd; border-radius: 8px;" />
+    </div>
+
+    <!-- Código -->
+    <div class="p-col-12 mb-2 text-left">
+      <label for="codigo" class="font-medium">Ingrese el código de verificación</label>
+      <input id="codigo" type="text" pInputText maxlength="6" placeholder="Ej: 123456"
+        class="w-full text-center text-lg" required name="codigo" #codigo="ngModel" ngModel />
+    </div>
+
+    <!-- Botón -->
+    <div class="p-col-12 mt-3">
+      <button (click)="verificar2FA_primera_ves(form2FA)" type="button" class="p-button-success">
+        <i class="pi pi-check"></i> Validar código
+      </button>
+    </div>
+
+  </form>
+
+  <ng-template pTemplate="footer">
+    <button pButton type="button" label="Cerrar" icon="pi pi-times" class="p-button-text"
+      (click)="showModal = false"></button>
+  </ng-template>
+
+</p-dialog>
+
+  <ng-template pTemplate="footer">
+    <button type="button" class="btn btn-secondary" (click)="mostrarLoginModal = false">
+      Cerrar
+    </button>
+  </ng-template>
+</p-dialog>

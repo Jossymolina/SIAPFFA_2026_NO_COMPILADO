@@ -1,0 +1,666 @@
+<main *ngIf="ventanaPrincipal === 1">
+  <div class="row g-3 justify-content-center">
+    <div class="col-12 col-sm-6 col-lg-3" *ngFor="let m of modules">
+      <p-card class="module-card h-100" (click)="cambiaVentana(m.ventana)">
+        <div class="module-content">
+          <div class="module-icon-wrapper">
+            <i class="module-icon" [class]="m.icon"></i>
+          </div>
+
+          <h3 class="module-title">
+            {{ m.title }}
+          </h3>
+
+          <p class="module-description">
+            {{ m.description }}
+          </p>
+        </div>
+      </p-card>
+    </div>
+  </div>
+</main>
+
+<!-- =======================
+     VENTANA 2 / 2.5
+======================= -->
+<div *ngIf="ventanaPrincipal === 2 || ventanaPrincipal === 2.5" class="container h-100 py-5">
+  <div class="row justify-content-center h-100">
+    <div class="col-md-8 align-self-start">
+      <p-card class="shadow-3 border-0 rounded-4 solicitud-identidad-card">
+        <!-- HEADER -->
+        <ng-template pHeader>
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center gap-3">
+              <div class="avatar-circle">
+                <i class="pi pi-id-card"></i>
+              </div>
+              <div>
+                <h5 class="mb-0 fw-semibold">Identidad para crear usuario</h5>
+                <small class="text-muted">
+                  Ingrese el número de identidad para consultar o crear el usuario.
+                </small>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+
+        <!-- FORM -->
+        <form #formIdentidad="ngForm" class="row g-3 mt-1"
+        (ngSubmit)="buscarporidentidad(ventanaPrincipal)"
+        >
+          <!-- INPUT IDENTIDAD -->
+          <div class="col-md-8 mx-auto">
+            <label class="form-label text-muted small mb-1">Identidad</label>
+
+            <div class="p-inputgroup p-inputgroup-lg">
+        
+
+              <input
+                pInputText
+                type="text"
+                name="identidad"
+                #identidad="ngModel"
+                ngModel
+                required
+                class="w-100"
+                placeholder="Ingrese la identidad (13 dígitos)"
+              />
+            </div>
+          </div>
+
+          <!-- BOTONES / LOADER -->
+          <div class="col-md-8 mx-auto mt-3">
+            <!-- BOTONES CUANDO NO ESTÁ CARGANDO -->
+            <div class="d-flex flex-wrap gap-2" *ngIf="banderadeCarga === 0">
+              <button
+                pButton
+                type="button"
+                class="p-button-success flex-fill"
+                icon="pi pi-search"
+                label="Buscar identidad"
+                [disabled]="formIdentidad.invalid"
+                (click)="buscarporidentidad(ventanaPrincipal)"
+              >
+              </button>
+            </div>
+          </div>
+        </form>
+      </p-card>
+    </div>
+  </div>
+</div>
+
+<!-- =======================
+     VENTANA 3
+======================= -->
+<div class="container h-100 py-5" *ngIf="ventanaPrincipal === 3">
+  <div class="row justify-content-center h-100">
+    <div class="col-md-8 align-self-start">
+      <p-card class="shadow-3 border-0 rounded-4 crear-usuario-card">
+        <!-- HEADER -->
+        <ng-template pHeader>
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center gap-3">
+              <div class="avatar-circle">
+                <i class="pi pi-user-plus"></i>
+              </div>
+              <div>
+                <h5 class="mb-0 fw-semibold">Formulario para crear usuario</h5>
+                <small class="text-muted">
+                  Este formulario solo crea usuarios comunes.
+                </small>
+              </div>
+            </div>
+
+            <p-tag value="Nuevo usuario" severity="info" class="d-none d-md-inline-flex"></p-tag>
+          </div>
+        </ng-template>
+
+        <!-- NOTA -->
+        <div class="mb-3">
+          <span class="text-danger small">
+            <strong>Nota:</strong> Este formulario solo crea usuarios comunes.
+          </span>
+        </div>
+
+        <!-- FORM -->
+        <form #formCrearUser="ngForm" class="row g-3 mt-1">
+          <!-- Nombre -->
+          <div class="col-md-6">
+            <label class="form-label text-muted small mb-1">Nombre</label>
+            <div class="p-inputtext p-component w-100 readonly-box">
+              <strong>{{ personaseleccionada?.nombres }} {{ personaseleccionada?.apellidos }}</strong>
+            </div>
+          </div>
+
+          <!-- Identidad -->
+          <div class="col-md-6">
+            <label class="form-label text-muted small mb-1">Identidad</label>
+            <div class="p-inputtext p-component w-100 readonly-box">
+              <strong>{{ personaseleccionada?.identidad }}</strong>
+            </div>
+          </div>
+
+          <!-- Usuario -->
+          <div class="col-md-6">
+            <label class="form-label text-muted small mb-1">Usuario</label>
+            <span class="p-input-icon-left w-100">
+              <i class="pi pi-user"></i>
+              <input
+                pInputText
+                type="text"
+                class="w-100"
+                #usuario="ngModel"
+                ngModel
+                required
+                name="usuario"
+                placeholder="Ingrese el usuario"
+              />
+            </span>
+          </div>
+
+          <!-- Contraseña -->
+          <div class="col-md-6">
+            <label class="form-label text-muted small mb-1">Contraseña</label>
+            <p-password
+              #contrasena="ngModel"
+              name="contrasena"
+              [toggleMask]="true"
+              [feedback]="false"
+              styleClass="w-100"
+              ngModel
+              required
+            >
+            </p-password>
+          </div>
+
+          <!-- BOTONES / CARGANDO -->
+          <div class="col-12 mt-3">
+            <!-- BOTONES CUANDO NO ESTÁ CARGANDO -->
+            <div
+              class="d-flex flex-wrap gap-2 justify-content-end"
+              *ngIf="banderadeCarga === 0; else cargandoTpl"
+            >
+              <button
+                pButton
+                type="button"
+                class="p-button-success"
+                icon="pi pi-save"
+                label="Crear usuario"
+                [disabled]="formCrearUser.invalid"
+                (click)="crearusuario()"
+              >
+              </button>
+
+              <button
+                pButton
+                type="button"
+                class="p-button-secondary p-button-outlined"
+                icon="pi pi-arrow-left"
+                label="Atrás"
+                (click)="atras()"
+              >
+              </button>
+            </div>
+
+            <!-- ESTADO CARGANDO -->
+            <ng-template #cargandoTpl>
+              <div class="d-flex flex-column align-items-center justify-content-center py-3 gap-2">
+                <p-progressSpinner
+                  styleClass="small-spinner"
+                  strokeWidth="4"
+                  animationDuration=".8s"
+                >
+                </p-progressSpinner>
+                <span class="text-muted small">Creando usuario...</span>
+              </div>
+            </ng-template>
+          </div>
+        </form>
+      </p-card>
+    </div>
+  </div>
+</div>
+
+<!-- =======================
+     VENTANA 4
+======================= -->
+<div class="col-12" *ngIf="ventanaPrincipal === 4">
+  <p-card class="shadow-3 border-0 rounded-4 usuario-detalle-card">
+    <!-- HEADER -->
+    <ng-template pHeader>
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center gap-2">
+          <button
+            pButton
+            type="button"
+            class="p-button-rounded p-button-text p-button-warning me-2"
+            icon="pi pi-arrow-left"
+            (click)="atras2('1')"
+          >
+          </button>
+
+          <div>
+            <h5 class="mb-0 fw-semibold">Detalle de usuario</h5>
+            <small class="text-muted">
+              Consulta y administración de permisos del usuario seleccionado
+            </small>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+
+    <div class="row g-3 align-items-start">
+      <!-- FOTO -->
+      <div class="col-md-3 col-sm-12 d-flex justify-content-center mb-3 mb-md-0">
+        <p-card class="border-0 shadow-1 p-0 usuario-foto-card">
+          <img
+            [src]="_DatospersonalesService.url2 + 'sacarfoto/' + usuarioBuscado?.foto"
+            alt="Foto usuario"
+            class="img-fluid rounded-4 w-100 h-auto object-fit-cover"
+          />
+        </p-card>
+      </div>
+
+      <!-- DATOS + ACCIONES + PERMISOS -->
+      <div class="col-md-9 col-sm-12">
+        <!-- DATOS BÁSICOS -->
+        <div class="mb-3">
+          <div class="row g-2">
+            <div class="col-md-7">
+              <label class="form-label text-muted small mb-1">Nombre</label>
+              <div class="p-inputtext p-component w-100 readonly-box">
+                {{ usuarioBuscado?.nombre }}
+              </div>
+            </div>
+
+            <div class="col-md-5">
+              <label class="form-label text-muted small mb-1">Usuario</label>
+              <div class="p-inputtext p-component w-100 readonly-box">
+                {{ usuarioBuscado?.usario }}
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label text-muted small mb-1">Contraseña</label>
+              <div class="p-inputtext p-component w-100 readonly-box text-muted">
+                ***********************
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ACCIONES -->
+        <div class="mb-3 d-flex flex-wrap gap-2">
+          <!-- Reset contraseña -->
+          <button
+            pButton
+            type="button"
+            class="p-button-success"
+            icon="pi pi-key"
+            label="Resetear contraseña"
+            title="Resetear contraseña"
+            (click)="displayResetDialog = true"
+          >
+          </button>
+
+          <!-- Cambiar fuerza/unidad que administra  *ngIf="verificarPermiso() || verificarPermiso(3)" -->
+          <button
+           
+            pButton
+            type="button"
+            class="p-button-warning"
+            icon="pi pi-sitemap"
+            label="Cambiar unidad / fuerza"
+            title="Cambiar Unidad y Fuerza que administra"
+            (click)="abrirDialogFuerza()"
+          >
+          </button>
+
+          <!-- Eliminar usuario  *ngIf="verificarPermiso(1) || verificarPermiso(3)"-->
+          <button
+            
+            pButton
+            type="button"
+            class="p-button-danger p-button-outlined"
+            icon="pi pi-trash"
+            label="Eliminar acceso"
+            title="Eliminar acceso"
+            (click)="eliminarUsuario()"
+          >
+          </button>
+        </div>
+
+        <!-- PERMISOS -->
+        <p-divider align="left" type="dashed" class="my-3">
+          <span class="section-title">
+            <i class="pi pi-shield me-2"></i> Permisos asignados
+          </span>
+        </p-divider>
+
+        <div class="row g-3">
+          <!-- TABLA PARA ADMIN  para el c1 -->
+          <div class="col-md-6"  *ngIf="verificarPermiso(['User_admin']) ; else bloqueFalso">
+            <p-table
+              [value]="permisosdelUser"
+              styleClass="p-datatable-sm p-datatable-gridlines permisos-table"
+              responsiveLayout="scroll"
+            >
+              <ng-template pTemplate="header">
+                <tr>
+                  <th style="width: 3rem;">#</th>
+                  <th>Permiso </th>
+                  <th class="text-center">Permitido</th>
+                </tr>
+              </ng-template>
+
+              <ng-template pTemplate="body" let-item let-i="rowIndex">
+                <tr>
+                  <td>{{ i + 1 }}</td>
+                  <td>{{ item.NombrePermiso }} </td>
+                  <td class="text-center">
+                    <p-checkbox
+                      [binary]="true"
+                      [ngModel]="item.permitido===1?true:false"
+                     
+                      (onChange)="cambiarPermiso(item)"
+                    >
+                    </p-checkbox>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+
+          <!-- TABLA PARA PERMISO de una fuerza -->
+          <ng-template #bloqueFalso>
+            <div class="col-md-6" *ngIf="verificarPermiso(['User_admin02']); else bloqueFalso2">
+              <p-table
+                [value]="permisosdelUser"
+                styleClass="p-datatable-sm p-datatable-gridlines permisos-table"
+                responsiveLayout="scroll"
+              >
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th style="width: 3rem;">#</th>
+                    <th>Permiso  de Fuerza</th>
+                    <th class="text-center">Permitido </th>
+                  </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-item let-i="rowIndex">
+                  <tr *ngIf="item.idPermisosDisponibles === 36 || item.idPermisosDisponibles === 37
+                   || item.idPermisosDisponibles === 38 
+                   ||  item.idPermisosDisponibles === 41 ||  item.idPermisosDisponibles === 20
+                   ||  item.idPermisosDisponibles === 21 ||  item.idPermisosDisponibles === 22  ||  item.idPermisosDisponibles === 34">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ item.NombrePermiso  }}  </td>
+                    <td class="text-center">
+                      <p-checkbox
+                        [binary]="true"
+                        [ngModel]="item.permitido"
+                     
+                        (onChange)="cambiarPermiso(item)"
+                      >
+                      </p-checkbox>
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+
+            <!-- TABLA PARA PERMISOs usuario de unidad -->
+            <ng-template #bloqueFalso2>
+              <div class="col-md-6"    *ngIf="verificarPermiso(['User_admin01'])"  >
+                <p-table
+                  [value]="permisosdelUser"
+                  styleClass="p-datatable-sm p-datatable-gridlines permisos-table"
+                  responsiveLayout="scroll"
+                >
+                  <ng-template pTemplate="header">
+                    <tr>
+                      <th style="width: 3rem;">#</th>
+                      <th>Permiso para unidad</th>
+                      <th class="text-center">Permitido  </th>
+                    </tr>
+                  </ng-template>
+
+                  <ng-template pTemplate="body" let-item let-i="rowIndex">
+                    <tr *ngIf="item.idPermisosDisponibles === 38 
+                        ">
+                      <td>{{ i + 1 }}</td>
+                      <td>{{ item.NombrePermiso }}   </td>
+                      <td class="text-center">
+                        <p-checkbox
+                          [binary]="true"
+                          [ngModel]="item.permitido"
+                         
+                          (onChange)="cambiarPermiso(item)"
+                        >
+                        </p-checkbox>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+              </div>
+            </ng-template>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </p-card>
+</div>
+
+<!-- =======================================
+     DIALOG: RESETEAR CONTRASEÑA (PrimeNG)
+=======================================  -->
+<p-dialog
+  [(visible)]="displayResetDialog"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [dismissableMask]="true"
+  [style]="{ width: '520px', maxWidth: '95vw' }"
+>
+  <ng-template pTemplate="header">
+    <div class="d-flex align-items-center gap-2">
+      <i class="pi pi-key me-2"></i>
+      <span class="fw-semibold">Restablecer Contraseña</span>
+    </div>
+  </ng-template>
+
+  <form #cambioContrasena="ngForm" class="row g-3">
+    <div class="col-md-6">
+      <label class="form-label text-muted small mb-1">Contraseña</label>
+      <p-password
+        name="contrasena"
+    #contrasena="ngModel"
+    ngModel
+    required
+      appendTo="body"  
+        [toggleMask]="true"
+        [feedback]="true"
+        
+        styleClass="w-100"
+        required
+      >
+      </p-password>
+    </div>
+
+    <div class="col-md-6">
+      <label class="form-label text-muted small mb-1">Confirmar Contraseña</label>
+      <p-password
+        name="contrasena2"
+        #contrasena2="ngModel"
+        ngModel
+        required
+        [toggleMask]="true"
+        [feedback]="false"
+ 
+        styleClass="w-100"
+        required
+      >
+      </p-password>
+    </div>
+
+ <div class="col-md-12 d-flex align-items-center mt-2">
+  <span class="me-2 small text-muted">Debe cambiar la contraseña</span>
+
+<p-toggleswitch
+  name="debeCambiar"
+  [(ngModel)]="modeloResetContrasena.debeCambiar"
+>
+</p-toggleswitch>
+</div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <div class="d-flex justify-content-end gap-2 w-100">
+      <button
+        pButton
+        type="button"
+        class="p-button-text"
+        label="Cerrar"
+        icon="pi pi-times"
+        (click)="displayResetDialog = false"
+      ></button>
+
+      <button
+        pButton
+        type="button"
+        class="p-button-danger"
+        label="Guardar"
+        icon="pi pi-save"
+        [disabled]="cambioContrasena.invalid"
+        (click)="resetContrasena(cambioContrasena); displayResetDialog = false"
+      ></button>
+    </div>
+  </ng-template>
+</p-dialog>
+ 
+<!-- =======================================
+     DIALOG: ADMINISTRAR FUERZA / UNIDAD
+======================================= -->
+<p-dialog
+  [(visible)]="displayFuerzaDialog"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [dismissableMask]="true"
+  [style]="{ width: '520px', maxWidth: '95vw' }"
+>
+  <ng-template pTemplate="header">
+    <div class="d-flex align-items-center gap-2">
+      <i class="pi pi-sitemap me-2"></i>
+      <span class="fw-semibold">Administrar Fuerza y Unidad</span>
+    </div>
+  </ng-template>
+
+  <div class="mb-3">
+    <p class="text-danger small mb-0">
+      Nota: Aquí usted decide a qué fuerza o unidad va a administrar este usuario.
+      Solo si el usuario fuese administrador de Fuerza o Unidad.
+    </p>
+  </div>
+
+ 
+  <form
+    #formularioAdministrador="ngForm"
+    class="row g-3"
+    *ngIf="1===1; else bloquePermiso3"
+  >
+    <div class="col-12">
+      <label class="form-label text-muted small mb-1">Fuerza</label>
+      <p-select
+        [options]="arregloFuerzas"
+        optionLabel="nombre"
+        [(ngModel)]="fuerzaSelected"
+        name="fuerzaSelected"
+        placeholder="Seleccione la fuerza"
+        [filter]="true"
+        [showClear]="true"
+        class="w-100"
+        appendTo="body"  
+        (onChange)="sacarUnidad()"
+        required
+      ></p-select>
+    </div>
+
+    <div class="col-12">
+      <label class="form-label text-muted small mb-1">Unidad</label>
+      <p-select
+        [options]="arregloUnidad"
+        optionLabel="unidad"
+        [(ngModel)]="unidadSelected"
+        name="unidadSelected"
+        placeholder="Seleccione la unidad"
+        [filter]="true"
+        appendTo="body"  
+        [showClear]="true"
+        class="w-100"
+        required
+      ></p-select>
+    </div>
+  </form>
+
+     <ng-template #bloquePermiso3>
+    <form
+      #formularioAdministrador="ngForm"
+      class="row g-3"
+      *ngIf="1===1"
+    >
+      <div class="col-12">
+        <label class="form-label text-muted small mb-1">Fuerza</label>
+        <p-select
+          [options]="arregloFuerzasFiltradas"
+          optionLabel="nombre"
+          [(ngModel)]="fuerzaSelected"
+          name="fuerzaSelected"
+          placeholder="Seleccione la fuerza"
+          [filter]="true"
+          class="w-100"
+          (onChange)="sacarUnidad()"
+          required
+        ></p-select>
+      </div>
+
+      <div class="col-12">
+        <label class="form-label text-muted small mb-1">Unidad</label>
+        <p-select
+          [options]="arregloUnidad"
+          optionLabel="unidad"
+          [(ngModel)]="unidadSelected"
+          name="unidadSelected"
+          placeholder="Seleccione la unidad"
+          [filter]="true"
+          [showClear]="true"
+          class="w-100"
+          required
+        ></p-select>
+      </div>
+    </form>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <div class="d-flex justify-content-end gap-2 w-100">
+      <button
+        pButton
+        type="button"
+        class="p-button-text"
+        label="Cerrar"
+        icon="pi pi-times"
+        (click)="displayFuerzaDialog = false"
+      ></button>
+
+      <button
+        pButton
+        type="button"
+        class="p-button-success"
+        label="Guardar"
+        icon="pi pi-save"
+       
+        (click)="guardarCambio(); displayFuerzaDialog = false"
+      ></button>
+    </div>
+  </ng-template>
+</p-dialog>

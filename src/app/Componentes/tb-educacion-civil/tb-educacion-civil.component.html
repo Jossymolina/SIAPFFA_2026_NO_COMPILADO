@@ -1,0 +1,185 @@
+<div class="form-wrapper">
+  <div class="card form-card p-3">
+
+    <!-- HEADER SOBRIO -->
+    <div class="form-header mb-2">
+      <div class="form-title">
+        Educación civil
+        <div class="form-subtitle">
+          Historial de formación académica del personal
+        </div>
+      </div>
+
+      <!-- Botón Agregar (abre p-dialog) -->
+      <button
+        type="button"
+        class="btn btn-sm btn-back-modern"
+        style="white-space: nowrap; background-color: black; color: white;"
+        (click)="abrirModalEducacionCivil()"
+        title="Agregar educación civil"
+      >
+        <i class="pi pi-plus"></i>
+        <span>Agregar</span>
+      </button>
+    </div>
+
+    <!-- BODY -->
+    <div class="card-body px-0 pt-2 pb-0">
+
+      <!-- Mensaje sin datos -->
+      <p
+        class="form-subtitle mb-2"
+        style="color: #dc3545;"
+        *ngIf="arregloProfesionPersona.length === 0"
+      >
+        * No contiene datos que mostrar
+      </p>
+
+      <!-- TABLA -->
+      <div class="table-responsive">
+        <table class="table table-sm table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th style="width: 50px;">#</th>
+              <th>Universidad / Centro educativo</th>
+              <th>Profesión</th>
+              <th>Fecha</th>
+              <th>País</th>
+              <th style="width: 80px;">Opciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of arregloProfesionPersona; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ item.Universidad }}</td>
+              <td>{{ item.Profesion }}</td>
+              <td>{{ item.fechaformat }}</td>
+              <td>{{ item.Pais }}</td>
+              <td>
+                <button
+                  type="button"
+                  title="Eliminar"
+                  (click)="eliminarprofesion(item)"
+                  class="btn btn-sm btn-outline-danger"
+                >
+                  <i class="pi pi-trash" aria-hidden="true"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<p-dialog
+  header="Agregar educación civil"
+  [(visible)]="mostrarModalEducacion"
+  [modal]="true"
+  [style]="{ width: '650px', maxWidth: '95vw' }"
+  [draggable]="false"
+  [resizable]="false"
+  [closable]="false"
+>
+
+  <form #formularioEducacion="ngForm" class="row g-3">
+
+    <!-- Nivel Educativo -->
+    <div class="col-md-6 col-12">
+      <label class="form-label">Nivel educativo</label>
+      <select
+        class="form-control"
+        name="Educacion"
+        required
+        [(ngModel)]="nivelSelected"
+        (change)="sacarProfesiones()"
+      >
+        <option [ngValue]="item" *ngFor="let item of arregloNivelEducativo">
+          {{ item.nombreNivel }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Carrera -->
+    <div class="col-md-6 col-12">
+      <label class="form-label">Carrera</label>
+      <select
+        class="form-control"
+        name="Profesion"
+        required
+        ngModel
+        (change)="sacarPais()"
+      >
+        <option [ngValue]="item" *ngFor="let item of arregloProfesiones">
+          {{ item.profesion }}
+        </option>
+      </select>
+    </div>
+
+    <!-- País -->
+    <div class="col-md-6 col-12">
+      <label class="form-label">País</label>
+      <select
+        class="form-control"
+        name="pais"
+        required
+        ngModel
+      >
+        <option [ngValue]="item" *ngFor="let item of arregloPais">
+          {{ item.nombrepaises }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Centro educativo -->
+    <div class="col-md-6 col-12">
+      <label class="form-label">Centro educativo</label>
+      <select
+        class="form-control"
+        name="centroEducativo"
+        required
+        ngModel
+      >
+        <option [ngValue]="item" *ngFor="let item of arregloUniversidades">
+          {{ item.nombre }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Fecha graduación -->
+    <div class="col-md-6 col-12">
+      <label class="form-label">Fecha graduación</label>
+      <input
+        type="date"
+        class="form-control"
+        name="fechaGraduacion"
+        required
+        ngModel
+      />
+    </div>
+
+  </form>
+
+  <!-- FOOTER DEL DIALOG -->
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      class="p-button-text"
+      label="Cerrar"
+      (click)="cerrarModalEducacionCivil()"
+    ></button>
+
+    <button
+      pButton
+      type="button"
+      label="Guardar"
+      icon="pi pi-check"
+      [disabled]="!formularioEducacion.valid"
+      (click)="guardarProfesion()"
+    ></button>
+  </ng-template>
+</p-dialog>

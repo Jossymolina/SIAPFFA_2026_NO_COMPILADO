@@ -1,0 +1,84 @@
+<div class="card-body row doc-grid">
+
+  <div *ngFor="let i of arreglodeDocumentos"
+       class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
+
+    <div class="card doc-card h-100 position-relative"
+         [class.doc-card--active]="dropdownDocId === i.iddocumento"
+         (click)="cerrarDropdownDocs()">
+
+      <!-- MENÚ DE ACCIONES -->
+      <div class="doc-card-actions dropdown"
+           [class.show]="dropdownDocId === i.iddocumento"
+           (mouseleave)="cerrarDropdownDocs()">
+
+        <button type="button"
+                class="btn btn-light btn-sm dropdown-toggle"
+                aria-expanded="dropdownDocId === i.iddocumento"
+                (click)="toggleDropdownDoc(i.iddocumento, $event)">
+          <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+        </button>
+
+        <div class="dropdown-menu dropdown-menu-right"
+             [class.show]="dropdownDocId === i.iddocumento">
+          <a class="dropdown-item"
+             [href]="_DatospersonalesService.url2 + 'sacarfoto/' + i?.dir"
+             target="_blank"
+             download>
+            Descargar
+          </a>
+          <a class="dropdown-item"
+             (click)="cambiarnombreDocumento(i); cerrarDropdownDocs()">
+            Cambiar nombre
+          </a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item text-danger"
+             *ngIf="banderaEspiner === 0"
+             (click)="eliminar(i.iddocumento, i.dir, i); cerrarDropdownDocs()">
+            Eliminar
+          </a>
+        </div>
+      </div>
+
+      <!-- PREVIEW DOCUMENTO -->
+      <div class="doc-preview-wrapper">
+        <embed class="doc-preview"
+               *ngIf="i?.extension === 'pdf'; else bloqueImagen"
+               [src]="urls + i?.dir | safe"
+               type="">
+        <ng-template #bloqueImagen>
+          <div *ngIf="versiesimagen(i?.extension); else bloqueDocumento">
+            <img class="doc-preview"
+                 [src]="urls + i?.dir | safe"
+                 alt="Vista previa">
+          </div>
+          <ng-template #bloqueDocumento>
+            <div *ngIf="versiesDocumento(i?.extension); else bloqueOtro">
+              <img class="doc-preview"
+                   src="word.png"
+                   alt="Documento Word">
+            </div>
+            <ng-template #bloqueOtro>
+              <img class="doc-preview"
+                   src="documento.png"
+                   alt="Documento">
+            </ng-template>
+          </ng-template>
+        </ng-template>
+      </div>
+
+      <!-- NOMBRE + SPINNER -->
+      <div class="card-body doc-card-body">
+        <h6 class="card-text doc-title" [title]="i.nombreDocumento">
+          {{ i.nombreDocumento }}
+        </h6>
+        <div *ngIf="banderaEspiner === 1"
+             class="spinner-border text-primary spinner-border-sm"
+             role="status">
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>

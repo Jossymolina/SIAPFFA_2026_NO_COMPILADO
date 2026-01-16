@@ -1,0 +1,1005 @@
+@if(SegundaVentana===0){
+<div class="container h-100"   >
+  <div class="row justify-content-center h-100">
+    <div class="col-md-8 align-self-center" style="margin-top: 100px;">
+      
+      <div class="card shadow-sm border-0 rounded-3">
+        <div class="card-body p-4">
+
+          <h4 class="text-center mb-4 fw-bold">Modificar Perfil</h4>
+
+          <form #formulariobusquedaId="ngForm" class="row g-3"  (submit)="buscarporIdentidad()" >
+
+            <!-- Identidad -->
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Identidad</label>
+              <input 
+                type="text"
+                name="identidad"
+                class="form-control"
+                maxlength="13"
+                minlength="13"
+                pattern="^[0-9]*$"
+                required
+                [(ngModel)]="consulta.identidad"
+              >
+              <div class="form-text text-danger" *ngIf="formulariobusquedaId.submitted && !formulariobusquedaId.form.valid">
+                La identidad debe tener 13 dígitos numéricos.
+              </div>
+            </div>
+
+            <!-- Botón Buscar -->
+            <div class="col-md-3">
+              <label class="form-label fw-semibold">Buscar</label>
+              <button 
+                class="btn btn-success w-100"
+                [disabled]="!formulariobusquedaId.valid"
+                 
+            
+                type="submit"
+              >
+                <i class="pi pi-search"></i>
+              </button>
+            </div>
+
+            <!-- Cargando -->
+            <div class="col-md-3" *ngIf="banderadeCarga === 1">
+              <label class="form-label fw-semibold">Cargando...</label>
+              <div class="d-flex align-items-center justify-content-center w-100">
+                <div class="spinner-border" role="status"></div>
+              </div>
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+}
+@if(SegundaVentana===1){
+<div class="container-fluid py-3" *ngIf="SegundaVentana === 1">
+  <div class="card shadow-lg border-0 rounded-4">
+    <div class="card-body pb-3">
+
+      <!-- NAVBAR SUPERIOR / ACCIONES -->
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <button
+          class="btn btn-outline-success d-flex align-items-center gap-2"
+          (click)="atras(2)"
+          title="Regresar"
+        >
+          <i class="pi pi-angle-double-left" aria-hidden="true"></i>
+          <span>Regresar</span>
+        </button>
+
+    
+      </div>
+
+      <!-- PERFIL -->
+      <div class="row g-3">
+        <!-- FOTO GRANDE -->
+        <div class="col-lg-3 col-md-4">
+          <div class="card border-0 shadow-sm rounded-4 h-100">
+            <div class="card-body p-2 d-flex justify-content-center align-items-center">
+              <img
+                *ngIf="objetoConsultado?.foto !== null; else falso"
+                [src]="_DatospersonalesService.url2 + 'sacarfoto/' + objetoConsultado?.foto"
+                alt="Foto de la persona"
+                class="img-fluid rounded-4 shadow-sm"
+                style="border: 4px solid #0e0d0d; max-height: 380px; object-fit: cover; width: 100%;"
+              />
+              <ng-template #falso>
+                <img
+                  src="../../../assets/fotoperfil.png"
+                  alt="Foto de perfil"
+                  class="img-fluid rounded-4 shadow-sm"
+                  style="border: 4px solid #0e0d0d; max-height: 380px; object-fit: cover; width: 100%;"
+                />
+              </ng-template>
+            </div>
+          </div>
+        </div>
+
+        <!-- DATOS EN TRES COLUMNAS -->
+        <div class="col-lg-9 col-md-8">
+          <div class="card border-0 shadow-sm rounded-4 h-100">
+            <div class="card-header bg-white border-0">
+              <h6 class="mb-0">Datos generales del personal</h6>
+            </div>
+            <div class="card-body pt-2">
+              <div class="row g-2">
+
+                <!-- Cada item es una “tarjetita” en 3 columnas -->
+                <div class="col-md-4">
+                  <div
+                    class="p-2 bg-light rounded-3 shadow-sm d-flex justify-content-between align-items-center"
+                    style="cursor: pointer;"
+                    (click)="cambiarnombres()"
+                  >
+                    <span class="text-muted small">Nombre</span>
+                    <strong class="ms-2 text-end">{{ objetoConsultado?.nombres }}</strong>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div
+                    class="p-2 bg-light rounded-3 shadow-sm d-flex justify-content-between align-items-center"
+                    style="cursor: pointer;"
+                    (click)="cambiarapellidos()"
+                  >
+                    <span class="text-muted small">Apellido</span>
+                    <strong class="ms-2 text-end">{{ objetoConsultado?.apellidos }}</strong>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div
+                    class="p-2 bg-light rounded-3 shadow-sm d-flex justify-content-between align-items-center"
+                    style="cursor: pointer;"
+                    (click)="Actualizaserie()"
+                  >
+                    <span class="text-muted small">Código</span>
+                    <strong class="ms-2 text-end">
+                      {{ objetoConsultado?.codigo }} - {{ objetoConsultado?.numeroSerie }}
+                    </strong>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div
+                    class="p-2 bg-light rounded-3 shadow-sm d-flex justify-content-between align-items-center"
+                    style="cursor: pointer;"
+                    (click)="ActualizarEstadoCivil()"
+                  >
+                    <span class="text-muted small">Estado Civil</span>
+                    <strong class="ms-2 text-end">{{ objetoConsultado?.estado_civil }}</strong>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div
+                    class="p-2 bg-light rounded-3 shadow-sm d-flex justify-content-between align-items-center"
+                    style="cursor: pointer;"
+                    (click)="abrirModalCambiarIdentidad()"
+                  >
+                    <span class="text-muted small">Identidad</span>
+                    <strong class="ms-2 text-end">{{ objetoConsultado?.identidad }}</strong>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div
+                    class="p-2 bg-light rounded-3 shadow-sm d-flex justify-content-between align-items-center"
+                  >
+                    <span class="text-muted small">Fuerza</span>
+                    <strong class="ms-2 text-end">{{ objetoConsultado?.nombre }}</strong>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div
+                    class="p-2 bg-light rounded-3 shadow-sm d-flex justify-content-between align-items-center"
+                    style="cursor: pointer;"
+                    (click)="cambiarnumeroAcuerdo()"
+                  >
+                    <span class="text-muted small">Núm. Acuerdo</span>
+                    <strong class="ms-2 text-end">{{ objetoConsultado?.numeroAcuerdo }}</strong>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div
+                    class="p-2 bg-light rounded-3 shadow-sm d-flex justify-content-between align-items-center"
+                    style="cursor: pointer;"
+                    (click)="ActualizarReligion()"
+                  >
+                    <span class="text-muted small">Religión</span>
+                    <strong class="ms-2 text-end">{{ objetoConsultado?.religion }}</strong>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div
+                    class="p-2 bg-light rounded-3 shadow-sm d-flex justify-content-between align-items-center"
+                    style="cursor: pointer;"
+                    (click)="ActualizaGenero()"
+                  >
+                    <span class="text-muted small">Género</span>
+                    <strong class="ms-2 text-end">{{ objetoConsultado?.sexo }}</strong>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div
+                    class="p-2 bg-light rounded-3 shadow-sm d-flex justify-content-between align-items-center"
+                    style="cursor: pointer;"
+                    (click)="ActualizartipoSangre()"
+                  >
+                    <span class="text-muted small">Tipo de sangre</span>
+                    <strong class="ms-2 text-end">{{ objetoConsultado?.tipo_sangre }}</strong>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div
+                    class="p-2 bg-light rounded-3 shadow-sm d-flex justify-content-between align-items-center"
+                    style="cursor: pointer;"
+                    (click)="abrirModalCuentaBanco()"
+                  >
+                    <span class="text-muted small">Cuenta de banco</span>
+                    <strong class="ms-2 text-end">{{ objetoConsultado?.cuenta_banco }}</strong>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div
+                    class="p-2 bg-light rounded-3 shadow-sm d-flex justify-content-between align-items-center"
+                    style="cursor: pointer;"
+                    (click)="ActualizaNumeropasaporte()"
+                  >
+                    <span class="text-muted small">Núm. pasaporte</span>
+                    <strong class="ms-2 text-end">{{ objetoConsultado?.numero_pasaporte }}</strong>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div
+                    class="p-2 bg-light rounded-3 shadow-sm d-flex justify-content-between align-items-center"
+                    style="cursor: pointer;"
+                    (click)="actualizarCombatiente()"
+                  >
+                    <span class="text-muted small">Combatiente</span>
+                    <strong class="ms-2 text-end">
+                      <span *ngIf="objetoConsultado?.combatiente === 1">Sí</span>
+                      <span *ngIf="objetoConsultado?.combatiente !== 1">No</span>
+                    </strong>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div
+                    class="p-2 bg-light rounded-3 shadow-sm d-flex justify-content-between align-items-center"
+                  >
+                    <span class="text-muted small">Grado/Rango actual</span>
+                    <strong class="ms-2 text-end">{{ objetoConsultado?.nombre_grado }}</strong>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div
+                    class="p-2 bg-light rounded-3 shadow-sm d-flex justify-content-between align-items-center"
+                    style="cursor: pointer;"
+                    (click)="sacarArmas(); abrirModalArma()"
+                  >
+                    <span class="text-muted small">Arma</span>
+                    <strong class="ms-2 text-end">{{ armaobjetoConsultado?.NombreArma }}</strong>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div
+                    class="p-2 bg-light rounded-3 shadow-sm d-flex justify-content-between align-items-center"
+                    style="cursor: pointer;"
+                    (click)="abrirModalFechaIngreso()"
+                  >
+                    <span class="text-muted small">Fecha ingreso</span>
+                    <strong class="ms-2 text-end">{{ objetoConsultado?.fecha | date }}</strong>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div
+                    class="p-2 bg-light rounded-3 shadow-sm d-flex justify-content-between align-items-center"
+                  >
+                    <span class="text-muted small">Antigüedad en el grado</span>
+                    <strong class="ms-2 text-end">
+                      <span *ngIf="objetoConsultado?.antiguedad_GradoActual >= 2">
+                        {{ objetoConsultado?.antiguedad_GradoActual }} años
+                      </span>
+                      <span *ngIf="objetoConsultado?.antiguedad_GradoActual <= 1">
+                        {{ objetoConsultado?.antiguedad_GradoActual }} año
+                      </span>
+                    </strong>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div
+                    class="p-2 bg-light rounded-3 shadow-sm d-flex justify-content-between align-items-center"
+                    style="cursor: pointer;"
+                    (click)="abrirModalFechaNacimiento()"
+                  >
+                    <span class="text-muted small">Fecha nacimiento</span>
+                    <strong class="ms-2 text-end">{{ objetoConsultado?.fechaFormato }}</strong>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div
+                    class="p-2 bg-light rounded-3 shadow-sm d-flex justify-content-between align-items-center"
+                    style="cursor: pointer;"
+                    (click)="abrirModalLugarNacimiento()"
+                  >
+                    <span class="text-muted small">Lugar nacimiento</span>
+                    <strong class="ms-2 text-end">{{ objetoConsultado?.municipio }}</strong>
+                  </div>
+                </div>
+
+                <!-- ESTADOS ACTIVO / BAJA -->
+                <div
+                  class="col-md-4"
+                  *ngIf="objetoConsultado.activo === 2"
+                >
+                  <div
+                    class="p-2 rounded-3 shadow-sm d-flex justify-content-between align-items-center text-white"
+                    style="background-color: rgb(255, 44, 7);"
+                  >
+                    <span class="text-white-50 small">Activo</span>
+                    <strong>NO</strong>
+                  </div>
+                </div>
+
+                <div
+                  class="col-md-4"
+                  *ngIf="objetoConsultado.activo === 2"
+                >
+                  <div
+                    class="p-2 rounded-3 shadow-sm d-flex justify-content-between align-items-center text-white"
+                    style="background-color: rgb(56, 184, 243);"
+                  >
+                    <span class="text-white-50 small">Tipo de baja</span>
+                    <strong>{{ objetoConsultado.nombreBaja }}</strong>
+                  </div>
+                </div>
+
+                <div
+                  class="col-md-4"
+                  *ngIf="objetoConsultado.activo === 2"
+                >
+                  <div
+                    class="p-2 rounded-3 shadow-sm d-flex justify-content-between align-items-center text-white"
+                    style="background-color: rgb(56, 184, 243);"
+                  >
+                    <span class="text-white-50 small">Fecha ingreso</span>
+                    <strong>{{ objetoConsultado.FechaIngreso }}</strong>
+                  </div>
+                </div>
+
+                <div
+                  class="col-md-4"
+                  *ngIf="objetoConsultado.activo === 2"
+                >
+                  <div
+                    class="p-2 rounded-3 shadow-sm d-flex justify-content-between align-items-center text-white"
+                    style="background-color: rgb(56, 184, 243);"
+                  >
+                    <span class="text-white-50 small">Fecha baja</span>
+                    <strong>{{ objetoConsultado.FechaBaja }}</strong>
+                  </div>
+                </div>
+
+                <div
+                  class="col-md-4"
+                  *ngIf="objetoConsultado.activo === 2"
+                >
+                  <div
+                    class="p-2 rounded-3 shadow-sm d-flex justify-content-between align-items-center text-white"
+                    style="background-color: rgb(56, 184, 243);"
+                  >
+                    <span class="text-white-50 small">Sueldo</span>
+                    <strong>{{ objetoConsultado.SueldoaPagar }}</strong>
+                  </div>
+                </div>
+
+                <div
+                  class="col-md-4"
+                  *ngIf="objetoConsultado.activo === 1"
+                >
+                  <div
+                    class="p-2 rounded-3 shadow-sm d-flex justify-content-between align-items-center text-white"
+                    style="background-color: rgb(23, 253, 92);"
+                  >
+                    <span class="   " style="color: black;">Activo</span>
+                    <strong style="color: black;">SI</strong>
+                  </div>
+                </div>
+
+              </div> <!-- row g-2 -->
+            </div> <!-- card-body -->
+          </div>
+        </div>
+      </div>
+
+    </div> <!-- card-body -->
+  </div>   <!-- card -->
+
+  <!-- TABLA ASCENSOS ABAJO CON SCROLL -->
+  <div class="mt-4">
+    <div class="card card-primary border-0 shadow-sm rounded-4">
+      <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center">
+        <h6 class="mb-0">Ascensos</h6>
+        <ul class="nav nav-tabs border-0" id="custom-tabs-one-tab" role="tablist">
+          <li class="nav-item"  >
+            <a
+              class="nav-link active"
+              id="custom-tabs-one-ascenso-tab"
+              data-toggle="pill"
+           
+              role="tab"
+              aria-controls="custom-tabs-one-ascenso"
+              aria-selected="true"
+            >
+              Historial
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="card-body pt-2">
+        <div class="table-responsive" style="max-height: 320px; overflow-y: auto;">
+          <table class="table table-sm table-hover align-middle table-bordered mb-0">
+            <thead class="table-primary">
+              <tr>
+                <th style="width: 40px;">#</th>
+                <th>Fuerza</th>
+                <th>Número de Acuerdo</th>
+                <th>Grado</th>
+                <th>Activo</th>
+                <th>Fecha de Ascenso</th>
+                <th style="width: 130px;">Opciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let y of arregloAscensos; let index = index">
+                <td>{{ index + 1 }}</td>
+                <td>{{ y.nombre }}</td>
+                <td>{{ y.numeroAcuerdo }}</td>
+                <td>{{ y.nombre_grado }}</td>
+                <td>
+                  <span *ngIf="y.activo === 1" style="color: black;" class="badge badge-success">Sí</span>
+                  <span *ngIf="y.activo !== 1"  style="color: red;"class="badge badge-secondary">No</span>
+                </td>
+                <td>{{ y?.fechaformatAscenso }}</td>
+                <td>
+                  <div class="btn-group btn-group-sm" role="group">
+                    <button
+                      class="btn btn-outline-success"
+                      title="Modificar esta fila"
+                      (click)="ascesoseleccionado(y); abrirModalModificarAscenso()"
+                    >
+                      <i class="pi pi-prime"></i>
+                    </button>
+                    <button
+                      class="btn btn-outline-danger"
+                      title="Eliminar esta fila"
+                      style="margin-left: 5px;"
+                      (click)="ascesoseleccionado(y); abrirModalEliminarAscenso()"
+                    >
+                      <i class="pi pi-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            <tfoot class="table-light">
+              <tr>
+                <td colspan="7"></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+}
+
+
+<p-dialog
+  [(visible)]="displayCambiarFoto"
+  [modal]="true"
+  [closable]="true"
+  [dismissableMask]="true"
+  [style]="{ width: '650px' }"
+  [contentStyle]="{ height: '600px', overflow: 'auto' }"
+>
+  <ng-template pTemplate="header">
+    <span>Cambiar foto</span>
+  </ng-template>
+
+  <ng-template pTemplate="content">
+    <div class="col-sm-12 align-self-center text-center" style="width: 500px; height: 600px; margin: 0 auto;">
+      <div class="card shadow" style="width: 500px; height: 600px;">
+        <div class="card-body" style="width: 500px; height: 600px;">
+
+          <img
+            class="card-img-top img-thumbnail img-fluid"
+            alt="Vista previa"
+            width="304"
+            height="236"
+            [src]="imgURL"
+            *ngIf="imgURL"
+          />
+
+          <div class="card-body">
+            <input
+              #file
+              type="file"
+              accept="image/*"
+              class="btn btn-primary"
+              (change)="preview(file.files, $event)"
+            />
+            <hr />
+            <button
+              class="btn btn-success"
+              style="margin-right: 5px;"
+              *ngIf="banderadeCarga === 0"
+              (click)="verificarImagen(); displayCambiarFoto = false"
+            >
+              Guardar ..
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button
+      type="button"
+      class="btn btn-default"
+      (click)="displayCambiarFoto = false"
+    >
+      Cerrar
+    </button>
+  </ng-template>
+</p-dialog>
+
+
+<p-dialog
+  [(visible)]="displayFechaNacimiento"
+  [modal]="true"
+  [closable]="true"
+  [dismissableMask]="true"
+  [style]="{ width: '450px' }"
+>
+  <ng-template pTemplate="header">
+    <h5 class="m-0">Control de Fechas</h5>
+  </ng-template>
+
+  <ng-template pTemplate="content">
+    <form>
+      <label class="form-control">
+        Seleccione la fecha de Nacimiento
+        <input
+          [(ngModel)]="fechanuevadeNacimiento"
+          name="fechanuevadeNacimiento"
+          class="form-control mt-2"
+          type="date"
+        />
+      </label>
+    </form>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button
+      type="button"
+      class="btn btn-secondary"
+      (click)="displayFechaNacimiento = false"
+    >
+      Cerrar
+    </button>
+
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="actualizarfechaNacimiento(); displayFechaNacimiento = false"
+    >
+      Guardar
+    </button>
+  </ng-template>
+</p-dialog>
+
+<p-dialog
+  [(visible)]="displayArma"
+  [modal]="true"
+  [closable]="true"
+  [dismissableMask]="true"
+  [style]="{ width: '500px' }"
+>
+  <ng-template pTemplate="header">
+    <h5 class="m-0">Control del Arma</h5>
+  </ng-template>
+
+  <ng-template pTemplate="content">
+    <!-- Fuerza 3 -->
+    <div
+      *ngIf="
+        objetoConsultado?.idfuerza === 3 &&
+        objetoConsultado?.codigo != 'AUX' &&
+        objetoConsultado?.codigo != 'EST' &&
+        objetoConsultado?.codigo != 'CAD'
+      "
+    >
+      <label>
+        Seleccione el Arma:
+        <select
+          [(ngModel)]="armaselected"
+          name="armaselected"
+          class="form-control mt-2"
+        >
+          <option [ngValue]="y" *ngFor="let y of arregloarmas">
+            {{ y.NombreArma }}
+          </option>
+        </select>
+      </label>
+    </div>
+
+    <!-- Mensaje fuerza 2 -->
+    <label *ngIf="objetoConsultado?.idfuerza === 2">
+      Solo Oficiales y Sub Oficiales pueden tener Cuerpo
+    </label>
+
+    <!-- Fuerza 2 -->
+    <div
+      *ngIf="
+        objetoConsultado?.idfuerza === 2 &&
+        objetoConsultado?.codigo != 'TRO' &&
+        objetoConsultado?.codigo != 'AUX' &&
+        objetoConsultado?.codigo != 'EST' &&
+        objetoConsultado?.codigo != 'CAD'
+      "
+    >
+      <label>
+        Seleccione el Arma:
+        <select
+          [(ngModel)]="armaselected"
+          name="armaselected"
+          class="form-control mt-2"
+        >
+          <option [ngValue]="y" *ngFor="let y of arregloarmas">
+            {{ y.NombreArma }}
+          </option>
+        </select>
+      </label>
+    </div>
+
+    <!-- Fuerza 4 -->
+    <div
+      *ngIf="
+        objetoConsultado?.idfuerza === 4 &&
+        objetoConsultado?.codigo != 'AUX' &&
+        objetoConsultado?.codigo != 'EST' &&
+        objetoConsultado?.codigo != 'CAD'
+      "
+    >
+      <label>
+        Seleccione el Arma:
+        <select
+          [(ngModel)]="armaselected"
+          name="armaselected"
+          class="form-control mt-2"
+        >
+          <option [ngValue]="y" *ngFor="let y of arregloarmas">
+            {{ y.NombreArma }}
+          </option>
+        </select>
+      </label>
+    </div>
+
+    <!-- Fuerza 6 -->
+    <div
+      *ngIf="
+        objetoConsultado?.idfuerza === 6 &&
+        objetoConsultado?.codigo != 'AUX' &&
+        objetoConsultado?.codigo != 'EST' &&
+        objetoConsultado?.codigo != 'CAD'
+      "
+    >
+      <label>
+        Seleccione el Arma:
+        <select
+          [(ngModel)]="armaselected"
+          name="armaselected"
+          class="form-control mt-2"
+        >
+          <option [ngValue]="y" *ngFor="let y of arregloarmas">
+            {{ y.NombreArma }}
+          </option>
+        </select>
+      </label>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button
+      type="button"
+      class="btn btn-secondary"
+      (click)="displayArma = false"
+    >
+      Cerrar
+    </button>
+
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="actualizarArma(); displayArma = false"
+    >
+      Guardar
+    </button>
+  </ng-template>
+</p-dialog>
+
+<p-dialog
+  [(visible)]="displayCuentaBanco"
+  [modal]="true"
+  [closable]="true"
+  [dismissableMask]="true"
+  [style]="{ width: '450px' }"
+>
+  <ng-template pTemplate="header">
+    <h5 class="m-0">Cambiar número de cuenta de banco</h5>
+  </ng-template>
+
+  <ng-template pTemplate="content">
+    <form [formGroup]="cambionumeroCuenta" class="row">
+      <label class="col-md-12">
+        # Banco
+        <input
+          class="form-control mt-2"
+          formControlName="cuenta"
+          type="number"
+          required
+        />
+      </label>
+    </form>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button
+      type="button"
+      class="btn btn-secondary"
+      (click)="displayCuentaBanco = false"
+    >
+      Cancelar
+    </button>
+
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="actualizarCuenta(); displayCuentaBanco = false"
+      aria-placeholder="top"
+      title="Guardar el número de cuenta nuevo"
+    >
+      Guardar
+    </button>
+  </ng-template>
+</p-dialog>
+
+<p-dialog
+  [(visible)]="displayCambiarIdentidad"
+  [modal]="true"
+  [closable]="true"
+  [dismissableMask]="true"
+  [style]="{ width: '450px' }"
+>
+  <ng-template pTemplate="header">
+    <h5 class="m-0">Cambiar número de Identidad</h5>
+  </ng-template>
+
+  <ng-template pTemplate="content">
+    <form [formGroup]="formIdentidad" class="row">
+      <label class="col-md-12">
+        # Identidad
+        <input
+          class="form-control mt-2"
+          formControlName="identidad"
+          type="text"
+          required
+        />
+      </label>
+    </form>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button
+      type="button"
+      class="btn btn-secondary"
+      (click)="displayCambiarIdentidad = false"
+    >
+      Cancelar
+    </button>
+
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="CambioIdentidadPErsonalAdmin(); displayCambiarIdentidad = false"
+      aria-placeholder="top"
+      title="Guardar el número de identidad nuevo"
+    >
+      Guardar
+    </button>
+  </ng-template>
+</p-dialog>
+
+<p-dialog
+  [(visible)]="displayFechaIngreso"
+  [modal]="true"
+  [closable]="true"
+  [dismissableMask]="true"
+  [style]="{ width: '450px' }"
+>
+  <ng-template pTemplate="header">
+    <h5 class="m-0">CAMBIO DE FECHA DE INGRESO</h5>
+  </ng-template>
+
+  <ng-template pTemplate="content">
+    <form>
+      <label class="col-md-12">
+        Fecha Ingreso
+        <input
+          [(ngModel)]="actualizarfechaIngreso"
+          name="actualizarfechaIngreso"
+          class="form-control mt-2"
+          type="date"
+        />
+      </label>
+    </form>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button
+      type="button"
+      class="btn btn-secondary"
+      (click)="displayFechaIngreso = false"
+    >
+      Cerrar
+    </button>
+
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="actualizarFechaIngreso(); displayFechaIngreso = false"
+    >
+      Guardar
+    </button>
+  </ng-template>
+</p-dialog>
+
+<p-dialog
+  [(visible)]="displayModificarAscenso"
+  [modal]="true"
+  [closable]="true"
+  [dismissableMask]="true"
+  [style]="{ width: '500px' }"
+>
+  <ng-template pTemplate="header">
+    <h5 class="m-0">MODIFICAR ASCENSO</h5>
+  </ng-template>
+
+  <ng-template pTemplate="content">
+    <form>
+      <label class="col-md-12">
+        Fecha Ascenso:
+        <input
+          [(ngModel)]="lineaAsecenso.FechaPrimerIngreso"
+          name="FechaPrimerIngreso"
+          class="form-control mt-2"
+          type="date"
+        />
+      </label>
+
+      <label class="col-md-12 mt-3">
+        Fecha Ingreso (Anterior):
+        <input
+          [(ngModel)]="lineaAsecenso.fecha"
+          name="fecha"
+          class="form-control mt-2"
+          type="date"
+        />
+      </label>
+
+      <label class="col-md-12 mt-3">
+        Numero de Acuerdo:
+        <input
+          [(ngModel)]="lineaAsecenso.numeroAcuerdo"
+          name="numeroAcuerdo"
+          class="form-control mt-2"
+          type="text"
+        />
+      </label>
+    </form>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button
+      type="button"
+      class="btn btn-secondary"
+      (click)="displayModificarAscenso = false"
+    >
+      Cerrar
+    </button>
+
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="actualizarTabladeAscenso(); displayModificarAscenso = false"
+    >
+      Guardar
+    </button>
+  </ng-template>
+</p-dialog>
+
+<p-dialog
+  [(visible)]="displayEliminarAscenso"
+  [modal]="true"
+  [closable]="true"
+  [dismissableMask]="true"
+  [style]="{ width: '500px' }"
+>
+  <ng-template pTemplate="header">
+    <h5 class="m-0 text-danger">ELIMINAR ASCENSO</h5>
+  </ng-template>
+
+  <ng-template pTemplate="content">
+    <form>
+      <label class="col-md-12">
+        Seleccione el grado | rango (El que quedará asignado):
+        <select
+          [(ngModel)]="gradoqueVaQuedar"
+          name="gradoqueVaQuedar"
+          class="form-control mt-2"
+        >
+          <option
+            *ngFor="let item of arregloAscensos"
+            [ngValue]="item"
+          >
+            {{ item.nombre_grado }}
+          </option>
+        </select>
+      </label>
+
+      <label class="col-md-12 mt-3">
+        Seleccione el grado | rango (El que se eliminará):
+        <select
+          [(ngModel)]="gradoaeliminar"
+          name="gradoaeliminar"
+          class="form-control mt-2"
+        >
+          <option
+            *ngFor="let item of arregloAscensos"
+            [ngValue]="item"
+          >
+            {{ item.nombre_grado }}
+          </option>
+        </select>
+      </label>
+    </form>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button
+      type="button"
+      class="btn btn-secondary"
+      (click)="displayEliminarAscenso = false"
+    >
+      Cerrar
+    </button>
+
+    <button
+      type="button"
+      class="btn btn-danger"
+      (click)="eliminargradoTablaAscenso(); displayEliminarAscenso = false"
+    >
+      Eliminar
+    </button>
+  </ng-template>
+</p-dialog>

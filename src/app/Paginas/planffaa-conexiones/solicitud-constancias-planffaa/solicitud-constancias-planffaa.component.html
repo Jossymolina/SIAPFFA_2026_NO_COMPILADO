@@ -1,0 +1,338 @@
+<div class="constancia-layout py-3 py-md-4">
+    <div class="container-xl">
+
+        <!-- =========================
+         PANTALLA 1: BUSCAR PERSONA
+    ========================== -->
+        <p-card *ngIf="pantalla === 1" class="buscador-persona shadow-3 border-0 rounded-4 overflow-hidden modern-card">
+
+            <ng-template pHeader>
+                <div class="d-flex justify-content-between align-items-center gap-3">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="avatar-circle d-none d-md-flex">
+                            <i class="pi pi-user"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0 fw-semibold">Solicitud de constancia</h5>
+                            <small class="text-muted">
+                                Búsqueda de personal para generar constancia vía Emelina
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="d-none d-md-flex align-items-center gap-2">
+                        <p-tag value="Emelina" icon="pi pi-whatsapp" severity="success"></p-tag>
+                        <span class="badge rounded-pill bg-light text-muted border small">
+                            Modo temporal sin WhatsApp
+                        </span>
+                    </div>
+                </div>
+            </ng-template>
+
+            <div class="alert alert-warning border-0 d-flex gap-3 align-items-start mb-4 small modern-alert">
+                <i class="pi pi-info-circle fs-5 mt-1"></i>
+                <p class="mb-0 text-justify">
+                    Esta opción de solicitud de constancias se habilitó temporalmente mientras el asistente virtual
+                    <strong>Emelina</strong> completa su proceso de legalización con la compañía Meta para el uso
+                    oficial de WhatsApp.
+                    <strong>La solicitud será atendida normalmente por Emelina</strong>, pero la respuesta se enviará
+                    únicamente al
+                    correo electrónico registrado, <strong>sin notificación por WhatsApp</strong>.
+                </p>
+            </div>
+
+            <p-divider align="left" type="solid" class="mb-3">
+                <span class="section-title">
+                    <i class="pi pi-search me-2"></i> Buscar persona
+                </span>
+            </p-divider>
+
+            <!-- Buscador -->
+            <form #formbuscar="ngForm" class="mb-2">
+                <div class="p-inputgroup p-inputgroup-lg modern-search-group">
+                    <span class="p-inputgroup-addon">
+                        <i class="pi pi-search"></i>
+                    </span>
+
+                    <input pInputText required name="nombre" #nombre="ngModel" ngModel id="txtBusquedaPersona"
+                        type="text" placeholder="Escribe nombre o identidad (sin guiones)…" autocomplete="off"
+                        (keypress)="enter($event, formbuscar.value)" />
+
+                    <button pButton type="button" id="btnBuscar" class="p-button-primary" label="Buscar"
+                        icon="pi pi-arrow-right" iconPos="right" (click)="buscarPorNombre(formbuscar.value)">
+                    </button>
+                </div>
+            </form>
+
+            <div id="ayudaBusqueda" class="mt-1 small text-muted d-flex flex-wrap gap-2 align-items-center">
+                <span class="me-1">Ejemplos:</span>
+                <p-chip label="María López" icon="pi pi-user" class="me-1"></p-chip>
+                <p-chip label="0801*******" icon="pi pi-id-card"></p-chip>
+            </div>
+
+        </p-card>
+
+        <!-- =========================
+         PANTALLA 2: LISTA PERSONAS
+    ========================== -->
+        <p-card *ngIf="pantalla === 2"
+            class="buscador-persona shadow-3 border-0 rounded-4 overflow-hidden modern-card mt-3">
+
+            <ng-template pHeader>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="mb-0 fw-semibold">Resultado de búsqueda</h5>
+                        <small class="text-muted">
+                            Selecciona a la persona correcta para continuar con la constancia
+                        </small>
+                    </div>
+
+                    <button pButton type="button" class="p-button-text p-button-danger" icon="pi pi-arrow-left"
+                        label="Regresar" (click)="atras(1)">
+                    </button>
+                </div>
+            </ng-template>
+
+            <p-table [value]="arregloPersonaNombre" [paginator]="true" [rows]="10"
+                styleClass="p-datatable-sm p-datatable-gridlines modern-table" [rowsPerPageOptions]="[5,10,20]"
+                [showCurrentPageReport]="true"
+                currentPageReportTemplate="Mostrando {first} - {last} de {totalRecords} resultados">
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="text-center" style="width: 120px;">Opción</th>
+                        <th>Grado</th>
+                        <th>Identidad</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Estado</th>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-p>
+                    <tr>
+                        <td class="text-center">
+                            <button pButton type="button" class="p-button-sm p-button-rounded p-button-success"
+                                icon="pi pi-check" label="Seleccionar" (click)="seleccionarPersona(p)">
+                            </button>
+                        </td>
+                        <td>{{ p.grado }}</td>
+                        <td>
+                            <span class="font-monospace">{{ p.identidad }}</span>
+                        </td>
+                        <td>{{ p.nombre }}</td>
+                        <td>{{ p.apellido }}</td>
+                        <td>
+                            <p-tag [value]="p.activo === 1 ? 'Activo' : 'Baja'"
+                                [severity]="p.activo === 1 ? 'success' : 'secondary'">
+                            </p-tag>
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="6" class="text-center text-muted py-4">
+                            <i class="pi pi-info-circle me-2"></i>
+                            No se encontraron resultados para la búsqueda.
+                        </td>
+                    </tr>
+                </ng-template>
+
+            </p-table>
+
+        </p-card>
+
+        <!-- =========================
+         PANTALLA 3: REGISTRAR CONSTANCIA
+    ========================== -->
+        <p-card *ngIf="pantalla === 3"
+            class="buscador-persona shadow-3 border-0 rounded-4 overflow-hidden modern-card mt-3">
+
+            <ng-template pHeader>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="mb-0 fw-semibold">Solicitud de constancia</h5>
+                        <small class="text-muted">
+                            Confirma los datos y el tipo de constancia a emitir
+                        </small>
+                    </div>
+
+                    <button pButton type="button" class="p-button-text p-button-danger" icon="pi pi-arrow-left"
+                        label="Regresar" (click)="atras(2)">
+                    </button>
+                </div>
+            </ng-template>
+
+            <form #formRegistrar="ngForm" class="row g-3">
+
+                <!-- DNI -->
+                <div class="col-md-4">
+                    <label class="form-label text-muted small mb-1">DNI</label>
+                    <span class="p-input-icon-left w-100">
+                        <i class="pi pi-id-card"></i>
+                        <input pInputText type="text" class="w-100" [value]="personaSeleccionada?.identidad" readonly>
+                    </span>
+                </div>
+
+                <!-- Nombres -->
+                <div class="col-md-4">
+                    <label class="form-label text-muted small mb-1">Nombres</label>
+                    <span class="p-input-icon-left w-100">
+                        <i class="pi pi-user"></i>
+                        <input pInputText type="text" class="w-100"
+                            [value]="personaSeleccionada?.nombre + ' ' + personaSeleccionada?.apellido" readonly>
+                    </span>
+                </div>
+
+                <!-- Tipo Constancia -->
+                <div class="col-md-4">
+                    <label class="form-label text-muted small mb-1">Tipo de constancia</label>
+                 <p-select
+                        name="tipoConstancia"
+                        #tipo="ngModel"
+                        [(ngModel)]="tipoConstancia"
+                        [options]="[
+                        { label: 'Con deducción', value: 1 },
+                        { label: 'Vaucher',        value: 2 },
+                        { label: 'Embajada',       value: 3 },
+                        { label: 'Sin deducción',  value: 4 },
+                        { label: 'Histórica',      value: 5 }
+                        ]"
+                        optionLabel="label"
+                        optionValue="value"
+                        placeholder="Seleccione un tipo"
+                        class="w-100">
+                    </p-select>
+                </div>
+
+                <!-- Empresa (tipos ≠ 2 y ≠ 5) -->
+                <ng-container *ngIf="tipoConstancia !== 2 && tipoConstancia !== 5">
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small mb-1">Empresa</label>
+                        <input pInputText type="text" name="empresa" #empresa="ngModel" ngModel class="w-100"
+                            placeholder="Nombre de la empresa" required>
+                    </div>
+                </ng-container>
+
+                <!-- Mes (tipo 2) -->
+                <ng-container *ngIf="tipoConstancia === 2">
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small mb-1">Mes</label>
+                        <input type="month" name="mes" #mes="ngModel" ngModel class="form-control" required>
+                    </div>
+                </ng-container>
+
+                <!-- Tipo de Objeto (tipo 2 o 5) -->
+                <ng-container *ngIf="tipoConstancia === 2 || tipoConstancia === 5">
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small mb-1">Tipo de objeto</label>
+                     <p-select
+  name="objeto"
+  #objeto="ngModel"
+  [(ngModel)]="objetoSeleccionado"
+  [options]="arregloObjeto"
+  optionLabel="nombre_objeto"
+  placeholder="Seleccione un objeto"
+  class="w-100"
+  required>
+</p-select>
+                    </div>
+                </ng-container>
+
+                <!-- Campos adicionales cuando tipo = 5 -->
+                <ng-container *ngIf="tipoConstancia === 5">
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small mb-1">Año</label>
+                        <input pInputText type="number" name="ano" #ano="ngModel" ngModel class="w-100" required
+                            min="1900" max="2100" placeholder="Ej. 2023">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small mb-1">Empresa</label>
+                    <p-select
+  name="empresa"
+  #empresa="ngModel"
+  [(ngModel)]="empresaSeleccionada"
+  [options]="arregloEmpresa"
+  optionLabel="nombre"
+  placeholder="Seleccione una empresa"
+  class="w-100"
+  required>
+</p-select>
+
+                    </div>
+                </ng-container>
+
+                <!-- Botón Guardar -->
+                <div class="col-12 mt-2 d-flex justify-content-end">
+                    <button pButton type="button" class="p-button-primary p-button-lg" icon="pi pi-save"
+                        label="Guardar solicitud" (click)="registrarconsanciadeCorreo(formRegistrar)">
+                    </button>
+                </div>
+            </form>
+
+            <p-divider align="left" type="dashed" class="mt-4 mb-3">
+                <span class="section-title">
+                    <i class="pi pi-envelope me-2"></i> Datos de contacto registrados
+                </span>
+            </p-divider>
+
+            <!-- Correos y Teléfonos -->
+            <div class="row g-3">
+
+                <!-- Correos -->
+                <div class="col-md-6" *ngIf="correos">
+                    <p-card class="border-0 shadow-1 h-100">
+                        <ng-template pHeader>
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="pi pi-at text-primary"></i>
+                                <span class="fw-semibold">Correos registrados</span>
+                            </div>
+                        </ng-template>
+
+                        <div class="table-responsive mb-0">
+                            <table class="table table-sm mb-0 align-middle">
+                                <tbody>
+                                    <tr *ngFor="let item of correos">
+                                        <td>{{ item.correo }}</td>
+                                    </tr>
+                                    <tr *ngIf="correos.length === 0">
+                                        <td class="text-danger small">Sin correo registrado</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </p-card>
+                </div>
+
+                <!-- Teléfonos -->
+                <div class="col-md-6" *ngIf="telefonos">
+                    <p-card class="border-0 shadow-1 h-100">
+                        <ng-template pHeader>
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="pi pi-phone text-primary"></i>
+                                <span class="fw-semibold">Teléfonos registrados</span>
+                            </div>
+                        </ng-template>
+
+                        <div class="table-responsive mb-0">
+                            <table class="table table-sm mb-0 align-middle">
+                                <tbody>
+                                    <tr *ngFor="let item of telefonos">
+                                        <td>{{ item.numero }}</td>
+                                    </tr>
+                                    <tr *ngIf="telefonos.length === 0">
+                                        <td class="text-danger small">Sin número de celular</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </p-card>
+                </div>
+
+            </div>
+
+        </p-card>
+    </div>
+</div>

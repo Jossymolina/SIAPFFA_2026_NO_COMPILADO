@@ -1,0 +1,73 @@
+/* CONTENEDOR SCROLL */
+.tabla-wrapper {
+  max-height: 500px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+/* TABLA MODERNA */
+.tabla-pagos-cargo {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 6px !important;
+}
+
+.tabla-pagos-cargo thead tr {
+  background: #f5f7fa !important;
+  border-bottom: 2px solid #e2e6ea;
+}
+
+.tabla-pagos-cargo thead th {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #495057;
+  text-transform: uppercase;
+  padding: 0.45rem 0.55rem;
+  text-align: center;
+}
+
+/* COLUMNAS */
+.tabla-pagos-cargo .col-num {
+  width: 50px;
+}
+
+.tabla-pagos-cargo .col-monto {
+  width: 110px;
+}
+
+/* FILAS */
+.tabla-pagos-cargo tbody tr {
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.tabla-pagos-cargo tbody td {
+  padding: 0.45rem 0.55rem;
+  font-size: 0.86rem;
+  border-top: none !important;
+}
+
+/* HOVER SUAVE */
+.tabla-pagos-cargo tbody tr:hover {
+  background: #f9fbff;
+}
+
+/* Monto a la derecha */
+.tabla-pagos-cargo tbody td.text-end {
+  font-weight: 500;
+}
+
+/* Input filter (opcional finito) */
+.input-group-text .pi {
+  font-size: 0.8rem;
+}
+
+
+.registros-total {
+  font-size: 0.82rem;
+  color: #6c757d;
+}
+
+.registros-total strong {
+  color: #343a40;
+}

@@ -1,0 +1,61 @@
+<div class="form-wrapper">
+  <div class="card form-card p-3">
+
+    <!-- Título -->
+    <div class="form-header mb-2">
+      <div>
+        <div class="form-title" style="text-align: left;">
+          Historial de Ascensos
+        </div>
+        <div class="form-subtitle">
+          Registros oficiales de ascensos en la carrera militar
+        </div>
+      </div>
+    </div>
+
+    <!-- Mensaje si no hay datos -->
+    <label
+      *ngIf="arregloAscensos.length === 0"
+      style="color: red; font-size: 0.8rem;"
+    >
+      * No contiene registro de ascenso *
+    </label>
+
+    <!-- Tabla -->
+    <div class="table-responsive mt-2">
+      <table class="table table-sm table-hover table-bordered align-middle" style="font-size: 13.5px;">
+        <thead class="table-light">
+          <tr>
+            <th style="width: 40px;">#</th>
+            <th>Fuerza</th>
+            <th>Número de acuerdo</th>
+            <th>Grado</th>
+            <th>Activo</th>
+            <th>Fecha de ascenso</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let y of arregloAscensos; let index = index">
+            <td>{{ index + 1 }}</td>
+            <td>{{ y.nombre }}</td>
+            <td>{{ y.numeroAcuerdo }}</td>
+            <td>{{ y._grado }}</td>
+
+            <td>
+              <span
+                class="badge"
+                [ngClass]="y.activo === 1 ? 'bg-success' : 'bg-secondary'"
+              >
+                {{ y.activo === 1 ? 'Sí' : 'No' }}
+              </span>
+            </td>
+
+            <td>{{ y?.fechaformatAscenso }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>

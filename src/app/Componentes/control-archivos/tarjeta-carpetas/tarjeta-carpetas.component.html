@@ -1,0 +1,266 @@
+<div class="dashboard-section-card mt-3">
+
+  <!-- TOP BAR DINÁMICA SEGÚN NIVEL -->
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <h5 class="top-bar-title" *ngIf="verCarpeta === 0">
+        Carpetas principales
+      </h5>
+      <h5 class="top-bar-title" *ngIf="verCarpeta === 1">
+        Subcarpetas
+      </h5>
+      <h5 class="top-bar-title" *ngIf="verCarpeta === 2">
+        Documentos
+      </h5>
+
+      <p class="top-bar-subtitle" *ngIf="verCarpeta === 0">
+        Organice las carpetas principales de la hoja de servicio.
+      </p>
+      <p class="top-bar-subtitle" *ngIf="verCarpeta === 1">
+        Gestión de subcarpetas dentro de la carpeta seleccionada.
+      </p>
+      <p class="top-bar-subtitle" *ngIf="verCarpeta === 2">
+        Control de documentos adjuntos en la subcarpeta seleccionada.
+      </p>
+    </div>
+
+    <div class="top-bar-right folder-actions-top">
+      <!-- Acciones nivel 0: carpetas principales -->
+      <ng-container *ngIf="verCarpeta === 0">
+        <button class="btn btn-outline-secondary btn-dashboard-action" 
+        
+        title="Crear carpeta"
+          (click)="crearCarpetaPrincipal()"
+          style="background-color: black; color: white;margin-left: 5px;"
+          >
+          <i class="pi plus" aria-hidden="true"></i>
+          <span>Nueva carpeta </span>
+        </button>
+
+       <!-- <a class="btn btn-outline-primary btn-dashboard-action"
+        style="background-color: black; color: white; margin-left: 2px;"
+          href="../../../assets/Manual de usuario para ingreso de la hoja de servicio.pdf"
+          download="EjemploHojaServicio" title="Documento de ejemplo para cargar archivos">
+          <i class="fa fa-book" aria-hidden="true"></i>
+          <span>Ejemplo hoja de servicio</span>
+        </a>-->
+      </ng-container>
+
+      <!-- Acciones nivel 1: subcarpetas -->
+      <ng-container *ngIf="verCarpeta === 1">
+        <button class="btn btn-outline-secondary btn-dashboard-action" (click)="AtrasDocumentos(0)" title="Atrás">
+          <i class="fa fa-undo" aria-hidden="true"></i>
+          <span>Atrás</span>
+        </button>
+
+        <button class="btn btn-outline-secondary btn-dashboard-action" 
+        style="margin-left: 5px;"
+        (click)="crearCarpetaSegundaria()"
+          title="Crear subcarpeta">
+          <i class="fa fa-plus-square-o" aria-hidden="true"></i>
+          <span>Nueva subcarpeta</span>
+        </button>
+      </ng-container>
+
+      <!-- Acciones nivel 2: documentos -->
+      <ng-container *ngIf="verCarpeta === 2">
+        <button class="btn btn-outline-secondary btn-dashboard-action" (click)="AtrasDocumentos(1)" title="Atrás">
+          <i class="fa fa-undo" aria-hidden="true"></i>
+          <span>Atrás</span>
+        </button>
+
+        <button class="btn btn-outline-secondary btn-dashboard-action" 
+        (click)="abrirModal()"
+        style="margin-left: 5px;"
+        title="Adjuntar documentos" data-bs-toggle="modal"
+          data-bs-target="#cargarDocumentos">
+          <i class="fa fa-plus-square-o" aria-hidden="true"></i>
+          <span>Adjuntar documentos</span>
+        </button>
+      </ng-container>
+    </div>
+  </div>
+
+  <!-- NIVEL 0: CARPETAS PRINCIPALES -->
+  <form *ngIf="verCarpeta === 0" class="mt-2">
+    <p class="mb-1 text-danger small fw-semibold" *ngIf="arreglocarpetaprincipal.length === 0">
+      No tiene archivos en esta sección.
+    </p>
+
+    <div class="card-body row folder-grid">
+      <div *ngFor="let i of arreglocarpetaprincipal" class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
+        <div class="card folder-card h-100 position-relative">
+
+          <!-- Menú de acciones -->
+          <div class="  folder-card h-25 "
+            [class.folder-card--active]="dropdownPrincipalId === i.idcarpetaPrincipal" (click)="cerrarDropdowns()">
+
+            <!-- Menú de acciones -->
+            <div class="folder-card-actions dropdown" [class.show]="dropdownPrincipalId === i.idcarpetaPrincipal"
+              (mouseleave)="cerrarDropdowns()">
+
+              <button type="button" class="btn btn-light btn-sm dropdown-toggle"
+                aria-expanded="dropdownPrincipalId === i.idcarpetaPrincipal"
+                (click)="toggleDropdownPrincipal(i.idcarpetaPrincipal, $event)">
+                <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+              </button>
+
+              <div class="dropdown-menu dropdown-menu-right"
+                [class.show]="dropdownPrincipalId === i.idcarpetaPrincipal">
+                <a class="dropdown-item" (click)="cambiarnombreCarpetaPrincipal(i); cerrarDropdowns()">
+                  Cambiar nombre 
+                </a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item text-danger"
+                  (click)="eliminarcarpetaprimaria(i.idcarpetaPrincipal); cerrarDropdowns()">
+                  Eliminar
+                </a>
+              </div>
+            </div>
+
+            <!-- Icono carpeta + resto igual -->
+          </div>
+
+
+
+
+          <!-- Icono carpeta -->
+          <div class="folder-icon-wrapper" (click)="buscarSegundacarpeta(i.idcarpetaPrincipal)">
+            <img class="folder-icon" src="cajon.gif" alt="Carpeta principal">
+          </div>
+
+          <div class="card-body folder-card-body">
+            <h6 class="card-text folder-title" [title]="i.nombrecarpeta">
+              {{ i.nombrecarpeta }}
+            </h6>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <!-- NIVEL 1: CARPETAS SECUNDARIAS -->
+  <form *ngIf="verCarpeta === 1" class="mt-2">
+    <p class="mb-1 text-danger small fw-semibold" *ngIf="arreglocarpetasegunda.length === 0">
+      No tiene archivos en esta sección.
+    </p>
+
+    <div class="card-body row folder-grid">
+      <div *ngFor="let i of arreglocarpetasegunda" class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
+        <div class="card folder-card h-100 position-relative">
+
+          <!-- Menú de acciones -->
+          <div class="card folder-card h-25 position-relative"
+            [class.folder-card--active]="dropdownSecundariaId === i.idcarpetasegundaria" (click)="cerrarDropdowns()">
+
+            <div class="folder-card-actions dropdown" [class.show]="dropdownSecundariaId === i.idcarpetasegundaria"
+              (mouseleave)="cerrarDropdowns()">
+
+              <button type="button" class="btn btn-light btn-sm dropdown-toggle"
+                aria-expanded="dropdownSecundariaId === i.idcarpetasegundaria"
+                (click)="toggleDropdownSecundaria(i.idcarpetasegundaria, $event)">
+                <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+              </button>
+
+              <div class="dropdown-menu dropdown-menu-right"
+                [class.show]="dropdownSecundariaId === i.idcarpetasegundaria">
+                <a class="dropdown-item" (click)="cambiarnombreCarpetaSegundaria(i); cerrarDropdowns()">
+                  Cambiar nombre
+                </a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item text-danger"
+                  (click)="eliminarcarpetasegundaria(i.idcarpetasegundaria); cerrarDropdowns()">
+                  Eliminar
+                </a>
+              </div>
+            </div>
+
+            <!-- Icono + texto igual -->
+          </div>
+
+
+          <!-- Icono carpeta -->
+          <div class="folder-icon-wrapper" (click)="buscardocumentos(i.idcarpetasegundaria)">
+            <img class="folder-icon" src="carpeta.png" alt="Subcarpeta">
+          </div>
+
+          <div class="card-body folder-card-body">
+            <h6 class="card-text folder-title" [title]="i.Nombre">
+              {{ i.Nombre }}
+            </h6>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-footer mt-2">
+      <h6 class="mb-0 text-muted">Control de carpetas</h6>
+    </div>
+  </form>
+
+  <!-- NIVEL 2: DOCUMENTOS -->
+  <form *ngIf="verCarpeta === 2" class="mt-2">
+    <p class="mb-1 text-danger small fw-semibold" *ngIf="arreglodeDocumentos.length === 0">
+      No tiene archivos en esta sección.
+    </p>
+
+    <div class="card table-card mt-2">
+      <div class="card-header py-2">
+        <h6 class="mb-0">Control de documentos</h6>
+      </div>
+      <div class="card-body p-2">
+        <app-tarjeta-archivos [idcarpetaSegundaria]="idcarpetaSegundaria" [identidad]="identidad_"
+          [arreglodeDocumentos]="arreglodeDocumentos"></app-tarjeta-archivos>
+
+      </div>
+    </div>
+  </form>
+
+</div>
+
+ 
+
+ 
+ 
+
+<!-- MODAL -->
+<p-dialog
+  header="Carga de archivos"
+  [(visible)]="visible"
+  [modal]="true"
+  [closable]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '750px' }">
+
+  <!-- CONTENIDO -->
+  <form #formArchivos="ngForm">
+        <div class="modal-body">
+          <p class="mb-3">
+            <strong class="text-primary">¡Buenas noticias! </strong>
+            En esta actualización, ahora puede subir <strong>varios documentos</strong> a la vez,
+            siempre y cuando sean en formato <strong>PDF, DOC o DOCX</strong>. 🚀
+          </p>
+
+          <input type="file" class="form-control" id="inputGroupFile01" (change)="AgregarArchivos($event)" #subirArchivo
+            multiple name="archivosFile" #archivosFile="ngModel" ngModel required>
+        </div>
+
+        <div class="modal-footer" style="margin-top: 10px;">
+          <button type="button" style="margin: 2px;" class="btn btn-outline-secondary" #Cerrar_doc_control data-dismiss="modal"
+            (click)="limpiarArreglo()">
+            Cerrar
+          </button>
+
+          <button type="button" style="margin: 2px;"  class="btn btn-outline-danger" (click)="limpiarArreglo()">
+            Limpiar
+          </button>
+
+          <button type="button" style="margin: 2px;"  class="btn btn-dark" (click)="guardarArchivos()" [disabled]="!formArchivos.valid">
+            Guardar
+          </button>
+        </div>
+      </form>
+ 
+
+</p-dialog>

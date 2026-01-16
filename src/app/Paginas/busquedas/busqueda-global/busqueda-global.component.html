@@ -1,0 +1,363 @@
+<div class="form-wrapper">
+    <p-card *ngIf="segundaVentana === 0" class="form-card">
+        <!-- HEADER DEL FORMULARIO -->
+        <div class="form-header">
+            <button pButton type="button" icon="pi pi-arrow-left" label="Atrás" class="btn-back-modern"
+                (click)="onAtras('menu/menu-busqueda')"> <i class="pi pi-arrow-left"></i>
+            </button>
+
+            <div class="form-title">
+                Búsqueda de Personal
+                <div class="form-subtitle">
+                    Filtra por identidad, nombre.
+                </div>
+            </div>
+
+
+        </div>
+
+        <!-- CUERPO DEL FORMULARIO -->
+      <form id="form-busqueda"
+      #f="ngForm"
+      class="mt-3"
+      (ngSubmit)="buscar_persona(f.value)">
+
+  <div class="row g-3">
+
+    <!-- INPUT -->
+    <div class="col-12 col-md-4">
+      <label class="form-label">DNI/NOMBRE</label>
+
+      <input pInputText type="text"
+             name="cadena"
+             #cadena="ngModel"
+             ngModel
+             placeholder="Ingresar dato..."
+             required
+             class="w-100" />
+    </div>
+
+    <!-- BOTÓN -->
+    <div class="col-12 col-md-4">
+      <label class="form-label">Buscar</label>
+
+      <button
+        pButton
+        type="submit"
+        label="Buscar"
+        class="btn-back-modern "
+        [disabled]="!f.valid">
+        <i class="pi pi-search"></i>
+      </button>
+    </div>
+
+  </div>
+
+</form>
+
+    </p-card>
+    <p-card *ngIf="segundaVentana === 1 " class="form-card">
+
+
+        <ng-container>
+
+            <div *ngIf="arregloResultados.length !== 0" class="form-wrapper">
+                <div class="card form-card p-3">
+
+                    <!-- HEADER -->
+                    <div class="form-header mb-2">
+                        <!-- Botón Atrás con tu estilo -->
+                        <button type="button" class="btn btn-sm btn-back-modern" (click)="atras(1,0)" title="Atrás">
+                            <i class="fa fa-fast-backward" aria-hidden="true"></i>
+                            <span>Atrás</span>
+                        </button>
+
+                        <!-- Título centrado -->
+                        <div class="form-title">
+                            Resultados de búsqueda
+                            <div class="form-subtitle">
+                                {{ arregloResultados.length | currency : '' : '' }} registros encontrados
+                            </div>
+                        </div>
+
+                        <!-- Espacio derecho (por si luego querés filtros, etc.) -->
+                        <div class="d-none d-sm-block">
+                            <!-- vacío por ahora -->
+                        </div>
+                    </div>
+
+                    <!-- BODY -->
+                    <div class="mt-1">
+
+                        <!-- Resumen de resultados -->
+                        <div class="mb-2">
+                            <label class="form-label mb-0">
+                                Resultados:
+                            </label>
+                            <span>{{ arregloResultados.length | currency : '' : '' }}</span>
+                        </div>
+
+                        <!-- Tabla scrollable -->
+                        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                            <table class="table table-sm table-hover align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Opt</th>
+                                        <th>Identidad</th>
+                                        <th>Grado</th>
+                                        <th>Categoría</th>
+                                        <th>Nombres</th>
+                                        <th>Apellidos</th>
+                                        <th>Serie</th>
+                                        <th>Estado</th>
+                                        <th>Combatiente</th>
+                                        <th>Pasaporte</th>
+                                        <th>Religión</th>
+                                        <th>Sangre</th>
+                                        <th>Género</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr *ngFor="let i of arregloResultados">
+                                        <td>
+                                            <i class="pi pi-eye" style="cursor: pointer;" (click)="verPerfil(i)"
+                                                title="Ver perfil"></i>
+                                        </td>
+                                        <td>{{ i.identidad }}</td>
+                                        <td>{{ i.grado }}</td>
+                                        <td>{{ i.categoria }}</td>
+                                        <td>{{ i.nombre }}</td>
+                                        <td>{{ i.apellido }}</td>
+                                        <td>{{ i.serie }}</td>
+                                        <td [style.color]="i.activo === 1 ? 'blue' : 'red'">
+                                            {{ i.activo === 1 ? 'Activo' : 'Baja' }}
+                                        </td>
+                                        <td>{{ i.combatiente === 1 ? 'Si' : 'No' }}</td>
+                                        <td>{{ i.pasaporte }}</td>
+                                        <td>{{ i.religion }}</td>
+                                        <td>{{ i.sangre }}</td>
+                                        <td>{{ i.sexo }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </ng-container>
+
+
+    </p-card>
+    <p-card *ngIf="segundaVentana === 2 ">
+        <ng-container  >
+
+            <div class="form-wrapper">
+                <div class="card form-card p-3">
+
+                    <!-- HEADER -->
+                    <div class="form-header mb-3">
+                        <!-- Botón Atrás -->
+                        <button type="button" class="btn btn-sm btn-back-modern" (click)="atras(0,1)" title="Atrás">
+                            <i class="fas fa-undo"></i>
+                            <span>Atrás</span>
+                        </button>
+
+                        <!-- Título centrado -->
+                        <div class="form-title">
+                            Perfil del personal
+                            <div class="form-subtitle" *ngIf="objetoConsultado">
+                                {{ objetoConsultado?.nombre }} {{ objetoConsultado?.apellido }} • {{
+                                objetoConsultado?.grado }}
+                            </div>
+                        </div>
+
+                        <!-- Lado derecho (por si luego agregás botones) -->
+                        <div class="d-none d-sm-block">
+                            <!-- vacío por ahora -->
+                        </div>
+                    </div>
+
+                    <!-- CONTENIDO -->
+                    <div class="row g-3 align-items-start mt-1" *ngIf="objetoConsultado">
+
+                        <!-- FOTO / PERFIL -->
+                        <div class="col-12 col-md-4">
+                            <div class="profile-photo-card">
+                                <div class="profile-photo-frame">
+
+                                    <ng-container *ngIf="objetoConsultado?.foto !== null; else sinFoto">
+                                        <img class="profile-photo-img"
+                                            [src]="_DatospersonalesService.url2 + 'sacarfoto/' + objetoConsultado?.foto"
+                                            alt="Image did not load..." />
+                                    </ng-container>
+
+                                    <ng-template #sinFoto>
+                                        <img class="profile-photo-img" src="../../../assets/fotoperfil.png"
+                                            alt="Image did not load..." />
+                                    </ng-template>
+
+                                </div>
+
+                                <div class="profile-photo-meta">
+                                    <div class="profile-name">
+                                        {{ objetoConsultado?.nombre }} {{ objetoConsultado?.apellido }}
+                                    </div>
+                                    <div class="profile-rank">
+                                        {{ objetoConsultado?.grado }}
+                                    </div>
+                                    <div class="profile-force-badge">
+                                        {{ objetoConsultado?.fuerza }}
+                                    </div>
+                                    <div class="profile-serie">
+                                        Serie: <span>{{ objetoConsultado?.serie }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- DATOS DETALLE -->
+                        <div class="col-12 col-md-8">
+                            <div class="row g-2">
+
+                                <!-- Nombre / Apellido -->
+                                <div class="col-md-6">
+                                    <div class="form-control d-flex justify-content-between align-items-center">
+                                        <span>Nombre:</span>
+                                        <strong>{{ objetoConsultado?.nombre }}</strong>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-control d-flex justify-content-between align-items-center">
+                                        <span>Apellido:</span>
+                                        <strong>{{ objetoConsultado?.apellido }}</strong>
+                                    </div>
+                                </div>
+
+                                <!-- Identidad / Fuerza -->
+                                <div class="col-md-6">
+                                    <div class="form-control d-flex justify-content-between align-items-center">
+                                        <span>Identidad:</span>
+                                        <strong>{{ objetoConsultado?.identidad }}</strong>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-control d-flex justify-content-between align-items-center">
+                                        <span>Fuerza:</span>
+                                        <strong>{{ objetoConsultado?.fuerza }}</strong>
+                                    </div>
+                                </div>
+
+                                <!-- Género / Combatiente -->
+                                <div class="col-md-6">
+                                    <div class="form-control d-flex justify-content-between align-items-center">
+                                        <span>Género:</span>
+                                        <strong>{{ objetoConsultado?.sexo }}</strong>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-control d-flex justify-content-between align-items-center">
+                                        <span>Combatiente:</span>
+                                        <strong>{{ objetoConsultado?.combatiente === 1 ? 'Si' : 'No' }}</strong>
+                                    </div>
+                                </div>
+
+                                <!-- Grado / Rango -->
+                                <div class="col-md-6">
+                                    <div class="form-control d-flex justify-content-between align-items-center">
+                                        <span>Grado / Rango Actual:</span>
+                                        <strong>{{ objetoConsultado?.grado }}</strong>
+                                    </div>
+                                </div>
+
+                                <!-- Estado ACTIVO / BAJA -->
+                                <div class="col-md-6" *ngIf="objetoConsultado.activo === 1">
+                                    <div
+                                        class="form-control bg-success text-white d-flex justify-content-between align-items-center">
+                                        <span>Activo:</span>
+                                        <strong>SI</strong>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6" *ngIf="objetoConsultado.activo === 2">
+                                    <div
+                                        class="form-control bg-danger text-white d-flex justify-content-between align-items-center">
+                                        <span>Activo:</span>
+                                        <strong>NO</strong>
+                                    </div>
+                                </div>
+
+                                <!-- Tipo de Baja / Fecha de ejecución (solo si está de baja) -->
+                                <div class="col-md-6" *ngIf="objetoConsultado.activo === 2">
+                                    <div
+                                        class="form-control bg-info text-white d-flex justify-content-between align-items-center">
+                                        <span>Tipo de Baja:</span>
+                                        <strong>{{ objetoConsultado?.nombre_baja }}</strong>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6" *ngIf="objetoConsultado.activo === 2">
+                                    <div
+                                        class="form-control bg-info text-white d-flex justify-content-between align-items-center">
+                                        <span>Fecha de ejecución:</span>
+                                        <strong>{{ objetoConsultado?.fecha_baja_sistema | date : 'medium':'UTC'
+                                            }}</strong>
+                                    </div>
+                                </div>
+
+                                <!-- Fechas ingreso / baja -->
+                                <div class="col-md-6">
+                                    <div
+                                        class="form-control bg-info text-white d-flex justify-content-between align-items-center">
+                                        <span>Fecha de Ingreso:</span>
+                                        <strong>{{ objetoConsultado?.fecha_ingreso | date : 'medium':'UTC' }}</strong>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6" *ngIf="objetoConsultado.activo === 2">
+                                    <div
+                                        class="form-control bg-info text-white d-flex justify-content-between align-items-center">
+                                        <span>Fecha de Baja:</span>
+                                        <strong>{{ objetoConsultado?.fecha_baja | date : 'medium':'UTC' }}</strong>
+                                    </div>
+                                </div>
+
+                                <!-- Unidad asignado / última asignación -->
+                                <div class="col-md-12" *ngIf="objetoConsultado.activo === 2; else asignadoActual">
+                                    <div class="form-control bg-success text-white">
+                                        <p class="mb-0">
+                                            Última Asignación:
+                                            <strong>{{ objetoConsultado?.unidad_asignado }}</strong>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <ng-template #asignadoActual>
+                                    <div class="col-md-12">
+                                        <div class="form-control bg-success text-white">
+                                            <p class="mb-0">
+                                                Asignado:
+                                                <strong>{{ objetoConsultado?.unidad_asignado }}</strong>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </ng-template>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </ng-container>
+
+    </p-card>
+</div>

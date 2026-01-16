@@ -1,0 +1,898 @@
+ 
+
+<div class="form-wrapper">
+  <div class="card form-card p-3">
+
+    <!-- PADRES -->
+    <div class="mb-3">
+      <div class="d-flex justify-content-between align-items-center mb-1">
+        <h3 class="mb-0" style="font-size: 1rem; font-weight: 600;">Padres</h3>
+
+        <button
+          type="button"
+          class="btn btn-sm btn-back-modern"
+          (click)="abrirModalPadre()"
+          title="Agregar padres"
+          style="background-color: black;color: white;"
+        >
+          <i class="pi pi-plus" aria-hidden="true"></i>
+          <span>Agregar</span>
+        </button>
+      </div>
+   
+ 
+
+@if(arregloPadres){
+<label *ngIf="arregloPadres.length === 0" style="color: red; font-size: 0.8rem;">
+        * No tiene padres registrados *
+      </label>
+
+      <div class="table-responsive">
+        <table class="table table-sm table-hover table-bordered align-middle">
+          <thead class="table-light">
+            <tr>
+              <th style="width: 40px;">#</th>
+              <th>Identidad</th>
+              <th>Nombres</th>
+              <th>Apellidos</th>
+              <th>Tipo de sangre</th>
+              <th style="width: 80px;">Opción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let i of arregloPadres; let index = index">
+              <td>{{ index + 1 }}</td>
+              <td>{{ i.identidad }}</td>
+              <td>{{ i.nombres }}</td>
+              <td>{{ i.apellidos }}</td>
+              <td>{{ i.tipo_sangre }}</td>
+              <td>
+                <button
+                 class="btn btn-sm btn-success"
+                  (click)="eliminarPadre(i)"
+                  title="Eliminar padre"
+                >
+                  <i class="pi pi-trash" aria-hidden="true"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+}
+      
+    </div>
+
+    <hr>
+
+    <!-- CÓNYUGE -->
+    <div class="mb-3">
+      <div class="d-flex justify-content-between align-items-center mb-1">
+        <h3 class="mb-0" style="font-size: 1rem; font-weight: 600;">Cónyuge</h3>
+
+        <button
+          type="button"
+          class="btn btn-sm btn-back-modern"
+          (click)="abrirModalConyugue()"
+          title="Agregar cónyuge"
+        style="background-color: black;color: white;"
+        >
+          <i class="pi pi-plus" aria-hidden="true"></i>
+          <span>Agregar</span>
+        </button>
+      </div>
+     
+      @if(arregloConyugue){
+<label *ngIf="!arregloConyugue || arregloConyugue.length === 0"
+             style="color: red; font-size: 0.8rem;">
+        * No tiene cónyuge registrado *
+      </label>
+ 
+      <div class="table-responsive"  >
+        <table class="table table-sm table-hover table-bordered align-middle">
+          <thead class="table-light">
+            <tr>
+              <th style="width: 40px;">#</th>
+              <th>Identidad</th>
+              <th>Nombres</th>
+              <th>Apellidos</th>
+              <th>Tipo de sangre</th>
+              <th style="width: 80px;">Opción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let i of arregloConyugue; let index = index">
+              <td>{{ index + 1 }}</td>
+              <td>{{ i.identidad }}</td>
+              <td>{{ i.nombres }}</td>
+              <td>{{ i.apellidos }}</td>
+              <td>{{ i.tipo_sangre }}</td>
+              <td>
+                <button
+                  class="btn btn-sm btn-success"
+                  (click)="eliminaconyugue(i)"
+                  title="Eliminar cónyuge"
+                >
+                  <i class="pi pi-trash" aria-hidden="true"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+}
+      
+    </div>
+
+    <hr>
+
+    <!-- HIJOS -->
+    <div>
+      <div class="d-flex justify-content-between align-items-center mb-1">
+        <h3 class="mb-0" style="font-size: 1rem; font-weight: 600;">Hijos</h3>
+
+        <button
+          type="button"
+          class="btn btn-sm btn-back-modern"
+          (click)="abrirModalHijo()"
+          title="Agregar hijo"
+  style="background-color: black;color: white;"
+        >
+          <i class="pi pi-plus" aria-hidden="true"></i>
+          <span>Agregar</span>
+        </button>
+      </div>
+@if (arregloHijos) {
+ <label *ngIf="!arregloHijos || arregloHijos.length === 0" style="color: red; font-size: 0.8rem;">
+        * No tiene hijos registrados *
+      </label>
+
+      <div class="table-responsive">
+        <table class="table table-sm table-hover table-bordered align-middle">
+          <thead class="table-light">
+            <tr>
+              <th style="width: 40px;">#</th>
+              <th>Identidad</th>
+              <th>Nombres</th>
+              <th>Apellidos</th>
+              <th>Tipo de sangre</th>
+              <th style="width: 80px;">Opción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let i of arregloHijos; let index = index">
+              <td>{{ index + 1 }}</td>
+              <td>{{ i.identidad }}</td>
+              <td>{{ i.nombres }}</td>
+              <td>{{ i.apellidos }}</td>
+              <td>{{ i.tipo_sangre }}</td>
+              <td>
+                <button
+                  class="btn btn-sm btn-success"
+                  (click)="eliminarHijos(i)"
+                  title="Eliminar hijo"
+                >
+                  <i class="pi pi-trash" aria-hidden="true"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+}
+     
+    </div>
+
+  </div>
+</div>
+
+<p-dialog
+  header="Datos familiares (Padres)"
+  [(visible)]="mostrarModalPadre"
+  [modal]="true"
+  [style]="{ width: '700px', maxWidth: '95vw' }"
+  [draggable]="false"
+  [resizable]="false"
+  [closable]="false"
+>
+  <!-- Paso 1: buscar por identidad -->
+  <form
+    [formGroup]="formIdentidad"
+    *ngIf="banderapariente === 0"
+    class="row g-2"
+  >
+    <div class="col-md-6">
+      <label class="form-label">Identidad</label>
+      <input
+        formControlName="identidad"
+        type="text"
+        maxlength="13"
+        minlength="13"
+        class="form-control"
+      />
+  
+    </div>
+
+    <div class="col-md-3 d-flex align-items-end">
+      <button
+        type="button"
+        class="btn btn-success w-100"
+        (click)="buscarParientes()"
+        [disabled]="!formIdentidad.valid"
+      >
+        <i class="fab fa-500px"></i> Buscar
+      </button>
+    </div>
+
+    <div class="col-md-3 d-flex align-items-end" *ngIf="banderadeCarga === 1">
+      <div class="w-100 text-center">
+        <span style="font-size: 0.8rem;">Cargando...</span>
+        <div class="spinner-border form-control mt-1" role="status"></div>
+      </div>
+    </div>
+  </form>
+
+  <!-- Paso 2: formulario de datos del pariente -->
+  <div *ngIf="banderapariente === 1" class="card-body sombra" style="border-radius: 1.25rem;">
+    <form
+      [formGroup]="formulariopariente"
+      class="row g-2"
+      style="margin: 5px;"
+    >
+      <!-- Identidad fija -->
+      <div class="col-12">
+        <label class="form-label">Identidad</label>
+        <div class="form-control">
+          {{ formIdentidad.value.identidad }}
+        </div>
+      </div>
+
+      <!-- Nombre -->
+      <div class="col-12">
+        <label class="form-label">Nombre completo</label>
+        <input type="text" formControlName="nombre" class="form-control" />
+        <div
+          class="alert-danger mt-1"
+          *ngIf="nombre1?.invalid && (nombre1?.dirty || nombre1?.touched)"
+        >
+           
+        </div>
+      </div>
+
+      <!-- Apellidos -->
+      <div class="col-12">
+        <label class="form-label">Apellidos</label>
+        <input type="text" formControlName="apellidos" class="form-control" />
+        <div
+          class="alert-danger mt-1"
+          *ngIf="apellidos1?.invalid && (apellidos1?.dirty || apellidos1?.touched)"
+        >
+         
+        </div>
+      </div>
+
+      <!-- Correo -->
+      <div class="col-12">
+        <label class="form-label">Correo</label>
+        <input type="text" formControlName="correo" class="form-control" />
+        <div
+          class="alert-danger mt-1"
+          *ngIf="correo1?.invalid && (correo1?.dirty || correo1?.touched)"
+        >
+           
+          
+        </div>
+      </div>
+
+      <!-- Tipo de sangre -->
+      <div class="col-md-6">
+        <label class="form-label">Tipo de sangre</label>
+        <select formControlName="tipo_sangre" class="form-control">
+          <option value="A+">A+</option>
+          <option value="A-">A-</option>
+          <option value="O+">O+</option>
+          <option value="O-">O-</option>
+          <option value="B+">B+</option>
+          <option value="B-">B-</option>
+          <option value="AB+">AB+</option>
+          <option value="AB-">AB-</option>
+        </select>
+        <div
+          class="alert-danger mt-1"
+          *ngIf="tipo_sangre1?.invalid && (tipo_sangre1?.dirty || tipo_sangre1?.touched)"
+        >
+          
+        </div>
+      </div>
+
+      <!-- Fecha nacimiento -->
+      <div class="col-md-6">
+        <label class="form-label">Fecha de nacimiento</label>
+        <input type="date" formControlName="fecha_nacimiento" class="form-control" />
+        <div
+          class="alert-danger mt-1"
+          *ngIf="fecha_nacimiento1?.invalid && (fecha_nacimiento1?.dirty || fecha_nacimiento1?.touched)"
+        >
+         
+        </div>
+      </div>
+
+      <!-- Departamento -->
+      <div class="col-md-6">
+        <label class="form-label">Departamento</label>
+        <select
+          class="form-control"
+          (change)="sacarmunicipio()"
+          [(ngModel)]="departamentoselected"
+          name="departamentoselected"
+          [ngModelOptions]="{ standalone: true }"
+        >
+          <option *ngFor="let i of arregloDepartamento" [ngValue]="i">
+            {{ i.departamento }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Municipio -->
+      <div class="col-md-6">
+        <label class="form-label">Lugar de nacimiento (municipio)</label>
+        <select formControlName="lugar_nacimiento" class="form-control">
+          <option [ngValue]="i.idmunicipio" *ngFor="let i of arreglomunicipio">
+            {{ i.municipio }}
+          </option>
+        </select>
+        <div
+          class="alert-danger mt-1"
+          *ngIf="lugar_nacimiento1?.invalid && (lugar_nacimiento1?.dirty || lugar_nacimiento1?.touched)"
+        >
+        
+        </div>
+      </div>
+
+      <!-- Estado civil, nivel educativo, religión, género, dirección -->
+      <!-- (dejo tu misma lógica, solo ordenada) -->
+
+      <div class="col-md-6">
+        <label class="form-label">Estado civil</label>
+        <select formControlName="estado_civil" class="form-control">
+          <option value="Soltero(a)">Soltero(a)</option>
+          <option value="Casado(a)">Casado(a)</option>
+          <option value="Viudo(a)">Viudo(a)</option>
+          <option value="Divorciado(a)">Divorciado(a)</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Nivel educativo</label>
+        <select formControlName="nivel_educativo" class="form-control">
+          <option value="Prebásica">Prebásica</option>
+          <option value="Básica">Básica</option>
+          <option value="Media ">Media</option>
+          <option value="Superior">Superior</option>
+          <option value="No aplica">No aplica</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Religión</label>
+        <select formControlName="religion" class="form-control">
+          <option value="Catolica">Católica</option>
+          <option value="Evangelico">Evangélico</option>
+          <option value="Mormon">Mormón</option>
+          <option value="Sin Religion">Sin religión</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Género</label>
+        <select formControlName="genero" class="form-control">
+          <option value="M">M</option>
+          <option value="F">F</option>
+        </select>
+      </div>
+
+      <div class="col-12">
+        <label class="form-label">Dirección exacta</label>
+        <input type="text" formControlName="direccion_exacta" class="form-control" />
+      </div>
+
+      <div class="col-12 mt-2">
+        <button
+          type="button"
+          class="btn btn-success w-100"
+          (click)="guardarPariente()"
+        >
+          Agregar padre
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      class="p-button-text"
+      label="Cerrar"
+      (click)="cerrarModalPadre()"
+    ></button>
+  </ng-template>
+</p-dialog>
+
+<p-dialog
+  header="Datos familiares (Cónyuge)"
+  [(visible)]="mostrarModalConyugue"
+  [modal]="true"
+  [style]="{ width: '700px', maxWidth: '95vw' }"
+  [draggable]="false"
+  [resizable]="false"
+  [closable]="false"
+>
+  <!-- Paso 1: buscar por identidad -->
+  <form
+    [formGroup]="formIdentidad"
+    *ngIf="banderapariente === 0"
+    class="row g-2"
+  >
+    <div class="col-md-6">
+      <label class="form-label">Identidad 1111</label>
+      <input
+        formControlName="identidad"
+        type="text"
+        maxlength="13"
+        minlength="13"
+        class="form-control"
+      />
+    </div>
+
+    <div class="col-md-3 d-flex align-items-end">
+      <button
+        type="button"
+        class="btn btn-success w-100"
+        [disabled]="!formIdentidad.valid"
+        (click)="buscarconyugue()"
+         
+      >
+        <i class="fab fa-500px"></i> Buscar sds
+      </button>
+    </div>
+
+    <div class="col-md-3 d-flex align-items-end" *ngIf="banderadeCarga === 1">
+      <div class="w-100 text-center">
+        <span style="font-size: 0.8rem;">Cargando...</span>
+        <div class="spinner-border form-control mt-1" role="status"></div>
+      </div>
+    </div>
+  </form>
+
+  <!-- Paso 2: formulario de datos del cónyuge -->
+  <div *ngIf="banderapariente === 1" class="card-body sombra" style="border-radius: 1.25rem;">
+    <form
+      [formGroup]="formulariopariente"
+      class="row g-2"
+      style="margin: 5px;"
+    >
+     <!-- Identidad fija -->
+      <div class="col-12">
+        <label class="form-label">Identidad</label>
+        <div class="form-control">
+          {{ formulariopariente.value.identidad }}
+        </div>
+      </div>
+
+      <!-- Nombre -->
+      <div class="col-12">
+        <label class="form-label">Nombre completo</label>
+        <input type="text" formControlName="nombre" class="form-control" />
+        <div
+          class="alert-danger mt-1"
+          *ngIf="nombre1?.invalid && (nombre1?.dirty || nombre1?.touched)"
+        >
+           
+        </div>
+      </div>
+
+      <!-- Apellidos -->
+      <div class="col-12">
+        <label class="form-label">Apellidos</label>
+        <input type="text" formControlName="apellidos" class="form-control" />
+        <div
+          class="alert-danger mt-1"
+          *ngIf="apellidos1?.invalid && (apellidos1?.dirty || apellidos1?.touched)"
+        >
+         
+        </div>
+      </div>
+
+      <!-- Correo -->
+      <div class="col-12">
+        <label class="form-label">Correo</label>
+        <input type="text" formControlName="correo" class="form-control" />
+        <div
+          class="alert-danger mt-1"
+          *ngIf="correo1?.invalid && (correo1?.dirty || correo1?.touched)"
+        >
+           
+          
+        </div>
+      </div>
+
+      <!-- Tipo de sangre -->
+      <div class="col-md-6">
+        <label class="form-label">Tipo de sangre</label>
+        <select formControlName="tipo_sangre" class="form-control">
+          <option value="A+">A+</option>
+          <option value="A-">A-</option>
+          <option value="O+">O+</option>
+          <option value="O-">O-</option>
+          <option value="B+">B+</option>
+          <option value="B-">B-</option>
+          <option value="AB+">AB+</option>
+          <option value="AB-">AB-</option>
+        </select>
+        <div
+          class="alert-danger mt-1"
+          *ngIf="tipo_sangre1?.invalid && (tipo_sangre1?.dirty || tipo_sangre1?.touched)"
+        >
+          
+        </div>
+      </div>
+
+      <!-- Fecha nacimiento -->
+      <div class="col-md-6">
+        <label class="form-label">Fecha de nacimiento</label>
+        <input type="date" formControlName="fecha_nacimiento" class="form-control" />
+        <div
+          class="alert-danger mt-1"
+          *ngIf="fecha_nacimiento1?.invalid && (fecha_nacimiento1?.dirty || fecha_nacimiento1?.touched)"
+        >
+         
+        </div>
+      </div>
+
+      <!-- Departamento -->
+      <div class="col-md-6">
+        <label class="form-label">Departamento</label>
+        <select
+          class="form-control"
+          (change)="sacarmunicipio()"
+          [(ngModel)]="departamentoselected"
+          name="departamentoselected"
+          [ngModelOptions]="{ standalone: true }"
+        >
+          <option *ngFor="let i of arregloDepartamento" [ngValue]="i">
+            {{ i.departamento }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Municipio -->
+      <div class="col-md-6">
+        <label class="form-label">Lugar de nacimiento (municipio)</label>
+        <select formControlName="lugar_nacimiento" class="form-control">
+          <option [ngValue]="i.idmunicipio" *ngFor="let i of arreglomunicipio">
+            {{ i.municipio }}
+          </option>
+        </select>
+        <div
+          class="alert-danger mt-1"
+          *ngIf="lugar_nacimiento1?.invalid && (lugar_nacimiento1?.dirty || lugar_nacimiento1?.touched)"
+        >
+        
+        </div>
+      </div>
+
+      <!-- Estado civil, nivel educativo, religión, género, dirección -->
+      <!-- (dejo tu misma lógica, solo ordenada) -->
+
+      <div class="col-md-6">
+        <label class="form-label">Estado civil</label>
+        <select formControlName="estado_civil" class="form-control">
+          <option value="Soltero(a)">Soltero(a)</option>
+          <option value="Casado(a)">Casado(a)</option>
+          <option value="Viudo(a)">Viudo(a)</option>
+          <option value="Divorciado(a)">Divorciado(a)</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Nivel educativo</label>
+        <select formControlName="nivel_educativo" class="form-control">
+          <option value="Prebásica">Prebásica</option>
+          <option value="Básica">Básica</option>
+          <option value="Media ">Media</option>
+          <option value="Superior">Superior</option>
+          <option value="No aplica">No aplica</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Religión</label>
+        <select formControlName="religion" class="form-control">
+          <option value="Catolica">Católica</option>
+          <option value="Evangelico">Evangélico</option>
+          <option value="Mormon">Mormón</option>
+          <option value="Sin Religion">Sin religión</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Género</label>
+        <select formControlName="genero" class="form-control">
+          <option value="M">M</option>
+          <option value="F">F</option>
+        </select>
+      </div>
+
+      <div class="col-12">
+        <label class="form-label">Dirección exacta</label>
+        <input type="text" formControlName="direccion_exacta" class="form-control" />
+      </div>
+
+ 
+
+      <!-- resto de inputs igual que el de padre -->
+
+      <div class="col-12 mt-2">
+        <button
+          type="button"
+          class="btn btn-success w-100"
+          [disabled]="!formulariopariente.valid"
+          (click)="guardarconyugue()"
+        >
+          Agregar cónyuge sasasa
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      class="p-button-text"
+      label="Cerrar"
+      (click)="cerrarModalConyugue()"
+    ></button>
+  </ng-template>
+</p-dialog>
+
+<p-dialog
+  header="Datos familiares (Hijo)"
+  [(visible)]="mostrarModalHijo"
+  [modal]="true"
+  [style]="{ width: '700px', maxWidth: '95vw' }"
+  [draggable]="false"
+  [resizable]="false"
+  [closable]="false"
+>
+  <!-- Paso 1: buscar por identidad -->
+  <form
+    [formGroup]="formIdentidad"
+    *ngIf="banderapariente === 0"
+    class="row g-2"
+  >
+    <div class="col-md-6">
+      <label class="form-label">Identidad</label>
+      <input
+        formControlName="identidad"
+        type="text"
+        maxlength="13"
+        minlength="13"
+        class="form-control"
+      />
+    </div>
+
+    <div class="col-md-3 d-flex align-items-end">
+      <button
+        type="button"
+        class="btn btn-success w-100"
+        (click)="buscarHijo()"
+        [disabled]="!formIdentidad.valid"
+      >
+        <i class="fab fa-500px"></i> Buscar
+      </button>
+    </div>
+
+    <div class="col-md-3 d-flex align-items-end" *ngIf="banderadeCarga === 1">
+      <div class="w-100 text-center">
+        <span style="font-size: 0.8rem;">Cargando...</span>
+        <div class="spinner-border form-control mt-1" role="status"></div>
+      </div>
+    </div>
+  </form>
+
+  <!-- Paso 2: formulario de datos del hijo -->
+
+   <div *ngIf="banderapariente === 1" class="card-body sombra" style="border-radius: 1.25rem;">
+    <form
+      [formGroup]="formulariopariente"
+      class="row g-2"
+      style="margin: 5px;"
+    >
+     <!-- Identidad fija -->
+      <div class="col-12">
+        <label class="form-label">Identidad</label>
+        <div class="form-control">
+          {{ formulariopariente.value.identidad }}
+        </div>
+      </div>
+
+      <!-- Nombre -->
+      <div class="col-12">
+        <label class="form-label">Nombre completo</label>
+        <input type="text" formControlName="nombre" class="form-control" />
+        <div
+          class="alert-danger mt-1"
+          *ngIf="nombre1?.invalid && (nombre1?.dirty || nombre1?.touched)"
+        >
+           
+        </div>
+      </div>
+
+      <!-- Apellidos -->
+      <div class="col-12">
+        <label class="form-label">Apellidos</label>
+        <input type="text" formControlName="apellidos" class="form-control" />
+        <div
+          class="alert-danger mt-1"
+          *ngIf="apellidos1?.invalid && (apellidos1?.dirty || apellidos1?.touched)"
+        >
+         
+        </div>
+      </div>
+
+      <!-- Correo -->
+      <div class="col-12">
+        <label class="form-label">Correo</label>
+        <input type="text" formControlName="correo" class="form-control" />
+        <div
+          class="alert-danger mt-1"
+          *ngIf="correo1?.invalid && (correo1?.dirty || correo1?.touched)"
+        >
+           
+          
+        </div>
+      </div>
+
+      <!-- Tipo de sangre -->
+      <div class="col-md-6">
+        <label class="form-label">Tipo de sangre</label>
+        <select formControlName="tipo_sangre" class="form-control">
+          <option value="A+">A+</option>
+          <option value="A-">A-</option>
+          <option value="O+">O+</option>
+          <option value="O-">O-</option>
+          <option value="B+">B+</option>
+          <option value="B-">B-</option>
+          <option value="AB+">AB+</option>
+          <option value="AB-">AB-</option>
+        </select>
+        <div
+          class="alert-danger mt-1"
+          *ngIf="tipo_sangre1?.invalid && (tipo_sangre1?.dirty || tipo_sangre1?.touched)"
+        >
+          
+        </div>
+      </div>
+
+      <!-- Fecha nacimiento -->
+      <div class="col-md-6">
+        <label class="form-label">Fecha de nacimiento</label>
+        <input type="date" formControlName="fecha_nacimiento" class="form-control" />
+        <div
+          class="alert-danger mt-1"
+          *ngIf="fecha_nacimiento1?.invalid && (fecha_nacimiento1?.dirty || fecha_nacimiento1?.touched)"
+        >
+         
+        </div>
+      </div>
+
+      <!-- Departamento -->
+      <div class="col-md-6">
+        <label class="form-label">Departamento</label>
+        <select
+          class="form-control"
+          (change)="sacarmunicipio()"
+          [(ngModel)]="departamentoselected"
+          name="departamentoselected"
+          [ngModelOptions]="{ standalone: true }"
+        >
+          <option *ngFor="let i of arregloDepartamento" [ngValue]="i">
+            {{ i.departamento }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Municipio -->
+      <div class="col-md-6">
+        <label class="form-label">Lugar de nacimiento (municipio)</label>
+        <select formControlName="lugar_nacimiento" class="form-control">
+          <option [ngValue]="i.idmunicipio" *ngFor="let i of arreglomunicipio">
+            {{ i.municipio }}
+          </option>
+        </select>
+        <div
+          class="alert-danger mt-1"
+          *ngIf="lugar_nacimiento1?.invalid && (lugar_nacimiento1?.dirty || lugar_nacimiento1?.touched)"
+        >
+        
+        </div>
+      </div>
+
+      <!-- Estado civil, nivel educativo, religión, género, dirección -->
+      <!-- (dejo tu misma lógica, solo ordenada) -->
+
+      <div class="col-md-6">
+        <label class="form-label">Estado civil</label>
+        <select formControlName="estado_civil" class="form-control">
+          <option value="Soltero(a)">Soltero(a)</option>
+          <option value="Casado(a)">Casado(a)</option>
+          <option value="Viudo(a)">Viudo(a)</option>
+          <option value="Divorciado(a)">Divorciado(a)</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Nivel educativo</label>
+        <select formControlName="nivel_educativo" class="form-control">
+          <option value="Prebásica">Prebásica</option>
+          <option value="Básica">Básica</option>
+          <option value="Media ">Media</option>
+          <option value="Superior">Superior</option>
+          <option value="No aplica">No aplica</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Religión</label>
+        <select formControlName="religion" class="form-control">
+          <option value="Catolica">Católica</option>
+          <option value="Evangelico">Evangélico</option>
+          <option value="Mormon">Mormón</option>
+          <option value="Sin Religion">Sin religión</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Género</label>
+        <select formControlName="genero" class="form-control">
+          <option value="M">M</option>
+          <option value="F">F</option>
+        </select>
+      </div>
+
+      <div class="col-12">
+        <label class="form-label">Dirección exacta</label>
+        <input type="text" formControlName="direccion_exacta" class="form-control" />
+      </div>
+
+ 
+
+      <!-- resto de inputs igual que el de padre -->
+
+      <div class="col-12 mt-2">
+        <button
+          type="button"
+          class="btn btn-success w-100"
+          [disabled]="!formulariopariente.valid"
+           (click)="guardarHijo()"
+        >
+          Agregar cónyuge sasasa
+        </button>
+      </div>
+    </form>
+  </div>
+
+  
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      class="p-button-text"
+      label="Cerrar"
+      (click)="cerrarModalHijo()"
+    ></button>
+  </ng-template>
+</p-dialog>
