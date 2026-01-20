@@ -75,6 +75,11 @@ export class MenuRepoEmcComponent {
       {
       id: 'r6', titulo: 'Buscar personal para Ascender', descripcion: 'Aqui estan las personas que pueden ascender segun su antiguedad',
       icon: 'pi pi-chart-line', categoria: 'RRHH', ruta: '/reportes/vacaciones'
+    },
+     ,
+      {
+      id: 'r7', titulo: 'Parte por Fuerza,Categoria y Unidad', descripcion: 'Aqui se busca el parte por unidad y categoria',
+      icon: 'pi pi-building-columns', categoria: 'RRHH', ruta: '/reportes/vacaciones'
     }
 
 
@@ -161,6 +166,40 @@ export class MenuRepoEmcComponent {
      
       if(form.value.categoria.id===1 || form.value.categoria.id===2 ){
            cade= ` and ingreso_ascenso.idfuerza= ${form.value.fuerza.idfuerza} and  categoria.idcategoria in (${form.value.categoria.nivel.join(',')}) `
+      }else{
+          cade= ` and unidad.idfuerza= ${form.value.fuerza.idfuerza} and  categoria.idcategoria in (${form.value.categoria.nivel.join(',')}) `
+      }
+      console.log(cade)
+   
+     this.arregloListaParteUnidad = []
+     this.arregloResumenParteUnidad =[]
+    let param = {
+     cadena:cade 
+    }
+    this._ServiciosMensajeService.show("Cargando parte de la unidad......");
+    this._ServicioBackendService.sacarParteMenuInicio(param).subscribe({
+      next: (response) => {
+        this._ServiciosMensajeService.hide()
+        if (response.error) return this._ServiciosMensajeService.mensajeMalo(response.error);
+        if (response.mensaje) return this._ServiciosMensajeService.mensajeMalo(response.mensaje);
+        this.arregloResumenParteUnidad = response.resultado_resumen
+        this.arregloListaParteUnidad = response.resultado_lista
+
+
+      }, error: (error) => {
+        this._ServiciosMensajeService.hide()
+
+        this._ServiciosMensajeService.mensajeerrorServer();
+      }
+    })
+  }
+
+    sacarParteFuerzaYUnidad(form:NgForm) {
+      console.log(form.value.categoria.id)
+      let cade=""
+     
+      if(form.value.categoria.id===1 || form.value.categoria.id===2 ){
+           cade= ` and ingreso_ascenso.idfuerza= ${form.value.fuerza.idfuerza} and unidad.idunidad=${form.value.unidad.idunidad} and  categoria.idcategoria in (${form.value.categoria.nivel.join(',')}) `
       }else{
           cade= ` and unidad.idfuerza= ${form.value.fuerza.idfuerza} and  categoria.idcategoria in (${form.value.categoria.nivel.join(',')}) `
       }
