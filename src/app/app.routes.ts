@@ -148,7 +148,7 @@ export const routes: Routes = [
       {
         path: 'menu-conexion-planffaa',
         canActivate: [permisosGuard],
-        data: { permisos: ["P_0001","P_0002","P_0003","P_0004"] },
+        data: { permisos: ["P_0001","P_0002","P_0003","P_0004","P_0005"] },
         loadComponent: () =>
           import('./Paginas/planffaa-conexiones/pagos-x-cargo/menu-conexion-planffaa/menu-conexion-planffaa.component')
             .then(m => m.MenuConexionPlanffaaComponent)
@@ -207,7 +207,7 @@ export const routes: Routes = [
       {
         path: 'menu-reportes',
         canActivate: [permisosGuard],
-        data: { permisos: [] },
+        data: { permisos: ['Re_0002','Re_0003','Re_0001'] },
         loadComponent: () =>
           import('./Paginas/reportes/reportes-menu/reportes-menu.component')
             .then(m => m.ReportesMenuComponent)
@@ -215,7 +215,7 @@ export const routes: Routes = [
       {
         path: 'menu-repo-unidad',
         canActivate: [permisosGuard],
-        data: { permisos: [] },
+        data: { permisos: ['Re_0002'] },
         loadComponent: () =>
           import('./Paginas/reportes/menu-repo-unidad/menu-repo-unidad.component')
             .then(m => m.MenuRepoUnidadComponent)
@@ -224,7 +224,7 @@ export const routes: Routes = [
       {
         path: 'menu-repo-fuerza',
         canActivate: [permisosGuard],
-        data: { permisos: [] },
+        data: { permisos: ['Re_0003'] },
         loadComponent: () =>
           import('./Paginas/reportes/repo-fuerzas/menu-repo-fuerza/menu-repo-fuerza.component')
             .then(m => m.MenuRepoFuerzaComponent)
@@ -232,7 +232,7 @@ export const routes: Routes = [
       {
         path: 'menu-repo-emc',
         canActivate: [permisosGuard],
-        data: { permisos: [] },
+        data: { permisos: ['Re_0001'] },
         loadComponent: () =>
           import('./Paginas/reportes/repo-emc/menu-repo-emc/menu-repo-emc.component')
             .then(m => m.MenuRepoEmcComponent)

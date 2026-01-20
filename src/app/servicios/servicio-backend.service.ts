@@ -786,99 +786,99 @@ export class ServicioBackendService {
   }
 
 
-  consultadeduccionPorEmpresa(data: any): Observable<any> {
+  consultadeduccionPorEmpresa(data: any) {
 
     return this.metodopost('consultadeduccionPorEmpresa', data);
   }
-  consultadeduccionPorUnidad(data: any): Observable<any> {
+  consultadeduccionPorUnidad(data: any){
 
     return this.metodopost('consultadeduccionPorUnidad', data);
   }
-  validardeduccionesengurpo(data: any): Observable<any> {
+  validardeduccionesengurpo(data: any)  {
 
     return this.metodopost('validardeduccionesengurpo', data);
   }
-  cargardeduccionesenbloque(data: any): Observable<any> {
+  cargardeduccionesenbloque(data: any)  {
 
     return this.metodopost('cargardeduccionesenbloque', data);
   }
-  cambiareidbloquecuentas(data: any): Observable<any> {
+  cambiareidbloquecuentas(data: any)  {
 
     return this.metodopost('cambiarcuentabloque', data);
   }
-  planillaSIREPTropa(data: any): Observable<any> {
+  planillaSIREPTropa(data: any)  {
 
     return this.metodopost('planillaSIREPTropa', data);
   }
 
-  sacarpersonalParaDarDebaja(data: any): Observable<any> {
+  sacarpersonalParaDarDebaja(data: any)  {
 
     return this.metodopost('sacarpersonalParaDarDebaja', data);
   }
-  listadepersonalActivo(data: any): Observable<any> {
+  listadepersonalActivo(data: any)  {
 
     return this.metodopost('listadepersonalActivo', data);
   }
-  listadepersonaldeBaja(data: any): Observable<any> {
+  listadepersonaldeBaja(data: any)  {
 
     return this.metodopost('listadepersonaldeBaja', data);
   }
-  sacarplanillaporunidad(data: any): Observable<any> {
+  sacarplanillaporunidad(data: any)  {
 
     return this.metodopost('sacarplanillaporunidad', data);
   }
-  consultaporNombre(data: any): Observable<any> {
+  consultaporNombre(data: any)  {
 
     return this.metodopost('consultaporNombre', data);
   }
-  consultaporNombrePorUnidad(data: any): Observable<any> {
+  consultaporNombrePorUnidad(data: any)  {
     return this.metodopost('consultaporNombrePorUnidad', data);
   }
 
-  sacarpersonalParaDarDebajadelamismaFuerza(data: any): Observable<any> {
+  sacarpersonalParaDarDebajadelamismaFuerza(data: any)  {
 
     return this.metodopost('sacarpersonalParaDarDebajadelamismaFuerza', data);
   }
-  consultaDeduccionPorfuerza(data: any): Observable<any> {
+  consultaDeduccionPorfuerza(data: any) {
     return this.metodopost('consultaDeduccionPorfuerza', data);
   }
-  consultadeduccionempresaYfuerza(data: any): Observable<any> {
+  consultadeduccionempresaYfuerza(data: any) {
     return this.metodopost('sacarDeducionPorEmpresaYfuerza', data);
   }
-  listadepersonaldeBajadeunaFuerza(data: any): Observable<any> {
+  listadepersonaldeBajadeunaFuerza(data: any){
 
     return this.metodopost('listadepersonaldeBajadeunaFuerza', data);
   }
   //Borrar esta funcion
-  resumandeduccionesdeHierro(data: any): Observable<any> {
+  resumandeduccionesdeHierro(data: any) {
 
     return this.metodopost('deduccionesdeHierro', data);
   }
-  deduccionesdeHierrounidad(data: any): Observable<any> {
+  deduccionesdeHierrounidad(data: any) {
     return this.metodopost('deduccionesdeHierrounidad', data);
   }
-  datosparaConstaciadeTropa(data: any): Observable<any> {
+  datosparaConstaciadeTropa(data: any){
     return this.metodopost('datosparaConstaciadeTropa', data);
   }
-  sacardeduccionsParaAPp(data: any): Observable<any> {
+  sacardeduccionsParaAPp(data: any) {
     return this.metodopost('sacardeduccionsParaAPp', data);
   }
-  eleminarnumeroTelefono(data: any): Observable<any> {
+  eleminarnumeroTelefono(data: any){
 
     return this.metodopost('eleminarnumeroTelefono', data);
   }
-  sacarplanillasporunidadTropaDecimos(data: any): Observable<any> {
+  sacarplanillasporunidadTropaDecimos(data: any) {
     return this.metodopost('sacarplanillasporunidadTropaDecimos', data);
   }
-  sacarplanillasporunidadTropaDecimosPorunidadEjecutora(data: any): Observable<any> {
+  sacarplanillasporunidadTropaDecimosPorunidadEjecutora(data: any) {
 
     return this.metodopost('sacarplanillasporunidadTropaDecimosPorunidadEjecutora', data);
   }
-  sacarplanillasTropaVacacionesPorunidadEjecutora(data: any): Observable<any> {
+  sacarplanillasTropaVacacionesPorunidadEjecutora(data: any) {
 
     return this.metodopost('sacarplanillasTropaVacacionesPorunidadEjecutora', data);
   }
-  sacarplanillasTropaVacacionesPorunidad(data: any): Observable<any> {
+  sacarplanillasTropaVacacionesPorunidad(data: any) {
     return this.metodopost('sacarplanillasTropaVacacionesPorunidad', data);
   }
   sacarcarpetaPrimaria(data: any) {
@@ -1056,35 +1056,42 @@ export class ServicioBackendService {
     return this.metodopost('reasignarOficialesAuxSub', data);
 
   }
-  crearusuario(data: any): Observable<any> {
+  crearusuario(data: any) {
 
     return this.metodopost('crearusuario', data);
 
 
   }
-  buscarusuario(data: any): Observable<any> {
+  buscarusuario(data: any)  {
 
     return this.metodopost('consultarusuario', data);
 
 
   }
   actualizacionContrasenas(data: any, token): Observable<any> {
-    return this.metodopost('actualizarContrasena', data);
+    console.log(token)
+    var headers = new HttpHeaders({
+        "Authorization":token || ""
+      });  
+      return this.http.post(this.url + "actualizarContrasena", data, { 
+      headers: headers
+     });
+ 
 
   }
-  PparteDeSubOficial(data: any): Observable<any> {
+  PparteDeSubOficial(data: any)  {
 
     return this.metodopost('parteporFuerzadeSubOficiales', data);
 
 
   }
-  parteporUnidaddeSubOficiales(data: any): Observable<any> {
+  parteporUnidaddeSubOficiales(data: any)  {
 
     return this.metodopost('parteporUnidaddeSubOficiales', data);
 
 
   }
-  agregarNombramiento(data: any): Observable<any> {
+  agregarNombramiento(data: any){
 
 
     return this.metodopost('agregarNombramiento', data);
@@ -1094,7 +1101,7 @@ export class ServicioBackendService {
   mostrarNombramiento(data: any) {
     return this.metodopost('mostrarNombramiento', data);
   }
-  agregarPuesto(data: any): Observable<any> {
+  agregarPuesto(data: any) {
 
 
     return this.metodopost('agregarPuesto', data);

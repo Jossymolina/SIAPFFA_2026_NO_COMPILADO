@@ -59,16 +59,24 @@ export class AutenticarseComponent {
 
    actualizarContrasena(form) {
     if (form.value.nuevaContrasena !== form.value.confirmarContrasena) return this._ServiciosMensajeService.mensajeMalo("Contraseña no coinciden");
+  let passwordPattern =/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&#._-])[A-Za-z\d@$!%*?&#._-]{12,}$/;
+const pass = (form.value.nuevaContrasena || '').trim();
 
-    var parametros = {
+if (!passwordPattern.test(pass)) {
+  return this._ServiciosMensajeService.mensajeMalo(
+    "La contraseña debe tener al menos 12 caracteres, una letra mayúscula, una letra minúscula, un número y un carácter especial."
+  );
+}
+  
+  var parametros = {
       contrasena: form.value.nuevaContrasena,
       identidad: this.usuarioLoguiado[0].identidad
     }
-    this.activar = !this.activar;
+   this._ServiciosMensajeService.show("Actualizando contraseña......");
 
     this._ServicioBackendService.actualizacionContrasenas(parametros,this.opt_token+this._ServicioBackendService.getControlVersion()).subscribe({
       next: (response) => {
-    this.activar = !this.activar;
+    this._ServiciosMensajeService.hide()
 
         if (response.error) return this._ServiciosMensajeService.mensajeMalo(response.error);
         if (response.mensaje) return this._ServiciosMensajeService.mensajeMalo(response.mensaje);
@@ -78,7 +86,8 @@ export class AutenticarseComponent {
         this.usuarioLoguiado = null;
         this.banderaCambioContrasena = 0;
       }, error: (error) => {
-    this.activar = !this.activar;
+    this._ServiciosMensajeService.hide()
+
 
         this._ServiciosMensajeService.mensajeerrorServer();
       }

@@ -724,6 +724,7 @@ export class BusquedaPersonalizadaComponent implements OnInit {
   }
 
   async exportexcel2(_idTabla?: string) {
+    this._ServiciosMensajesService.show()
     const workbook = new ExcelJS.Workbook();
     const sheet = workbook.addWorksheet('Resultados');
 
@@ -829,6 +830,8 @@ export class BusquedaPersonalizadaComponent implements OnInit {
     const blob = new Blob([bufferExcel], {
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     });
+    this._ServiciosMensajesService.hide()
     saveAs(blob, 'resultados_consulta_combinada.xlsx');
+
   }
 }

@@ -1,11 +1,11 @@
     <!--class="modules-container"-->
     <main >
    
-      <div class="row g-3 justify-content-start">
-        <div
-          class="col-12 col-sm-6 col-lg-3"
-          *ngFor="let m of modules">
-
+      <div class="row g-3 justify-content-start"  >
+        <ng-container *ngFor="let m of modules">
+          @if (sacarPermisoPersonalVista(m.code)) {
+               <div          class="col-12 col-sm-6 col-lg-3"       >
+ 
           <p-card
             class="module-card h-100"
             (click)="openModule(m)">
@@ -23,7 +23,11 @@
               </p>
             </div>
           </p-card>
+     
 
         </div>
+          }
+        </ng-container>
+     
       </div>
     </main>

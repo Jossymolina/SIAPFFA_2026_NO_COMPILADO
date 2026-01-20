@@ -3,12 +3,14 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
  
 import { Card } from 'primeng/card';
+import { ServicioBackendService } from '../../../servicios/servicio-backend.service';
  
  interface ModuleCard {
   title: string;
   description: string;
   icon: string;
   route?: string;
+  code:string[]
 }
 @Component({
   selector: 'app-menu-modo-programador',
@@ -24,11 +26,12 @@ export class MenuModoProgramadorComponent {
       title: 'Consultas SQL',
       description: 'Consulta sql',
       icon: 'pi pi-star-fill',
-      route: '/menu/consultas-sql'
+      route: '/menu/consultas-sql',
+      code:['PRG_0001']
     } 
  
   ];
-    constructor(private router: Router) {
+    constructor(private router: Router,private _ServicioBackendService:ServicioBackendService) {
 
   }
    openModule(m: ModuleCard) {
@@ -36,5 +39,9 @@ export class MenuModoProgramadorComponent {
     if (m.route) {
       this.router.navigate([m.route]);
     }
+  }
+      sacarPermisoPersonalVista(permiso:string[]){
+   return this._ServicioBackendService.verificarPermisos(permiso)
+    //console.log( JSON.parse(localStorage.getItem("permisos") || "[]") as any[])
   }
 }
