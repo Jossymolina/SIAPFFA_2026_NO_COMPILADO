@@ -140,7 +140,11 @@
                           <div class="mini-value">{{ objetoConsultado.identidad }}</div>
                         </div>
 
-                 
+                  <div class="mini-block">
+                          <div class="mini-label">RTN</div>
+                          <div class="mini-value">{{ objetoConsultado.rtn }}</div>
+                        </div>
+
 
                        
                     <!--  <div class="mini-block">
@@ -170,16 +174,22 @@
                           </div>
                         </div>
  
-                         <div class="mini-block" style="background-color: rgb(143, 143, 228);">
-                          <div class="mini-label">Arma</div>
+                         <div class="mini-block" style="background-color: rgb(148, 148, 156);">
+                          <div class="mini-label" style="color: black;" >Arma</div>
                           <div class="mini-value">{{ armaobjetoConsultado?.NombreArma ? armaobjetoConsultado.NombreArma:"Sin Arma" }}</div>
-                        </div>  
-                          <div class="mini-block">
-                          <div class="mini-label">Pasaporte</div>
-                          <div class="mini-value">
-                            {{ objetoConsultado.numero_pasaporte }}
-                          </div>
+                        </div> 
+                        
+                         <div class="mini-block"  >
+                          <div class="mini-label"   >Antiguedad en el grado Actual</div>
+                          <div class="mini-value">{{ objetoConsultado?.antiguedad_GradoActual<=1?objetoConsultado?.antiguedad_GradoActual+' Año':objetoConsultado?.antiguedad_GradoActual+' Años' }}</div>
                         </div>
+
+                         <div class="mini-block" >
+                          <div class="mini-label"  >Antiguedad en  FFAA</div>
+                          <div class="mini-value">{{ objetoConsultado?.fecha_antiguedadFFaa<=1?objetoConsultado?.fecha_antiguedadFFaa+' Año':objetoConsultado?.fecha_antiguedadFFaa+' Años' }}</div>
+                        </div>
+                        
+                       
                       </div>
 
                       <!-- COLUMNA DERECHA -->
@@ -193,9 +203,15 @@
                         </div>
 
                         <div class="mini-block">
-                          <div class="mini-label">Primer ingreso</div>
+                          <div class="mini-label">Fecha ultimo Ascenso</div>
                           <div class="mini-value">
                             {{ objetoConsultado.fechaPrimerIngreso | date:'yyyy-MM-dd' }}
+                          </div>
+                        </div>
+                         <div class="mini-block">
+                          <div class="mini-label">Fecha primer Ingreso</div>
+                          <div class="mini-value">
+                            {{ objetoConsultado.fecha | date:'yyyy-MM-dd' }}
                           </div>
                         </div>
 
@@ -225,12 +241,17 @@
                           <div class="mini-value">
                             {{ objetoConsultado.cuenta_banco }}
                             <div class="mini-hint">
-                              Banco: {{ objetoConsultado.banco }} • RTN: {{ objetoConsultado.rtn }}
+                              Banco: {{ objetoConsultado.banco }}  
                             </div>
                           </div>
                         </div>
 
-                      
+                         <div class="mini-block">
+                          <div class="mini-label">Pasaporte</div>
+                          <div class="mini-value">
+                            {{ objetoConsultado.numero_pasaporte }}
+                          </div>
+                        </div>
 
                       </div>
                       <div class="col-12">

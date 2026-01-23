@@ -13,7 +13,7 @@ import { ServiciosMensajeService } from './serviMensaje/servicios-mensaje.servic
 })
 //ng build --aot --output-hashing=all
 export class ServicioBackendService {
-  public url2 = "https://siapfa.ffaa.mil.hn:4443/" //"http://localhost:3978/" //"https://siapfa.ffaa.mil.hn:4443/"
+  public url2 = "https://siapfa.ffaa.mil.hn:4443/"//"http://localhost:3978/" //"https://siapfa.ffaa.mil.hn:4443/"
   refrescar = 0
   public url ="https://siapfa.ffaa.mil.hn:4443/" //"http://localhost:3978/" //"https://siapfa.ffaa.mil.hn:4443/"     
   usuarioLogin: any;
@@ -35,6 +35,12 @@ export class ServicioBackendService {
 
 
   ) { }
+  sacarOrganizacionCompleta(data){
+    return this.metodopost("sacarOrganizacionCompleta",data)
+  }
+  sacaPersonalVacaciones(data){
+    return this.metodopost("sacaPersonalVacaciones",data)
+  }
   sacarCambioCategoria(data){
     return this.metodopost('sacarCambioCategoria', data);
   }

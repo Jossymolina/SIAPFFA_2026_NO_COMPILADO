@@ -1064,7 +1064,6 @@ arreglounidadEjecutora = []
 this._ServiciosMensajeService.show()
     this._DatospersonalesService.consultaPorIdentidad(this.consulta).subscribe(
       Response => {
-        console.log(Response)
         this._ServiciosMensajeService.hide()
         if (Response.error) {
           this._DatospersonalesService.mensajeError(Response.error.sqlMessage + "BUSC")
@@ -3843,9 +3842,11 @@ displayFechaNacimiento = false;
 displayLugarNacimiento = false;
 displayModificarAscenso = false;
 displayEliminarAscenso = false;
-
+displayCambiarRTN = false;
 abrirModalCambiarFoto() { this.displayCambiarFoto = true; }
 abrirModalCambiarIdentidad() { this.displayCambiarIdentidad = true; }
+abrirModalCambiarRTN() { this.displayCambiarRTN = true; }
+
 abrirModalCuentaBanco() { this.displayCuentaBanco = true; }
 abrirModalArma() { this.displayArma = true; }
 abrirModalFechaIngreso() { this.displayFechaIngreso = true; }
@@ -3853,6 +3854,59 @@ abrirModalFechaNacimiento() { this.displayFechaNacimiento = true; }
 abrirModalLugarNacimiento() { this.displayLugarNacimiento = true; }
 abrirModalModificarAscenso() { this.displayModificarAscenso = true; }
 abrirModalEliminarAscenso() { this.displayEliminarAscenso = true; }
+
+
+
+ async CambioRTNPErsonalAdmin() {
+    var respuesta = await this._DatospersonalesService.mensajePregunta("Cambio de RTN", "Esta seguro de Remplazar el RTN")
+    if (respuesta) {
+      if (this.formIdentidad.valid) {
+        if (this.objetoConsultado.identidad === this.usuarioLoguiado.identidad) {
+          this._DatospersonalesService.mensajeError("USTED MISMO NO SE PUEDE CAMBIAR LA IDENTIDAD");
+        } else {
+          if (this.objetoConsultado.identidad === undefined || this.usuarioLoguiado.identidad === undefined) {
+            this._DatospersonalesService.mensajeError("ERROR EN IDENTIDAD VIEJA O IDENTIDAD DE USUARIO LOGIADO")
+          } else {
+            var parametro = {
+              rtn: this.formIdentidad.value.identidad,
+              identidad: this.objetoConsultado.identidad,
+              usuario:this.usuarioLoguiado,
+              persona:this.objetoConsultado
+           
+            }
+            this._ServiciosMensajeService.show()
+            this._DatospersonalesService.modificarRTN(parametro).subscribe({
+              next: Response => {
+                  if (Response.error) {
+                  this._DatospersonalesService.mensajeError(Response.error)
+                } else {
+                  if (Response.mensaje) {
+                    this._DatospersonalesService.mensajeError(Response.mensaje)
+
+                  } else {
+                    this._DatospersonalesService.mensajeBueno(Response.resultado)
+                    this.consulta.identidad = ""
+                    this.formIdentidad.reset();
+                    this.desplegar = 2
+                    this.SegundaVentana = 0;
+                 }
+                }
+              },error:()=>{
+                this._ServiciosMensajeService.hide()
+                this._DatospersonalesService.mensajeError("ERROR DE CONECCION AL MOMENTO DE CAMBIAR EL RTN")
+            }
+            }
+             
+            )
+          }
+
+        }
+      } else {
+        this._DatospersonalesService.mensajeError("LA IDENTIDAD NUEVA NO CUENTA CON EL FORMATO")
+      }
+    }
+    this.formIdentidad.reset();
+  }
 }
 
 

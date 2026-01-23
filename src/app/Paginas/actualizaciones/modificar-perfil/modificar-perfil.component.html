@@ -169,6 +169,17 @@
                     <strong class="ms-2 text-end">{{ objetoConsultado?.identidad }}</strong>
                   </div>
                 </div>
+                     <div class="col-md-4">
+                  <div
+                    class="p-2 bg-light rounded-3 shadow-sm d-flex justify-content-between align-items-center"
+                    style="cursor: pointer;"
+                    (click)="abrirModalCambiarRTN()"
+                  >
+                    <span class="text-muted small">RTN</span>
+                    <strong class="ms-2 text-end">{{ objetoConsultado?.rtn }}</strong>
+                  </div>
+                </div>
+                
 
                 <div class="col-md-4">
                   <div
@@ -1000,6 +1011,53 @@
       (click)="eliminargradoTablaAscenso(); displayEliminarAscenso = false"
     >
       Eliminar
+    </button>
+  </ng-template>
+</p-dialog>
+
+
+<p-dialog
+  [(visible)]="displayCambiarRTN"
+  [modal]="true"
+  [closable]="true"
+  [dismissableMask]="true"
+  [style]="{ width: '450px' }"
+>
+  <ng-template pTemplate="header">
+    <h5 class="m-0">Cambiar número de RTN</h5>
+  </ng-template>
+
+  <ng-template pTemplate="content">
+    <form [formGroup]="formIdentidad" class="row">
+      <label class="col-md-12">
+        # RTN
+        <input
+          class="form-control mt-2"
+          formControlName="identidad"
+          type="text"
+          required
+        />
+      </label>
+    </form>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button
+      type="button"
+      class="btn btn-secondary"
+      (click)="displayCambiarRTN = false"
+    >
+      Cancelar
+    </button>
+
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="CambioRTNPErsonalAdmin(); displayCambiarRTN = false"
+      aria-placeholder="top"
+      title="Guardar el número de RTN nuevo"
+    >
+      Guardar
     </button>
   </ng-template>
 </p-dialog>

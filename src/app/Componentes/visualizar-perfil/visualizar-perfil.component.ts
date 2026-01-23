@@ -149,6 +149,7 @@ armaobjetoConsultado
     this._DatospersonalesService.consultaPorIdentidad(parametro).subscribe(
       {
         next: (Response) => {
+          console.log(Response)
    this._ServiciosMensajesService.hide()
           if (Response.error) {
             this._DatospersonalesService.mensajeError(Response.error.sqlMessage + "BUSC")

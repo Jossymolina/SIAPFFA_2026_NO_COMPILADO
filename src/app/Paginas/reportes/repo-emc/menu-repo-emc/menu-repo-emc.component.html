@@ -13,15 +13,9 @@
     <!-- ✅ CORREGIDO: NO usar [(ngModel)]="q()" -->
     <div class="search">
       <span class="p-input-icon-left w-100">
-        
-        <input
-          pInputText
-          class="w-100"
-          [ngModel]="q()"
-          (ngModelChange)="q.set($event)"
-          placeholder="Buscar reporte..."
-          style="background-color: black;"
-        />
+
+        <input pInputText class="w-100" [ngModel]="q()" (ngModelChange)="q.set($event)" placeholder="Buscar reporte..."
+          style="background-color: black;" />
       </span>
     </div>
   </div>
@@ -29,14 +23,8 @@
   <!-- FILTROS -->
   <div class="filters">
     <div class="filters-scroll">
-      <button
-        type="button"
-        class="chip"
-        *ngFor="let c of categorias()"
-        [class.active]="categoria() === c"
-        (click)="seleccionarCategoria(c)"
-        
-        >
+      <button type="button" class="chip" *ngFor="let c of categorias()" [class.active]="categoria() === c"
+        (click)="seleccionarCategoria(c)">
         <i class="pi pi-tag"></i>
         <span>{{ c }}</span>
       </button>
@@ -74,993 +62,1330 @@
       </div>
     </div>
   </div>
- 
-@if(VentanaSeleccionada?.id==='r1'){
-  <div>
-     <div class="container-fluid py-3">
 
-        <form #formbuscar="ngForm" class="row">
-             <label for="" class="col-md-2">
-             Fuerza 
-         
-             <select name="fuerza" class="form-control" id="fuerza" 
-             (change)="sacarunidades(formbuscar)"
-             #fuerza="ngModel" ngModel  required>
- 
+  @if(VentanaSeleccionada?.id==='r1'){
+  <div>
+    <div class="container-fluid py-3">
+
+      <form #formbuscar="ngForm" class="row">
+        <label for="" class="col-md-2">
+          Fuerza
+
+          <select name="fuerza" class="form-control" id="fuerza" (change)="sacarunidades(formbuscar)" #fuerza="ngModel"
+            ngModel required>
+
             <option *ngFor="let u of arregloFuerzas" [ngValue]="u">{{ u.nombre }}</option>
 
-             </select>
-            </label>
+          </select>
+        </label>
 
-            <label for="" style="margin-left: 5px;" class="col-md-2">
-             Unidad/Base 
-         
-             <select name="unidad" class="form-control" id="unidad" 
-             #unidad="ngModel" ngModel  required>
- 
+        <label for="" style="margin-left: 5px;" class="col-md-2">
+          Unidad/Base
+
+          <select name="unidad" class="form-control" id="unidad" #unidad="ngModel" ngModel required>
+
             <option *ngFor="let u of ArregloUnidades" [ngValue]="u">{{ u.unidad }}</option>
 
-             </select>
-            </label>
-            <label for="" class="col-md-1">
-                  <br>     
-             <button 
-              class="form-control btn btn-primary"
-              [disabled]="!formbuscar.valid"
-              (click)="sacarParteUnidad(formbuscar)"
-              style="margin-left: 10px;" >
-                Buscar
-             </button>
-            </label>
-        </form>
+          </select>
+        </label>
+        <label for="" class="col-md-1">
+          <br>
+          <button class="form-control btn btn-primary" [disabled]="!formbuscar.valid"
+            (click)="sacarParteUnidad(formbuscar)" style="margin-left: 10px;">
+            Buscar
+          </button>
+        </label>
+      </form>
 
-  <!-- HEADER -->
-  <div class="row align-items-center mb-3">
-    <div class="col">
-      <h5 class="mb-0">Parte de su unidad</h5>
+      <!-- HEADER -->
+      <div class="row align-items-center mb-3">
+        <div class="col">
+          <h5 class="mb-0">Parte de su unidad</h5>
+        </div>
+
+        <div class="col-auto">
+          <button class="btn btn-sm btn-success" (click)="exportarExcelResumen('tablaResumen')">
+            <i class="bi bi-file-earmark-excel me-1"></i>
+            Exportar
+          </button>
+        </div>
+      </div>
+
+
+
+      <!-- TABLA -->
+      <div class="table-responsive">
+        <label for="">Total {{ sumarPropiedad(arregloResumenParteUnidad,'cantidad') }}</label>
+        <table id="tablaResumen" class="table table-bordered table-hover table-sm align-middle">
+          <thead class="table-light">
+            <tr>
+              <th style="width:60px">#</th>
+              <th>Grado</th>
+              <th>Categoria</th>
+              <th class="text-end" style="width:120px">Cantidad</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let r of arregloResumenParteUnidad; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ r.nombre_grado }}</td>
+              <td>{{ r.categoria }}</td>
+              <td class="text-end fw-bold">
+                {{ r.cantidad }}
+              </td>
+            </tr>
+
+            <tr *ngIf="arregloResumenParteUnidad?.length === 0">
+              <td colspan="10" class="text-center text-muted py-3">
+                No hay datos para mostrar
+              </td>
+            </tr>
+          </tbody>
+
+
+        </table>
+      </div>
+
     </div>
 
-    <div class="col-auto">
-      <button
-        class="btn btn-sm btn-success"
-        (click)="exportarExcelResumen('tablaResumen')">
-        <i class="bi bi-file-earmark-excel me-1"></i>
-        Exportar
-      </button>
-    </div>
-  </div>
+    <div class="container-fluid py-3">
 
- 
+      <!-- HEADER -->
+      <div class="row align-items-center mb-3">
 
-  <!-- TABLA -->
-  <div class="table-responsive"  >
-    <label for="">Total {{ sumarPropiedad(arregloResumenParteUnidad,'cantidad')   }}</label>
-  <table id="tablaResumen" class="table table-bordered table-hover table-sm align-middle">
-      <thead class="table-light">
-        <tr>
-          <th style="width:60px">#</th>
-          <th>Grado</th>
-          <th>Categoria</th>
-          <th class="text-end" style="width:120px">Cantidad</th>
-        </tr>
-      </thead>
 
-      <tbody>
-        <tr *ngFor="let r of arregloResumenParteUnidad; let i = index">
-          <td>{{ i + 1 }}</td>
-          <td>{{ r.nombre_grado }}</td>
-          <td>{{ r.categoria }}</td>
-          <td class="text-end fw-bold">
-            {{ r.cantidad }}
-          </td>
-        </tr>
+        <div class="col-auto">
+          <button class="btn btn-sm btn-success" (click)="exportarExcelResumen('tablaList')">
+            <i class="bi bi-file-earmark-excel me-1"></i>
+            Exportar
+          </button>
+        </div>
+      </div>
 
-        <tr *ngIf="arregloResumenParteUnidad?.length === 0">
-          <td colspan="10" class="text-center text-muted py-3">
-            No hay datos para mostrar
-          </td>
-        </tr>
-      </tbody>
 
-     
-    </table>
-  </div>
 
-</div>
+      <!-- TABLA -->
+      <div class="table-responsive">
 
- <div class="container-fluid py-3">
-
-  <!-- HEADER -->
-  <div class="row align-items-center mb-3">
-   
-
-    <div class="col-auto">
-      <button
-        class="btn btn-sm btn-success"
-        (click)="exportarExcelResumen('tablaList')">
-        <i class="bi bi-file-earmark-excel me-1"></i>
-        Exportar
-      </button>
-    </div>
-  </div>
-
- 
-
-  <!-- TABLA -->
-  <div class="table-responsive"  >
- 
 
 
         <table id="tablaList" class="table table-bordered table-hover table-sm align-middle">
-      <thead class="table-light">
-        <tr>
-          <th style="width:60px">#</th>
-          <th>Identidad</th>
-          <th>Categoria</th>
-          <th>Grado</th>
-          <th>Nombres</th>
-          <th>Cuenta Banco</th>
-          <th>Sexo</th>
-          <th>Fecha Ingreso</th>
-          <th>Fecha Ascenso</th>
-          <th>Fecha Asignación</th>
-       
+          <thead class="table-light">
+            <tr>
+              <th style="width:60px">#</th>
+              <th>Identidad</th>
+              <th>Categoria</th>
+              <th>Grado</th>
+              <th>Nombres</th>
+              <th>Cuenta Banco</th>
+              <th>Sexo</th>
+              <th>Fecha Ingreso</th>
+              <th>Fecha Ascenso</th>
+              <th>Fecha Asignación</th>
 
 
-         
-        </tr>
-      </thead>
 
-      <tbody>
-        <tr *ngFor="let r of arregloListaParteUnidad; let i = index">
-          <td>{{ i + 1 }}</td>
-          <td>{{ r.identidad }}</td>
-          <td>{{r.categoria}}</td>
-          <td>{{ r.grado }}</td>
-            <td>{{ r.nombres }}</td>
-          <td>{{ r.cuenta_banco }}</td>
-         
-          <td>{{ r.sexo }}</td>
-          <td>{{ r.fecha_ingreso   | date: 'dd/MM/yyyy' }}</td>
-          <td>{{ r.fecha_ascenso  | date: 'dd/MM/yyyy'   }}</td>
-          <td>{{ r.fecha_asignacion  | date: 'dd/MM/yyyy'  }}</td>
 
- 
-        </tr>
+            </tr>
+          </thead>
 
-        <tr *ngIf="arregloListaParteUnidad?.length === 0">
-          <td colspan="10" class="text-center text-muted py-3">
-            No hay datos para mostrar
-          </td>
-        </tr>
-      </tbody>
+          <tbody>
+            <tr *ngFor="let r of arregloListaParteUnidad; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ r.identidad }}</td>
+              <td>{{r.categoria}}</td>
+              <td>{{ r.grado }}</td>
+              <td>{{ r.nombres }}</td>
+              <td>{{ r.cuenta_banco }}</td>
 
-     
-    </table>
+              <td>{{ r.sexo }}</td>
+              <td>{{ r.fecha_ingreso | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ r.fecha_ascenso | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ r.fecha_asignacion | date: 'dd/MM/yyyy' }}</td>
+
+
+            </tr>
+
+            <tr *ngIf="arregloListaParteUnidad?.length === 0">
+              <td colspan="10" class="text-center text-muted py-3">
+                No hay datos para mostrar
+              </td>
+            </tr>
+          </tbody>
+
+
+        </table>
+      </div>
+
+    </div>
+
+
   </div>
-
-</div>
-
-
-  </div>
-}
+  }
 
 
-@if(VentanaSeleccionada?.id==='r2'){
+  @if(VentanaSeleccionada?.id==='r2'){
   <div>
-     <div class="container-fluid py-3">
-  <form
-  #formBuscar="ngForm"
-  class="row"
-  >
-    <label for="" class="col-md-2">
-             Fuerza 
-         
-             <select name="fuerza" class="form-control" id="fuerza" 
-        (change)="sacarunidades(formBuscar)"
-             #fuerza="ngModel" ngModel  required>
- 
+    <div class="container-fluid py-3">
+      <form #formBuscar="ngForm" class="row">
+        <label for="" class="col-md-2">
+          Fuerza
+
+          <select name="fuerza" class="form-control" id="fuerza" (change)="sacarunidades(formBuscar)" #fuerza="ngModel"
+            ngModel required>
+
             <option *ngFor="let u of arregloFuerzas" [ngValue]="u">{{ u.nombre }}</option>
 
-             </select>
-            </label>
-            <label for="" class="col-md-2">Fecha
-            <br>
-            <input type="month"  
-            name="fecha" #fecha="ngModel" ngModel
-          required
-            class="form-control"  >
+          </select>
+        </label>
+        <label for="" class="col-md-2">Fecha
+          <br>
+          <input type="month" name="fecha" #fecha="ngModel" ngModel required class="form-control">
         </label>
         <label for="" style="margin-left: 5px;" class="col-md-2">
-             Unidad/Base 
-         
-             <select name="unidad" class="form-control" id="unidad" 
-             #unidad="ngModel" ngModel  required>
- 
+          Unidad/Base
+
+          <select name="unidad" class="form-control" id="unidad" #unidad="ngModel" ngModel required>
+
             <option *ngFor="let u of ArregloUnidades" [ngValue]="u">{{ u.unidad }}</option>
 
-             </select>
+          </select>
         </label>
-         <label for="" style="margin-left: 5px;" class="col-md-2">
-            <br>
-            <button 
-               [disabled]="!formBuscar.valid"
-            class="btn  btn-primary" (click)="sacarBajasPorUnidad(formBuscar)">Buscar </button>
-        </label>
-
-  </form>
-   
-  <div class="row align-items-center mb-3">
-    <div class="col">
-      <h5 class="mb-0">Parte de bajas</h5>
-    
-    </div>
-
-    <div class="col-auto">
-      <button
-        class="btn btn-sm btn-success"
-        (click)="exportarExcelResumen('tablaResumen')">
-        <i class="bi bi-file-earmark-excel me-1"></i>
-        Exportar
-      </button>
-    </div>
-  </div>
-
- 
-
-  <!-- TABLA -->
-  <div class="table-responsive"  >
-    <label for="">Total {{  arregloBajas.length }}</label>
-  <table id="tablaResumen" class="table table-bordered table-hover table-sm align-middle">
-      <thead class="table-light">
-        <tr>
-          <th style="width:60px">#</th>
-          <th>Identidad</th>
-          <th>Nombres</th>
-          <th>Grado</th>
-          <th>Fecha Ingreso</th>
-          <th>Fecha Baja</th>
-          <th>Fecha de Ejecucion</th>
-         <th>Tipo Baja</th>  
-         <th>Unidad</th>  
-         <th>Observación</th>
-         
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr *ngFor="let r of arregloBajas; let i = index">
-          <td>{{ i + 1 }}</td>
-          <td>{{ r.identidad }}</td>
-          <td>{{ r.nombres }}</td>
-          <td>{{ r.grado }}</td>
-          <td>{{ r.fecha | date: 'dd/MM/yyyy':"UTC-6" }}</td>
-          <td>{{ r.fecha_de_baja | date: 'dd/MM/yyyy':"UTC-6" }}</td>
-          <td>{{ r.fecha_sistema | date: 'dd/MM/yyyy hh:mm:ss':"UTC-6" }}</td>
-          <td>{{ r.tipo_baja }}</td>
-          <td>{{ r.asignacion }}</td>
-          <td>{{ r.observacion }}</td>
-
-
-         
-        </tr>
-
-        <tr *ngIf="arregloBajas?.length === 0">
-          <td colspan="10" class="text-center text-muted py-3">
-            No hay datos para mostrar
-          </td>
-        </tr>
-      </tbody>
-
-     
-    </table>
-  </div>
-
-</div>
- 
-
-
-  </div>
-}
-
-@if(VentanaSeleccionada?.id==='r3'){
-  <div>
-     <div class="container-fluid py-3">
-  <form
-  class="row"
-  #formBuscar="ngForm"
-  >
-     
-            <label for="" class="col-md-2">Fecha 
-            <br>
-            <input type="month"  
-            name="fecha" #fecha="ngModel" ngModel
-          required
-            class="form-control"  >
-        </label>
-        
-         <label for="" class="col-md-2">
-            <br>
-            <button 
-               [disabled]="!formBuscar.valid"
-            class="btn btn-sm btn-primary" (click)="sacarCambioCategoria(formBuscar)">Buscar  </button>
+        <label for="" style="margin-left: 5px;" class="col-md-2">
+          <br>
+          <button [disabled]="!formBuscar.valid" class="btn  btn-primary"
+            (click)="sacarBajasPorUnidad(formBuscar)">Buscar </button>
         </label>
 
-  </form>
-   
-  <div class="row align-items-center mb-3">
-    <div class="col">
-      <h5 class="mb-0">Parte de cambios de categoria</h5>
-    </div>
-
-    <div class="col-auto">
-      <button
-        class="btn btn-sm btn-success"
-        (click)="exportarExcelResumen('tablaCambio')">
-        <i class="bi bi-file-earmark-excel me-1"></i>
-        Exportar
-      </button>
-    </div>
-  </div>
-
- 
-
-  <!-- TABLA -->
-  <div class="table-responsive"  >
-    <label for="">Total {{  arregloCambioCategoria.length }}</label>
-  <table id="tablaCambio" class="table table-bordered table-hover table-sm align-middle">
-      <thead class="table-light">
-        <tr>
-          <th style="width:60px">#</th>
-          <th>Identidad</th>
-          <th>Nombres</th>
-          <th>Grado</th>
-          <th>Asignación</th>
-
-          <th>Fecha Ingreso</th>
-          <th>Fecha que Cambio</th>
-      
-         
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr *ngFor="let r of arregloCambioCategoria; let i = index">
-          <td>{{ i + 1 }}</td>
-          <td>{{ r.identidad }}</td>
-          <td>{{ r.nombre }}</td>
-          <td>{{ r.nombre_grado }}</td>
-          <td>{{ r.Asignacion }}</td>
-
-          <td>{{ r.fecha_ingreso | date: 'dd/MM/yyyy':"UTC-6" }}</td>
-          <td>{{ r.fecha_cambio_cat | date: 'dd/MM/yyyy':"UTC-6" }}</td>
-        
-
-
-         
-        </tr>
-
-        <tr *ngIf="arregloCambioCategoria?.length === 0">
-          <td colspan="10" class="text-center text-muted py-3">
-            No hay datos para mostrar
-          </td>
-        </tr>
-      </tbody>
-
-     
-    </table>
-  </div>
-
-</div>
- 
-
-
-  </div>
-}
-
-@if(VentanaSeleccionada?.id==='r4'){
-  <div>
-     <div class="container-fluid py-3">
-
-        <form #formbuscar="ngForm" class="row">
-             <label for="" class="col-md-2">
-             Fuerza 
-         
-             <select name="fuerza" class="form-control" id="fuerza" 
-             
-             #fuerza="ngModel" ngModel  required>
- 
-            <option *ngFor="let u of arregloFuerzas" [ngValue]="u">{{ u.nombre }}</option>
-
-             </select>
-            </label>
-
-              <label for="" class="col-md-2">
-             Categoría 
-         
-             <select name="categoria" class="form-control" id="categoria" 
-             
-             #categoria="ngModel" ngModel   >
- 
-            <option *ngFor="let u of arregloCategorias" [ngValue]="u">{{ u.nombre }}</option>
-
-             </select>
-            </label>
-
-           
-            
-            <label for="" class="col-md-1">
-                  <br>     
-             <button 
-              class="form-control btn btn-primary"
-              [disabled]="!formbuscar.valid"
-              (click)="sacarParteFuerza(formbuscar)"
-              style="margin-left: 10px;" >
-                Buscar
-             </button>
-            </label>
-             <label for="" class="col-md-1">
-                  <br>     
-             <button 
-              class="form-control btn btn-danger"
-              [disabled]="!formbuscar.valid"
-              (click)="limpiar2(formbuscar)"
-              style="margin-left: 10px;" >
-                Limpiar
-             </button>
-            </label>
-        </form>
-
-  <!-- HEADER -->
-  <div class="row align-items-center mb-3">
-    <div class="col">
-      <h5 class="mb-0">Parte de su unidad</h5>
-    </div>
-
-    <div class="col-auto">
-      <button
-        class="btn btn-sm btn-success"
-        (click)="exportarExcelResumen('tablaResumen')">
-        <i class="bi bi-file-earmark-excel me-1"></i>
-        Exportar
-      </button>
-    </div>
-  </div>
-
- 
-
-  <!-- TABLA -->
-  <div class="table-responsive"  >
-    <label for="">Total {{ sumarPropiedad(arregloResumenParteUnidad,'cantidad')   }}</label>
-  <table id="tablaResumen" class="table table-bordered table-hover table-sm align-middle">
-      <thead class="table-light">
-        <tr>
-          <th style="width:60px">#</th>
-          <th>Grado</th>
-          <th>Categoria</th>
-          <th class="text-end" style="width:120px">Cantidad</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr *ngFor="let r of arregloResumenParteUnidad; let i = index">
-          <td>{{ i + 1 }}</td>
-          <td>{{ r.nombre_grado }}</td>
-          <td>{{ r.categoria }}</td>
-          <td class="text-end fw-bold">
-            {{ r.cantidad }}
-          </td>
-        </tr>
-
-        <tr *ngIf="arregloResumenParteUnidad?.length === 0">
-          <td colspan="4" class="text-center text-muted py-3">
-            No hay datos para mostrar
-          </td>
-        </tr>
-      </tbody>
-
-     
-    </table>
-  </div>
-
-</div>
-
- <div class="container-fluid py-3">
-
-  <!-- HEADER -->
-  <div class="row align-items-center mb-3">
-   
-
-    <div class="col-auto">
-      <button
-        class="btn btn-sm btn-success"
-        (click)="exportarExcelResumen('tablaList')">
-        <i class="bi bi-file-earmark-excel me-1"></i>
-        Exportar
-      </button>
-    </div>
-  </div>
-
- 
-
-  <!-- TABLA -->
-  <div class="table-responsive"  >
- 
-
-
-        <table id="tablaList" class="table table-bordered table-hover table-sm align-middle">
-      <thead class="table-light">
-        <tr>
-          <th style="width:60px">#</th>
-          <th>Identidad</th>
-          <th>Categoria</th>
-          <th>Grado</th>
-          <th>Nombres</th>
-          <th>Cuenta Banco</th>
-          <th>Sexo</th>
-          <th>Fecha Ingreso</th>
-          <th>Fecha Ascenso</th>
-          <th>Fecha Asignación</th>
-       
-
-
-         
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr *ngFor="let r of arregloListaParteUnidad; let i = index">
-          <td>{{ i + 1 }}</td>
-          <td>{{ r.identidad }}</td>
-          <td>{{r.categoria}}</td>
-          <td>{{ r.grado }}</td>
-            <td>{{ r.nombres }}</td>
-          <td>{{ r.cuenta_banco }}</td>
-         
-          <td>{{ r.sexo }}</td>
-          <td>{{ r.fecha_ingreso   | date: 'dd/MM/yyyy' }}</td>
-          <td>{{ r.fecha_ascenso  | date: 'dd/MM/yyyy'   }}</td>
-          <td>{{ r.fecha_asignacion  | date: 'dd/MM/yyyy'  }}</td>
-
- 
-        </tr>
-
-        <tr *ngIf="arregloListaParteUnidad?.length === 0">
-          <td colspan="10" class="text-center text-muted py-3">
-            No hay datos para mostrar
-          </td>
-        </tr>
-      </tbody>
-
-     
-    </table>
-  </div>
-
-</div>
-
-
-  </div>
-}
-
-@if(VentanaSeleccionada?.id==='r5'){
-  <div>
-     <div class="container-fluid py-3">
-  <form
-  #formBuscar="ngForm"
-  class="row"
-  >
-    <label for="" class="col-md-2">
-             Fuerza 
-         
-             <select name="fuerza" class="form-control" id="fuerza" 
-        (change)="sacarunidades(formBuscar)"
-             #fuerza="ngModel" ngModel  required>
- 
-            <option *ngFor="let u of arregloFuerzas" [ngValue]="u">{{ u.nombre }}</option>
-
-             </select>
-            </label>
-              <label for="" class="col-md-2">
-             Categoría 
-         
-             <select name="categoria" class="form-control" id="categoria" 
-             
-             #categoria="ngModel" ngModel   >
- 
-            <option *ngFor="let u of arregloCategorias" [ngValue]="u">{{ u.nombre }}</option>
-
-             </select>
-            </label>
-            <label for="" class="col-md-2">Fecha
-            <br>
-            <input type="month"  
-            name="fecha" #fecha="ngModel" ngModel
-          required
-            class="form-control"  >
-        </label>
-     
-         <label for="" style="margin-left: 5px;" class="col-md-2">
-            <br>
-            <button 
-               [disabled]="!formBuscar.valid"
-            class="btn  btn-primary" (click)="sacarBajas(formBuscar)">Buscar 12</button>
-        </label>
-
-  </form>
-   
-  <div class="row align-items-center mb-3">
-    <div class="col">
-      <h5 class="mb-0">Parte de bajas</h5>
-    
-    </div>
-
-    <div class="col-auto">
-      <button
-        class="btn btn-sm btn-success"
-        (click)="exportarExcelResumen('tablaResumen')">
-        <i class="bi bi-file-earmark-excel me-1"></i>
-        Exportar
-      </button>
-    </div>
-  </div>
-
- 
-
-  <!-- TABLA -->
-  <div class="table-responsive"  >
-    <label for="">Total {{  arregloBajas.length }}</label>
-  <table id="tablaResumen" class="table table-bordered table-hover table-sm align-middle">
-      <thead class="table-light">
-        <tr>
-          <th style="width:60px">#</th>
-          <th>Identidad</th>
-          <th>Nombres</th>
-          <th>Grado</th>
-          <th>Fecha Ingreso</th>
-          <th>Fecha Baja</th>
-          <th>Fecha de Ejecucion</th>
-         <th>Tipo Baja</th>  
-         <th>Unidad</th>  
-         <th>Observación</th>
-         
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr *ngFor="let r of arregloBajas; let i = index">
-          <td>{{ i + 1 }}</td>
-          <td>{{ r.identidad }}</td>
-          <td>{{ r.nombres }}</td>
-          <td>{{ r.grado }}</td>
-          <td>{{ r.fecha | date: 'dd/MM/yyyy':"UTC-6" }}</td>
-          <td>{{ r.fecha_de_baja | date: 'dd/MM/yyyy':"UTC-6" }}</td>
-          <td>{{ r.fecha_sistema | date: 'dd/MM/yyyy hh:mm:ss':"UTC-6" }}</td>
-          <td>{{ r.tipo_baja }}</td>
-          <td>{{ r.asignacion }}</td>
-          <td>{{ r.observacion }}</td>
-
-
-         
-        </tr>
-
-        <tr *ngIf="arregloBajas?.length === 0">
-          <td colspan="10" class="text-center text-muted py-3">
-            No hay datos para mostrar
-          </td>
-        </tr>
-      </tbody>
-
-     
-    </table>
-  </div>
-
-</div>
- 
-
-
-  </div>
-}
- 
-@if(VentanaSeleccionada?.id==='r6'){
-  <div>
-     <div class="container-fluid py-3">
-  <form
-  #formBuscar="ngForm"
-  class="row"
-  >
-  <label  class="col-md-2" >
-    Objeto
-    <select  name="grado" class="form-control" #grado="ngModel" ngModel required>
-      <option *ngFor="let item of objetoAScensos" [ngValue]="item">{{item.nombre}} / Año minimo: {{item.ano}}</option>
-    </select>
-  </label>
-   <label  class="col-md-1" >
-    <br>
-    <button
-    (click)="sacarPersonalAscenso(formBuscar)"
-    class="btn btn-danger form-control"
-    >Buscar</button>
-  </label>
-   
-   
-  </form>
-   
-  <div class="row align-items-center mb-3">
-    <div class="col">
-      <h5 class="mb-0">Parte de posibles  ascensos</h5>
-    
-    </div>
-
-    <div class="col-auto">
-      <button
-        class="btn btn-sm btn-success"
-        (click)="exportexcel2('tablaAscensos')">
-        <i class="bi bi-file-earmark-excel me-1"></i>
-        Exportar
-      </button>
-    </div>
-  </div>
-
- 
-
-  <!-- TABLA -->
-  <div class="table-responsive"  >
-    <label for="">Total {{  arregloBajas.length }}</label>
-  <table id="tablaAscensos" class="table table-bordered table-hover table-sm align-middle">
-      <thead class="table-light">
-        <tr>
-          <th style="width:60px">#</th>
-          <th  >Foto</th>
-
-          <th>Identidad</th>
-          <th>Categoria</th>
-          <th>Grado</th>
-          <th>Nombres</th>
-          <th>Series</th>
-          <th>Fuerza</th>
-         <th>Genero</th>  
-         <th>Fecha ultimo Ascenso</th>  
-         <th>Fecha Ingreaso</th>
-         <th>Antiguedad</th>
-
-         
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr *ngFor="let r of arregloListaAscenso; let i = index">
-            <td>{{ i + 1 }}</td>
-            <td>
-              <img src="{{ _ServicioBackendService.url2 + 'sacarfoto/' + r.Foto }}" style="height: 50px; width: 50px;" alt="">
-              
+      </form>
+
+      <div class="row align-items-center mb-3">
+        <div class="col">
+          <h5 class="mb-0">Parte de bajas</h5>
+
+        </div>
+
+        <div class="col-auto">
+          <button class="btn btn-sm btn-success" (click)="exportarExcelResumen('tablaResumen')">
+            <i class="bi bi-file-earmark-excel me-1"></i>
+            Exportar
+          </button>
+        </div>
+      </div>
+
+
+
+      <!-- TABLA -->
+      <div class="table-responsive">
+        <label for="">Total {{ arregloBajas.length }}</label>
+        <table id="tablaResumen" class="table table-bordered table-hover table-sm align-middle">
+          <thead class="table-light">
+            <tr>
+              <th style="width:60px">#</th>
+              <th>Identidad</th>
+              <th>Nombres</th>
+              <th>Grado</th>
+              <th>Fecha Ingreso</th>
+              <th>Fecha Baja</th>
+              <th>Fecha de Ejecucion</th>
+              <th>Tipo Baja</th>
+              <th>Unidad</th>
+              <th>Observación</th>
+
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let r of arregloBajas; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ r.identidad }}</td>
+              <td>{{ r.nombres }}</td>
+              <td>{{ r.grado }}</td>
+              <td>{{ r.fecha | date: 'dd/MM/yyyy':"UTC-6" }}</td>
+              <td>{{ r.fecha_de_baja | date: 'dd/MM/yyyy':"UTC-6" }}</td>
+              <td>{{ r.fecha_sistema | date: 'dd/MM/yyyy hh:mm:ss':"UTC-6" }}</td>
+              <td>{{ r.tipo_baja }}</td>
+              <td>{{ r.asignacion }}</td>
+              <td>{{ r.observacion }}</td>
+
+
+
+            </tr>
+
+            <tr *ngIf="arregloBajas?.length === 0">
+              <td colspan="10" class="text-center text-muted py-3">
+                No hay datos para mostrar
               </td>
-            <td>{{ r.Identidad }}</td>
-            <td>{{ r.Categoria }}</td>
-            <td>{{ r.Grado }}</td>
-            <td>{{ r.Nombre }}</td>
-            <td>{{ r.Serie }}</td>
-            <td>{{ r.Fuerza }}</td>
-            <td>{{ r.Genero }}</td>
-            <td>{{ r.Fecha_Ascenso    }}</td>
-            <td>{{ r.Fecha_Ingreso   }}</td>
-            <td>{{ r.Antiguedad }}</td>
+            </tr>
+          </tbody>
 
-         
-        </tr>
 
-        <tr *ngIf="arregloBajas?.length === 0">
-          <td colspan="12" class="text-center text-muted py-3">
-            No hay datos para mostrar
-          </td>
-        </tr>
-      </tbody>
+        </table>
+      </div>
 
-     
-    </table>
-  </div>
+    </div>
 
-</div>
- 
 
 
   </div>
-}
+  }
 
-
-@if(VentanaSeleccionada?.id==='r7'){
+  @if(VentanaSeleccionada?.id==='r3'){
   <div>
-     <div class="container-fluid py-3">
+    <div class="container-fluid py-3">
+      <form class="row" #formBuscar="ngForm">
 
-        <form #formbuscar="ngForm" class="row">
-             <label for="" class="col-md-2"
-              (change)="sacarunidades(formbuscar)"
-             >
-             Fuerza 
-         
-             <select name="fuerza" class="form-control" id="fuerza" 
-             
-             #fuerza="ngModel" ngModel  required>
- 
+        <label for="" class="col-md-2">Fecha
+          <br>
+          <input type="month" name="fecha" #fecha="ngModel" ngModel required class="form-control">
+        </label>
+
+        <label for="" class="col-md-2">
+          <br>
+          <button [disabled]="!formBuscar.valid" class="btn btn-sm btn-primary"
+            (click)="sacarCambioCategoria(formBuscar)">Buscar </button>
+        </label>
+
+      </form>
+
+      <div class="row align-items-center mb-3">
+        <div class="col">
+          <h5 class="mb-0">Parte de cambios de categoria</h5>
+        </div>
+
+        <div class="col-auto">
+          <button class="btn btn-sm btn-success" (click)="exportarExcelResumen('tablaCambio')">
+            <i class="bi bi-file-earmark-excel me-1"></i>
+            Exportar
+          </button>
+        </div>
+      </div>
+
+
+
+      <!-- TABLA -->
+      <div class="table-responsive">
+        <label for="">Total {{ arregloCambioCategoria.length }}</label>
+        <table id="tablaCambio" class="table table-bordered table-hover table-sm align-middle">
+          <thead class="table-light">
+            <tr>
+              <th style="width:60px">#</th>
+              <th>Identidad</th>
+              <th>Nombres</th>
+              <th>Grado</th>
+              <th>Asignación</th>
+
+              <th>Fecha Ingreso</th>
+              <th>Fecha que Cambio</th>
+
+
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let r of arregloCambioCategoria; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ r.identidad }}</td>
+              <td>{{ r.nombre }}</td>
+              <td>{{ r.nombre_grado }}</td>
+              <td>{{ r.Asignacion }}</td>
+
+              <td>{{ r.fecha_ingreso | date: 'dd/MM/yyyy':"UTC-6" }}</td>
+              <td>{{ r.fecha_cambio_cat | date: 'dd/MM/yyyy':"UTC-6" }}</td>
+
+
+
+
+            </tr>
+
+            <tr *ngIf="arregloCambioCategoria?.length === 0">
+              <td colspan="10" class="text-center text-muted py-3">
+                No hay datos para mostrar
+              </td>
+            </tr>
+          </tbody>
+
+
+        </table>
+      </div>
+
+    </div>
+
+
+
+  </div>
+  }
+
+  @if(VentanaSeleccionada?.id==='r4'){
+  <div>
+    <div class="container-fluid py-3">
+
+      <form #formbuscar="ngForm" class="row">
+        <label for="" class="col-md-2">
+          Fuerza
+
+          <select name="fuerza" class="form-control" id="fuerza" #fuerza="ngModel" ngModel required>
+
             <option *ngFor="let u of arregloFuerzas" [ngValue]="u">{{ u.nombre }}</option>
 
-             </select>
-            </label>
+          </select>
+        </label>
 
-             <label for="" style="margin-left: 5px;" class="col-md-2">
-             Unidad/Base 
-         
-             <select name="unidad" class="form-control" id="unidad" 
-             #unidad="ngModel" ngModel  required>
- 
-            <option *ngFor="let u of ArregloUnidades" [ngValue]="u">{{ u.unidad }}</option>
+        <label for="" class="col-md-2">
+          Categoría
 
-             </select>
-            </label>
+          <select name="categoria" class="form-control" id="categoria" #categoria="ngModel" ngModel>
 
-              <label for="" class="col-md-2">
-             Categoría 
-         
-             <select name="categoria" class="form-control" id="categoria" 
-             
-             #categoria="ngModel" ngModel   >
- 
             <option *ngFor="let u of arregloCategorias" [ngValue]="u">{{ u.nombre }}</option>
 
-             </select>
-            </label>
+          </select>
+        </label>
 
-           
-            
-            <label for="" class="col-md-1">
-                  <br>     
-             <button 
-              class="form-control btn btn-primary"
-              [disabled]="!formbuscar.valid"
-              (click)="sacarParteFuerzaYUnidad(formbuscar)"
-              style="margin-left: 10px;" >
-                Buscar
-             </button>
-            </label>
-             <label for="" class="col-md-1">
-                  <br>     
-             <button 
-              class="form-control btn btn-danger"
-              [disabled]="!formbuscar.valid"
-              (click)="limpiar2(formbuscar)"
-              style="margin-left: 10px;" >
-                Limpiar
-             </button>
-            </label>
-        </form>
 
-  <!-- HEADER -->
-  <div class="row align-items-center mb-3">
-    <div class="col">
-      <h5 class="mb-0">Parte de su unidad</h5>
+
+        <label for="" class="col-md-1">
+          <br>
+          <button class="form-control btn btn-primary" [disabled]="!formbuscar.valid"
+            (click)="sacarParteFuerza(formbuscar)" style="margin-left: 10px;">
+            Buscar
+          </button>
+        </label>
+        <label for="" class="col-md-1">
+          <br>
+          <button class="form-control btn btn-danger" [disabled]="!formbuscar.valid" (click)="limpiar2(formbuscar)"
+            style="margin-left: 10px;">
+            Limpiar
+          </button>
+        </label>
+      </form>
+
+      <!-- HEADER -->
+      <div class="row align-items-center mb-3">
+        <div class="col">
+          <h5 class="mb-0">Parte de su unidad</h5>
+        </div>
+
+        <div class="col-auto">
+          <button class="btn btn-sm btn-success" (click)="exportarExcelResumen('tablaResumen')">
+            <i class="bi bi-file-earmark-excel me-1"></i>
+            Exportar
+          </button>
+        </div>
+      </div>
+
+
+
+      <!-- TABLA -->
+      <div class="table-responsive">
+        <label for="">Total {{ sumarPropiedad(arregloResumenParteUnidad,'cantidad') }}</label>
+        <table id="tablaResumen" class="table table-bordered table-hover table-sm align-middle">
+          <thead class="table-light">
+            <tr>
+              <th style="width:60px">#</th>
+              <th>Grado</th>
+              <th>Categoria</th>
+              <th class="text-end" style="width:120px">Cantidad</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let r of arregloResumenParteUnidad; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ r.nombre_grado }}</td>
+              <td>{{ r.categoria }}</td>
+              <td class="text-end fw-bold">
+                {{ r.cantidad }}
+              </td>
+            </tr>
+
+            <tr *ngIf="arregloResumenParteUnidad?.length === 0">
+              <td colspan="4" class="text-center text-muted py-3">
+                No hay datos para mostrar
+              </td>
+            </tr>
+          </tbody>
+
+
+        </table>
+      </div>
+
     </div>
 
-    <div class="col-auto">
-      <button
-        class="btn btn-sm btn-success"
-        (click)="exportarExcelResumen('tablaResumen')">
-        <i class="bi bi-file-earmark-excel me-1"></i>
-        Exportar
-      </button>
-    </div>
-  </div>
+    <div class="container-fluid py-3">
 
- 
+      <!-- HEADER -->
+      <div class="row align-items-center mb-3">
 
-  <!-- TABLA -->
-  <div class="table-responsive"  >
-    <label for="">Total {{ sumarPropiedad(arregloResumenParteUnidad,'cantidad')   }}</label>
-  <table id="tablaResumen" class="table table-bordered table-hover table-sm align-middle">
-      <thead class="table-light">
-        <tr>
-          <th style="width:60px">#</th>
-          <th>Grado</th>
-          <th>Categoria</th>
-          <th class="text-end" style="width:120px">Cantidad</th>
-        </tr>
-      </thead>
 
-      <tbody>
-        <tr *ngFor="let r of arregloResumenParteUnidad; let i = index">
-          <td>{{ i + 1 }}</td>
-          <td>{{ r.nombre_grado }}</td>
-          <td>{{ r.categoria }}</td>
-          <td class="text-end fw-bold">
-            {{ r.cantidad }}
-          </td>
-        </tr>
+        <div class="col-auto">
+          <button class="btn btn-sm btn-success" (click)="exportarExcelResumen('tablaList')">
+            <i class="bi bi-file-earmark-excel me-1"></i>
+            Exportar
+          </button>
+        </div>
+      </div>
 
-        <tr *ngIf="arregloResumenParteUnidad?.length === 0">
-          <td colspan="4" class="text-center text-muted py-3">
-            No hay datos para mostrar
-          </td>
-        </tr>
-      </tbody>
 
-     
-    </table>
-  </div>
 
-</div>
+      <!-- TABLA -->
+      <div class="table-responsive">
 
- <div class="container-fluid py-3">
-
-  <!-- HEADER -->
-  <div class="row align-items-center mb-3">
-   
-
-    <div class="col-auto">
-      <button
-        class="btn btn-sm btn-success"
-        (click)="exportarExcelResumen('tablaList')">
-        <i class="bi bi-file-earmark-excel me-1"></i>
-        Exportar
-      </button>
-    </div>
-  </div>
-
- 
-
-  <!-- TABLA -->
-  <div class="table-responsive"  >
- 
 
 
         <table id="tablaList" class="table table-bordered table-hover table-sm align-middle">
-      <thead class="table-light">
-        <tr>
-          <th style="width:60px">#</th>
-          <th>Identidad</th>
-          <th>Categoria</th>
-          <th>Grado</th>
-          <th>Nombres</th>
-          <th>Cuenta Banco</th>
-          <th>Sexo</th>
-          <th>Fecha Ingreso</th>
-          <th>Fecha Ascenso</th>
-          <th>Fecha Asignación</th>
-       
+          <thead class="table-light">
+            <tr>
+              <th style="width:60px">#</th>
+              <th>Identidad</th>
+              <th>Categoria</th>
+              <th>Grado</th>
+              <th>Nombres</th>
+              <th>Cuenta Banco</th>
+              <th>Sexo</th>
+              <th>Fecha Ingreso</th>
+              <th>Fecha Ascenso</th>
+              <th>Fecha Asignación</th>
 
 
-         
-        </tr>
-      </thead>
 
-      <tbody>
-        <tr *ngFor="let r of arregloListaParteUnidad; let i = index">
-          <td>{{ i + 1 }}</td>
-          <td>{{ r.identidad }}</td>
-          <td>{{r.categoria}}</td>
-          <td>{{ r.grado }}</td>
-            <td>{{ r.nombres }}</td>
-          <td>{{ r.cuenta_banco }}</td>
-         
-          <td>{{ r.sexo }}</td>
-          <td>{{ r.fecha_ingreso   | date: 'dd/MM/yyyy' }}</td>
-          <td>{{ r.fecha_ascenso  | date: 'dd/MM/yyyy'   }}</td>
-          <td>{{ r.fecha_asignacion  | date: 'dd/MM/yyyy'  }}</td>
+
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let r of arregloListaParteUnidad; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ r.identidad }}</td>
+              <td>{{r.categoria}}</td>
+              <td>{{ r.grado }}</td>
+              <td>{{ r.nombres }}</td>
+              <td>{{ r.cuenta_banco }}</td>
+
+              <td>{{ r.sexo }}</td>
+              <td>{{ r.fecha_ingreso | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ r.fecha_ascenso | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ r.fecha_asignacion | date: 'dd/MM/yyyy' }}</td>
+
+
+            </tr>
+
+            <tr *ngIf="arregloListaParteUnidad?.length === 0">
+              <td colspan="10" class="text-center text-muted py-3">
+                No hay datos para mostrar
+              </td>
+            </tr>
+          </tbody>
+
+
+        </table>
+      </div>
+
+    </div>
+
+
+  </div>
+  }
+
+  @if(VentanaSeleccionada?.id==='r5'){
+  <div>
+    <div class="container-fluid py-3">
+      <form #formBuscar="ngForm" class="row">
+        <label for="" class="col-md-2">
+          Fuerza
+
+          <select name="fuerza" class="form-control" id="fuerza" (change)="sacarunidades(formBuscar)" #fuerza="ngModel"
+            ngModel required>
+
+            <option *ngFor="let u of arregloFuerzas" [ngValue]="u">{{ u.nombre }}</option>
+
+          </select>
+        </label>
+        <label for="" class="col-md-2">
+          Categoría
+
+          <select name="categoria" class="form-control" id="categoria" #categoria="ngModel" ngModel>
+
+            <option *ngFor="let u of arregloCategorias" [ngValue]="u">{{ u.nombre }}</option>
+
+          </select>
+        </label>
+        <label for="" class="col-md-2">Fecha
+          <br>
+          <input type="month" name="fecha" #fecha="ngModel" ngModel required class="form-control">
+        </label>
+
+        <label for="" style="margin-left: 5px;" class="col-md-2">
+          <br>
+          <button [disabled]="!formBuscar.valid" class="btn  btn-primary" (click)="sacarBajas(formBuscar)">Buscar
+            12</button>
+        </label>
+
+      </form>
+
+      <div class="row align-items-center mb-3">
+        <div class="col">
+          <h5 class="mb-0">Parte de bajas</h5>
+
+        </div>
+
+        <div class="col-auto">
+          <button class="btn btn-sm btn-success" (click)="exportarExcelResumen('tablaResumen')">
+            <i class="bi bi-file-earmark-excel me-1"></i>
+            Exportar
+          </button>
+        </div>
+      </div>
+
+
+
+      <!-- TABLA -->
+      <div class="table-responsive">
+        <label for="">Total {{ arregloBajas.length }}</label>
+        <table id="tablaResumen" class="table table-bordered table-hover table-sm align-middle">
+          <thead class="table-light">
+            <tr>
+              <th style="width:60px">#</th>
+              <th>Identidad</th>
+              <th>Nombres</th>
+              <th>Grado</th>
+              <th>Fecha Ingreso</th>
+              <th>Fecha Baja</th>
+              <th>Fecha de Ejecucion</th>
+              <th>Tipo Baja</th>
+              <th>Unidad</th>
+              <th>Observación</th>
+
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let r of arregloBajas; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ r.identidad }}</td>
+              <td>{{ r.nombres }}</td>
+              <td>{{ r.grado }}</td>
+              <td>{{ r.fecha | date: 'dd/MM/yyyy':"UTC-6" }}</td>
+              <td>{{ r.fecha_de_baja | date: 'dd/MM/yyyy':"UTC-6" }}</td>
+              <td>{{ r.fecha_sistema | date: 'dd/MM/yyyy hh:mm:ss':"UTC-6" }}</td>
+              <td>{{ r.tipo_baja }}</td>
+              <td>{{ r.asignacion }}</td>
+              <td>{{ r.observacion }}</td>
+
+
+
+            </tr>
+
+            <tr *ngIf="arregloBajas?.length === 0">
+              <td colspan="10" class="text-center text-muted py-3">
+                No hay datos para mostrar
+              </td>
+            </tr>
+          </tbody>
+
+
+        </table>
+      </div>
+
+    </div>
+
+
+
+  </div>
+  }
+
+  @if(VentanaSeleccionada?.id==='r6'){
+  <div>
+    <div class="container-fluid py-3">
+      <form #formBuscar="ngForm" class="row">
+        <label class="col-md-2">
+          Objeto
+          <select name="grado" class="form-control" #grado="ngModel" ngModel required>
+            <option *ngFor="let item of objetoAScensos" [ngValue]="item">{{item.nombre}} / Año minimo: {{item.ano}}
+            </option>
+          </select>
+        </label>
+        <label class="col-md-1">
+          <br>
+          <button (click)="sacarPersonalAscenso(formBuscar)" class="btn btn-danger form-control">Buscar</button>
+        </label>
+
+
+      </form>
+
+      <div class="row align-items-center mb-3">
+        <div class="col">
+          <h5 class="mb-0">Parte de posibles ascensos</h5>
+
+        </div>
+
+        <div class="col-auto">
+          <button class="btn btn-sm btn-success" (click)="exportexcel2('tablaAscensos')">
+            <i class="bi bi-file-earmark-excel me-1"></i>
+            Exportar
+          </button>
+        </div>
+      </div>
+
+
+
+      <!-- TABLA -->
+      <div class="table-responsive">
+        <label for="">Total {{ arregloBajas.length }}</label>
+        <table id="tablaAscensos" class="table table-bordered table-hover table-sm align-middle">
+          <thead class="table-light">
+            <tr>
+              <th style="width:60px">#</th>
+              <th>Foto</th>
+
+              <th>Identidad</th>
+              <th>Categoria</th>
+              <th>Grado</th>
+              <th>Nombres</th>
+              <th>Series</th>
+              <th>Fuerza</th>
+              <th>Genero</th>
+              <th>Fecha ultimo Ascenso</th>
+              <th>Fecha Ingreaso</th>
+              <th>Antiguedad</th>
+
+
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let r of arregloListaAscenso; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>
+                <img src="{{ _ServicioBackendService.url2 + 'sacarfoto/' + r.Foto }}" style="height: 50px; width: 50px;"
+                  alt="">
+
+              </td>
+              <td>{{ r.Identidad }}</td>
+              <td>{{ r.Categoria }}</td>
+              <td>{{ r.Grado }}</td>
+              <td>{{ r.Nombre }}</td>
+              <td>{{ r.Serie }}</td>
+              <td>{{ r.Fuerza }}</td>
+              <td>{{ r.Genero }}</td>
+              <td>{{ r.Fecha_Ascenso }}</td>
+              <td>{{ r.Fecha_Ingreso }}</td>
+              <td>{{ r.Antiguedad }}</td>
+
+
+            </tr>
+
+            <tr *ngIf="arregloBajas?.length === 0">
+              <td colspan="12" class="text-center text-muted py-3">
+                No hay datos para mostrar
+              </td>
+            </tr>
+          </tbody>
+
+
+        </table>
+      </div>
+
+    </div>
+
+
+
+  </div>
+  }
+
+
+  @if(VentanaSeleccionada?.id==='r7'){
+  <div>
+    <div class="container-fluid py-3">
+
+      <form #formbuscar="ngForm" class="row">
+        <label for="" class="col-md-2" (change)="sacarunidades(formbuscar)">
+          Fuerza
+
+          <select name="fuerza" class="form-control" id="fuerza" #fuerza="ngModel" ngModel required>
+
+            <option *ngFor="let u of arregloFuerzas" [ngValue]="u">{{ u.nombre }}</option>
+
+          </select>
+        </label>
+
+        <label for="" style="margin-left: 5px;" class="col-md-2">
+          Unidad/Base
+
+          <select name="unidad" class="form-control" id="unidad" #unidad="ngModel" ngModel required>
+
+            <option *ngFor="let u of ArregloUnidades" [ngValue]="u">{{ u.unidad }}</option>
+
+          </select>
+        </label>
+
+        <label for="" class="col-md-2">
+          Categoría
+
+          <select name="categoria" class="form-control" id="categoria" #categoria="ngModel" ngModel>
+
+            <option *ngFor="let u of arregloCategorias" [ngValue]="u">{{ u.nombre }}</option>
+
+          </select>
+        </label>
+
+
+
+        <label for="" class="col-md-1">
+          <br>
+          <button class="form-control btn btn-primary" [disabled]="!formbuscar.valid"
+            (click)="sacarParteFuerzaYUnidad(formbuscar)" style="margin-left: 10px;">
+            Buscar
+          </button>
+        </label>
+        <label for="" class="col-md-1">
+          <br>
+          <button class="form-control btn btn-danger" [disabled]="!formbuscar.valid" (click)="limpiar2(formbuscar)"
+            style="margin-left: 10px;">
+            Limpiar
+          </button>
+        </label>
+      </form>
+
+      <!-- HEADER -->
+      <div class="row align-items-center mb-3">
+        <div class="col">
+          <h5 class="mb-0">Parte de su unidad</h5>
+        </div>
+
+        <div class="col-auto">
+          <button class="btn btn-sm btn-success" (click)="exportarExcelResumen('tablaResumen')">
+            <i class="bi bi-file-earmark-excel me-1"></i>
+            Exportar
+          </button>
+        </div>
+      </div>
+
+
+
+      <!-- TABLA -->
+      <div class="table-responsive">
+        <label for="">Total {{ sumarPropiedad(arregloResumenParteUnidad,'cantidad') }}</label>
+        <table id="tablaResumen" class="table table-bordered table-hover table-sm align-middle">
+          <thead class="table-light">
+            <tr>
+              <th style="width:60px">#</th>
+              <th>Grado</th>
+              <th>Categoria</th>
+              <th>Unidad</th>
+              <th class="text-end" style="width:120px">Cantidad</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let r of arregloResumenParteUnidad; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ r.nombre_grado }}</td>
+              <td>{{ r.categoria }}</td>
+              <td> {{formbuscar.value.unidad?.corto}}</td>
+              <td class="text-end fw-bold">
+                {{ r.cantidad }}
+              </td>
+            </tr>
+
+            <tr *ngIf="arregloResumenParteUnidad?.length === 0">
+              <td colspan="4" class="text-center text-muted py-3">
+                No hay datos para mostrar
+              </td>
+            </tr>
+          </tbody>
+
+
+        </table>
+      </div>
+
+    </div>
+
+    <div class="container-fluid py-3">
+
+      <!-- HEADER -->
+      <div class="row align-items-center mb-3">
+
+
+        <div class="col-auto">
+          <button class="btn btn-sm btn-success" (click)="exportarExcelResumen('tablaList')">
+            <i class="bi bi-file-earmark-excel me-1"></i>
+            Exportar
+          </button>
+        </div>
+      </div>
+
+
+
+      <!-- TABLA -->
+      <div class="table-responsive">
+
+
+
+        <table id="tablaList" class="table table-bordered table-hover table-sm align-middle">
+          <thead class="table-light">
+            <tr>
+              <th style="width:60px">#</th>
+              <th>Identidad</th>
+              <th>Categoria</th>
+              <th>Grado</th>
+              <th>Nombres</th>
+              <th>Cuenta Banco</th>
+              <th>Sexo</th>
+              <th>Fecha Ingreso</th>
+              <th>Fecha Ascenso</th>
+              <th>Fecha Asignación</th>
+              <th>Unidad</th>
+
+
+
+
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let r of arregloListaParteUnidad; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ r.identidad }}</td>
+              <td>{{r.categoria}}</td>
+              <td>{{ r.grado }}</td>
+              <td>{{ r.nombres }}</td>
+              <td>{{ r.cuenta_banco }}</td>
+
+              <td>{{ r.sexo }}</td>
+              <td>{{ r.fecha_ingreso | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ r.fecha_ascenso | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ r.fecha_asignacion | date: 'dd/MM/yyyy' }}</td>
+              <td>{{formbuscar.value.unidad?.corto}}</td>
+
+
+            </tr>
+
+            <tr *ngIf="arregloListaParteUnidad?.length === 0">
+              <td colspan="10" class="text-center text-muted py-3">
+                No hay datos para mostrar
+              </td>
+            </tr>
+          </tbody>
+
+
+        </table>
+      </div>
+
+    </div>
+
+
+  </div>
+  }
+
+  @if(VentanaSeleccionada?.id==='r8'){
+  <div>
+
+    <div class="d-flex align-items-center gap-4">
+
+      <div *ngFor="let op of opciones" class="d-flex align-items-center gap-2">
+        <p-radioButton name="fechaCorte" [value]="op.value" [(ngModel)]="opcion" inputId="{{ op.value }}">
+        </p-radioButton>
+
+        <label [for]="op.value" class="mb-0">
+          {{ op.label }}
+        </label>
+      </div>
+
+
+    </div>
+    <hr>
+
+
+    <div *ngIf="opcion === 'fuerza'">
+
+      <form #formbuscar="ngForm" class="row">
+        <label for="" class="col-md-2" (change)="sacarunidades(formbuscar)">
+          Fuerza
+
+          <select name="fuerza" class="form-control" id="fuerza" #fuerza="ngModel" ngModel required>
+
+            <option *ngFor="let u of arregloFuerzas" [ngValue]="u">{{ u.nombre }}</option>
+
+          </select>
+        </label>
+
+
+        <label for="" class="col-md-2">
+          Categoría
+
+          <select name="categoria" class="form-control" id="categoria" #categoria="ngModel" ngModel>
+
+            <option *ngFor="let u of arregloCategorias" [ngValue]="u">{{ u.nombre }}</option>
+
+          </select>
+        </label>
+
+        <label for="" class="col-md-2">
+          Fecha
+
+          <input type="month" class="form-control" name="fecha" #fecha="ngModel" ngModel>
+        </label>
+
+
+
+        <label for="" class="col-md-1">
+          <br>
+          <button class="form-control btn btn-primary" [disabled]="!formbuscar.valid"
+            (click)="  puscarPersonalVacacioensFuerza(formbuscar)" style="margin-left: 10px;">
+            Buscar
+          </button>
+        </label>
+
+      </form>
+    </div>
+
+    <div *ngIf="opcion === 'unidad'">
+
+      <form #formbuscar="ngForm" class="row">
+        <label for="" class="col-md-2" (change)="sacarunidades(formbuscar)">
+          Fuerza
+
+          <select name="fuerza" class="form-control" id="fuerza" #fuerza="ngModel" ngModel required>
+
+            <option *ngFor="let u of arregloFuerzas" [ngValue]="u">{{ u.nombre }}</option>
+
+          </select>
+        </label>
+
+        <label for="" style="margin-left: 5px;" class="col-md-2">
+          Unidad/Base
+
+          <select name="unidad" class="form-control" id="unidad" #unidad="ngModel" ngModel required>
+
+            <option *ngFor="let u of ArregloUnidades" [ngValue]="u">{{ u.unidad }}</option>
+
+          </select>
+        </label>
+
+        <label for="" class="col-md-2">
+          Categoría
+
+          <select name="categoria" class="form-control" id="categoria" #categoria="ngModel" ngModel>
+
+            <option *ngFor="let u of arregloCategorias" [ngValue]="u">{{ u.nombre }}</option>
+
+          </select>
+        </label>
+        <label for="" class="col-md-2">
+          Fecha
+
+          <input type="month" class="form-control" name="fecha" #fecha="ngModel" ngModel>
+        </label>
+
+
+
+
+        <label for="" class="col-md-1">
+          <br>
+          <button class="form-control btn btn-danger" [disabled]="!formbuscar.valid"
+            (click)="  puscarPersonalVacacioensUnidad(formbuscar)" style="margin-left: 10px;">
+            Buscar
+          </button>
+        </label>
+        <label for="" class="col-md-1">
+          <br>
+          <button class="form-control btn btn-danger" [disabled]="!formbuscar.valid" (click)="limpiar2(formbuscar)"
+            style="margin-left: 10px;">
+            Limpiar
+          </button>
+        </label>
+      </form>
+    </div>
+
+
+
+
+    <div class="container-fluid py-3">
+
+
+
+      <!-- HEADER -->
+      <div class="row align-items-center mb-3">
+        <div class="col">
+          <h5 class="mb-0">Parte de vacaciones</h5>
+        </div>
+
+
+      </div>
+
+
+
+
+
+    </div>
+
+    <div class="container-fluid py-3">
+
+      <!-- HEADER -->
+      <div class="row align-items-center mb-3">
+
+
+        <div class="col-auto">
+          <button class="btn btn-sm btn-success" (click)="exportarExcelResumen('tablaList')">
+            <i class="bi bi-file-earmark-excel me-1"></i>
+            Exportar
+          </button>
+        </div>
+      </div>
+
+
+
+      <!-- TABLA -->
+      <div class="table-responsive">
+
+
+
+        <table id="tablaList" class="table table-bordered table-hover table-sm align-middle">
+          <thead class="table-light">
+            <tr>
+              <th style="width:60px">#</th>
+              <th>Identidad</th>
+              <th>Categoria</th>
+              <th>Grado</th>
+              <th>Nombres</th>
+              <th>Fecha Planilla</th>
+              <th>Unidad</th>
+              <th>Antiguedad</th>
+              <th>Dias Vacaiones</th>
+
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let r of arregloListaVacacioens; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ r.identidad }}</td>
+              <td>{{r.categoria}}</td>
+              <td>{{ r.grado }}</td>
+              <td>{{ r.nombres }}</td>
+
+              <td>{{ r.fecha_planilla | date: 'dd/MM/yyyy' }}</td>
+
+              <td>{{r.unidad}}</td>
+
+
+              <td>{{ r.antiguedad }}</td>
+              <td>{{ r.dias_vacaciones }}</td>
+
+            </tr>
+
+            <tr *ngIf="arregloListaVacacioens?.length === 0">
+              <td colspan="10" class="text-center text-muted py-3">
+                No hay datos para mostrar
+              </td>
+            </tr>
+          </tbody>
+
+
+        </table>
+      </div>
+
+    </div>
+
+
+
+
+
+  </div>
+  }
+
+   @if(VentanaSeleccionada?.id==='r9'){
+  <div>
+
+    <div class="d-flex align-items-center gap-4">
+
+      <div *ngFor="let op of opciones" class="d-flex align-items-center gap-2">
+        <p-radioButton name="fechaCorte" [value]="op.value" [(ngModel)]="opcion" inputId="{{ op.value }}">
+        </p-radioButton>
+
+        <label [for]="op.value" class="mb-0">
+          {{ op.label }}
+        </label>
+      </div>
+
+
+    </div>
+    <hr>
+
+
+    <div *ngIf="opcion === 'fuerza'">
+
+      <form #formbuscar="ngForm" class="row">
+        <label for="" class="col-md-2" (change)="sacarunidades(formbuscar)">
+          Fuerza
+
+          <select name="fuerza" class="form-control" id="fuerza" #fuerza="ngModel" ngModel required>
+
+            <option *ngFor="let u of arregloFuerzas" [ngValue]="u">{{ u.nombre }}</option>
+
+          </select>
+        </label>
 
  
-        </tr>
+ 
 
-        <tr *ngIf="arregloListaParteUnidad?.length === 0">
-          <td colspan="10" class="text-center text-muted py-3">
-            No hay datos para mostrar
-          </td>
-        </tr>
-      </tbody>
+
+        <label for="" class="col-md-1">
+          <br>
+          <button class="form-control btn btn-primary" [disabled]="!formbuscar.valid"
+            (click)="  sacarOrganizacion(formbuscar,'fuerza')" style="margin-left: 10px;">
+            Buscar
+          </button>
+        </label>
+         <label for="" class="col-md-1">
+          <br>
+          <button class="form-control btn btn-primary" [disabled]="!formbuscar.valid"
+            (click)="  limpiar_organizacion()" style="margin-left: 10px;">
+            Limpiar
+          </button>
+        </label>
+
+      </form>
+    </div>
+
+    <div *ngIf="opcion === 'unidad'">
+
+      <form #formbuscar="ngForm" class="row">
+        <label for="" class="col-md-2" (change)="sacarunidades(formbuscar)">
+          Fuerza
+
+          <select name="fuerza" class="form-control" id="fuerza" #fuerza="ngModel" ngModel required>
+
+            <option *ngFor="let u of arregloFuerzas" [ngValue]="u">{{ u.nombre }}</option>
+
+          </select>
+        </label>
+
+        <label for="" style="margin-left: 5px;" class="col-md-2">
+          Unidad/Base
+
+          <select name="unidad" class="form-control" id="unidad" #unidad="ngModel" ngModel required>
+
+            <option *ngFor="let u of ArregloUnidades" [ngValue]="u">{{ u.unidad }}</option>
+
+          </select>
+        </label>
 
      
-    </table>
+
+
+        <label for="" class="col-md-1">
+          <br>
+          <button class="form-control btn btn-danger" [disabled]="!formbuscar.valid"
+            (click)="sacarOrganizacion(formbuscar,'unidad')" style="margin-left: 10px;">
+            Buscar
+          </button>
+        </label>
+        <label for="" class="col-md-1">
+          <br>
+          <button class="form-control btn btn-danger" [disabled]="!formbuscar.valid" (click)="limpiar2(formbuscar)"
+            style="margin-left: 10px;">
+            Limpiar
+          </button>
+        </label>
+      </form>
+    </div>
+
+
+
+
+    <div class="container-fluid py-3">
+
+
+
+      <!-- HEADER -->
+      <div class="row align-items-center mb-3">
+        <div class="col">
+          <h5 class="mb-0">Parte de vacaciones</h5>
+        </div>
+
+
+      </div>
+
+
+
+
+
+    </div>
+
+    <div class="container-fluid py-3">
+
+      <!-- HEADER -->
+      <div class="row align-items-center mb-3">
+
+
+        <div class="col-auto">
+          <button class="btn btn-sm btn-success" (click)="exportarExcelResumen('tablaList')">
+            <i class="bi bi-file-earmark-excel me-1"></i>
+            Exportar
+          </button>
+        </div>
+      </div>
+
+
+
+      <!-- TABLA -->
+      <div class="table-responsive">
+
+
+
+        <table id="tablaList" class="table table-bordered table-hover table-sm align-middle">
+          <thead class="table-light">
+            <tr>
+              <th style="width:60px">#</th>
+              <th>Identidad</th>
+              <th>Categoria</th>
+              <th>Grado</th>
+              <th>Nombres</th>
+              <th>Fecha Asignacion</th>
+              <th>unidad</th>
+              <th>Sección</th>
+              <th>Puesto</th>
+
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let r of arregloOrganizacionCompleta; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ r.identidad }}</td>
+              <td>{{r.categoria}}</td>
+              <td>{{ r.grado }}</td>
+              <td>{{ r.nombres }}</td>
+
+              <td>{{ r.fecha_asignacion | date: 'dd/MM/yyyy' }}</td>
+
+              <td>{{r.unidad}}</td>
+
+
+              <td [style]=" r.seccion ? '' : 'background-color: red;color:white'">{{ r.seccion?r.seccion:"Sin  Cargo" }}</td>
+              <td>{{ r.Nombre_Puesto }}</td>
+
+            </tr>
+
+            <tr *ngIf="arregloOrganizacionCompleta?.length === 0">
+              <td colspan="10" class="text-center text-muted py-3">
+                No hay datos para mostrar
+              </td>
+            </tr>
+          </tbody>
+
+
+        </table>
+      </div>
+
+    </div>
+
+
+
+
+
   </div>
-
-</div>
-
-
-  </div>
-}
+  }
 </div>

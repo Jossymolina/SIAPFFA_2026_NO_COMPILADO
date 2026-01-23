@@ -1,4 +1,4 @@
-import { Component, computed, OnInit, signal } from '@angular/core';
+import { Component, computed, OnInit, signal, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 
@@ -11,7 +11,9 @@ import { ServiciosMensajeService } from '../../../../servicios/serviMensaje/serv
 import { saveAs } from 'file-saver';
 import * as ExcelJS from 'exceljs';
 import { HttpClient } from '@angular/common/http';
-
+import { RadioButtonModule } from 'primeng/radiobutton';
+RadioButtonModule
+type Opcion = 'fuerza' | 'unidad' ;
 type Reporte = {
   id: string;
   titulo: string;
@@ -23,7 +25,7 @@ type Reporte = {
 @Component({
   selector: 'app-menu-repo-emc',
   standalone: true,
-    imports: [CommonModule, FormsModule, CardModule, InputTextModule, TooltipModule],
+    imports: [CommonModule, FormsModule, CardModule, InputTextModule, TooltipModule, RadioButtonModule],
   templateUrl: './menu-repo-emc.component.html',
   styleUrl: './menu-repo-emc.component.css',
 })
@@ -53,22 +55,28 @@ export class MenuRepoEmcComponent {
   }
   q = signal('');
 
-
+  opcion: Opcion = 'fuerza';
+@ViewChild('formbuscar') formbuscar!: NgForm;
+  opciones = [
+    { label: 'Por fuerza', value: 'fuerza' as const },
+    { label: 'Por unidad', value: 'unidad' as const },
+ 
+  ];
   categoria = signal<'Todos' | string>('Todos');
 
   reportes = signal<Reporte[]>([
     { id: 'r1', titulo: 'Parte por Unidad', descripcion: 'Parte de toda la Unidad', icon: 'pi pi-wallet', categoria: 'Partes', ruta: '/reportes/planilla' },
-     { id: 'r4', titulo: 'Parte por Fuerza', descripcion: 'Parte de fuerza y categoria', icon: 'pi-microchip', categoria: 'Partes', ruta: '/reportes/planilla' },
+    { id: 'r4', titulo: 'Parte por Fuerza,Categoria', descripcion: 'Parte de fuerza y categoria', icon: 'pi-microchip', categoria: 'Partes', ruta: '/reportes/planilla' },
     {
       id: 'r2', titulo: 'Parte de bajas por unidad', descripcion: 'Aqui se muestran las bajas', icon: 'pi pi-percentage',
       categoria: 'Partes', ruta: '/reportes/isr'
     },
       {
-      id: 'r5', titulo: 'Parte de bajas por fuerza', descripcion: 'Aqui se muestran las bajas por fuerza', icon: 'pi pi-prime',
+      id: 'r5', titulo: 'Parte de bajas por fuerza,categoria', descripcion: 'Aqui se muestran las bajas por fuerza', icon: 'pi pi-prime',
       categoria: 'Partes', ruta: '/reportes/isr'
     },
     {
-      id: 'r3', titulo: 'Cambio de Categorias', descripcion: 'Aqui estan las personas que cambiaron de categoria',
+      id: 'r3', titulo: 'Cambio de Categorias x mes', descripcion: 'Aqui estan las personas que cambiaron de categoria',
       icon: 'pi pi-calendar', categoria: 'RRHH', ruta: '/reportes/vacaciones'
     }
    ,
@@ -80,6 +88,16 @@ export class MenuRepoEmcComponent {
       {
       id: 'r7', titulo: 'Parte por Fuerza,Categoria y Unidad', descripcion: 'Aqui se busca el parte por unidad y categoria',
       icon: 'pi pi-building-columns', categoria: 'RRHH', ruta: '/reportes/vacaciones'
+    },
+    ,
+      {
+      id: 'r8', titulo: 'Consulta pago Vacaciones', descripcion: 'Aqui  el personal que se le paga vacaciones en un mes determinado',
+      icon: 'pi pi-dollar', categoria: 'RRHH', ruta: '/reportes/vacaciones'
+    }
+     ,
+      {
+      id: 'r9', titulo: 'Organizacion', descripcion: 'Consulta la organizacion completa de las fuerzas',
+      icon: 'pi pi-clipboard', categoria: 'RRHH', ruta: '/reportes/vacaciones'
     }
 
 
@@ -201,7 +219,7 @@ export class MenuRepoEmcComponent {
       if(form.value.categoria.id===1 || form.value.categoria.id===2 ){
            cade= ` and ingreso_ascenso.idfuerza= ${form.value.fuerza.idfuerza} and unidad.idunidad=${form.value.unidad.idunidad} and  categoria.idcategoria in (${form.value.categoria.nivel.join(',')}) `
       }else{
-          cade= ` and unidad.idfuerza= ${form.value.fuerza.idfuerza} and  categoria.idcategoria in (${form.value.categoria.nivel.join(',')}) `
+          cade= ` and unidad.idfuerza= ${form.value.fuerza.idfuerza}  and unidad.idunidad=${form.value.unidad.idunidad} and  categoria.idcategoria in (${form.value.categoria.nivel.join(',')}) `
       }
       console.log(cade)
    
@@ -213,6 +231,7 @@ export class MenuRepoEmcComponent {
     this._ServiciosMensajeService.show("Cargando parte de la unidad......");
     this._ServicioBackendService.sacarParteMenuInicio(param).subscribe({
       next: (response) => {
+        console.log(response)
         this._ServiciosMensajeService.hide()
         if (response.error) return this._ServiciosMensajeService.mensajeMalo(response.error);
         if (response.mensaje) return this._ServiciosMensajeService.mensajeMalo(response.mensaje);
@@ -511,6 +530,104 @@ arregloFuerzas =[]
       return null;
     }
   }
-  
 
+  arregloListaVacacioens =[]
+  puscarPersonalVacacioensFuerza(form){
+   console.log(form.value)
+     let p ={
+    cadena:``
+   }
+   if(form.value.categoria.id ===1 || form.value.categoria.id ===2){
+           p.cadena =` and ia.idfuerza=${form.value.fuerza.idfuerza}     
+                and month(ia.fecha_planilla)=month('${form.value.fecha}-1')  and  c.idcategoria in (${form.value.categoria.nivel.join(',')}) `
+   }else{
+       p.cadena =` and u.idfuerza=${form.value.fuerza.idfuerza}     
+                and month(ia.fecha_planilla)=month('${form.value.fecha}-1')  and  c.idcategoria in (${form.value.categoria.nivel.join(',')}) `
+   }
+ 
+    
+   console.log(p)
+      console.log(form.value)
+ this.arregloListaVacacioens=[]
+
+   this._ServiciosMensajeService.show("Buscando personal.....");
+ 
+   this._ServicioBackendService.sacaPersonalVacaciones(p).subscribe({
+    next: (response) => {
+      console.log(response)
+      this._ServiciosMensajeService.hide()
+      if (response.error) return this._ServiciosMensajeService.mensajeMalo(response.error);
+      if (response.mensaje) return this._ServiciosMensajeService.mensajeMalo(response.mensaje);
+      this.arregloListaVacacioens = response.resultado;
+      console.log(response)
+    }, error: (error) => {
+      this._ServiciosMensajeService.hide()
+      this._ServiciosMensajeService.mensajeerrorServer();
+    }
+  }
+  );
+  }
+  
+ puscarPersonalVacacioensUnidad(form){
+   console.log(form.value)
+   let p ={
+    cadena:` and u.idunidad=${form.value.unidad.idunidad}     
+                and month(ia.fecha_planilla)=month('${form.value.fecha}-1')  and  c.idcategoria in (${form.value.categoria.nivel.join(',')}) `
+   }
+   console.log(p)
+      console.log(form.value)
+ this.arregloListaVacacioens=[]
+
+   this._ServiciosMensajeService.show("Buscando personal.....");
+ 
+   this._ServicioBackendService.sacaPersonalVacaciones(p).subscribe({
+    next: (response) => {
+      console.log(response)
+      this._ServiciosMensajeService.hide()
+      if (response.error) return this._ServiciosMensajeService.mensajeMalo(response.error);
+      if (response.mensaje) return this._ServiciosMensajeService.mensajeMalo(response.mensaje);
+      this.arregloListaVacacioens = response.resultado;
+      console.log(response)
+    }, error: (error) => {
+      this._ServiciosMensajeService.hide()
+      this._ServiciosMensajeService.mensajeerrorServer();
+    }
+  }
+  );
+  }
+  arregloOrganizacionCompleta =[]
+sacarOrganizacion(form:NgForm,objeto){
+this.arregloOrganizacionCompleta =[]
+let q={cadena:``}
+   if(objeto === "fuerza") q.cadena=` and unidad.idfuerza=${form.value.fuerza.idfuerza}`
+   if(objeto === "unidad") q.cadena=` and unidad.idunidad=${form.value.unidad.idunidad}`
+
+
+   this.ejecucatarConsultaOrganizacion(q)
+}
+
+ejecucatarConsultaOrganizacion(p){
+ 
+
+   this._ServiciosMensajeService.show("Buscando personal.....");
+ console.log(p)
+   this._ServicioBackendService.sacarOrganizacionCompleta(p).subscribe({
+    next: (response) => {
+      console.log(response)
+      this._ServiciosMensajeService.hide()
+      if (response.error) return this._ServiciosMensajeService.mensajeMalo(response.error);
+      if (response.mensaje) return this._ServiciosMensajeService.mensajeMalo(response.mensaje);
+      this.arregloOrganizacionCompleta = response.resultado;
+      console.log(response)
+    }, error: (error) => {
+      this._ServiciosMensajeService.hide()
+      this._ServiciosMensajeService.mensajeerrorServer();
+    }
+  }
+  );
+}
+limpiar_organizacion(){
+this.arregloOrganizacionCompleta =[]
+
+}
 }
