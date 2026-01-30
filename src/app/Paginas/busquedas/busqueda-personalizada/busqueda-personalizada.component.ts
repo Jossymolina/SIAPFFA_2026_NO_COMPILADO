@@ -151,40 +151,7 @@ export class BusquedaPersonalizadaComponent implements OnInit {
     }
   }
 
-  // ============================
-  // 65 AÑOS
-  // ============================
-  sacarPersonal_65_anos(date?: any) {
-    let d = new Date().toISOString().split('T')[0];
-    let parametro = {
-      cadena:
-        'and (activo= 1)' +
-        " and month(fecha_nacimiento) = month('" +
-        d +
-        "')  and edad_proxima=65",
-    };
-    this._ServiciosMensajesService.show();
-    this._ServiciosSiapffaaService.vistaSiapffaa(parametro).subscribe({
-      next: (response) => {
-        this._ServiciosMensajesService.hide();
-
-        if (response.error)
-          return this._ServiciosMensajesService.mensajeMalo(response.error);
-        if (response.mensaje)
-          return this._ServiciosMensajesService.mensajeMalo(response.mensaje);
-
-        this.resetEstados();
-        this.arregloResultado = response.resultado || [];
-        this.aplicarFiltro(); // si quieres reutilizar el mismo listado
-        this.formularioBuscar = 5; // o 1 si usas otra vista
-      },
-      error: () => {
-        this._ServiciosMensajesService.hide();
-        this._ServiciosMensajesService.mensajeerrorServer();
-      },
-    });
-  }
-
+ 
   // ============================
   // BÚSQUEDA PRINCIPAL
   // ============================
@@ -724,6 +691,9 @@ export class BusquedaPersonalizadaComponent implements OnInit {
   }
 
   async exportexcel2(_idTabla?: string) {
+    let preguntas = await this._ServiciosMensajesService.mensajePregunta("¿Desea exportar con las fotos?")
+    if (!preguntas) return this.exportarSinfoto(_idTabla);
+
     this._ServiciosMensajesService.show()
     const workbook = new ExcelJS.Workbook();
     const sheet = workbook.addWorksheet('Resultados');
@@ -833,5 +803,8 @@ export class BusquedaPersonalizadaComponent implements OnInit {
     this._ServiciosMensajesService.hide()
     saveAs(blob, 'resultados_consulta_combinada.xlsx');
 
+  }
+  exportarSinfoto(nombre){
+    this._ServiciosSiapffaaService.exportexcel2(nombre,'Exportar sin foto');
   }
 }

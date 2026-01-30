@@ -525,7 +525,11 @@ export class BusquedaNormalComponent {
       );
     });
   }
-  async exportarExcel() {
+  async exportarExcel(name) {
+let espera = await this._ServiciosMensajesService.mensajePregunta("¿Desea exportar con las fotos?")
+if (!espera) return this.exportexcel2(name);
+  
+
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Resultados');
 

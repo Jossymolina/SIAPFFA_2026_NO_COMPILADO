@@ -7,7 +7,6 @@ import { Router } from '@angular/router';
  
 import { Card } from 'primeng/card';
 import { ServicioBackendService } from '../../../servicios/servicio-backend.service';
- 
  interface ModuleCard {
   title: string;
   description: string;
@@ -47,6 +46,14 @@ export class ReportesMenuComponent {
       icon: 'pi pi-search-plus',
       route: '/menu/menu-repo-unidad',
       code:['Re_0002']
+
+    },
+    {
+      title: 'Reporte de Historial',
+      description: 'Reposte personalizado por unidad.',
+      icon: 'pi pi-face-smile',
+      route: '/menu/menu-repo-historial',
+      code:['Re_0004']
 
     },
  

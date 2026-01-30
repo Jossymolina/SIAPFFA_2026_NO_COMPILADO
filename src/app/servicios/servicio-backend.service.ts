@@ -13,9 +13,9 @@ import { ServiciosMensajeService } from './serviMensaje/servicios-mensaje.servic
 })
 //ng build --aot --output-hashing=all
 export class ServicioBackendService {
-  public url2 = "https://siapfa.ffaa.mil.hn:4443/"//"http://localhost:3978/" //"https://siapfa.ffaa.mil.hn:4443/"
+  public url2 = "http://localhost:3979/"  //"http://localhost:3978/" //"https://siapfa.ffaa.mil.hn:4443/"
   refrescar = 0
-  public url ="https://siapfa.ffaa.mil.hn:4443/" //"http://localhost:3978/" //"https://siapfa.ffaa.mil.hn:4443/"     
+  public url ="http://localhost:3979/" //"http://localhost:3978/" //"https://siapfa.ffaa.mil.hn:4443/"     
   usuarioLogin: any;
   token = "";
 
@@ -35,6 +35,21 @@ export class ServicioBackendService {
 
 
   ) { }
+  resetearQR(data){
+    return this.metodopost("resetearQR",data)
+  }
+  sacarplanillaporunidad(data){
+    return this.metodopost("sacarplanillaporunidad",data)
+  }
+  sacarPersonalMas10anos(data){
+    return this.metodopost("sacarPersonalMas10anos",data)
+  }
+  personalPrimerIngreso(data){
+    return this.metodopost("personalPrimerIngreso",data)
+  }
+  sacarPersonal65Anos(data){
+    return this.metodopost("sacarPersonal65Anos",data)
+  }
   sacarOrganizacionCompleta(data){
     return this.metodopost("sacarOrganizacionCompleta",data)
   }
@@ -253,22 +268,22 @@ export class ServicioBackendService {
 
 
   /*De aqui empiesan las rutas viejas*/
-  cuadroPoblacion(data): Observable<any> {
+  cuadroPoblacion(data){
     return this.metodopost('cuadroPoblacion', data);
   }
-  sacarTelefonodeAdministradoresdeFuuerza(data): Observable<any> {
+  sacarTelefonodeAdministradoresdeFuuerza(data){
     return this.metodopost('sacarTelefonodeAdministradoresdeFuuerza', data);
   }
-  guardarPlanilla(data): Observable<any> {
+  guardarPlanilla(data) {
     return this.metodopost('guardarPlanilla', data);
   }
-  sacarPersonalSegunCursoMilitar(data): Observable<any> {
+  sacarPersonalSegunCursoMilitar(data){
     return this.metodopost('sacarPersonalSegunCursoMilitar', data);
   }
   eliminarCursodelaPersona(data) {
     return this.metodopost('eliminarCursosPersonal', data);
   }
-  SacarCursosMilitaresDeUnaPersona(data): Observable<any> {
+  SacarCursosMilitaresDeUnaPersona(data) {
     return this.metodopost('SacarCursosMilitaresDeUnaPersona', data);
   }
   GuardarCursosmilitar(data) {
@@ -283,10 +298,10 @@ export class ServicioBackendService {
   sacarCursosMilitares(data) {
     return this.metodopost('sacarCursosMilitares', data);
   }
-  logs(data, id): Observable<any> {
+  logs(data, id){
     return this.http.post('logs/' + id, data);
   }
-  sacarPersonalSegunProfesion(data): Observable<any> {
+  sacarPersonalSegunProfesion(data){
     return this.metodopost('sacarPersonalSegunProfesion', data);
   }
   eliminarProfesionDelaPersona(data) {
@@ -295,7 +310,7 @@ export class ServicioBackendService {
   sacarnivelesEducativos() {
     return this.metodoget('sacarnivelesEducativos');
   }
-  cambiarnombreDocumento(data): Observable<any> {
+  cambiarnombreDocumento(data){
     return this.metodopost('cambiarnombreDocumento', data);
   }
   cambiarnombreCarpetaSegundaria(data) {
@@ -305,29 +320,29 @@ export class ServicioBackendService {
     return this.metodopost('cambiarnombreCarpetaPrincipal', data);
   }
 
-  eliminarCuposAcensos(data): Observable<any> {
+  eliminarCuposAcensos(data) {
     return this.metodopost('eliminarCuposAcensos', data);
   }
-  actualizarcuposAcensos(data): Observable<any> {
+  actualizarcuposAcensos(data) {
 
     return this.metodopost('actualizarcuposAcensos', data);
   }
-  sacarcuposAscenso(data): Observable<any> {
+  sacarcuposAscenso(data) {
     return this.metodopost('sacarcuposAscenso', data);
   }
-  sacarGradosSoloAscenso(data): Observable<any> {
+  sacarGradosSoloAscenso(data) {
     return this.metodopost('sacarGradosSoloAscenso', data);
   }
-  AgregarCupoAscenso(data): Observable<any> {
+  AgregarCupoAscenso(data) {
     return this.metodopost('AgregarCupoAscenso', data);
   }
-  sacarPrimerIngreso(data): Observable<any> {
+  sacarPrimerIngreso(data) {
     return this.metodopost('sacarPrimerIngreso', data);
   }
-  eliminarUsuario(data): Observable<any> {
+  eliminarUsuario(data) {
     return this.metodopost('eliminarUsuario', data);
   }
-  modificarUsuarioAdministrarUnidad(data): Observable<any> {
+  modificarUsuarioAdministrarUnidad(data) {
     return this.metodopost('modificarUsuarioAdministrarUnidad', data);
   }
   verificarPermisos(requeridos: string[]): boolean {
@@ -352,39 +367,39 @@ export class ServicioBackendService {
     this.arregloPermisos = JSON.parse(localStorage.getItem("permisos"));
   }
 
-  cambiarPermisoUsuario(data): Observable<any> {
+  cambiarPermisoUsuario(data){
     return this.metodopost('cambiarPermisoUsuario', data);
   }
-  sacarPermisosDisponibles(data): Observable<any> {
+  sacarPermisosDisponibles(data){
     return this.metodopost('sacarPermisosDisponibles', data);
   }
-  CambiarContrasena(data): Observable<any> {
+  CambiarContrasena(data) {
     return this.metodopost('CambiarContrasena', data);
   }
-  EliminarTarjetadeIngreso(data): Observable<any> {
+  EliminarTarjetadeIngreso(data) {
     return this.metodopost('EliminarTarjetadeIngreso', data);
   }
-  agregarnuevoscupos(data): Observable<any> {
+  agregarnuevoscupos(data) {
     return this.metodopost('agregarnuevoscupos', data);
   }
-  sacarGradosSegunOrden(data): Observable<any> {
+  sacarGradosSegunOrden(data) {
     return this.metodopost('sacarGradosSegunOrden', data);
   }
-  modificarSiesCombatiente(data): Observable<any> {
+  modificarSiesCombatiente(data) {
     return this.metodopost('modificarSiesCombatiente', data);
   }
 
-  modificarcupo(data): Observable<any> {
+  modificarcupo(data) {
     return this.metodopost('modificarcupo', data);
   }
 
-  desactivarCupos(data): Observable<any> {
+  desactivarCupos(data) {
     return this.metodopost('desactivarCupos', data);
   }
-  sacarControlGrados(data): Observable<any> {
+  sacarControlGrados(data) {
     return this.metodopost('sacarControlGrados', data);
   }
-  cambioIdentidad(data): Observable<any> {
+  cambioIdentidad(data) {
     return this.metodopost('cambioIdentidad', data);
   }
   consultacorreoPersonal(data) {
@@ -396,7 +411,7 @@ export class ServicioBackendService {
   eliminarCorreo(data) {
     return this.metodopost('eliminarCorreo', data);
   }
-  sacarpersonalPorDireccionSeccion(data): Observable<any> {
+  sacarpersonalPorDireccionSeccion(data) {
     return this.metodopost('sacarpersonalPorDireccionSeccion', data);
   }
   getMesesdelAno() {
@@ -414,52 +429,52 @@ export class ServicioBackendService {
     }
     return anos
   }
-  sacarDireccionAsignadoActual(data): Observable<any> {
+  sacarDireccionAsignadoActual(data) {
     return this.metodopost('sacarDireccionAsignadoActual', data);
   }
-  desactivarAsignacionDireccion(data): Observable<any> {
+  desactivarAsignacionDireccion(data) {
     return this.metodopost('desactivarAsignacionDireccion', data);
   }
   sacarDireccionDeAsignado(data) {
     return this.metodopost('sacarDireccionDeAsignado', data);
   }
-  agregarAsignacionDireccion(data): Observable<any> {
+  agregarAsignacionDireccion(data) {
     return this.metodopost('agregarAsignacionDireccion', data);
   }
-  busquedaporEdad(data): Observable<any> {
+  busquedaporEdad(data){
     return this.metodopost('busquedaporEdad', data);
   }
-  sacarPersonalAscenso(data): Observable<any> {
+  sacarPersonalAscenso(data) {
     return this.metodopost('sacarPersonalAscenso', data);
   }
 
-  eliminarArresto(data): Observable<any> {
+  eliminarArresto(data) {
     return this.metodopost('eliminarArresto', data);
   }
-  eliminarGradoTablaAscenso(data): Observable<any> {
+  eliminarGradoTablaAscenso(data) {
     return this.metodopost('eliminarGradoTablaAscenso', data);
   }
 
-  actualizarTablaascenso(data): Observable<any> {
+  actualizarTablaascenso(data){
     return this.metodopost('actualizarTablaascenso', data);
   }
 
-  actualizarAcuerdoyfechaIngreso(data): Observable<any> {
+  actualizarAcuerdoyfechaIngreso(data){
 
     return this.metodopost('actualizarAcuerdoyfechaIngreso', data);
   }
-  actualizarNombresYapellidos(data): Observable<any> {
+  actualizarNombresYapellidos(data) {
 
     return this.metodopost('actualizarNombresYapellidos', data);
   }
-  eliminarNombramiento(data): Observable<any> {
+  eliminarNombramiento(data) {
     return this.metodopost('eliminarNombramiento', data);
   }
 
-  eliminarPuesto(data): Observable<any> {
+  eliminarPuesto(data) {
     return this.metodopost('eliminarPuesto', data);
   }
-  sacarOrganizacionPorUnidad(data): Observable<any> {
+  sacarOrganizacionPorUnidad(data) {
     return this.metodopost('sacarOrganizacionPorUnidad', data);
   }
   desactivarPuesto(data) {
@@ -468,17 +483,17 @@ export class ServicioBackendService {
   datosparaConstaciadeTropaMiembroActivo(data) {
     return this.metodopost('datosparaConstaciadeTropaMiembroActivo', data);
   }
-  agregarPersonaenOrganizacion(data): Observable<any> {
+  agregarPersonaenOrganizacion(data) {
     return this.metodopost('agregarPersonaenOrganizacion', data);
   }
   sacarCargoDeUnapersona(data) {
     return this.metodopost('sacarCargoDeUnapersona', data);
   }
-  sacarcoposhabilitados(data): Observable<any> {
+  sacarcoposhabilitados(data){
     return this.metodopost('sacarcoposhabilitados', data);
   }
 
-  consultaporArma(data): Observable<any> {
+  consultaporArma(data) {
     return this.metodopost('consultaporArma', data);
   }
 
@@ -486,40 +501,40 @@ export class ServicioBackendService {
     return this.metodopost('sacarpersonalDarbajaEMC', data);
 
   }
-  guardarcambiodeCategoria(data): Observable<any> {
+  guardarcambiodeCategoria(data) {
     return this.metodopost('guardarcambiodeCategoria', data);
   }
 
-  sacarcategoriaporNivel(data): Observable<any> {
+  sacarcategoriaporNivel(data) {
     return this.metodopost('sacarcategoriaporNivel', data);
   }
 
-  paraRellenarCuadroPrincipalTropayAuxiliar(data): Observable<any> {
+  paraRellenarCuadroPrincipalTropayAuxiliar(data){
     return this.metodopost('paraRellenarCuadroPrincipalTropayAuxiliar', data);
   }
 
 
-  paraRellenarCuadroPrincipal(data): Observable<any> {
+  paraRellenarCuadroPrincipal(data) {
     return this.metodopost('paraRellenarCuadroPrincipal', data);
   }
 
-  parteGeneroCombatienteTropa(data): Observable<any> {
+  parteGeneroCombatienteTropa(data) {
 
     return this.metodopost('parteGeneroCombatienteTropa', data);
   }
-  sacarpartePorCategoriayFuerza(data: any): Observable<any> {
+  sacarpartePorCategoriayFuerza(data: any) {
 
     return this.metodopost('sacarpartePorCategoriayFuerza', data);
   }
-  sacarGenerosPorfuerzas(data: any): Observable<any> {
+  sacarGenerosPorfuerzas(data: any) {
 
     return this.metodopost('sacarGenerosPorfuerzas', data);
   }
-  sacarBajasUnidad(data: any): Observable<any> {
+  sacarBajasUnidad(data: any) {
 
     return this.metodopost('sacarBajasUnidad', data);
   }
-  sacaraccionActual(data: any): Observable<any> {
+  sacaraccionActual(data: any) {
 
     return this.metodopost('sacarasignacionActual', data);
   }
@@ -552,10 +567,10 @@ export class ServicioBackendService {
   sacarFuerza() {
     return this.metodoget('sacarFuerza');
   }
-  partedetropaporUnidad(data: any): Observable<any> {
+  partedetropaporUnidad(data: any) {
     return this.metodopost('parteporunidaddetropas', data);
   }
-  parteporFuerzadetropas(data: any): Observable<any> {
+  parteporFuerzadetropas(data: any) {
 
     return this.metodopost('parteporFuerzadetropas', data);
   }
@@ -567,13 +582,13 @@ export class ServicioBackendService {
 
     return this.metodopost('sacarcategoria', data);
   }
-  sacarpersonaldeUnidad(data: any): Observable<any> {
+  sacarpersonaldeUnidad(data: any) {
     return this.metodopost('sacarpersonaldeUnidad', data);
   }
-  guardarascenso(data: any): Observable<any> {
+  guardarascenso(data: any) {
     return this.metodopost('agregarascenso', data);
   }
-  sacarPersonalIdentidad(data: any): Observable<any> {
+  sacarPersonalIdentidad(data: any) {
     return this.metodopost('sacatrpersonalporidentidad', data);
   }
 
@@ -611,10 +626,10 @@ export class ServicioBackendService {
   guardaridiomadelpersonal(data: any) {
     return this.metodopost('guardaridiomadelpersonal', data);
   }
-  sacaruniversidad(data: any): Observable<any> {
+  sacaruniversidad(data: any) {
     return this.metodopost('sacaruniversidad', data);
   }
-  sacarprofesiondeuniversidades(data: any): Observable<any> {
+  sacarprofesiondeuniversidades(data: any) {
     return this.metodopost('sacarprofesiondelasUniversidad', data);
   }
   sacardepartamento(data: any) {
@@ -626,7 +641,7 @@ export class ServicioBackendService {
 
   }
 
-  guardarprofesiondeunpersonal(data: any): Observable<any> {
+  guardarprofesiondeunpersonal(data: any) {
     return this.metodopost('guardarProfesiondelpersonal', data);
   }
 
@@ -636,24 +651,24 @@ export class ServicioBackendService {
   }
 
 
-  consultaPorIdentidadPrfuerza(data: any): Observable<any> {
+  consultaPorIdentidadPrfuerza(data: any){
     return this.metodopost('consultaPorIdentidadPrfuerza', data);
   }
-  consultaPorIdentidadPrfuerzaYunidad(data: any): Observable<any> {
+  consultaPorIdentidadPrfuerzaYunidad(data: any) {
 
     return this.metodopost('consultaPorIdentidadPrfuerzaYunidad', data);
   }
 
-  consultaprofecionDelPersonal(data: any): Observable<any> {
+  consultaprofecionDelPersonal(data: any) {
     return this.metodopost('consultaprofecionDelPersonal', data);
   }
-  consultaPaisesDelPersonal(data: any): Observable<any> {
+  consultaPaisesDelPersonal(data: any){
     return this.metodopost('consultaPaisesDelPersonal', data);
   }
-  consultaIdiomasPersonal(data: any): Observable<any> {
+  consultaIdiomasPersonal(data: any) {
     return this.metodopost('consultaIdiomasPersonal', data);
   }
-  consultaTelefonoPersonal(data: any): Observable<any> {
+  consultaTelefonoPersonal(data: any){
     return this.metodopost('consultaTelefonoPersonal', data);
   }
   consultaPadresPersonal(data: any) {
@@ -665,7 +680,7 @@ export class ServicioBackendService {
   sacarGrados(data: any) {
     return this.metodopost('sacargrados', data);
   }
-  sacargradosporid(data: any): Observable<any> {
+  sacargradosporid(data: any) {
     return this.metodopost('sacargradosporid', data);
   }
 
@@ -681,34 +696,34 @@ export class ServicioBackendService {
   asignarpersonalaUnidad(data: any) {
     return this.metodopost('AsignarPersonalAUnidad', data);
   }
-  sacarLasAsignacionesDeunaPersona(data: any): Observable<any> {
+  sacarLasAsignacionesDeunaPersona(data: any) {
     return this.metodopost('sacarAsignaciones_de_unPersonal', data);
   }
-  guardarAresto(data: any): Observable<any> {
+  guardarAresto(data: any){
 
     return this.metodopost('guardarAresto', data);
   }
-  sacarAresto(data: any): Observable<any> {
+  sacarAresto(data: any) {
     return this.metodopost('sacarAresto', data);
   }
-  consultaPorAntiguedadAsignado(data: any): Observable<any> {
+  consultaPorAntiguedadAsignado(data: any){
     return this.metodopost('consultaPorAntiguedadAsignado', data);
   }
-  consultapersonaldeunidad(data: any): Observable<any> {
+  consultapersonaldeunidad(data: any) {
     return this.metodopost('buscarOficialdeUnidad', data);
   }
-  sacarpersonalPorIdioma(data: any): Observable<any> {
+  sacarpersonalPorIdioma(data: any) {
     return this.metodopost('sacarpersonalPorIdioma', data);
   }
-  sacarpersonalPorIdiomaFuerza(data: any): Observable<any> {
+  sacarpersonalPorIdiomaFuerza(data: any) {
     return this.metodopost( 'sacarpersonalPorIdiomaFuerza', data);
   }
 
-  planillaOficiles(data: any): Observable<any> {
+  planillaOficiles(data: any) {
     return this.metodopost('planillaOficiles', data);
   }
 
-  sacarempresas(): Observable<any> {
+  sacarempresas() {
 
     return this.metodopost('sacarempresas', {});
   }
@@ -718,42 +733,42 @@ export class ServicioBackendService {
     return this.metodoget("sacarFecha")
 
   }
-  agregarDeducciones(data: any): Observable<any> {
+  agregarDeducciones(data: any) {
 
     return this.metodopost('agregarDeducciones', data);
   }
-  sacarDeduccionesporfecha(data: any): Observable<any> {
+  sacarDeduccionesporfecha(data: any) {
 
     return this.metodopost('sacarDeduccionesporfecha', data);
   }
-  sacardeduccionparapagadurias(data: any): Observable<any> {
+  sacardeduccionparapagadurias(data: any) {
     return this.metodopost('sacardeduccionparapagadurias', data);
   }
-  planillaTropa(data: any): Observable<any> {
+  planillaTropa(data: any) {
 
     return this.metodopost('planillaTropa', data);
   }
-  planillaAuxilia(data: any): Observable<any> {
+  planillaAuxilia(data: any) {
 
     return this.metodopost('planillaAuxilia', data);
   }
-  planillasuboficial(data: any): Observable<any> {
+  planillasuboficial(data: any) {
 
     return this.metodopost('planillasuboficial', data);
   }
-  autenticarse(data: any): Observable<any> {
+  autenticarse(data: any) {
 
     return this.metodopost('autenticarse', data);
   }
-  agregarascensoPersonalIngresado(data: any): Observable<any> {
+  agregarascensoPersonalIngresado(data: any) {
 
     return this.metodopost('agregarascensoPersonalIngresado', data);
   }
-  guardarDocumento(data: any): Observable<any> {
+  guardarDocumento(data: any){
     return this.metodopost('guardarDocumento', data);
   }
 
-  sacarUnidadEjecutora(): Observable<any> {
+  sacarUnidadEjecutora(){
 
     return this.metodopost('sacarUnidadEjecutora', {});
   }
@@ -829,10 +844,7 @@ export class ServicioBackendService {
 
     return this.metodopost('listadepersonaldeBaja', data);
   }
-  sacarplanillaporunidad(data: any)  {
-
-    return this.metodopost('sacarplanillaporunidad', data);
-  }
+ 
   consultaporNombre(data: any)  {
 
     return this.metodopost('consultaporNombre', data);
@@ -965,7 +977,7 @@ export class ServicioBackendService {
   deletepais(data: any) {
     return this.metodopost('deletepais', data);
   }
-  deleteidomas(data: any): Observable<any> {
+  deleteidomas(data: any){
     return this.metodopost('deleteidomas', data);
   }
   deletePadres(data: any) {
@@ -975,7 +987,7 @@ export class ServicioBackendService {
     return this.metodopost('deleteConyugue', data);
   }
 
-  disponibilidadpresupuestaria(data: any): Observable<any> {
+  disponibilidadpresupuestaria(data: any) {
     return this.metodopost('disponibilidadpresupuestaria', data);
 
   }
@@ -984,81 +996,81 @@ export class ServicioBackendService {
     return this.metodopost('deleteHijo', data);
 
   }
-  actualizarGenero(data: any): Observable<any> {
+  actualizarGenero(data: any){
     return this.metodopost('actualizarGenero', data);
 
 
   }
-  actualizarFechaNacimiento(data: any): Observable<any> {
+  actualizarFechaNacimiento(data: any){
 
     return this.metodopost('actualizarFechaNacimiento', data);
 
 
   }
-  actualizarSerie(data: any): Observable<any> {
+  actualizarSerie(data: any){
 
     return this.metodopost('actualizarSerie', data);
   }
 
 
-  actualizarPasaporte(data: any): Observable<any> {
+  actualizarPasaporte(data: any) {
     return this.metodopost('actualizarPasaporte', data);
 
 
   }
-  actualizartipoSangre(data: any): Observable<any> {
+  actualizartipoSangre(data: any) {
 
     return this.metodopost('actualizartipoSangre', data);
 
 
   }
-  actualizarCuentaBanco(data: any): Observable<any> {
+  actualizarCuentaBanco(data: any) {
 
     return this.metodopost('actualizarCuentaBanco', data);
 
 
   }
-  actualizarReligion(data: any): Observable<any> {
+  actualizarReligion(data: any) {
 
     return this.metodopost( 'actualizarReligion', data);
 
 
   }
-  actualizarestadoCivil(data: any): Observable<any> {
+  actualizarestadoCivil(data: any) {
 
     return this.metodopost('actualizarestadoCivil', data);
 
 
   }
-  actualizarCombatiente(data: any): Observable<any> {
+  actualizarCombatiente(data: any) {
 
     return this.metodopost('actualizarCombatiente', data);
 
 
   }
-  buscarcumpleanero(data: any): Observable<any> {
+  buscarcumpleanero(data: any) {
     return this.metodopost('buscarcumpleaneros', data);
 
 
   }
-  sacarArmas(data: any): Observable<any> {
+  sacarArmas(data: any) {
 
     return this.metodopost('sacarArmas', data);
 
   }
-  ActualizarArma(data: any): Observable<any> {
+  ActualizarArma(data: any) {
 
     return this.metodopost('ActualizarArma', data);
 
 
   }
-  ActualizarlugarNacimiento(data: any): Observable<any> {
+  ActualizarlugarNacimiento(data: any) {
 
     return this.metodopost('ActualizarlugarNacimiento', data);
 
 
   }
-  reasignarOficialesAuxSub(data: any): Observable<any> {
+  reasignarOficialesAuxSub(data: any) {
     return this.metodopost('reasignarOficialesAuxSub', data);
 
   }
@@ -1125,7 +1137,7 @@ export class ServicioBackendService {
 
 
   }
-  SacarPorSexo(data: any): Observable<any> {
+  SacarPorSexo(data: any){
 
 
     return this.metodopost('SacarPorSexo', data);

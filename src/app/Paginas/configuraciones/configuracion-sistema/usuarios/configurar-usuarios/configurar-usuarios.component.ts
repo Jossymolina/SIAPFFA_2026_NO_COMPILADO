@@ -18,7 +18,7 @@ import { TableModule } from 'primeng/table';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DialogModule } from 'primeng/dialog';
 import { SelectModule } from 'primeng/select';
-import { ToggleSwitchModule } from 'primeng/toggleswitch'; 
+import { ToggleSwitchModule } from 'primeng/toggleswitch';
 interface ModuleCard {
   title: string;
   description: string;
@@ -30,10 +30,10 @@ interface ModuleCard {
   standalone: true,
   imports: [CommonModule, CardModule, InputTextModule, InputGroupModule,
     ButtonModule, ProgressSpinnerModule, ReactiveFormsModule, FormsModule,
-    TagModule, PasswordModule, DividerModule, TableModule, CheckboxModule,DialogModule,
-  SelectModule
-,ToggleSwitchModule
-],
+    TagModule, PasswordModule, DividerModule, TableModule, CheckboxModule, DialogModule,
+    SelectModule
+    , ToggleSwitchModule
+  ],
   templateUrl: './configurar-usuarios.component.html',
   styleUrl: './configurar-usuarios.component.css',
 })
@@ -98,23 +98,23 @@ export class ConfigurarUsuariosComponent {
     var param = {
       idfuerza: this.fuerzaSelected.idfuerza
     }
-    this.arregloUnidad =[]
+    this.arregloUnidad = []
     this._ServiciosMensajesService.show()
     this._DatospersonalesService.sacarunidad(param).subscribe(
       {
-      next:(Response) => {
-        this._ServiciosMensajesService.hide()
-        if (Response.error) return  this._DatospersonalesService.mensajeError(Response.error)
-         if (Response.mensaje) return       this._DatospersonalesService.mensajeError(Response.mensaje)
-         this.arregloUnidad = Response.resultado
-         
-   
-      }, error:(error) => {
-        this._ServiciosMensajesService.hide()
-        this._ServiciosMensajesService.mensajeMalo("ERROR DE CONEXION")
+        next: (Response) => {
+          this._ServiciosMensajesService.hide()
+          if (Response.error) return this._DatospersonalesService.mensajeError(Response.error)
+          if (Response.mensaje) return this._DatospersonalesService.mensajeError(Response.mensaje)
+          this.arregloUnidad = Response.resultado
+
+
+        }, error: (error) => {
+          this._ServiciosMensajesService.hide()
+          this._ServiciosMensajesService.mensajeMalo("ERROR DE CONEXION")
+        }
       }
-      }
-   
+
     )
   }
   sacarFuerzas() {
@@ -141,28 +141,28 @@ export class ConfigurarUsuariosComponent {
     var param = {
       identidad: data
     }
-    this.permisosdelUser =[]
+    this.permisosdelUser = []
     this._ServiciosMensajesService.show()
     this._DatospersonalesService.sacarPermisosDisponibles(param).subscribe(
       {
-          next: (Response) => {
-            this._ServiciosMensajesService.hide()
-     
-        if (Response.error) return   this._DatospersonalesService.mensajeError(Response.error)
-        if (Response.mensaje)  return     this._DatospersonalesService.mensajeError(Response.mensaje)
-            this.permisosdelUser = Response.resultado
-      
-       
-        },error: (error) => {
-         this._ServiciosMensajesService.hide()
+        next: (Response) => {
+          this._ServiciosMensajesService.hide()
 
-        this._DatospersonalesService.mensajeError("ERROR DSE CONEXION")
-      
-      }
+          if (Response.error) return this._DatospersonalesService.mensajeError(Response.error)
+          if (Response.mensaje) return this._DatospersonalesService.mensajeError(Response.mensaje)
+          this.permisosdelUser = Response.resultado
+
+
+        }, error: (error) => {
+          this._ServiciosMensajesService.hide()
+
+          this._DatospersonalesService.mensajeError("ERROR DSE CONEXION")
+
+        }
       }
     )
   }
-   
+
 
   buscarporidentidadDeUnidad() {
 
@@ -208,9 +208,9 @@ export class ConfigurarUsuariosComponent {
 
   //busqueda globar para super y administradores de fuerzas
   buscarporidentidad(numero) {
-   
+
     if (numero === 2) {
-       let parametro = {
+      let parametro = {
         identidad_pariente: this.formIdentidad.value.identidad
       }
       this._ServiciosMensajesService.show()
@@ -231,34 +231,34 @@ export class ConfigurarUsuariosComponent {
       )
 
     } else if (numero === 2.5) {
-        let parametro = {
+      let parametro = {
         identidad: this.formIdentidad.value.identidad
       }
       this._ServiciosMensajesService.show()
 
-        this._DatospersonalesService.buscarusuario(parametro).subscribe(
-          {
-            next: (Response)=> {
-              this._ServiciosMensajesService.hide()
-              if (Response.error) return    this._DatospersonalesService.mensajeError(Response.error)
-          
-                if (Response.mensaje) return        this._DatospersonalesService.mensajeError(Response.mensaje)
+      this._DatospersonalesService.buscarusuario(parametro).subscribe(
+        {
+          next: (Response) => {
+            this._ServiciosMensajesService.hide()
+            if (Response.error) return this._DatospersonalesService.mensajeError(Response.error)
 
-               
-                  this.ventanaPrincipal = 4;
-                  this.usuarioBuscado = Response.resultado[0];
-                  this.sacarPermisosdeUsuario(this.usuarioBuscado.identidad)
+            if (Response.mensaje) return this._DatospersonalesService.mensajeError(Response.mensaje)
 
-              
-              
-            },error: (err) => {
-              this._ServiciosMensajesService.hide()
-              this._ServiciosMensajesService.mensajeMalo("ERROR DE CONEXION")
-            }
+
+            this.ventanaPrincipal = 4;
+            this.usuarioBuscado = Response.resultado[0];
+            this.sacarPermisosdeUsuario(this.usuarioBuscado.identidad)
+
+
+
+          }, error: (err) => {
+            this._ServiciosMensajesService.hide()
+            this._ServiciosMensajesService.mensajeMalo("ERROR DE CONEXION")
           }
-            
-          )
-    
+        }
+
+      )
+
     }
 
 
@@ -485,19 +485,19 @@ export class ConfigurarUsuariosComponent {
 
   }
   @ViewChild('formularioAdministrador') formularioAdministrador: NgForm;
-  guardarCambio( ) {
-    
-  
-  
-    if (this.formularioAdministrador.valid  ) {
+  guardarCambio() {
+
+
+
+    if (this.formularioAdministrador.valid) {
 
       var parametro = {
         idfuerza: this.formularioAdministrador.value.fuerzaSelected.idfuerza,
-        idunidad:  this.formularioAdministrador.value.unidadSelected.idunidad,
+        idunidad: this.formularioAdministrador.value.unidadSelected.idunidad,
         identidad: this.usuarioBuscado.identidad,
         identidadEjecutora: this.usuarioLoguiado.identidad,
-        nombreFuerza:  this.formularioAdministrador.value.fuerzaSelected.nombre,
-        nombreunidad:  this.formularioAdministrador.value.unidadSelected.unidad,
+        nombreFuerza: this.formularioAdministrador.value.fuerzaSelected.nombre,
+        nombreunidad: this.formularioAdministrador.value.unidadSelected.unidad,
         nombreUsuario: this.usuarioBuscado.nombres + " " + this.usuarioBuscado.apellidos
       }
       this._DatospersonalesService.modificarUsuarioAdministrarUnidad(parametro).subscribe(
@@ -562,42 +562,73 @@ export class ConfigurarUsuariosComponent {
     this.ventanaPrincipal = numero;
   }
   displayFuerzaDialog = false;
-displayResetDialog = false;
+  displayResetDialog = false;
 
-// modelo simple para el reset
-modeloResetContrasena = {
-  contrasena: '',
-  contrasena2: '',
-  debeCambiar: false
-};
+  // modelo simple para el reset
+  modeloResetContrasena = {
+    contrasena: '',
+    contrasena2: '',
+    debeCambiar: false
+  };
 
-// método para abrir el diálogo de fuerza/unidad (puedes hacer más lógica si quieres)
- 
-get fuerzasFiltradas() {
-  if (!this.usuarioLoguiado) return [];
-  return this.arregloFuerzas.filter(f => f.idfuerza === this.usuarioLoguiado.idfuerza);
-}
- 
-// dialogs
- 
+  // método para abrir el diálogo de fuerza/unidad (puedes hacer más lógica si quieres)
 
-// modelo reset contraseña
- 
-
-// para fuerza filtrada cuando permiso 3
-arregloFuerzasFiltradas: any[] = [];
-
-// llamada al abrir el diálogo de fuerza
-abrirDialogFuerza() {
-  this.sacarFuerzas(); // ya la tienes
-  // si usas permiso(3), filtra aquí:
-  if (this.usuarioLoguiado) {
-    this.arregloFuerzasFiltradas = this.arregloFuerzas.filter(
-      (f: any) => f.idfuerza === this.usuarioLoguiado.idfuerza
-    );
-  } else {
-    this.arregloFuerzasFiltradas = this.arregloFuerzas;
+  get fuerzasFiltradas() {
+    if (!this.usuarioLoguiado) return [];
+    return this.arregloFuerzas.filter(f => f.idfuerza === this.usuarioLoguiado.idfuerza);
   }
-  this.displayFuerzaDialog = true;
-}
+
+  // dialogs
+
+
+  // modelo reset contraseña
+
+
+  // para fuerza filtrada cuando permiso 3
+  arregloFuerzasFiltradas: any[] = [];
+
+  // llamada al abrir el diálogo de fuerza
+  abrirDialogFuerza() {
+    this.sacarFuerzas(); // ya la tienes
+    // si usas permiso(3), filtra aquí:
+    if (this.usuarioLoguiado) {
+      this.arregloFuerzasFiltradas = this.arregloFuerzas.filter(
+        (f: any) => f.idfuerza === this.usuarioLoguiado.idfuerza
+      );
+    } else {
+      this.arregloFuerzasFiltradas = this.arregloFuerzas;
+    }
+    this.displayFuerzaDialog = true;
+  }
+  async resetearQR() {
+    let espera = await this._ServiciosMensajesService.mensajePregunta("Esta segur@ de resetear el QR de este usuario")
+    if (!espera) return
+
+    var parametro = {
+      persona: this.usuarioBuscado,
+      usuario: this.usuarioLoguiado
+    }
+
+    this._DatospersonalesService.resetearQR(parametro).subscribe(
+      {
+        next: (Response) => {
+          if (Response.error) {
+            this._DatospersonalesService.mensajeError(Response.error)
+          } else {
+            if (Response.mensaje) {
+              this._DatospersonalesService.mensajeError(Response.mensaje)
+            } else {
+              this._DatospersonalesService.mensajeBueno(Response.resultado)
+            }
+          }
+        }, error: () => {
+          this._DatospersonalesService.mensajeError("ERROR DE CONEXION")
+        }
+      }
+    )
+  }
+   sacarPermisoPersonalVista(permiso:string[]){
+   return this._DatospersonalesService.verificarPermisos(permiso)
+    //console.log( JSON.parse(localStorage.getItem("permisos") || "[]") as any[])
+  }
 }

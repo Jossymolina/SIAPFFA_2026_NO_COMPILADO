@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { authGuard } from './guards/guard-sesion/auth.guard';
 import { permisosGuard } from './guards/guard-sesion/permisos.guard';
 import { homeGuard } from './guards/guard-sesion/home.guard';
-import { MenuRepoEmcComponent } from './Paginas/reportes/repo-emc/menu-repo-emc/menu-repo-emc.component';
+ 
  
 export const routes: Routes = [
   // Opcional: si alguien entra a '/', lo mandas al menú
@@ -207,7 +207,7 @@ export const routes: Routes = [
       {
         path: 'menu-reportes',
         canActivate: [permisosGuard],
-        data: { permisos: ['Re_0002','Re_0003','Re_0001'] },
+        data: { permisos: ['Re_0002','Re_0003','Re_0001','Re_0004'] },
         loadComponent: () =>
           import('./Paginas/reportes/reportes-menu/reportes-menu.component')
             .then(m => m.ReportesMenuComponent)
@@ -219,6 +219,15 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./Paginas/reportes/menu-repo-unidad/menu-repo-unidad.component')
             .then(m => m.MenuRepoUnidadComponent)
+      }
+       ,
+      {
+        path: 'menu-repo-historial',
+        canActivate: [permisosGuard],
+        data: { permisos: ['Re_0004'] },
+        loadComponent: () =>
+          import('./Paginas/reportes/historial/historial.component')
+            .then(m => m.HistorialComponent)
       }
       ,
       {
@@ -236,6 +245,14 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./Paginas/reportes/repo-emc/menu-repo-emc/menu-repo-emc.component')
             .then(m => m.MenuRepoEmcComponent)
+      },
+      {
+        path: 'menu-planillas-planffaa',
+        canActivate: [permisosGuard],
+        data: { permisos: ['P_0005'] },
+        loadComponent: () =>
+          import('./Paginas/planffaa-conexiones/planillas/planillas.component')
+            .then(m => m.PlanillasComponent)
       }
     ]
   },

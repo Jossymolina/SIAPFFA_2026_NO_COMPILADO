@@ -13,6 +13,7 @@ import { TbLogisticaComponent } from '../tb-logistica/tb-logistica.component';
 import { TarjetaCarpetasComponent } from '../control-archivos/tarjeta-carpetas/tarjeta-carpetas.component';
 import { DialogModule } from 'primeng/dialog';
 import { jsPDF } from "jspdf";
+import { FormsModule, NgForm } from '@angular/forms';
 
 interface Persona {
   nombreCompleto: string;
@@ -48,7 +49,8 @@ TbControlDisciplinarioComponent,
 TbAsignacionesComponent,
 TbLogisticaComponent,
 DialogModule,
-TarjetaCarpetasComponent],
+TarjetaCarpetasComponent,
+FormsModule],
   templateUrl: './visualizar-perfil.component.html',
   styleUrl: './visualizar-perfil.component.css',
 })
@@ -151,7 +153,9 @@ armaobjetoConsultado
         next: (Response) => {
           console.log(Response)
    this._ServiciosMensajesService.hide()
-          if (Response.error) {
+          
+   if (Response.error) {
+          
             this._DatospersonalesService.mensajeError(Response.error.sqlMessage + "BUSC")
           } else {
             if (Response.mensaje) {
@@ -164,7 +168,7 @@ armaobjetoConsultado
             let r = this.sacarVacacionSegunTabla(anio_anti) /*(anio_anti)<=5 ? 15 : (((anio_anti)>=6 && anio_anti<=10?20:
               ((anio_anti)>=12 && (anio_anti)<=15?25:30) ))*/
              
-              
+              console.log(this.ArregloVacacionesTomadas)
              this.dia_vacacion_ley =r
               this.armaobjetoConsultado = Response.arma[0]
             }
@@ -477,4 +481,58 @@ abrirConstanciaVacaciones(){
     throw new Error("Fechas inválidas");
   }
   }
+  displayCambiarRTN = false
+  @ViewChild("formRNT") formRNT:NgForm
+  abrirModalCambiarRTN() {
+     this.displayCambiarRTN = true; 
+    } 
+
+async CambioRTNPErsonalAdmin(form: any) {
+
+  const rtn = (form?.value?.rtn ?? '').toString().trim();
+
+  console.log(rtn.length);
+
+  const respuesta = await this._DatospersonalesService.mensajePregunta(
+    "Cambio de RTN",
+    "Esta seguro de Remplazar el RTN"
+  );
+
+  if (!respuesta) return;
+
+  if (rtn.length !== 14)
+    return this._DatospersonalesService.mensajeError("EL RTN DEBE TENER 14 CARACTERES");
+
+  if (this.objetoConsultado?.identidad === this.usuariologuiado?.identidad)
+    return this._DatospersonalesService.mensajeError("USTED MISMO NO SE PUEDE CAMBIAR LA IDENTIDAD");
+
+  if (!this.objetoConsultado?.identidad || !this.usuariologuiado?.identidad)
+    return this._DatospersonalesService.mensajeError("ERROR EN IDENTIDAD VIEJA O IDENTIDAD DE USUARIO LOGIADO");
+
+  const parametro = {
+    rtn,
+    identidad: this.objetoConsultado.identidad,
+    usuario: this.usuariologuiado,
+    persona: this.objetoConsultado
+  };
+
+  this._ServiciosMensajesService.show();
+
+  this._DatospersonalesService.modificarRTN(parametro).subscribe({
+    next: (Response) => {
+      this._ServiciosMensajesService.hide();
+
+      if (Response?.error) return this._DatospersonalesService.mensajeError(Response.error);
+      if (Response?.mensaje) return this._DatospersonalesService.mensajeError(Response.mensaje);
+
+      this._DatospersonalesService.mensajeBueno(Response?.resultado ?? "RTN actualizado");
+       this.buscarporIdentidad()
+    },
+    error: () => {
+      this._ServiciosMensajesService.hide();
+      this._DatospersonalesService.mensajeError("ERROR DE CONECCION AL MOMENTO DE CAMBIAR EL RTN");
+    }
+  });
+}
+
 }

@@ -186,84 +186,82 @@
                 </div>
 
                 <!-- Tipo Constancia -->
-                <div class="col-md-4">
+
+                <div class="col-md-4" *ngIf="personaSeleccionada.activo===1">
                     <label class="form-label text-muted small mb-1">Tipo de constancia</label>
-                 <p-select
-                        name="tipoConstancia"
-                        #tipo="ngModel"
-                        [(ngModel)]="tipoConstancia"
-                        [options]="[
+                    <p-select name="tipoConstancia" #tipo="ngModel" [(ngModel)]="tipoConstancia" [options]="[
                         { label: 'Con deducción', value: 1 },
                         { label: 'Vaucher',        value: 2 },
                         { label: 'Embajada',       value: 3 },
                         { label: 'Sin deducción',  value: 4 },
                         { label: 'Histórica',      value: 5 }
-                        ]"
-                        optionLabel="label"
-                        optionValue="value"
-                        placeholder="Seleccione un tipo"
-                        class="w-100">
+                        ]" optionLabel="label" optionValue="value" placeholder="Seleccione un tipo" class="w-100">
                     </p-select>
                 </div>
+                <div class="col-md-4" *ngIf="personaSeleccionada.activo===2">
+                    <!--Estop se activa cuando detecta personal de baja -->
+                    <label class="form-label text-muted small mb-1">Tipo de constancia</label>
+                    <p-select name="tipoConstancia" #tipo="ngModel" [(ngModel)]="tipoConstancia" [options]="[
+                        { label: 'Personal de baja', value: 8 },
+                       
+                        ]" optionLabel="label" optionValue="value" placeholder="Seleccione un tipo" class="w-100">
+                    </p-select>
+                </div>
+                <div *ngIf="personaSeleccionada.activo===1;else baja">
+                    <!-- Empresa (tipos ≠ 2 y ≠ 5) -->
+                    <ng-container *ngIf="tipoConstancia !== 2 && tipoConstancia !== 5">
+                        <div class="col-md-4">
+                            <label class="form-label text-muted small mb-1">Empresa</label>
+                            <input pInputText type="text" name="empresa" #empresa="ngModel" ngModel class="w-100"
+                                placeholder="Nombre de la empresa" required>
+                        </div>
+                    </ng-container>
 
-                <!-- Empresa (tipos ≠ 2 y ≠ 5) -->
-                <ng-container *ngIf="tipoConstancia !== 2 && tipoConstancia !== 5">
-                    <div class="col-md-4">
-                        <label class="form-label text-muted small mb-1">Empresa</label>
-                        <input pInputText type="text" name="empresa" #empresa="ngModel" ngModel class="w-100"
-                            placeholder="Nombre de la empresa" required>
-                    </div>
-                </ng-container>
+                    <!-- Mes (tipo 2) -->
+                    <ng-container *ngIf="tipoConstancia === 2">
+                        <div class="col-md-4">
+                            <label class="form-label text-muted small mb-1">Mes</label>
+                            <input type="month" name="mes" #mes="ngModel" ngModel class="form-control" required>
+                        </div>
+                    </ng-container>
 
-                <!-- Mes (tipo 2) -->
-                <ng-container *ngIf="tipoConstancia === 2">
-                    <div class="col-md-4">
-                        <label class="form-label text-muted small mb-1">Mes</label>
-                        <input type="month" name="mes" #mes="ngModel" ngModel class="form-control" required>
-                    </div>
-                </ng-container>
+                    <!-- Tipo de Objeto (tipo 2 o 5) -->
+                    <ng-container *ngIf="tipoConstancia === 2 || tipoConstancia === 5">
+                        <div class="col-md-4">
+                            <label class="form-label text-muted small mb-1">Tipo de objeto</label>
+                            <p-select name="objeto" #objeto="ngModel" [(ngModel)]="objetoSeleccionado"
+                                [options]="arregloObjeto" optionLabel="nombre_objeto" placeholder="Seleccione un objeto"
+                                class="w-100" required>
+                            </p-select>
+                        </div>
+                    </ng-container>
 
-                <!-- Tipo de Objeto (tipo 2 o 5) -->
-                <ng-container *ngIf="tipoConstancia === 2 || tipoConstancia === 5">
-                    <div class="col-md-4">
-                        <label class="form-label text-muted small mb-1">Tipo de objeto</label>
-                     <p-select
-  name="objeto"
-  #objeto="ngModel"
-  [(ngModel)]="objetoSeleccionado"
-  [options]="arregloObjeto"
-  optionLabel="nombre_objeto"
-  placeholder="Seleccione un objeto"
-  class="w-100"
-  required>
-</p-select>
-                    </div>
-                </ng-container>
+                    <!-- Campos adicionales cuando tipo = 5 -->
+                    <ng-container *ngIf="tipoConstancia === 5">
+                        <div class="col-md-4">
+                            <label class="form-label text-muted small mb-1">Año</label>
+                            <input pInputText type="number" name="ano" #ano="ngModel" ngModel class="w-100" required
+                                min="1900" max="2100" placeholder="Ej. 2023">
+                        </div>
 
-                <!-- Campos adicionales cuando tipo = 5 -->
-                <ng-container *ngIf="tipoConstancia === 5">
-                    <div class="col-md-4">
-                        <label class="form-label text-muted small mb-1">Año</label>
-                        <input pInputText type="number" name="ano" #ano="ngModel" ngModel class="w-100" required
-                            min="1900" max="2100" placeholder="Ej. 2023">
-                    </div>
+                        <div class="col-md-4">
+                            <label class="form-label text-muted small mb-1">Empresa</label>
+                            <p-select name="empresa" #empresa="ngModel" [(ngModel)]="empresaSeleccionada"
+                                [options]="arregloEmpresa" optionLabel="nombre" placeholder="Seleccione una empresa"
+                                class="w-100" required>
+                            </p-select>
 
-                    <div class="col-md-4">
-                        <label class="form-label text-muted small mb-1">Empresa</label>
-                    <p-select
-  name="empresa"
-  #empresa="ngModel"
-  [(ngModel)]="empresaSeleccionada"
-  [options]="arregloEmpresa"
-  optionLabel="nombre"
-  placeholder="Seleccione una empresa"
-  class="w-100"
-  required>
-</p-select>
+                        </div>
+                    </ng-container>
 
-                    </div>
-                </ng-container>
-
+                </div>
+                <ng-template #baja>
+                     <div class="col-md-4">
+                            <label class="form-label text-muted small mb-1">Empresa</label>
+                            <input pInputText type="text" name="empresa" #empresa="ngModel" ngModel class="w-100"
+                                placeholder="Nombre de la empresa" required>
+                        </div>
+                </ng-template>
                 <!-- Botón Guardar -->
                 <div class="col-12 mt-2 d-flex justify-content-end">
                     <button pButton type="button" class="p-button-primary p-button-lg" icon="pi pi-save"

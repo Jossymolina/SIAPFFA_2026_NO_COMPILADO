@@ -83,8 +83,12 @@ export class MenuRepoFuerzaComponent {
       {
       id: 'r6', titulo: 'Organizacion', descripcion: 'Consulta la organizacion completa ',
       icon: 'pi pi-clipboard', categoria: 'RRHH', ruta: '/reportes/vacaciones'
-    }
+    },
+    { id: 'r7', titulo: 'Parte por Fuerza,Categoria', descripcion: 'Parte de fuerza y categoria', icon: 'pi-microchip', categoria: 'Partes', ruta: '/reportes/planilla' },
 
+    
+     
+     
 
   ]);
 
@@ -118,6 +122,10 @@ export class MenuRepoFuerzaComponent {
     this.arregloBajas = []
     this.arregloCambioCategoria = []
     this.VentanaSeleccionada = null
+    this.arregloResultado = []
+     this.arregloListaParteUnidad = []
+     this.arregloResumenParteUnidad =[]
+
   }
   abrir(r: Reporte) {
     // Aquí luego lo cambias por Router navigate.
@@ -369,6 +377,130 @@ ejecucatarConsultaOrganizacion(p){
 }
 limpiar_organizacion(){
 this.arregloOrganizacionCompleta =[]
+this.arregloResultado=[]
 
 }
+buscar65Anos(data,objeto){
+console.log(data.value)
+console.log(objeto)
+let cadena = ""
+ if(objeto==="fuerza") cadena=` and unidad.idfuerza=${this.usuarioLoguiado.idfuerza} and month(fecha_nacimiento)=month('${data.value.fecha}-1')  `
+ 
+ this.buscarPersonal_65_anos(cadena)
+ 
+}
+arregloResultado = []
+buscarPersonal_65_anos(cadenita){
+  let p={cadena:cadenita}
+  this._ServiciosMensajeService.show("Buscando personal de 65 años o mas.....");
+  this.arregloResultado = []
+  console.log(p)
+    this._ServicioBackendService.sacarPersonal65Anos(p).subscribe({
+    next: (response) => {
+      console.log(response)
+      this._ServiciosMensajeService.hide()
+      if (response.error) return this._ServiciosMensajeService.mensajeMalo(response.error);
+      if (response.mensaje) return this._ServiciosMensajeService.mensajeMalo(response.mensaje);
+      this.arregloResultado = response.resultado;
+      console.log(response)
+    }, error: (error) => {
+      this._ServiciosMensajeService.hide()
+      this._ServiciosMensajeService.mensajeerrorServer();
+    }
+  }
+  );
+
+}
+limpiar_(){
+  this.arregloResultado =[]
+}
+
+listaPrimerIngreso(form,objeto){
+  let cadena = ""
+  if(objeto==="fuerza") cadena=` and unidad.idfuerza=${this.usuarioLoguiado.idfuerza} and month(fecha)=month('${form.value.fecha}-1') and year(fecha)=year('${form.value.fecha}-1') `
+  if(objeto==="unidad") cadena=` and unidad.idunidad=${this.usuarioLoguiado.idunidad} and month(fecha)=month('${form.value.fecha}-1') and year(fecha)=year('${form.value.fecha}-1') `
+ this.personalPrimerIngreso(cadena)
+}
+personalPrimerIngreso(cadenita){
+  console.log(cadenita)
+  let p={cadena:cadenita}
+  this._ServiciosMensajeService.show("Buscando personal de primer ingreso.....");
+  this.arregloResultado = []
+    this._ServicioBackendService.personalPrimerIngreso(p).subscribe({
+    next: (response) => {
+      console.log(response)
+      this._ServiciosMensajeService.hide()
+      if (response.error) return this._ServiciosMensajeService.mensajeMalo(response.error);
+      if (response.mensaje) return this._ServiciosMensajeService.mensajeMalo(response.mensaje);
+      this.arregloResultado = response.resultado;
+      console.log(response)
+    }, error: (error) => {
+      this._ServiciosMensajeService.hide()
+      this._ServiciosMensajeService.mensajeerrorServer();
+    }
+  }
+  );
+
+}
+
+listaAntiguedadGrado(form,objeto){
+  let cadena = ""
+  if(objeto==="fuerza") cadena=`    and ((YEAR(curdate())-YEAR(fechaPrimerIngreso)))>= ${form.value.anos}  and ingreso_ascenso.idfuerza =${this.usuarioLoguiado.idfuerza} `
+ 
+ this.personalantiguedadGrado(cadena)
+}
+personalantiguedadGrado(cadenita){
+  console.log(cadenita)
+  let p={cadena:cadenita}
+  this._ServiciosMensajeService.show("Buscando personal con antiguedad en el grado.....");
+  this.arregloResultado = []
+    this._ServicioBackendService.sacarPersonalMas10anos(p).subscribe({
+    next: (response) => {
+      console.log(response)
+      this._ServiciosMensajeService.hide()
+      if (response.error) return this._ServiciosMensajeService.mensajeMalo(response.error);
+      if (response.mensaje) return this._ServiciosMensajeService.mensajeMalo(response.mensaje);
+      this.arregloResultado = response.resultado;
+      console.log(response)
+    }, error: (error) => {
+      this._ServiciosMensajeService.hide()
+      this._ServiciosMensajeService.mensajeerrorServer();
+    }
+  }
+  );
+
+}
+   sacarParteFuerza(form:NgForm) {
+      console.log(form.value.categoria.id)
+      let cade=""
+     
+      if(form.value.categoria.id===1 || form.value.categoria.id===2 ){
+           cade= ` and ingreso_ascenso.idfuerza= ${this.usuarioLoguiado.idfuerza} and  categoria.idcategoria in (${form.value.categoria.nivel.join(',')}) `
+      }else{
+          cade= ` and unidad.idfuerza= ${this.usuarioLoguiado.idfuerza} and  categoria.idcategoria in (${form.value.categoria.nivel.join(',')}) `
+      }
+      console.log(cade)
+   
+     this.arregloListaParteUnidad = []
+     this.arregloResumenParteUnidad =[]
+    let param = {
+     cadena:cade 
+    }
+    this._ServiciosMensajeService.show("Cargando parte de la unidad......");
+    this._ServicioBackendService.sacarParteMenuInicio(param).subscribe({
+      next: (response) => {
+        this._ServiciosMensajeService.hide()
+        if (response.error) return this._ServiciosMensajeService.mensajeMalo(response.error);
+        if (response.mensaje) return this._ServiciosMensajeService.mensajeMalo(response.mensaje);
+        this.arregloResumenParteUnidad = response.resultado_resumen
+        this.arregloListaParteUnidad = response.resultado_lista
+
+
+      }, error: (error) => {
+        this._ServiciosMensajeService.hide()
+
+        this._ServiciosMensajeService.mensajeerrorServer();
+      }
+    })
+  }
 }

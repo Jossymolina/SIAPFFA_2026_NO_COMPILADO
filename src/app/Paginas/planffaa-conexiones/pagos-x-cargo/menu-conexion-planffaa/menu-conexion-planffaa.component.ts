@@ -53,7 +53,7 @@ export class MenuConexionPlanffaaComponent {
       title: 'Detalle del Pago',
       description: 'Aqui puedes ver el detalle de los pagos del personal',
       icon: 'pi pi-dollar',
-      route: '/menu/solicitud-constancias-planffaa',
+      route: '/menu/menu-planillas-planffaa',
       code :['P_0005']
 
     },

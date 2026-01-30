@@ -130,7 +130,7 @@
 
           <!-- BOTÓN EXPORTAR EXCEL -->
           <div class="col-12 col-md-4 d-flex justify-content-md-end">
-            <button type="button" class="btn-back-modern w-100 w-md-auto" pButton (click)="exportarExcel()">
+            <button type="button" class="btn-back-modern w-100 w-md-auto" pButton (click)="exportarExcel('tabla_resultado')">
               <i class="pi pi-file-excel me-1"></i>
               <span>Exportar a Excel</span>
             </button>
@@ -140,7 +140,7 @@
 
         <!-- TABLA -->
         <div class="table-responsive" style="max-height: 600px; min-height: 400px; overflow-y: auto;">
-          <table class="table table-sm table-hover align-middle">
+          <table id="tabla_resultado" class="table table-sm table-hover align-middle">
 
             <thead class="table-light">
               <tr>

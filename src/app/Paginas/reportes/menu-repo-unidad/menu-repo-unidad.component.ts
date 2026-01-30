@@ -74,7 +74,7 @@ ngOnInit(): void {
       {
       id: 'r5', titulo: 'Organizacion', descripcion: 'Consulta la organizacion completa ',
       icon: 'pi pi-clipboard', categoria: 'RRHH', ruta: '/reportes/vacaciones'
-    }
+    } 
  
  
   ]);
@@ -109,6 +109,8 @@ ngOnInit(): void {
     this.arregloBajas =[]
     this.arregloCambioCategoria =[]
     this.VentanaSeleccionada=null
+    this.arregloResultado = []
+
   }
   abrir(r: Reporte) {
     // Aquí luego lo cambias por Router navigate.
@@ -307,6 +309,38 @@ ejecucatarConsultaOrganizacion(p){
 }
 limpiar_organizacion(){
 this.arregloOrganizacionCompleta =[]
+this.arregloResultado = []
+
+}
+buscar65Anos(data,objeto){
+console.log(data.value)
+console.log(objeto)
+let cadena = ""
+ if(objeto==="unidad") cadena=` and unidad.idunidad=${this.usuarioLoguiado.idunidad}  and month(fecha_nacimiento)=month('${data.value.fecha}-1')  `
+ 
+ this.buscarPersonal_65_anos(cadena)
+ 
+}
+arregloResultado = []
+buscarPersonal_65_anos(cadenita){
+  let p={cadena:cadenita}
+  this._ServiciosMensajeService.show("Buscando personal de 65 años o mas.....");
+  this.arregloResultado = []
+  console.log(p)
+    this._ServicioBackendService.sacarPersonal65Anos(p).subscribe({
+    next: (response) => {
+      console.log(response)
+      this._ServiciosMensajeService.hide()
+      if (response.error) return this._ServiciosMensajeService.mensajeMalo(response.error);
+      if (response.mensaje) return this._ServiciosMensajeService.mensajeMalo(response.mensaje);
+      this.arregloResultado = response.resultado;
+      console.log(response)
+    }, error: (error) => {
+      this._ServiciosMensajeService.hide()
+      this._ServiciosMensajeService.mensajeerrorServer();
+    }
+  }
+  );
 
 }
 }

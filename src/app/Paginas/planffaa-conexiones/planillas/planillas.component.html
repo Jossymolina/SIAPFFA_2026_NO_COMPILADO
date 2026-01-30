@@ -1,0 +1,139 @@
+<!-- GRID DE MÓDULOS -->
+<main *ngIf="queElijio===''" class="modules-page">
+ 
+
+  <div class="row g-3 justify-content-center">
+    <ng-container *ngFor="let m of modules">
+      @if (sacarPermisoPersonalVista(m.code)) {
+        <div class="col-12 col-sm-6 col-lg-3">
+          <p-card class="module-card h-100" (click)="openModule(m)">
+            <div class="module-content">
+              <div class="module-icon-wrapper">
+                <i class="module-icon" [class]="m.icon"></i>
+              </div>
+
+              <h3 class="module-title">{{ m.title }}</h3>
+
+              <p class="module-description">
+                {{ m.description }}
+              </p>
+
+             
+            </div>
+          </p-card>
+        </div>
+      }
+    </ng-container>
+  </div>
+</main>
+
+<!-- TABLA -->
+@if(queElijio==='P_0005'){
+    <form #formBuscar="ngForm" class="row" style="margin-bottom: 20px;">
+                <label  class="col-md-2">
+                    Objeto
+                   <select name="objeto" #objeto="ngModel" ngModel required class="form-control">
+                      <option [ngValue]="item" *ngFor="let item of objetoGasto">{{ item.nombre }}</option>
+                   </select>
+                </label>
+                 <label  class="col-md-2">
+                    Mes
+               <input type="month" class="form-control" name="fecha" #fecha="ngModel" ngModel required />
+                </label>
+                <label  class="col-md-1">
+                    <br>
+                     <button type="button"
+                     [disabled]="!formBuscar.valid"
+                  class="btn btn-primary   btn-modern form-control "
+                  (click)="sacarplanillaporunidad(formBuscar)">
+            <i class="pi pi-search me-2"></i>
+            Buscar
+          </button>
+                </label>
+                  <label  class="col-md-1">
+                    <br>
+                     <button type="button"
+                  class="btn btn-danger   btn-modern form-control "
+                  (click)="queElijio='';">
+             
+            Cancelar
+          </button>
+                </label>
+    </form>
+    
+  <section class="report-page">
+    <p-card class="report-card shadow-2 border-round-xl">
+        
+      <div class="table-wrap mt-2">
+        <table class="table table-sm align-middle table-hover modern-table">
+          <thead class="sticky-head">
+            <tr>
+              <th>#</th>
+              <th>Unidad</th>
+              <th>Cargo</th>
+              <th>Identidad</th>
+              <th>Grado</th>
+              <th>Nombre</th>
+              <th class="text-end">Sueldo Nominal</th>
+              <th>Fecha Ingreso</th>
+              <th>Días</th>
+              <th class="text-end">Sueldo neto</th>
+              <th class="text-end">IPM</th>
+              <th class="text-end">HM</th>
+              <th class="text-end">FHEMA</th>
+              <th class="text-end">ISR</th>
+              <th class="text-end">Otras Deducciones</th>
+              <th class="text-end">Total deducciones</th>
+              <th class="text-end">Total a pagar</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let item of arregloResultado; let i = index">
+              <td class="text-muted">{{ i + 1 }}</td>
+              <td>{{ item.corto_unidad===0 ? "-----" : item.corto_unidad }}</td>
+              <td class="text-truncate" style="max-width: 220px;">{{ item.cargo }}</td>
+              <td class="font-mono">{{ item.identidad }}</td>
+              <td class="text-uppercase">{{ item.grado }}</td>
+              <td class="text-uppercase">{{ item.nombre }}</td>
+
+              <td class="text-end fw-semibold">{{ item.sueldo_bruto | currency:"L " }}</td>
+              <td>{{ item.fecha_ingreso }}</td>
+
+              <td>{{ item.dias_trabajados }}</td>
+              <td class="text-end">{{ item.sueldo_base | currency:"L " }}</td>
+
+              <td class="text-end">{{ item.ipm | currency:"L " }}</td>
+              <td class="text-end">{{ item.hm | currency:"L " }}</td>
+              <td class="text-end">{{ item.fhema | currency:"L " }}</td>
+              <td class="text-end">{{ item.isr | currency:"L " }}</td>
+
+              <td class="text-end">{{ item.otras_deducciones | currency:"L " }}</td>
+              <td class="text-end">{{ item.total_deduccion | currency:"L " }}</td>
+              <td class="text-end fw-semibold">{{ item.sueldo_neto | currency:"L " }}</td>
+            </tr>
+
+            <!-- TOTAL  
+            <tr class="total-row">
+              <td class="fw-bold">Total</td>
+              <td colspan="5"></td>
+
+              <td class="text-end fw-bold">{{ sumas.sueldo_bruto | currency:"L " }}</td>
+              <td class="text-muted">—</td>
+              <td class="text-muted">—</td>
+
+              <td class="text-end fw-bold">{{ sumas.total_sueldos | currency:"L " }}</td>
+              <td class="text-end fw-bold">{{ sumas.ipm | currency:"L " }}</td>
+              <td class="text-end fw-bold">{{ sumas.hm | currency:"L " }}</td>
+              <td class="text-end fw-bold">{{ sumas.fhema | currency:"L " }}</td>
+              <td class="text-end fw-bold">{{ sumas.isr | currency:"L " }}</td>
+              <td class="text-end fw-bold">{{ sumas.total_otras_deduccion | currency:"L " }}</td>
+              <td class="text-end fw-bold">{{ sumas.total_deduccion | currency:"L " }}</td>
+              <td class="text-end fw-bold">{{ sumas.total_sueldos_neto | currency:"L " }}</td>
+            </tr>-->
+          </tbody>
+        </table>
+      </div>
+    </p-card>
+  </section>
+}

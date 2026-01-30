@@ -277,25 +277,18 @@ this._ServiciosMensajesService.mensajeerrorServer();
     }
       this._ServiciosMensajesService.show()
 
-    this._DatospersonalesService.consultaIdiomasPersonal(parametro).subscribe(
-      Response => {
-        this._ServiciosMensajesService.hide();
-        if (Response.error) {
-         // this._DatospersonalesService.mensajeError(Response.error)
-
-        } else {
-          if (Response.mensaje) {
-           // this._DatospersonalesService.mensajeError(Response.mensaje)
-
-          } else {
-            this.arregloMisIdiomas = Response.resultado;
-          }
-        }
-      }, error => {
-        this._ServiciosMensajesService.hide();
-
-        this._ServiciosMensajesService.mensajeerrorServer();
+    this._DatospersonalesService.consultaIdiomasPersonal(parametro).subscribe({
+      next: (Response) => {
+          this._ServiciosMensajesService.hide();
+           if (Response.error) return
+           if (Response.mensaje) return
+             this.arregloMisIdiomas = Response.resultado;
+      },error:()=>{
+      this._ServiciosMensajesService.hide();
+         this._ServiciosMensajesService.mensajeerrorServer();
       }
+    }
+      
     )
   }
   async eliminarIdioma(data: any) {

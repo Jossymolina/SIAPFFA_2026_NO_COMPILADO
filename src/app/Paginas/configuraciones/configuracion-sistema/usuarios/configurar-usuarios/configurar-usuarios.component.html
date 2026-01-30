@@ -319,14 +319,25 @@
 
           <!-- Eliminar usuario  *ngIf="verificarPermiso(1) || verificarPermiso(3)"-->
           <button
-            
-            pButton
+                        pButton
             type="button"
             class="p-button-danger p-button-outlined"
             icon="pi pi-trash"
             label="Eliminar acceso"
             title="Eliminar acceso"
             (click)="eliminarUsuario()"
+          >
+          </button>
+            <button
+            *ngIf="sacarPermisoPersonalVista(['A_0005'])"
+
+            pButton
+            type="button"
+            class="p-button-sucess p-button-outlined"
+            icon="pi pi-eraser"
+            label="Reset QR"
+            title="Reset QR"
+            (click)="resetearQR()"
           >
           </button>
         </div>

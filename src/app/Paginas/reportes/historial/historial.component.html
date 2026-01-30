@@ -1,0 +1,137 @@
+<p-card class="hist-card shadow-3 border-round-2xl">
+  <ng-template pTemplate="header">
+    <div class="d-flex align-items-center justify-content-between w-100">
+      <div class="d-flex align-items-center gap-2">
+        <i class="pi pi-id-card text-primary fs-5"></i>
+        <span class="fw-semibold">Historial</span>
+      </div>
+
+      <span class="badge bg-light text-secondary border">Consulta</span>
+    </div>
+  </ng-template>
+
+  <div class="mt-3">
+
+    <!-- Radios tipo pill -->
+    <div class="segmented">
+      <label class="segmented-item" (click)="limpiar()" [class.active]="opcionSeleccionada === 'SI'">
+        <input
+          class="segmented-input"
+          type="radio"
+          name="opcion"
+          [checked]="opcionSeleccionada === 'SI'"
+          (change)="opcionSeleccionada = 'SI'"
+        />
+        <i class="pi pi-user me-2"></i>
+        Persona Afectada
+      </label>
+
+      <label class="segmented-item" (click)="limpiar()" [class.active]="opcionSeleccionada === 'NO'">
+        <input
+          class="segmented-input"
+          type="radio"
+          name="opcion"
+          [checked]="opcionSeleccionada === 'NO'"
+          (change)="opcionSeleccionada = 'NO'"
+        />
+        <i class="pi pi-briefcase me-2"></i>
+        Persona Ejecutora
+      </label>
+    </div>
+
+    <!-- Form -->
+    @if(opcionSeleccionada==="SI"){
+      <form class="mt-4 row g-3 align-items-end" #form="ngForm">
+        <div class="col-12 col-md-5 col-lg-4">
+          <label class="form-label fw-semibold text-secondary">
+            Identidad Persona Afectada
+          </label>
+          <div class="input-group input-group-modern">
+            <span class="input-group-text">
+              <i class="pi pi-id-card"></i>
+            </span>
+            <input
+              type="text"
+              class="form-control"
+              name="identidad"
+              #identidad="ngModel"
+              ngModel
+              required
+              placeholder="Ej: 0801..."
+            />
+          </div>
+        </div>
+
+        <div class="col-12 col-md-3 col-lg-2">
+          <button class="btn btn-danger w-100 btn-modern" (click)="buscar(form)">
+            <i class="pi pi-search me-2"></i> Buscar
+          </button>
+        </div>
+      </form>
+    } @else {
+      <form class="mt-4 row g-3 align-items-end" #form="ngForm">
+        <div class="col-12 col-md-5 col-lg-4">
+          <label class="form-label fw-semibold text-secondary">
+            Identidad Persona Ejecutora
+          </label>
+          <div class="input-group input-group-modern">
+            <span class="input-group-text">
+              <i class="pi pi-id-card"></i>
+            </span>
+            <input
+              type="text"
+              class="form-control"
+              name="identidad"
+              #identidad="ngModel"
+              ngModel
+              required
+              placeholder="Ej: 0801..."
+            />
+          </div>
+        </div>
+
+        <div class="col-12 col-md-3 col-lg-2">
+          <button class="btn btn-danger w-100 btn-modern" (click)="buscar(form)">
+            <i class="pi pi-search me-2"></i> Buscar
+          </button>
+        </div>
+      </form>
+    }
+
+    <!-- Tabla -->
+    <div class="mt-4 table-shell">
+      <div class="table-scroll">
+        <table class="table table-hover table-sm table-modern mb-0">
+          <thead>
+            <tr>
+              <th>{{ opcionSeleccionada === 'SI' ? 'Identidad Ejecutora' : 'Identidad Afectada' }}</th>
+
+              <th> {{ opcionSeleccionada === 'SI' ? 'Persona Ejecutora' : 'Persona Afectada' }}</th>
+              <th>Fecha</th>
+      
+              <th>Concepto</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of arregloResultado">
+              <td class="text-mono">{{  opcionSeleccionada === 'SI' ? item.identidadEjecutora : item.identidadAfectada   }}</td>
+
+              <td class="fw-semibold">{{ item.Persona }}</td>
+              <td>{{ item.fecha | date:"dd/MM/yyyy hh:mm:ss" }}</td>
+           
+              <td class="text-wrap">{{ item.concepto }}</td>
+            </tr>
+
+            <tr *ngIf="!arregloResultado?.length">
+              <td colspan="5" class="text-center text-secondary py-4">
+                <i class="pi pi-inbox me-2"></i>
+                Sin resultados por mostrar
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</p-card>

@@ -1,0 +1,107 @@
+/* Card */
+.hist-card :host,
+.hist-card {
+  overflow: hidden;
+}
+
+/* Segmented (radios tipo pill) */
+.segmented {
+  display: inline-flex;
+  gap: 10px;
+  padding: 6px;
+  border-radius: 999px;
+  background: rgba(0,0,0,0.03);
+  border: 1px solid rgba(0,0,0,0.06);
+}
+
+.segmented-item {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  user-select: none;
+  font-weight: 600;
+  color: #495057;
+  transition: transform .12s ease, background .2s ease, box-shadow .2s ease;
+}
+
+.segmented-item:hover {
+  transform: translateY(-1px);
+}
+
+.segmented-item.active {
+  background: #ffffff;
+  box-shadow: 0 6px 18px rgba(0,0,0,.08);
+  border: 1px solid rgba(0,0,0,0.08);
+  color: #0d6efd;
+}
+
+.segmented-input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Input group moderno */
+.input-group-modern .input-group-text {
+  background: #fff;
+  border-right: 0;
+  color: #6c757d;
+}
+
+.input-group-modern .form-control {
+  border-left: 0;
+}
+
+.input-group-modern .form-control:focus {
+  box-shadow: none;
+}
+
+/* Botón */
+.btn-modern {
+  border-radius: 12px;
+  font-weight: 700;
+  letter-spacing: .2px;
+}
+
+/* Tabla */
+.table-shell {
+  border: 1px solid rgba(0,0,0,0.07);
+  border-radius: 16px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.table-scroll {
+  max-height: 600px;
+  overflow: auto;
+}
+
+.table-modern thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: #f8f9fa;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  font-weight: 800;
+  color: #343a40;
+  white-space: nowrap;
+}
+
+.table-modern td,
+.table-modern th {
+  vertical-align: middle;
+  padding: 10px 12px;
+}
+
+.table-modern tbody tr:hover {
+  background: rgba(13,110,253,0.06);
+}
+
+.text-mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: .92rem;
+}

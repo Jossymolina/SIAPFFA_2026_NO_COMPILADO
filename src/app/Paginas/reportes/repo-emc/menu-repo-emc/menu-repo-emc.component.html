@@ -618,7 +618,7 @@
         <label for="" style="margin-left: 5px;" class="col-md-2">
           <br>
           <button [disabled]="!formBuscar.valid" class="btn  btn-primary" (click)="sacarBajas(formBuscar)">Buscar
-            12</button>
+            </button>
         </label>
 
       </form>
@@ -1370,6 +1370,589 @@
             </tr>
 
             <tr *ngIf="arregloOrganizacionCompleta?.length === 0">
+              <td colspan="10" class="text-center text-muted py-3">
+                No hay datos para mostrar
+              </td>
+            </tr>
+          </tbody>
+
+
+        </table>
+      </div>
+
+    </div>
+
+
+
+
+
+  </div>
+  }
+
+   @if(VentanaSeleccionada?.id==='r10'){
+  <div>
+
+    
+
+
+    <div  >
+
+      <form #formbuscar="ngForm" class="row">
+        <label for="" class="col-md-2"  >
+          Fuerza
+
+          <select name="fuerza" class="form-control" id="fuerza" #fuerza="ngModel" ngModel required>
+
+            <option *ngFor="let u of arregloFuerzas" [ngValue]="u">{{ u.nombre }}</option>
+
+          </select>
+        </label>
+
+  <label for="" class="col-md-2"  >
+          Mes
+       <input type="month" class="form-control " name="fecha" #fecha="ngModel" ngModel required>
+          
+        </label>
+ 
+
+
+        <label for="" class="col-md-1">
+          <br>
+          <button class="form-control btn btn-primary" [disabled]="!formbuscar.valid"
+            (click)="  buscar65Anos(formbuscar,'fuerza')" style="margin-left: 10px;">
+            Buscar
+          </button>
+        </label>
+         <label for="" class="col-md-1">
+          <br>
+          <button class="form-control btn btn-primary" [disabled]="!formbuscar.valid"
+            (click)="  limpiar_organizacion()" style="margin-left: 10px;">
+            Limpiar
+          </button>
+        </label>
+
+      </form>
+    </div>
+
+ 
+
+
+
+    <div class="container-fluid py-3">
+
+
+
+      <!-- HEADER -->
+      <div class="row align-items-center mb-3">
+        <div class="col">
+          <h5 class="mb-0">Parte de personal de 65 años</h5>
+        </div>
+
+
+      </div>
+
+
+
+
+
+    </div>
+
+    <div class="container-fluid py-3">
+
+      <!-- HEADER -->
+      <div class="row align-items-center mb-3">
+
+
+        <div class="col-auto">
+          <button class="btn btn-sm btn-success" (click)="exportarExcelResumen('tablaList')">
+            <i class="bi bi-file-earmark-excel me-1"></i>
+            Exportar
+          </button>
+        </div>
+      </div>
+
+
+
+      <!-- TABLA -->
+      <div class="table-responsive">
+
+
+
+        <table id="tablaList" class="table table-bordered table-hover table-sm align-middle">
+          <thead class="table-light">
+            <tr>
+              <th style="width:60px">#</th>
+              <th>Identidad</th>
+              <th>Grado</th>
+              <th>Nombres</th>
+              <th>Apellidos</th>
+              <th>Fecha Nacimiento</th>
+              <th>Asignacion</th>
+              <th>Edad</th>
+              <th>Antiguedad</th>
+           </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let r of arregloResultado; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ r.identidad }}</td>
+              <td>{{r.grado}}</td>
+              <td>{{ r.nombres }}</td>
+              <td>{{ r.apellidos }}</td>
+
+
+              <td>{{ r.fecha_nacimiento | date: 'dd/MM/yyyy' }}</td>
+
+              <td>{{r.asignacion}}</td>
+              <td>{{r.edad}}</td>
+              <td>{{r.antiguedad}}</td>
+
+
+ 
+
+            </tr>
+
+            <tr *ngIf="arregloResultado?.length === 0">
+              <td colspan="10" class="text-center text-muted py-3">
+                No hay datos para mostrar
+              </td>
+            </tr>
+          </tbody>
+
+
+        </table>
+      </div>
+
+    </div>
+
+
+
+
+
+  </div>
+  }
+
+    @if(VentanaSeleccionada?.id==='r11'){
+  <div>
+
+    <div class="d-flex align-items-center gap-4">
+
+      <div *ngFor="let op of opciones" class="d-flex align-items-center gap-2">
+        <p-radioButton name="fechaCorte" [value]="op.value" [(ngModel)]="opcion" inputId="{{ op.value }}">
+        </p-radioButton>
+
+        <label [for]="op.value" class="mb-0">
+          {{ op.label }}
+        </label>
+      </div>
+
+
+    </div>
+    <hr>
+
+
+    <div *ngIf="opcion === 'fuerza'">
+
+      <form #formbuscar="ngForm" class="row">
+        <label for="" class="col-md-2"  >
+          Fuerza
+
+          <select name="fuerza" class="form-control" id="fuerza" #fuerza="ngModel" ngModel required>
+
+            <option *ngFor="let u of arregloFuerzas" [ngValue]="u">{{ u.nombre }}</option>
+
+          </select>
+        </label>
+      <label for="" class="col-md-2"  >
+          Fecha
+
+          <input type="month"  class="form-control " name="fecha" #fecha="ngModel" ngModel required>
+        </label>
+ 
+ 
+
+
+        <label for="" class="col-md-1">
+          <br>
+          <button class="form-control btn btn-primary" [disabled]="!formbuscar.valid"
+            (click)="  listaPrimerIngreso(formbuscar,'fuerza')" style="margin-left: 10px;">
+            Buscar
+          </button>
+        </label>
+         <label for="" class="col-md-1">
+          <br>
+          <button class="form-control btn btn-primary" [disabled]="!formbuscar.valid"
+            (click)="  limpiar_organizacion()" style="margin-left: 10px;">
+            Limpiar
+          </button>
+        </label>
+
+      </form>
+    </div>
+
+    <div *ngIf="opcion === 'unidad'">
+
+      <form #formbuscar="ngForm" class="row">
+        <label for="" class="col-md-2" (change)="sacarunidades(formbuscar)">
+          Fuerza
+
+          <select name="fuerza" class="form-control" id="fuerza" #fuerza="ngModel" ngModel required>
+
+            <option *ngFor="let u of arregloFuerzas" [ngValue]="u">{{ u.nombre }}</option>
+
+          </select>
+        </label>
+
+        <label for="" style="margin-left: 5px;" class="col-md-2">
+          Unidad/Base
+
+          <select name="unidad" class="form-control" id="unidad" #unidad="ngModel" ngModel required>
+
+            <option *ngFor="let u of ArregloUnidades" [ngValue]="u">{{ u.unidad }}</option>
+
+          </select>
+        </label>
+ <label for="" class="col-md-2" >
+          Fecha
+
+          <input type="month"  class="form-control " name="fecha" #fecha="ngModel" ngModel required>
+        </label>
+     
+
+
+        <label for="" class="col-md-1">
+          <br>
+          <button class="form-control btn btn-danger" [disabled]="!formbuscar.valid"
+            (click)="listaPrimerIngreso(formbuscar,'unidad')" style="margin-left: 10px;">
+            Buscar
+          </button>
+        </label>
+        <label for="" class="col-md-1">
+          <br>
+          <button class="form-control btn btn-danger" [disabled]="!formbuscar.valid" (click)="limpiar2(formbuscar)"
+            style="margin-left: 10px;">
+            Limpiar
+          </button>
+        </label>
+      </form>
+    </div>
+
+
+
+
+    <div class="container-fluid py-3">
+
+
+
+      <!-- HEADER -->
+      <div class="row align-items-center mb-3">
+        <div class="col">
+          <h5 class="mb-0">Lista de personal de primer Ingreso</h5>
+        </div>
+
+
+      </div>
+
+
+
+
+
+    </div>
+
+    <div class="container-fluid py-3">
+
+      <!-- HEADER -->
+      <div class="row align-items-center mb-3">
+
+
+        <div class="col-auto">
+          <button class="btn btn-sm btn-success" (click)="exportarExcelResumen('tablaList')">
+            <i class="bi bi-file-earmark-excel me-1"></i>
+            Exportar
+          </button>
+        </div>
+      </div>
+
+
+
+      <!-- TABLA -->
+      <div class="table-responsive">
+
+
+
+        <table id="tablaList" class="table table-bordered table-hover table-sm align-middle">
+          <thead class="table-light">
+            <tr>
+              <th style="width:60px">#</th>
+              <th>Identidad</th>
+              <th>Categoria</th>
+              <th>Grado</th>
+              <th>Nombres</th>
+              <th>Fecha Ingreso</th>
+              <th>Asignacion</th>
+              <th>Cuenta</th>
+               
+
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let r of arregloResultado; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ r.Identidad }}</td>
+              <td>{{r.Categoria}}</td>
+              <td>{{ r.Grado }}</td>
+              <td>{{ r.Nombres }}</td>
+              <td>{{ r.Fecha_Ingreso | date: 'dd/MM/yyyy' }}</td>
+              <td>{{r.Asignacion}}</td>
+               <td >{{ r.N_Cuenta }}</td>
+                       </tr>
+
+            <tr *ngIf="arregloResultado?.length === 0">
+              <td colspan="10" class="text-center text-muted py-3">
+                No hay datos para mostrar
+              </td>
+            </tr>
+          </tbody>
+
+
+        </table>
+      </div>
+
+    </div>
+
+
+
+
+
+  </div>
+  }
+
+    @if(VentanaSeleccionada?.id==='r12'){
+  <div>
+
+    <div  >
+
+      <form #formbuscar="ngForm" class="row">
+     
+     <label for="" class="col-md-2"  >
+          Años 
+
+          <input type="number" min="1" class="form-control " name="anos" #anos="ngModel" ngModel required>
+        </label>
+
+   
+        
+ 
+
+
+        <label for="" class="col-md-1">
+          <br>
+          <button class="form-control btn btn-primary" [disabled]="!formbuscar.valid"
+            (click)="  listaAntiguedadGrado(formbuscar,'fuerza')" style="margin-left: 10px;">
+            Buscar
+          </button>
+        </label>
+         <label for="" class="col-md-1">
+          <br>
+          <button class="form-control btn btn-primary" [disabled]="!formbuscar.valid"
+            (click)="  limpiar_organizacion()" style="margin-left: 10px;">
+            Limpiar
+          </button>
+        </label>
+
+      </form>
+    </div>
+ 
+<p style="color: red;">*Segun el numero que coloque se reflejara al cantidad de años  de antiguedad que desea visualizar </p>
+
+
+    <div class="container-fluid py-3">
+
+
+
+      <!-- HEADER -->
+      <div class="row align-items-center mb-3">
+        <div class="col">
+          <h5 class="mb-0">Personal con antiguedad en el grado</h5>
+        </div>
+
+
+      </div>
+
+
+
+
+
+    </div>
+
+    <div class="container-fluid py-3">
+
+      <!-- HEADER -->
+      <div class="row align-items-center mb-3">
+
+
+        <div class="col-auto">
+          <button class="btn btn-sm btn-success" (click)="exportarExcelResumen('tablaList')">
+            <i class="bi bi-file-earmark-excel me-1"></i>
+            Exportar
+          </button>
+        </div>
+      </div>
+
+
+
+      <!-- TABLA -->
+      <div class="table-responsive">
+
+
+
+        <table id="tablaList" class="table table-bordered table-hover table-sm align-middle">
+          <thead class="table-light">
+            <tr>
+              <th style="width:60px">#</th>
+              <th>Identidad</th>
+              <th>Categoria</th>
+              <th>Grado</th>
+              <th>Nombres</th>
+              <th>Fecha Ultimo Ascenso</th>
+              <th>Asignacion</th>
+              <th>Antiguedad</th>
+               
+
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let r of arregloResultado; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ r.identidad }}</td>
+              <td>{{r.categoria}}</td>
+              <td>{{ r.grado }}</td>
+              <td>{{ r.nombres }}</td>
+              <td>{{ r.fecha_ultimo_ascenso | date: 'dd/MM/yyyy' }}</td>
+              <td>{{r.asignacion}}</td>
+               <td >{{ r.antiguedad_en_grado }}</td>
+                       </tr>
+
+            <tr *ngIf="arregloResultado?.length === 0">
+              <td colspan="10" class="text-center text-muted py-3">
+                No hay datos para mostrar
+              </td>
+            </tr>
+          </tbody>
+
+
+        </table>
+      </div>
+
+    </div>
+
+
+
+
+
+  </div>
+  }
+
+   @if(VentanaSeleccionada?.id==='r13'){
+  <div>
+
+    <div  >
+
+      <form #formbuscar="ngForm" class="row">
+           
+
+        <label for="" class="col-md-1">
+          <br>
+          <button class="form-control btn btn-primary" [disabled]="!formbuscar.valid"
+            (click)="  lisataPersonalSinCargo()" style="margin-left: 10px;">
+            Buscar
+          </button>
+        </label>
+         <label for="" class="col-md-1">
+          <br>
+          <button class="form-control btn btn-primary" [disabled]="!formbuscar.valid"
+            (click)="  limpiar_organizacion()" style="margin-left: 10px;">
+            Limpiar
+          </button>
+        </label>
+
+      </form>
+    </div>
+ 
+<p style="color: red;">*Aqui se visualiza el personal sin cargo (Click en Buscar) </p>
+
+
+    <div class="container-fluid py-3">
+
+
+
+      <!-- HEADER -->
+      <div class="row align-items-center mb-3">
+        <div class="col">
+          <h5 class="mb-0">Personal con antiguedad en el grado</h5>
+        </div>
+
+
+      </div>
+
+
+
+
+
+    </div>
+
+    <div class="container-fluid py-3">
+
+      <!-- HEADER -->
+      <div class="row align-items-center mb-3">
+
+
+        <div class="col-auto">
+          <button class="btn btn-sm btn-success" (click)="exportarExcelResumen('tablaList')">
+            <i class="bi bi-file-earmark-excel me-1"></i>
+            Exportar
+          </button>
+        </div>
+      </div>
+
+
+
+      <!-- TABLA -->
+      <div class="table-responsive">
+
+
+
+        <table id="tablaList" class="table table-bordered table-hover table-sm align-middle">
+          <thead class="table-light">
+            <tr>
+              <th style="width:60px">#</th>
+              <th>Identidad</th>
+              <th>Grado</th>
+              <th>Nombres</th>
+              <th>Cargo</th>
+              <th>Fuerza/Depend. </th>
+              <th>Unidad</th>
+               
+
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let r of arregloResultado; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ r.identidad }}</td>
+            
+              <td>{{ r.grado }}</td>
+              <td>{{ r.persona }}</td>
+              <td>{{ r.cargo  }}</td>
+              <td>{{r.nombre}}</td>
+               <td >{{ r.unidad }}</td>
+                       </tr>
+
+            <tr *ngIf="arregloResultado?.length === 0">
               <td colspan="10" class="text-center text-muted py-3">
                 No hay datos para mostrar
               </td>

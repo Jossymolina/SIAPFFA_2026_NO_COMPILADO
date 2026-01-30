@@ -4,41 +4,41 @@ import { FormsModule, UntypedFormControl, UntypedFormGroup, Validators } from '@
 import { ActivatedRoute, Router } from '@angular/router';
 import { ServiciosMensajeService } from '../../servicios/serviMensaje/servicios-mensaje.service';
 import { ServicioBackendService } from '../../servicios/servicio-backend.service';
- 
-   import { DialogModule } from 'primeng/dialog';
- import { ButtonModule } from 'primeng/button';
- import {
+
+import { DialogModule } from 'primeng/dialog';
+import { ButtonModule } from 'primeng/button';
+import {
   ReactiveFormsModule,
- 
-  
+
+
 } from '@angular/forms';
 @Component({
   selector: 'app-tb-control-disciplinario',
-  standalone:true,
+  standalone: true,
   imports: [
     CommonModule,
-FormsModule,
-DialogModule,
-ButtonModule,
-ReactiveFormsModule
+    FormsModule,
+    DialogModule,
+    ButtonModule,
+    ReactiveFormsModule
   ],
   templateUrl: './tb-control-disciplinario.component.html',
   styleUrl: './tb-control-disciplinario.component.css',
 })
 export class TbControlDisciplinarioComponent {
- arregloArestos = []
+  arregloArestos = []
   @Input("identidad") identidad_
   idarrestoSelected;
   imgURL: any = "";
   public FilesToUploads: Array<File> = [];
   private identidadregex: any = /^[0-9]*$/;
   personaQueAreasta: any;
- 
+
   constructor(
     private _Router: Router,
     private _Activatedroute: ActivatedRoute,
     public _DatospersonalesService: ServicioBackendService,
- 
+
 
     private _ServiciosMensajesService: ServiciosMensajeService
 
@@ -68,31 +68,32 @@ export class TbControlDisciplinarioComponent {
   ngOnInit(): void {
     this.usuariologuiado = JSON.parse(localStorage.getItem('user_login')!).user;
     this.sacarArestosdelPersonal();
+    this.sacarPermisoPersonal()
   }
   sacarArestosdelPersonal() {
     var params = {
       identidad: this.identidad_
     }
-  
+
     this.arregloArestos = []
     this._ServiciosMensajesService.show()
     this._DatospersonalesService.sacarAresto(params).subscribe(
       Response => {
-    this._ServiciosMensajesService.hide()
+        this._ServiciosMensajesService.hide()
 
         if (Response.error) {
           this._DatospersonalesService.mensajeError(Response.error.sqlMessage)
         } else {
           if (Response.mensaje) {
-           // this._DatospersonalesService.mensajeError(Response.mensaje)
+            // this._DatospersonalesService.mensajeError(Response.mensaje)
           } else {
             this.arregloArestos = Response.resultado;
 
           }
         }
-      },error=>{
-    this._ServiciosMensajesService.hide()
-this._ServiciosMensajesService.mensajeerrorServer();
+      }, error => {
+        this._ServiciosMensajesService.hide()
+        this._ServiciosMensajesService.mensajeerrorServer();
       }
     )
   }
@@ -103,42 +104,41 @@ this._ServiciosMensajesService.mensajeerrorServer();
         idarrestos: iddocumento,
         dir: dir
       }
-         this._ServiciosMensajesService.show()
+      this._ServiciosMensajesService.show()
 
       this._DatospersonalesService.deleteDocumentoArrestos(params).subscribe(
         Response => {
-      this._ServiciosMensajesService.hide();
+          this._ServiciosMensajesService.hide();
 
-       if (Response.error) {
+          if (Response.error) {
             this._DatospersonalesService.mensajeError(Response.error)
-           } else {
+          } else {
             if (Response.mensaje) {
               this._DatospersonalesService.mensajeError(Response.mensaje)
-               } else {
-                 this.sacarArestosdelPersonal();
-           }
+            } else {
+              this.sacarArestosdelPersonal();
+            }
           }
-        },error=>{
-      this._ServiciosMensajesService.hide();
-this._ServiciosMensajesService.mensajeerrorServer();
+        }, error => {
+          this._ServiciosMensajesService.hide();
+          this._ServiciosMensajesService.mensajeerrorServer();
         }
       )
     }
-   
+
   }
   ver(f: any) {
     this.idarrestoSelected = f.idarrestos
 
   }
 
-  
+
   guardardocumentoDElArresto() {
     this._ServiciosMensajesService.show()
 
     this.makeFileReques(this._DatospersonalesService.url2 + "subirdocumentosArresto/" + this.idarrestoSelected, [], this.FilesToUploads).then(
       (result: any) => {
         this._ServiciosMensajesService.hide()
-
 
         this.imgURL = "";
         if (result.error) {
@@ -154,9 +154,9 @@ this._ServiciosMensajesService.mensajeerrorServer();
           }
 
         }
-      },error=>{
-    this._ServiciosMensajesService.hide()
-this._ServiciosMensajesService.mensajeerrorServer();
+      }, error => {
+        this._ServiciosMensajesService.hide()
+        this._ServiciosMensajesService.mensajeerrorServer();
       }
     )
 
@@ -228,52 +228,52 @@ this._ServiciosMensajesService.mensajeerrorServer();
 
   }
   async guardarAresto() {
-let respuesta = await this._ServiciosMensajesService.mensajePregunta("Esta seguro de agregar este arresto");
-if (respuesta) {
-  this.formularioAresto.value.identidad = this.identidad_;
-  if (this.formularioAresto.valid) {
-    this._ServiciosMensajesService.show()
+    let respuesta = await this._ServiciosMensajesService.mensajePregunta("Esta seguro de agregar este arresto");
+    if (respuesta) {
+      this.formularioAresto.value.identidad = this.identidad_;
+      if (this.formularioAresto.valid) {
+        this._ServiciosMensajesService.show()
 
-    this._DatospersonalesService.guardarAresto(this.formularioAresto.value).subscribe(
-      Response => {
-        this._ServiciosMensajesService.hide()
-        if (Response.error) {
-          this._DatospersonalesService.mensajeError(Response.error.sqlMessage)
-        } else {
-          if (Response.mensaje) {
-            this._DatospersonalesService.mensajeError(Response.mensaje)
-          } else {
-            this._DatospersonalesService.mensajeBueno("Excelente")
-            this.sacarArestosdelPersonal();
+        this._DatospersonalesService.guardarAresto(this.formularioAresto.value).subscribe(
+          Response => {
+            this._ServiciosMensajesService.hide()
+            if (Response.error) {
+              this._DatospersonalesService.mensajeError(Response.error.sqlMessage)
+            } else {
+              if (Response.mensaje) {
+                this._DatospersonalesService.mensajeError(Response.mensaje)
+              } else {
+                this._DatospersonalesService.mensajeBueno("Excelente")
+                this.sacarArestosdelPersonal();
 
+              }
+            }
+          }, error => {
+            this._ServiciosMensajesService.hide()
+            this._ServiciosMensajesService.mensajeerrorServer();
           }
-        }
-      },error=>{
-        this._ServiciosMensajesService.hide()
-        this._ServiciosMensajesService.mensajeerrorServer();
+        )
+
+      } else {
+
+        this._DatospersonalesService.mensajeError("Rellene los Campos")
+
+
       }
-    )
-
-  } else {
-  
-    this._DatospersonalesService.mensajeError("Rellene los Campos")
-
-
-  }
-}
+    }
 
 
   }
   buscarPersonaParaOrdenarAresto() {
-  
+
     var params = {
       identidad_pariente: this.formularioAresto.value.identidadAcusador
     }
-       this._ServiciosMensajesService.show()
+    this._ServiciosMensajesService.show()
 
     this._DatospersonalesService.sacarPersonalIdentidad(params).subscribe(
       Response => {
-    this._ServiciosMensajesService.hide()
+        this._ServiciosMensajesService.hide()
 
         if (Response.error) {
           this._DatospersonalesService.mensajeError(Response.error.sqlMessage)
@@ -285,18 +285,20 @@ if (respuesta) {
 
           }
         }
-      },error=>{
-    this._ServiciosMensajesService.hide()
-this._ServiciosMensajesService.mensajeerrorServer();
+      }, error => {
+        this._ServiciosMensajesService.hide()
+        this._ServiciosMensajesService.mensajeerrorServer();
       }
     )
   }
   mostrarModalAresto = false;
-mostrarModalDocumentoArresto = false;
-mostrarModalBuscarPersona = false;
-permisoBotonAdminArresto = false;
- sacarPermisoPersonal(){
-  this.permisoBotonAdminArresto=  this._DatospersonalesService.verificarPermisos(['User_admin'])
+  mostrarModalDocumentoArresto = false;
+  mostrarModalBuscarPersona = false;
+  agregarArestoT = false
+  sacarPermisoPersonal() {
+
+    this.agregarArestoT = this._DatospersonalesService.verificarPermisos(['User_admin', 'User_admin01', 'User_admin02'])
     //console.log( JSON.parse(localStorage.getItem("permisos") || "[]") as any[])
   }
+
 }

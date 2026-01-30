@@ -158,7 +158,7 @@ export class SolicitudConstanciasPlanffaaComponent {
     let parametro = {
       persona_solicitante: this.personaSeleccionada,
       usuario: this.usuarioLogin,
-      empresa: data.value.empresa,
+      empresa:  data.value.empresa? data.value.empresa : "No indico la empresa",
       tipo_constancia: this.tipoConstancia,//data.value.tipo,
       idestado_whatssap: 1,
 
@@ -172,11 +172,10 @@ export class SolicitudConstanciasPlanffaaComponent {
       ue_pertenece: this.personaSeleccionada.ue_pertenece
 
     }
-    console.log(parametro)
+    
   this._ServiciosMensajesService.show()
     this._DatospersonalesService.registrarconsanciadeCorreo(parametro).subscribe({
       next: (response) => {
-        console.log(response)
         this._ServiciosMensajesService.hide()
 
         if (response.error) return this._ServiciosMensajesService.mensajeMalo(response.error)
@@ -191,10 +190,7 @@ export class SolicitudConstanciasPlanffaaComponent {
       }
     }) 
   }
-  verificarPermiso(data) {
-    return this._DatospersonalesService.verificarPermisos(data)
-
-  }
+  
 
   objetoSeleccionado
   empresaSeleccionada
