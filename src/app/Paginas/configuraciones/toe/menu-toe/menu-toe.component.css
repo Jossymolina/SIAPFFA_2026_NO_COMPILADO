@@ -1,0 +1,220 @@
+ /* contenedor */
+.toe-wrap{
+  border: 1px solid #111;
+  background: #fff;
+}
+
+/* barra verde superior */
+.toe-title{
+  background: #16a34a;
+  color: #000;
+  font-weight: 900;
+  text-align: center;
+  padding: 6px 10px;
+  text-transform: uppercase;
+  border-bottom: 1px solid #111;
+  font-size: 20px;
+}
+
+/* scroll horizontal */
+.toe-scroll{
+  overflow: auto;
+  max-height: 72vh;
+}
+
+/* tabla tipo excel */
+.toe-table{
+  border-collapse: collapse;
+  width: max-content;
+  min-width: 100%;
+  font-size: 14px;
+}
+
+/* bordes fuertes */
+.toe-table th, .toe-table td{
+  border: 1px solid #111;
+  padding: 3px 6px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* headers */
+.toe-table thead th{
+  background: #feffff;
+  font-weight: 900;
+  font-size: 12px;
+}
+
+/* fila 2 headers */
+.toe-table thead .h2 th{
+  font-weight: 900;
+}
+
+/* DIA en naranja como la imagen */
+.toe-table th.dia,
+.toe-table td.diaVal{
+  color: #d97706;
+  font-weight: 900;
+}
+
+/* sticky No. y Unidad */
+.sticky-1{
+  position: sticky;
+  left: 0;
+  z-index: 5;
+  background: #fff;
+}
+.sticky-2{
+  position: sticky;
+  left: 56px; /* ancho de No. */
+  z-index: 5;
+  background: #fff;
+}
+
+.c-no{ width: 56px; font-weight: 900; }
+.c-unit{ min-width: 220px; text-align: left; font-weight: 900; }
+
+/* headers sticky encima */
+.toe-table thead .sticky-1,
+.toe-table thead .sticky-2{
+  background: #f3f4f6;
+  z-index: 10;
+}
+
+/* zebra suave */
+.toe-table tbody tr:nth-child(even) td{
+  background: #fafafa;
+}
+
+.empty{
+  text-align: center;
+  padding: 12px;
+  font-weight: 800;
+}
+
+
+/* Hover completo por fila */
+.toe-table tbody tr:hover td{
+  background: #08d34f;   /* verde claro suave */
+  transition: background .15s ease-in-out;
+}
+
+/* Asegurar que las columnas sticky también cambien */
+.toe-table tbody tr:hover td.sticky-1,
+.toe-table tbody tr:hover td.sticky-2{
+  background: #08f75b !important;
+}
+
+
+/* fila */
+.toe-table tbody tr.row-hover td{
+  background: #05f12c65;
+}
+
+/* columna NO (1ra celda de cada fila) */
+.toe-table tbody tr td:nth-child(1).col-hover,
+.toe-table tbody tr.row-hover td:nth-child(1){
+  /* esto asegura consistencia visual */
+}
+
+/* columna UNIDAD (2da celda de cada fila) */
+.toe-table tbody tr td:nth-child(2).col-hover,
+.toe-table tbody tr.row-hover td:nth-child(2){
+}
+
+/* pinta TODA la columna No cuando hoverCol='__no__' */
+.toe-table tbody tr td:nth-child(1){
+  /* normal */
+}
+.toe-table tbody tr td:nth-child(1).col-hover{
+  background: #eff6ff !important;
+}
+
+/* pinta TODA la columna Unidad cuando hoverCol='__unit__' */
+.toe-table tbody tr td:nth-child(2).col-hover{
+  background: #ffeff1 !important;
+}
+
+/* columnas dinámicas (las de groups) */
+.toe-table tbody td.col-hover{
+  background: #b3ff0056 !important;
+}
+
+/* intersección (la cruz) */
+.toe-table tbody td.cross{
+  background: #f1d4ac !important;
+  outline: 2px solid rgba(22,163,74,.35);
+  outline-offset: -2px;
+  font-weight: 900;
+}
+
+/* negativo */
+.toe-table td.negativo{
+  background: #f50505 !important; /* rojo claro */
+  color: #000000;
+  font-weight: 900;
+}
+
+/* positivo */
+.toe-table td.positivo{
+  background: #dbeafe !important; /* azul claro */
+  color: #1e40af;
+  font-weight: 900;
+}
+
+.total-head{
+  background:#f1f5f9;
+  font-weight:900;
+}
+.total-col{
+  background:#f8fafc;
+  font-weight:900;
+}
+
+
+.toe-total-row td{
+  background:#f1f5f9 !important;
+  font-weight: 900;
+}
+
+.total-sticky{
+  background:#eaf2ff !important;
+}
+.total-cell{
+  font-variant-numeric: tabular-nums;
+}
+
+.toe-total-row td.col-hover{
+  background: #eff6ff !important; /* azul suave */
+}
+
+/* Intersección (cross) en la fila TOTAL */
+.toe-total-row td.cross{
+  background: #bbf7d0 !important; /* verde más fuerte */
+  outline: 2px solid rgba(22,163,74,.35);
+  outline-offset: -2px;
+}
+
+/* IMPORTANTE: si es positivo/negativo, que se respete ese color por encima del hover */
+.toe-total-row td.negativo{
+  background: #f71d1d !important;
+}
+.toe-total-row td.positivo{
+  background: #dbeafe !important;
+}
+
+.toe-table thead tr.h1 th{
+  position: sticky;
+  top: 0;
+  z-index: 100;
+ 
+}
+/* Segunda fila */
+.toe-table thead tr.h2 th{
+  position: sticky;
+  top: 20px; /* altura real de la fila h1 */
+  z-index: 99;
+  background: #fff;
+}
+
+ 

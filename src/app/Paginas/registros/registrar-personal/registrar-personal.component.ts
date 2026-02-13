@@ -136,7 +136,6 @@ sacarFuerza(){
 sacarBancos(){
         this._DatospersonalesService.sacarbancos().subscribe(
       Response => {
-        console.log(Response)
         this.arregloBancos = Response.resultado
       }
     )
@@ -184,7 +183,6 @@ sacarFechaServer(){
   guardarPersonal(data:any) {
  
  
- 
 
   var fechaSeleccionada= this.unidadDelIngreso.FechaIngresar.split("/")
 
@@ -208,6 +206,7 @@ sacarFechaServer(){
  this.ingresoAscenso.banderaPrimerIngreso = "1";
  var numAcuerdoCabie="";
 
+ /* Error de validacion de categoria.... */
  if ( this.categoriaAsignar.idcategoria===2 || this.categoriaAsignar.idcategoria===4|| this.categoriaAsignar.idcategoria===3) {
   if (this.categoriaAsignar.idcategoria===2) {
     if (parseInt(this.mesdelAno)<12) {
@@ -229,13 +228,16 @@ sacarFechaServer(){
       }
     }
   }
-  this.pasosFormulario.p1 =0
-  this.pasosFormulario.p2 =1
+
   this.banderabloqContrado=true;
    this.ingresoAscenso.numeroAcuerdo = numAcuerdoCabie;
  } else {
+ 
   this.ingresoAscenso.numeroAcuerdo = "";
  }
+
+  this.cambiVentana(0,2,0)
+
 
  
 /*
@@ -263,7 +265,7 @@ sacarFechaServer(){
 
      } else {
        this.ingresoAscenso.fecha_ascenso = this.ingresoAscenso.fecha_ingreso
-         this.atrasFormularioPersona(0,0,1)
+       this.cambiVentana(0,0,3)
      }
     }
   }
@@ -286,14 +288,12 @@ sacarFechaServer(){
       iddepartamento: form.value.departamentoselected.iddepartamento,
       prueba: "prueba"
     }
-    console.log(form.value)
 
   this.arreglomunicipio = []
   this._ServiciosMensajeService.show()
     this._DatospersonalesService.sacarmunicipio(params).subscribe(
       {
         next:(Response)=>{
-          console.log(Response)
         this._ServiciosMensajeService.hide()
         if(Response.error) return this._ServiciosMensajeService.mensajeMalo(Response.error)
           if(Response.mensaje) return this._ServiciosMensajeService.mensajeMalo(Response.error)
@@ -429,7 +429,6 @@ sacarFechaServer(){
 
   }
   ver2(){
-    console.log(this.fechaingreso.value)
   }
 fechaingreso
   ver() {
@@ -675,7 +674,6 @@ loading = false
     card:this.Card_Selecionado,
     usuario:this.usuarioLogiado
   }
-  console.log(parametorEnviar)
  let respuesta = await this._DatospersonalesService.mensajePregunta("Precaucion","Esta seguro de guardar los datos")
  if (respuesta) {
   this.formIngreso.value.combatiente = this.categoriaSelected.combatiente
@@ -731,7 +729,7 @@ this._ServiciosMensajeService.hide()
       
        
       this.sacarCupos();
-      this.atrasFormularioPersona(0,0,0)
+      this.cambiVentana(1,0,0)
     },error:()=>{
       this._ServiciosMensajeService.hide()
       this._DatospersonalesService.mensajeError("Error de conexion | Problema")
@@ -773,6 +771,13 @@ verificarPermiso(data){
  }
  atrasMenu(ruta){
 this._Router.navigate([ruta]);
+
+ }
+ cambiVentana(p1,p2,p3){
+   this.pasosFormulario.p1 = p1
+   this.pasosFormulario.p2 = p2
+   this.pasosFormulario.p3 = p3
+
 
  }
 }

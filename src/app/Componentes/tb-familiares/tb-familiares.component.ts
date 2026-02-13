@@ -314,6 +314,8 @@ this._ServiciosMensajesService.show()
               }
               this._DatospersonalesService.guardarhijo(datos2).subscribe(
                 Response => {
+                  console.log("#############")
+                  console.log(Response)
                   if (Response.error) {
                     this._DatospersonalesService.mensajeError(Response.error)
 

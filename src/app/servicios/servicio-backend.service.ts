@@ -13,9 +13,9 @@ import { ServiciosMensajeService } from './serviMensaje/servicios-mensaje.servic
 })
 //ng build --aot --output-hashing=all
 export class ServicioBackendService {
-  public url2 = "http://localhost:3979/"  //"http://localhost:3978/" //"https://siapfa.ffaa.mil.hn:4443/"
+  public url2 = "https://siapfa.ffaa.mil.hn:4443/" //"http://localhost:3979/" //"https://siapfa.ffaa.mil.hn:4443/"
   refrescar = 0
-  public url ="http://localhost:3979/" //"http://localhost:3978/" //"https://siapfa.ffaa.mil.hn:4443/"     
+  public url = "https://siapfa.ffaa.mil.hn:4443/"//"http://localhost:3979/" //"https://siapfa.ffaa.mil.hn:4443/"     
   usuarioLogin: any;
   token = "";
 
@@ -35,6 +35,21 @@ export class ServicioBackendService {
 
 
   ) { }
+  municipioRecidencia(data){
+    return this.metodopost("sacarMunicipioRecidencia",data)
+  }
+  actualizarSexoSangre(dato){
+    return this.metodopost("actualizarSexoSangre",dato)
+  }
+  getToePivotPorCorto(data){
+    return this.metodopost('getToePivotPorCorto', data);
+  }
+    subirdocumentosArresto(data: FormData): Observable<any> {
+   var headers = new HttpHeaders({
+      "Authorization": this.getToken()
+    });
+    return this.http.post(this.url + "subirdocumentosArresto", data, { headers: headers });
+  }
   resetearQR(data){
     return this.metodopost("resetearQR",data)
   }

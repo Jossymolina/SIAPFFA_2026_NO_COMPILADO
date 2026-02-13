@@ -1,13 +1,12 @@
  
  
-
  
 <div class="container h-100" *ngIf="cambiodeVEntanas===3">
   <div class="row justify-content-center h-100">
     <div class="col-sm-8 align-self-center text-center" style="margin-top: 100px;">
       <div class="card shadow">
         <div class="card-body">
-          <h1>FORMULARIO DE BAJA (EMC)</h1>
+          <h1>FORMULARIO DE BAJA (EMC-01)</h1>
 
           <form [formGroup]="formBAJA" class="row">
 
@@ -133,14 +132,14 @@
 </div>
 
  
-
+@if(sacarPermisoPersonal(['R_0002'])   && cambiodeVEntanas===0){
 <div class="container h-100"
-    *ngIf="sacarPermisoPersonal(['R_0002'])   && cambiodeVEntanas===0">
+ >
   <div class="row justify-content-center h-100">
     <div class="col-sm-8 align-self-center text-center" style="margin-top: 100px;">
       <div class="card shadow">
         <div class="card-body">
-          <h1>IDENTIDAD (PARA DAR DE BAJA EN LA UNIDAD)</h1>
+          <h1>IDENTIDAD (PARA DAR DE BAJA EN LA UNIDAD -01)</h1>
 
           <form [formGroup]="formIdentidad"
                 #formbusquedaId="ngForm"
@@ -162,11 +161,11 @@
            
 
             <label *ngIf="banderaspiner===0" class="col-md-3 text-start">
-              Buscar:
+    <br>
               <button class="btn btn-success form-control"
                       [disabled]="!formbusquedaId.valid"
                       (click)="buscarporidentidad()">
-                <i class="fab fa-500px"></i>
+                <i class="fab fa-500px"></i>Buscar
               </button>
             </label>
 
@@ -181,8 +180,7 @@
     </div>
   </div>
 </div>
-
-@if( sacarPermisoPersonal(['User_admin']) && cambiodeVEntanas===0){
+}@else if( sacarPermisoPersonal(['R_0003']) && cambiodeVEntanas===0){
  <div class="container h-100"   
      >
   <div class="row justify-content-center h-100">
@@ -212,10 +210,10 @@
 
            
             <label  class="col-md-3 text-start">
-              Buscar:
+             <br>
               <button class="btn btn-success form-control"
                       (click)="buscarporidentidadParaEMc()">
-                <i class="pi pi-search"></i>
+                <i class="pi pi-search"></i>Buscar
               </button>
             </label>
 
@@ -227,7 +225,7 @@
     </div>
   </div>
 </div>
-}@else{
+}
     <div class="container h-100" *ngIf="sacarPermisoPersonal(['R_0002'])  && cambiodeVEntanas===1">
       <div class="row justify-content-center h-100">
         <div class="col-sm-8 align-self-center text-center" style="margin-top: 100px;">
@@ -355,5 +353,4 @@
         </div>
       </div>
     </div>
-}
 

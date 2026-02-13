@@ -31,6 +31,7 @@
         <!-- =========================
              PASO 1: LISTA DE CUPOS / REGISTROS
         ========================== -->
+     
         <div  *ngIf="banderaPersonal===1" class="row g-3">
           <div
             class="col-12 col-sm-6 col-md-4 col-lg-3"
@@ -113,11 +114,16 @@
           </div>
         </div>
     <div *ngIf="banderaPersonal===2">
-      
+    
+
+       
+ 
+
         <!-- =========================
              PASO 2: FORMULARIO PRIMER INGRESO
         ========================== -->
-        <div [hidden]="pasosFormulario.p1 !== 1"  class="row justify-content-center">
+        <!--si es !==1 ejemplo  activo-->
+        <div   [hidden]="pasosFormulario.p1 !== 1"  class="row justify-content-center">
           <div class="col-12 col-lg-10">
             <div class="card shadow-sm rounded-4">
               <div class="card-body p-4">
@@ -130,6 +136,8 @@
                 <form
                    #formIngreso="ngForm"
                   class="row g-3">
+
+                
 
                   <!-- Nombre completo -->
                   <div class="col-12">
@@ -500,7 +508,7 @@
                      
                       >
                       <i class="pi pi-arrow-right me-2"></i>
-                      Siguiente
+                      Siguiente 1
                     </button>
                   </div>
 
@@ -514,7 +522,7 @@
         <!-- =========================
              PASO 3: FORMULARIO ASCENSO
         ========================== -->
-        <div [hidden]="pasosFormulario.p2 !== 1" class="row justify-content-center mt-3">
+        <div [hidden]="pasosFormulario.p2 !== 2" class="row justify-content-center mt-3">
           <div class="col-12 col-lg-10">
             <div class="card shadow-sm rounded-4">
               <div class="card-body p-4">
@@ -614,7 +622,7 @@
                     <button
                       type="button"
                       class="btn btn-outline-secondary"
-                      (click)="atrasFormularioPersona(1,0,0)">
+                      (click)="cambiVentana(1,0,0)">
                       <i class="pi pi-arrow-left me-2"></i>
                       Atrás
                     </button>
@@ -637,7 +645,7 @@
         <!-- =========================
              PASO 4: FORMULARIO ASIGNACIÓN
         ========================== -->
-        <div [hidden]="pasosFormulario.p3 !== 1" class="row justify-content-center mt-3">
+        <div [hidden]="pasosFormulario.p3 !== 3" class="row justify-content-center mt-3">
           <div class="col-12 col-lg-10">
             <div class="card shadow-sm rounded-4">
               <div class="card-body p-4">
@@ -697,7 +705,7 @@
                     <button
                       type="button"
                       class="btn btn-outline-secondary"
-                     (click)="atrasFormularioPersona(0,1,0)">
+                     (click)=" this.cambiVentana(0,2,0)">
                       <i class="pi pi-arrow-left me-2"></i>
                       Atrás
                     </button>

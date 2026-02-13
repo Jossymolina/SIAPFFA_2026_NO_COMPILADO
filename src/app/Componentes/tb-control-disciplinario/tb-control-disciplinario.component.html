@@ -113,7 +113,7 @@
                       style="margin-left: 2px;"
                       (click)="deleteDocumentoArresto(f.idarrestos, f.archivo)"
                     >
-                      <i class="fa fa-trash-o" aria-hidden="true"></i>
+                      <i class="pi pi-trash" aria-hidden="true"></i>
                     </button>
                   </ng-container>
                 </ng-template>
@@ -143,7 +143,7 @@
         #file
         type="file"
         class="form-control mt-1"
-        (change)="preview(file.files, $event)"
+        (change)="AgregarArchivos($event)"
       />
     </label>
   </div>

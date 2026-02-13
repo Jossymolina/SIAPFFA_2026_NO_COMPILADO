@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { FormsModule, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ServiciosMensajeService } from '../../servicios/serviMensaje/servicios-mensaje.service';
@@ -132,10 +132,58 @@ export class TbControlDisciplinarioComponent {
 
   }
 
+  @ViewChild('file') file;
+  arreglosArchivos = []
+  AgregarArchivos(data) {
 
+    this.arreglosArchivos = [];
+    for (let index = 0; index < data.target.files.length; index++) {
+      const file = data.target.files[index];
+      var parametros = {
+        archivo: file,
+        nombre: file.name,
+      };
+      this.arreglosArchivos.push(parametros);
+    }
+    //this.subirArchivo.nativeElement.value = ""
+  }
   guardardocumentoDElArresto() {
-    this._ServiciosMensajesService.show()
+  
+   const body = new FormData();
+      this.arreglosArchivos.forEach((element) => {
+        body.append('myfile', element.archivo, element.nombre);
+      });
+      let parametros = {
+        idAresto: this.idarrestoSelected,
+        usuariologuiado: this.usuariologuiado
+      }
+      this._ServiciosMensajesService.show()
+       body.append('parametros', JSON.stringify(parametros));
+        this._DatospersonalesService.subirdocumentosArresto(body).subscribe({
+        next: (response) => {
+          this._ServiciosMensajesService.hide();
+        this.sacarArestosdelPersonal();
+          if (response.error) return this._ServiciosMensajesService.mensajeMalo(response.error);
+          if (response.mensaje) return this._ServiciosMensajesService.mensajeAdvertencia(response.mensaje);
+          if (response.resultado) {
+           this.file.nativeElement.value = "";
+            this.arreglosArchivos = [];
+         
+          
+            return this._ServiciosMensajesService.mensajeBueno(response.resultado);
+          }
 
+
+
+        }, error: () => {
+                   this._ServiciosMensajesService.hide();
+
+
+          this._ServiciosMensajesService.mensajeerrorServer();
+        }
+      })
+       /*
+    this._ServiciosMensajesService.show()
     this.makeFileReques(this._DatospersonalesService.url2 + "subirdocumentosArresto/" + this.idarrestoSelected, [], this.FilesToUploads).then(
       (result: any) => {
         this._ServiciosMensajesService.hide()
@@ -158,7 +206,7 @@ export class TbControlDisciplinarioComponent {
         this._ServiciosMensajesService.hide()
         this._ServiciosMensajesService.mensajeerrorServer();
       }
-    )
+    )*/
 
   }
   makeFileReques(url: string, params: Array<String>, file: Array<File>) {

@@ -291,6 +291,9 @@
               <th>Fecha de Ejecucion</th>
               <th>Tipo Baja</th>
               <th>Unidad</th>
+              <th>Sueldo</th>
+              <th>Cuenta banco</th>
+
               <th>Observación</th>
 
             </tr>
@@ -307,6 +310,8 @@
               <td>{{ r.fecha_sistema | date: 'dd/MM/yyyy hh:mm:ss':"UTC-6" }}</td>
               <td>{{ r.tipo_baja }}</td>
               <td>{{ r.asignacion }}</td>
+                  <td>{{ r.sueldo_nominal | currency:'':'' }}</td>
+          <td>{{ r.cuenta_banco }}</td>
               <td>{{ r.observacion }}</td>
 
 
@@ -314,7 +319,7 @@
             </tr>
 
             <tr *ngIf="arregloBajas?.length === 0">
-              <td colspan="10" class="text-center text-muted py-3">
+              <td colspan="12" class="text-center text-muted py-3">
                 No hay datos para mostrar
               </td>
             </tr>
@@ -442,8 +447,20 @@
           </select>
         </label>
 
+         <label for="" class="col-md-2">
+          Combatiente
+
+          <select name="combatiente" class="form-control" id="combatiente" #combatiente="ngModel" ngModel required >
+            <option [ngValue]="[0,1]">Todo</option>
+
+            <option [ngValue]="[1]">Combatiente</option>
+            <option [ngValue]="[0]">No Combatiente</option>
+
+          </select>
+        </label>
 
 
+ 
         <label for="" class="col-md-1">
           <br>
           <button class="form-control btn btn-primary" [disabled]="!formbuscar.valid"
@@ -546,6 +563,9 @@
               <th>Fecha Ingreso</th>
               <th>Fecha Ascenso</th>
               <th>Fecha Asignación</th>
+              <th>Unidad</th>
+              <th>Combatiente</th>
+
 
 
 
@@ -566,12 +586,15 @@
               <td>{{ r.fecha_ingreso | date: 'dd/MM/yyyy' }}</td>
               <td>{{ r.fecha_ascenso | date: 'dd/MM/yyyy' }}</td>
               <td>{{ r.fecha_asignacion | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ r.unidad }}</td>
+              <td>{{ r.combatiente===1?'Combatiente':'No Combatiente' }}</td>
+
 
 
             </tr>
 
             <tr *ngIf="arregloListaParteUnidad?.length === 0">
-              <td colspan="10" class="text-center text-muted py-3">
+              <td colspan="11" class="text-center text-muted py-3">
                 No hay datos para mostrar
               </td>
             </tr>
@@ -654,6 +677,9 @@
               <th>Fecha de Ejecucion</th>
               <th>Tipo Baja</th>
               <th>Unidad</th>
+              <th>Sueldo</th>
+              <th>Cuenta banco</th>
+
               <th>Observación</th>
 
             </tr>
@@ -670,6 +696,8 @@
               <td>{{ r.fecha_sistema | date: 'dd/MM/yyyy hh:mm:ss':"UTC-6" }}</td>
               <td>{{ r.tipo_baja }}</td>
               <td>{{ r.asignacion }}</td>
+                 <td>{{ r.sueldo_nominal | currency:'':'' }}</td>
+          <td>{{ r.cuenta_banco }}</td>
               <td>{{ r.observacion }}</td>
 
 
@@ -677,7 +705,7 @@
             </tr>
 
             <tr *ngIf="arregloBajas?.length === 0">
-              <td colspan="10" class="text-center text-muted py-3">
+              <td colspan="12" class="text-center text-muted py-3">
                 No hay datos para mostrar
               </td>
             </tr>
@@ -889,6 +917,49 @@
             </tr>
 
             <tr *ngIf="arregloResumenParteUnidad?.length === 0">
+              <td colspan="4" class="text-center text-muted py-3">
+                No hay datos para mostrar
+              </td>
+            </tr>
+          </tbody>
+
+
+        </table>
+      </div>
+
+
+        <div class="row align-items-center mb-3">
+         <div class="col-auto">
+          <button class="btn btn-sm btn-success" (click)="exportarExcelResumen('resumenToe')">
+            <i class="bi bi-file-earmark-excel me-1"></i>
+            Exportar
+          </button>
+        </div>
+      </div>
+       <div class="table-responsive">
+        <table id="resumenToe" class="table table-bordered table-hover table-sm align-middle">
+          <thead class="table-light">
+            <tr>
+              <th style="width:60px">#</th>
+              <th>Grado</th>
+              <th>Autorizado</th>
+              <th>Dia</th>
+              <th  >TOE</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let r of arregloToe; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ (formbuscar.value?.fuerza.idfuerza===2? r.equivalente:r.nombre_grado) }}</td>
+              <td>{{ r.toe_autorizada }}</td>
+              <td> {{r.toe_dia}}</td>
+            <td [ngClass]="r.diferencia < 0 ? 'negativo' : 'positivo'">
+                  {{ r.diferencia }}
+                </td>
+            </tr>
+
+            <tr *ngIf="arregloToe?.length === 0">
               <td colspan="4" class="text-center text-muted py-3">
                 No hay datos para mostrar
               </td>
@@ -1970,5 +2041,8 @@
 
 
   </div>
+  }
+  @if (VentanaSeleccionada?.id==='r14') {
+       <app-menu-toe [tipoBusqueda]="'EMC'" ></app-menu-toe>
   }
 </div>

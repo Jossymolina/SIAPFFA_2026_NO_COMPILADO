@@ -55,7 +55,7 @@ export class ReportesMenuComponent {
       route: '/menu/menu-repo-historial',
       code:['Re_0004']
 
-    },
+    } 
  
   ];
     constructor(private router: Router,private _ServicioBackendService:ServicioBackendService) {

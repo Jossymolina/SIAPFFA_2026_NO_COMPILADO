@@ -140,6 +140,9 @@
               <!-- TAB: FICHA GENERAL -->
 
               <div *ngSwitchCase="'generales'">
+                <div class="toast-flotante" *ngIf="mostrarMensaje">
+                {{ mensajeFlotante }}
+              </div>
                 <div class="form-header mb-3">
                   <div class="form-title">
                     {{ objetoConsultado.nombres }} {{ objetoConsultado.apellidos }}
@@ -166,23 +169,40 @@
                     </div>
 
                     <div class="mini-block" style="cursor: pointer;" (click)="abrirModalCambiarRTN()">
+                       <span class="badge-editable"><i class="pi pi-pencil"></i>  </span>
+
                       <div class="mini-label">RTN</div>
                       <div class="mini-value">{{ objetoConsultado.rtn }}</div>
                     </div>
 
 
-                    <div class="mini-block">
-                      <div class="mini-label">Estado civil</div>
+                    <div class="mini-block" style="cursor: pointer;" (click)="cambioestadoCivil=true">
+                       <span class="badge-editable"><i class="pi pi-pencil"></i>  </span>
+
+                      <div class="mini-label">Estado civil</div> 
                       <div class="mini-value">{{ objetoConsultado.estado_civil }}</div>
                     </div>
 
-                    <div class="mini-block">
-                      <div class="mini-label">Municipio</div>
+                    <div class="mini-block"style="cursor: pointer;"  (click)="cambioMunicipioNacimiento=true"  >
+                       <span class="badge-editable"><i class="pi pi-pencil"></i>  </span>
+
+                      <div class="mini-label">Municipio de Nacimiento</div>
                       <div class="mini-value">{{ objetoConsultado.municipio }}</div>
                     </div>
 
-                    <div class="mini-block">
-                      <div class="mini-label">Dirección</div>
+                     <div class="mini-block" style="cursor: pointer;" *ngIf="objetoConsultado.activo === 1"  (click)="cambioMunicipioResidencia=true"  >
+                     <span class="badge-editable">
+                        <i class="pi pi-pencil"></i>  
+                      </span>
+
+                      <div class="mini-label">Municipio de Residencia</div>
+                      <div class="mini-value">{{ objetoConsultado.municipio_recidencia }}</div>
+                    </div>
+
+                    <div class="mini-block" style="cursor: pointer;" (click)="cambiarDireccion=true;agregarDireccion()" >
+                       <span class="badge-editable"><i class="pi pi-pencil"></i>  </span>
+
+                      <div class="mini-label">Dirección actual detallada</div>
                       <div class="mini-value multi-line">
                         {{ objetoConsultado.direccion }}
                       </div>
@@ -195,7 +215,7 @@
                     </div>
 
 
-                    <div class="mini-block" *ngIf="objetoConsultado.activo === 1">
+                    <div class="mini-block"  *ngIf="objetoConsultado.activo === 1">
                       <div class="mini-label" style="color: black;">ANTIGUEDAD EN EL GRADO</div>
                       <div class="mini-value">
                         {{ objetoConsultado?.antiguedad_GradoActual }} AÑOS
@@ -258,7 +278,9 @@
                       </div>
                     </div>
 
-                    <div class="mini-block">
+                    <div class="mini-block" style="cursor: pointer;" (click)=" cambiarSexoSangreF();cambiarSexoSangre=true" >
+                       <span class="badge-editable"><i class="pi pi-pencil"></i>  </span>
+
                       <div class="mini-label">Sexo / Sangre</div>
                       <div class="mini-value">
                         {{ objetoConsultado.sexo }} • {{ objetoConsultado.tipo_sangre }}
@@ -282,7 +304,8 @@
                       </div>
                     </div>
 
-                    <div class="mini-block">
+                    <div class="mini-block" style="cursor: pointer;" (click)="cambiarPasaporte=true" >
+                       <span class="badge-editable"><i class="pi pi-pencil"></i>  </span>
                       <div class="mini-label">Pasaporte</div>
                       <div class="mini-value">
                         {{ objetoConsultado.numero_pasaporte }}
@@ -627,6 +650,257 @@
 
           <button type="button" class="btn btn-primary col-md-3" [disabled]="!formRNT.valid"
             (click)="CambioRTNPErsonalAdmin(formRNT); displayCambiarRTN = false" title="Guardar el número de RTN nuevo">
+            Guardar
+          </button>
+        </div>
+      </div>
+
+    </form>
+  </ng-template>
+
+
+</p-dialog>
+
+
+<p-dialog [(visible)]="cambioestadoCivil" [modal]="true" [closable]="true" [dismissableMask]="true"
+  [style]="{ width: '450px' }">
+  <ng-template pTemplate="header">
+    <h5 class="m-0">Cambiar estado civil</h5>
+  </ng-template>
+  <ng-template pTemplate="content">
+    <form #formestado="ngForm" class="row">
+
+      <label class="col-md-12">
+        Departamento
+                   <select name="estado" #estado="ngModel" ngModel class="form-control mt-2" required>
+                          <option value="" disabled selected>Seleccione el estado civil</option>
+                         <option value="Soltero(a)">Soltero(a)</option>
+                          <option value="Casado(a)">Casado(a)</option>
+                          <option value="Viudo(a)">Viudo(a)</option>
+                          <option value="Divorciado(a)">Divorciado(a)</option>
+                          <option value="Union Libre">Unión libre</option>
+     </select>
+      </label>
+      <div class="row mt-1">
+        <div class="col d-flex justify-content-end gap-2">
+          <button type="button" class="btn btn-secondary col-md-3" (click)="cambioestadoCivil = false">
+            Cancelar
+          </button>
+
+          <button type="button" class="btn btn-primary col-md-3" [disabled]="!formestado.valid"
+            (click)="CambioEstadoCivil(formestado); cambioestadoCivil = false" title="Guardar el nuevo estado civil">
+            Guardar
+          </button>
+        </div>
+      </div>
+
+    </form>
+  </ng-template>
+
+
+</p-dialog>
+
+
+
+
+
+<p-dialog [(visible)]="cambioMunicipioNacimiento" [modal]="true" [closable]="true" [dismissableMask]="true"
+  [style]="{ width: '450px' }">
+  <ng-template pTemplate="header">
+    <h5 class="m-0">Cambiar municipio de nacimiento</h5>
+  </ng-template>
+  <ng-template pTemplate="content">
+    <form #formMunicipio="ngForm" class="row">
+
+      <label class="col-md-12">
+      Departamento
+         <select name="departamento" 
+         (ngModelChange)="sacarMunicipio(formMunicipio)"
+         #departamento="ngModel" ngModel class="form-control mt-2" required>
+            <option value="" disabled selected>Seleccione el departamento</option>
+            <option [ngValue]="item"  *ngFor="let item of arregloDepartamentos"  >{{item.departamento}}</option>
+                        
+     </select>
+
+       
+      </label>
+        <label class="col-md-12">
+      Municipio
+         <select name="municipio" 
+         
+         #municipio="ngModel" ngModel class="form-control mt-2" required>
+            <option value="" disabled selected>Seleccione el municipio</option>
+            <option [ngValue]="item"  *ngFor="let item of arregloMunicipios"  >{{item.municipio}}</option>
+                        
+     </select>
+
+       
+      </label>
+      <div class="row mt-1">
+        <div class="col d-flex justify-content-end gap-2">
+          <button type="button" class="btn btn-secondary col-md-3" (click)="cambioMunicipioNacimiento = false">
+            Cancelar
+          </button>
+
+          <button type="button" class="btn btn-primary col-md-3" [disabled]="!formMunicipio.valid"
+            (click)="guardarLugarNacimiento(formMunicipio);  cambioMunicipioNacimiento = false" title="Guardar el nuevo municipio de nacimiento">
+            Guardar
+          </button>
+        </div>
+      </div>
+
+    </form>
+  </ng-template>
+
+
+</p-dialog>
+
+
+
+<p-dialog [(visible)]="cambioMunicipioResidencia" [modal]="true" [closable]="true" [dismissableMask]="true"
+  [style]="{ width: '450px' }">
+  <ng-template pTemplate="header">
+    <h5 class="m-0">Cambiar municipio de residencia</h5>
+  </ng-template>
+  <ng-template pTemplate="content">
+    <form #formMunicipiRecidencia="ngForm" class="row">
+
+      <label class="col-md-12">
+      Departamento
+         <select name="departamento" 
+         (ngModelChange)="sacarMunicipio(formMunicipiRecidencia)"
+         #departamento="ngModel" ngModel class="form-control mt-2" required>
+            <option value="" disabled selected>Seleccione el departamento</option>
+            <option [ngValue]="item"  *ngFor="let item of arregloDepartamentos"  >{{item.departamento}}</option>
+                        
+     </select>
+
+       
+      </label>
+        <label class="col-md-12">
+      Municipio
+         <select name="municipio" 
+         
+         #municipio="ngModel" ngModel class="form-control mt-2" required>
+            <option value="" disabled selected>Seleccione el municipio</option>
+            <option [ngValue]="item"  *ngFor="let item of arregloMunicipios"  >{{item.municipio}}</option>
+                        
+     </select>
+
+       
+      </label>
+      <div class="row mt-1">
+        <div class="col d-flex justify-content-end gap-2">
+          <button type="button" class="btn btn-secondary col-md-3" (click)="cambioMunicipioResidencia = false">
+            Cancelar
+          </button>
+
+          <button type="button" class="btn btn-primary col-md-3" [disabled]="!formMunicipiRecidencia.valid"
+            (click)="guardarLugarResidencia(formMunicipiRecidencia);  cambioMunicipioResidencia = false" title="Guardar el nuevo municipio de residencia">
+            Guardar
+          </button>
+        </div>
+      </div>
+
+    </form>
+  </ng-template>
+
+
+</p-dialog>
+
+
+<p-dialog [(visible)]="cambiarDireccion" [modal]="true" [closable]="true" [dismissableMask]="true"
+  [style]="{ width: '450px' }">
+  <ng-template pTemplate="header">
+    <h5 class="m-0">Cambiar dirección</h5>
+  </ng-template>
+  <ng-template pTemplate="content">
+    <form #formDireccion="ngForm" class="row">
+       <textarea name="direccion" #direccion="ngModel" ngModel class="form-control mt-2" required></textarea>
+      
+      <div class="row mt-1">
+        <div class="col d-flex justify-content-end gap-2">
+          <button type="button" class="btn btn-secondary col-md-3" (click)="cambiarDireccion = false">
+            Cancelar
+          </button>
+
+          <button type="button" class="btn btn-primary col-md-3" [disabled]="!formDireccion.valid"
+            (click)=" guardarDireccion(formDireccion); cambiarDireccion = false" title="Guardar la nueva dirección">
+            Guardar
+          </button>
+        </div>
+      </div>
+
+    </form>
+  </ng-template>
+
+
+</p-dialog>
+
+
+
+
+
+<p-dialog [(visible)]="cambiarPasaporte" [modal]="true" [closable]="true" [dismissableMask]="true"
+  [style]="{ width: '450px' }">
+  <ng-template pTemplate="header">
+    <h5 class="m-0">Cambiar pasaporte</h5>
+  </ng-template>
+  <ng-template pTemplate="content">
+    <form #formPasaporte="ngForm" class="row">
+       <textarea name="pasaporte" #pasaporte="ngModel" ngModel class="form-control mt-2" required></textarea>
+      
+      <div class="row mt-1">
+        <div class="col d-flex justify-content-end gap-2">
+          <button type="button" class="btn btn-secondary col-md-3" (click)="cambiarPasaporte = false">
+            Cancelar
+          </button>
+
+          <button type="button" class="btn btn-primary col-md-3" [disabled]="!formPasaporte.valid"
+            (click)="guardarPasaporte(formPasaporte);  cambiarPasaporte = false" title="Guardar el nuevo pasaporte">
+            Guardar
+          </button>
+        </div>
+      </div>
+
+    </form>
+  </ng-template>
+
+
+</p-dialog>
+
+<p-dialog [(visible)]="cambiarSexoSangre" [modal]="true" [closable]="true" [dismissableMask]="true"
+  [style]="{ width: '450px' }">
+  <ng-template pTemplate="header">
+    <h5 class="m-0">Cambiar Genero y Tipo Sangre</h5>
+  </ng-template>
+  <ng-template pTemplate="content">
+    <form #formSexoSangre="ngForm" class="row">
+       <select name="sexo" id="sexo" #sexo="ngModel" ngModel class="form-control mt-2" required>
+        <option value="" disabled selected>Seleccione el sexo</option>
+        <option value="M">Masculino</option>
+        <option value="F">Femenino</option>
+      </select>
+
+      <select name="sangre" id="sangre" #sangre="ngModel" ngModel class="form-control mt-2" required>
+        <option value="" disabled selected>Seleccione el tipo de sangre</option>
+        <option value="A+">A+</option>
+        <option value="A-">A-</option>
+        <option value="B+">B+</option>
+        <option value="B-">B-</option>
+        <option value="AB+">AB+</option>
+        <option value="AB-">AB-</option>
+        <option value="O+">O+</option>
+        <option value="O-">O-</option>
+      </select>
+      <div class="row mt-1">
+        <div class="col d-flex justify-content-end gap-2">
+          <button type="button" class="btn btn-secondary col-md-3" (click)="cambiarSexoSangre = false">
+            Cancelar
+          </button>
+
+          <button type="button" class="btn btn-primary col-md-3" [disabled]="!formSexoSangre.valid"
+            (click)="guardarSexoSangre(formSexoSangre);  cambiarSexoSangre = false" title="Guardar el nuevo pasaporte">
             Guardar
           </button>
         </div>

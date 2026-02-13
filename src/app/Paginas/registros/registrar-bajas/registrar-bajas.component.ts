@@ -385,7 +385,6 @@ export class RegistrarBajasComponent {
 
  
    sacarPermisoPersonal(permisos : string[]){
-  
     return this._DatospersonalesService.verificarPermisos(permisos)
     
   }

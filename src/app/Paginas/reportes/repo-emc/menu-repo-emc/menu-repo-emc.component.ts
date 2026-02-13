@@ -12,6 +12,8 @@ import { saveAs } from 'file-saver';
 import * as ExcelJS from 'exceljs';
 import { HttpClient } from '@angular/common/http';
 import { RadioButtonModule } from 'primeng/radiobutton';
+import { MenuToeComponent } from '../../../configuraciones/toe/menu-toe/menu-toe.component';
+
 RadioButtonModule
 type Opcion = 'fuerza' | 'unidad' ;
 type Reporte = {
@@ -25,7 +27,7 @@ type Reporte = {
 @Component({
   selector: 'app-menu-repo-emc',
   standalone: true,
-    imports: [CommonModule, FormsModule, CardModule, InputTextModule, TooltipModule, RadioButtonModule],
+    imports: [CommonModule, FormsModule, CardModule, InputTextModule, TooltipModule, RadioButtonModule,MenuToeComponent],
   templateUrl: './menu-repo-emc.component.html',
   styleUrl: './menu-repo-emc.component.css',
 })
@@ -118,6 +120,10 @@ export class MenuRepoEmcComponent {
       {
       id: 'r13', titulo: 'Lista de Personal de sin cargo', descripcion: 'Se muestra el personal que esta sin cargo asignado',
       icon: 'pi pi-bars', categoria: 'RRHH', ruta: '/reportes/vacaciones'
+    },
+    {
+      id: 'r14', titulo: 'TOE', descripcion: 'Se muestra el personal con TOE',
+      icon: 'pi pi-asterisk', categoria: 'RRHH', ruta: '/reportes/toe'
     }
   ]);
 
@@ -199,7 +205,6 @@ export class MenuRepoEmcComponent {
     })
   }
     sacarParteFuerza(form:NgForm) {
-      console.log(form.value.categoria.id)
       let cade=""
      
       if(form.value.categoria.id===1 || form.value.categoria.id===2 ){
@@ -207,8 +212,10 @@ export class MenuRepoEmcComponent {
       }else{
           cade= ` and unidad.idfuerza= ${form.value.fuerza.idfuerza} and  categoria.idcategoria in (${form.value.categoria.nivel.join(',')}) `
       }
-      console.log(cade)
+
+      cade += ` and  personal.combatiente  in (${form.value.combatiente.join(',')})   `
    
+      
      this.arregloListaParteUnidad = []
      this.arregloResumenParteUnidad =[]
     let param = {
@@ -232,8 +239,8 @@ export class MenuRepoEmcComponent {
     })
   }
 
+  arregloToe=[]
     sacarParteFuerzaYUnidad(form:NgForm) {
-      console.log(form.value.categoria.id)
       let cade=""
      
       if(form.value.categoria.id===1 || form.value.categoria.id===2 ){
@@ -241,12 +248,14 @@ export class MenuRepoEmcComponent {
       }else{
           cade= ` and unidad.idfuerza= ${form.value.fuerza.idfuerza}  and unidad.idunidad=${form.value.unidad.idunidad} and  categoria.idcategoria in (${form.value.categoria.nivel.join(',')}) `
       }
-      console.log(cade)
    
      this.arregloListaParteUnidad = []
      this.arregloResumenParteUnidad =[]
+  this.arregloToe=[]
+
     let param = {
-     cadena:cade 
+     cadena:cade,
+     form:form.value
     }
     this._ServiciosMensajeService.show("Cargando parte de la unidad......");
     this._ServicioBackendService.sacarParteMenuInicio(param).subscribe({
@@ -257,6 +266,7 @@ export class MenuRepoEmcComponent {
         if (response.mensaje) return this._ServiciosMensajeService.mensajeMalo(response.mensaje);
         this.arregloResumenParteUnidad = response.resultado_resumen
         this.arregloListaParteUnidad = response.resultado_lista
+  this.arregloToe = response.toe_resultado
 
 
       }, error: (error) => {
@@ -286,11 +296,11 @@ export class MenuRepoEmcComponent {
   sacarBajas(form) {
         let cade=""
       if(form.value.categoria.id===1 || form.value.categoria.id===2){
-          cade= ` and ingreso_ascenso.idfuerza=${form.value.fuerza.idfuerza} and  year(fecha_de_baja)=year('${form.value.fecha}-1') 
-                and month(fecha_de_baja)=month('${form.value.fecha}-1')  and  categoria.idcategoria in (${form.value.categoria.nivel.join(',')}) `
+          cade= ` and ingreso_ascenso.idfuerza=${form.value.fuerza.idfuerza} and  year(bajaspersonal.fecha_de_baja)=year('${form.value.fecha}-1') 
+                and month(bajaspersonal.fecha_de_baja)=month('${form.value.fecha}-1')  and  categoria.idcategoria in (${form.value.categoria.nivel.join(',')}) `
       }  else{
-         cade= ` and unidad.idfuerza=${form.value.fuerza.idfuerza} and  year(fecha_de_baja)=year('${form.value.fecha}-1') 
-                and month(fecha_de_baja)=month('${form.value.fecha}-1')   and  categoria.idcategoria in (${form.value.categoria.nivel.join(',')}) `
+         cade= ` and unidad.idfuerza=${form.value.fuerza.idfuerza} and  year(bajaspersonal.fecha_de_baja)=year('${form.value.fecha}-1') 
+                and month(bajaspersonal.fecha_de_baja)=month('${form.value.fecha}-1')   and  categoria.idcategoria in (${form.value.categoria.nivel.join(',')}) `
       }
  
     let param = {
@@ -316,8 +326,8 @@ export class MenuRepoEmcComponent {
   sacarBajasPorUnidad(form) {
         let cade=""
     
-          cade= ` and unidad.idunidad=${form.value.unidad.idunidad} and  year(fecha_de_baja)=year('${form.value.fecha}-1') 
-                and month(fecha_de_baja)=month('${form.value.fecha}-1')  `
+          cade= ` and unidad.idunidad=${form.value.unidad.idunidad} and  year(bajaspersonal.fecha_de_baja)=year('${form.value.fecha}-1') 
+                and month(bajaspersonal.fecha_de_baja)=month('${form.value.fecha}-1')  `
     
  
     let param = {
@@ -420,7 +430,6 @@ arregloFuerzas =[]
  }
  arregloListaAscenso:any[]=[]
  sacarPersonalAscenso(form:NgForm){
-   console.log(form.value)
  this.arregloListaAscenso=[]
 
    this._ServiciosMensajeService.show("Buscando personal para ascender.....");
@@ -434,7 +443,6 @@ arregloFuerzas =[]
       if (response.error) return this._ServiciosMensajeService.mensajeMalo(response.error);
       if (response.mensaje) return this._ServiciosMensajeService.mensajeMalo(response.mensaje);
       this.arregloListaAscenso = response.resultado[0];
-      console.log(response)
     }, error: (error) => {
       this._ServiciosMensajeService.hide()
       this._ServiciosMensajeService.mensajeerrorServer();
@@ -547,14 +555,12 @@ arregloFuerzas =[]
         responseType: 'arraybuffer',
       }).toPromise()) as ArrayBuffer;
     } catch (e) {
-      console.error('Error descargando imagen', e);
       return null;
     }
   }
 
   arregloListaVacacioens =[]
   puscarPersonalVacacioensFuerza(form){
-   console.log(form.value)
      let p ={
     cadena:``
    }
@@ -567,20 +573,16 @@ arregloFuerzas =[]
    }
  
     
-   console.log(p)
-      console.log(form.value)
  this.arregloListaVacacioens=[]
 
    this._ServiciosMensajeService.show("Buscando personal.....");
  
    this._ServicioBackendService.sacaPersonalVacaciones(p).subscribe({
     next: (response) => {
-      console.log(response)
       this._ServiciosMensajeService.hide()
       if (response.error) return this._ServiciosMensajeService.mensajeMalo(response.error);
       if (response.mensaje) return this._ServiciosMensajeService.mensajeMalo(response.mensaje);
       this.arregloListaVacacioens = response.resultado;
-      console.log(response)
     }, error: (error) => {
       this._ServiciosMensajeService.hide()
       this._ServiciosMensajeService.mensajeerrorServer();
@@ -590,25 +592,20 @@ arregloFuerzas =[]
   }
   
  puscarPersonalVacacioensUnidad(form){
-   console.log(form.value)
    let p ={
     cadena:` and u.idunidad=${form.value.unidad.idunidad}     
                 and month(ia.fecha_planilla)=month('${form.value.fecha}-1')  and  c.idcategoria in (${form.value.categoria.nivel.join(',')}) `
    }
-   console.log(p)
-      console.log(form.value)
  this.arregloListaVacacioens=[]
 
    this._ServiciosMensajeService.show("Buscando personal.....");
  
    this._ServicioBackendService.sacaPersonalVacaciones(p).subscribe({
     next: (response) => {
-      console.log(response)
       this._ServiciosMensajeService.hide()
       if (response.error) return this._ServiciosMensajeService.mensajeMalo(response.error);
       if (response.mensaje) return this._ServiciosMensajeService.mensajeMalo(response.mensaje);
       this.arregloListaVacacioens = response.resultado;
-      console.log(response)
     }, error: (error) => {
       this._ServiciosMensajeService.hide()
       this._ServiciosMensajeService.mensajeerrorServer();
@@ -631,15 +628,12 @@ ejecucatarConsultaOrganizacion(p){
  
 
    this._ServiciosMensajeService.show("Buscando personal.....");
- console.log(p)
    this._ServicioBackendService.sacarOrganizacionCompleta(p).subscribe({
     next: (response) => {
-      console.log(response)
       this._ServiciosMensajeService.hide()
       if (response.error) return this._ServiciosMensajeService.mensajeMalo(response.error);
       if (response.mensaje) return this._ServiciosMensajeService.mensajeMalo(response.mensaje);
       this.arregloOrganizacionCompleta = response.resultado;
-      console.log(response)
     }, error: (error) => {
       this._ServiciosMensajeService.hide()
       this._ServiciosMensajeService.mensajeerrorServer();
@@ -653,8 +647,6 @@ this.arregloResultado = []
 
 }
 buscar65Anos(data,objeto){
-console.log(data.value)
-console.log(objeto)
 let cadena = ""
  if(objeto==="fuerza") cadena=` and unidad.idfuerza=${data.value.fuerza.idfuerza} and month(fecha_nacimiento)=month('${data.value.fecha}-1')  `
  
@@ -668,12 +660,10 @@ buscarPersonal_65_anos(cadenita){
   this.arregloResultado = []
     this._ServicioBackendService.sacarPersonal65Anos(p).subscribe({
     next: (response) => {
-      console.log(response)
       this._ServiciosMensajeService.hide()
       if (response.error) return this._ServiciosMensajeService.mensajeMalo(response.error);
       if (response.mensaje) return this._ServiciosMensajeService.mensajeMalo(response.mensaje);
       this.arregloResultado = response.resultado;
-      console.log(response)
     }, error: (error) => {
       this._ServiciosMensajeService.hide()
       this._ServiciosMensajeService.mensajeerrorServer();
@@ -690,18 +680,15 @@ listaPrimerIngreso(form,objeto){
  this.personalPrimerIngreso(cadena)
 }
 personalPrimerIngreso(cadenita){
-  console.log(cadenita)
   let p={cadena:cadenita}
   this._ServiciosMensajeService.show("Buscando personal de primer ingreso.....");
   this.arregloResultado = []
     this._ServicioBackendService.personalPrimerIngreso(p).subscribe({
     next: (response) => {
-      console.log(response)
       this._ServiciosMensajeService.hide()
       if (response.error) return this._ServiciosMensajeService.mensajeMalo(response.error);
       if (response.mensaje) return this._ServiciosMensajeService.mensajeMalo(response.mensaje);
       this.arregloResultado = response.resultado;
-      console.log(response)
     }, error: (error) => {
       this._ServiciosMensajeService.hide()
       this._ServiciosMensajeService.mensajeerrorServer();
@@ -718,18 +705,15 @@ listaAntiguedadGrado(form,objeto){
  this.personalantiguedadGrado(cadena)
 }
 personalantiguedadGrado(cadenita){
-  console.log(cadenita)
   let p={cadena:cadenita}
   this._ServiciosMensajeService.show("Buscando personal con antiguedad en el grado.....");
   this.arregloResultado = []
     this._ServicioBackendService.sacarPersonalMas10anos(p).subscribe({
     next: (response) => {
-      console.log(response)
       this._ServiciosMensajeService.hide()
       if (response.error) return this._ServiciosMensajeService.mensajeMalo(response.error);
       if (response.mensaje) return this._ServiciosMensajeService.mensajeMalo(response.mensaje);
       this.arregloResultado = response.resultado;
-      console.log(response)
     }, error: (error) => {
       this._ServiciosMensajeService.hide()
       this._ServiciosMensajeService.mensajeerrorServer();
@@ -745,12 +729,10 @@ lisataPersonalSinCargo(){
   this.arregloResultado = []
     this._ServicioBackendService.sacarPersonalSinCargo().subscribe({
     next: (response) => {
-      console.log(response)
       this._ServiciosMensajeService.hide()
       if (response.error) return this._ServiciosMensajeService.mensajeMalo(response.error);
       if (response.mensaje) return this._ServiciosMensajeService.mensajeMalo(response.mensaje);
       this.arregloResultado = response.resultado;
-      console.log(response)
     }, error: (error) => {
       this._ServiciosMensajeService.hide()
       this._ServiciosMensajeService.mensajeerrorServer();

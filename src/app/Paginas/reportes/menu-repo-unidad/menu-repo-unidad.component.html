@@ -261,6 +261,9 @@
           <th>Fecha de Ejecucion</th>
          <th>Tipo Baja</th>  
          <th>Unidad</th>  
+         <th>Sueldo</th> 
+         <th>Cuenta</th> 
+
          <th>Observación</th>
          
         </tr>
@@ -277,6 +280,9 @@
           <td>{{ r.fecha_sistema | date: 'dd/MM/yyyy hh:mm:ss':"UTC-6" }}</td>
           <td>{{ r.tipo_baja }}</td>
           <td>{{ r.asignacion }}</td>
+              <td>{{ r.sueldo_nominal | currency:'':'' }}</td>
+          <td>{{ r.cuenta_banco }}</td>
+
           <td>{{ r.observacion }}</td>
 
 
@@ -284,7 +290,7 @@
         </tr>
 
         <tr *ngIf="arregloBajas?.length === 0">
-          <td colspan="10" class="text-center text-muted py-3">
+          <td colspan="12" class="text-center text-muted py-3">
             No hay datos para mostrar
           </td>
         </tr>
@@ -692,6 +698,10 @@
 
 
   </div>
+  }
+
+   @if (VentanaSeleccionada?.id==='r6') {
+       <app-menu-toe [tipoBusqueda]="'unidad'" ></app-menu-toe>
   }
    
 </div>

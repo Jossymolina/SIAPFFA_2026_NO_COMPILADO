@@ -146,3 +146,17 @@
   border: 1px solid rgba(255,255,255,0.10);
 }
 .go{ opacity: .65; }
+
+
+.negativo {
+  color: #dc2626;        /* rojo fuerte */
+  font-weight: 700;
+  background-color: #fee2e2; /* fondo rojo claro opcional */
+}
+
+.positivo {
+  color: #000000;        /* rojo fuerte */
+  font-weight: 700;
+  background-color: #0011fd4d; /* fondo rojo claro opcional */
+}
+

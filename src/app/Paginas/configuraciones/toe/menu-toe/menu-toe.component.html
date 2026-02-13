@@ -1,0 +1,183 @@
+@if (tipoBusqueda==='EMC') {
+<form #formBuscar="ngForm" class="row" style="margin: 20px;">
+  <label for="" class="col-md-2">
+    Unidad Ejecutora 
+    <select class="form-control" name="fuerza" #fuerza="ngModel" required ngModel id="">
+      <option *ngFor="let fuerza of arregloFuerza" [ngValue]="fuerza">{{ fuerza.nombre }}</option>
+    </select>
+  </label>
+  <label for="" class="col-md-2">
+    <br>
+    <button class="btn btn-danger" (click)="getToePivotPorCorto(formBuscar)"
+      [disabled]="!formBuscar.valid">Buscar</button>
+  </label>
+</form>
+}@else if(tipoBusqueda==='fuerza') {
+<form #formBuscar="ngForm" class="row" style="margin: 20px;">
+  <label for="" class="col-md-2">
+    Unidad Ejecutora
+    <select class="form-control" name="fuerza" #fuerza="ngModel" required ngModel id="">
+      <ng-container *ngFor="let fuerza of arregloFuerza">
+        <option *ngIf="fuerza.idfuerza===usuarioLoguiado.idfuerza" [ngValue]="fuerza">{{ fuerza.nombre }}</option>
+      </ng-container>
+    </select>
+  </label>
+  <label for="" class="col-md-2">
+    <br>
+    <button class="btn btn-danger" (click)="getToePivotPorCorto(formBuscar)"
+      [disabled]="!formBuscar.valid">Buscar</button>
+  </label>
+</form>
+}@else if(tipoBusqueda==='unidad') {
+<form class="row" style="margin: 20px;">
+  <label for="" class="col-md-2">
+    Unidad
+    <p class="form-control">{{usuarioLoguiado.corto}}</p>
+  </label>
+  <label for="" class="col-md-2">
+    <br>
+    <button class="btn btn-danger" (click)="getToePivotPorCortoUnidad( )">Buscar</button>
+  </label>
+</form>
+}
+<div class="row" style="margin: 3px;">
+  <div class="col-md-12">
+    <button class="btn btn-success  float-end" (click)="exportar('tablatoe')">Exportar</button>
+  </div>
+</div>
+<div class="toe-wrap">
+
+  <div class="toe-title">
+    {{ titulo }}
+  </div>
+
+  <div class="toe-scroll">
+    <table id="tablatoe" class="toe-table table-striped">
+      <thead>
+        <tr class="h1">
+          <th class="c-no sticky-1" rowspan="2">No.</th>
+          <th class="c-unit sticky-2" rowspan="2">UNIDAD</th>
+
+          <th *ngFor="let g of groups" [attr.colspan]="g.cols.length" class="grp">
+            {{ g.name }}
+          </th>
+
+          <!-- NUEVO: bloque de totales -->
+          <th class="grp total-head" colspan="3">TOTALES</th>
+        </tr>
+
+        <tr class="h2">
+          <ng-container *ngFor="let g of groups">
+            <th *ngFor="let c of g.cols" class="sub" [class.dia]="c.kind==='dia'">
+              {{ c.label }}
+            </th>
+          </ng-container>
+
+          <!-- NUEVO: subheaders totales -->
+          <th class="sub total-col">TOE</th>
+          <th class="sub total-col">DÍAS</th>
+          <th class="sub total-col">DISP</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let row of data; let i = index" class="toe-row" [class.row-hover]="hoverRow === i"
+          (mouseleave)="clearHover()" style="cursor: pointer;">
+
+          <!-- No. -->
+          <td class="c-no sticky-1" (mouseenter)="setHover(i,'__no__')" [class.col-hover]="hoverCol === '__no__'"
+            [class.cross]="hoverRow === i && hoverCol === '__no__'">
+            {{ i + 1 }}
+          </td>
+
+          <!-- Unidad -->
+          <td class="c-unit sticky-2" (mouseenter)="setHover(i,'__unit__')" [class.col-hover]="hoverCol === '__unit__'"
+            [class.cross]="hoverRow === i && hoverCol === '__unit__'">
+            {{ row.corto }}
+          </td>
+
+          <!-- Celdas dinámicas -->
+          <ng-container *ngFor="let g of groups">
+            <td *ngFor="let c of g.cols" class="cell" [class.diaVal]="c.kind==='dia'" (mouseenter)="setHover(i, c.key)"
+              [class.col-hover]="hoverCol === c.key" [class.cross]="hoverRow === i && hoverCol === c.key"
+              [class.negativo]="c.key?.endsWith('_disp') && +val(row, c.key) < 0"
+              [class.positivo]="c.key?.endsWith('_disp') && +val(row, c.key) > 0">
+              {{ val(row, c.key) }}
+            </td>
+          </ng-container>
+
+          <!-- NUEVO: Totales por fila (3 columnas) -->
+          <td class="cell total-col" (mouseenter)="setHover(i,'__toe_total__')"
+            [class.col-hover]="hoverCol === '__toe_total__'"
+            [class.cross]="hoverRow === i && hoverCol === '__toe_total__'">
+            {{ rowToeTotal(row) }}
+          </td>
+
+          <td class="cell total-col" (mouseenter)="setHover(i,'__dias_total__')"
+            [class.col-hover]="hoverCol === '__dias_total__'"
+            [class.cross]="hoverRow === i && hoverCol === '__dias_total__'">
+            {{ rowDiasTotal(row) }}
+          </td>
+
+          <td class="cell total-col" (mouseenter)="setHover(i,'__disp_total__')"
+            [class.col-hover]="hoverCol === '__disp_total__'"
+            [class.cross]="hoverRow === i && hoverCol === '__disp_total__'" [class.negativo]="rowDispTotal(row) < 0"
+            [class.positivo]="rowDispTotal(row) > 0">
+            {{ rowDispTotal(row) }}
+          </td>
+        </tr>
+
+        <tr *ngIf="data?.length" class="toe-total-row" [class.row-hover]="hoverRow === FOOTER_ROW"
+          (mouseleave)="clearHover()">
+
+          <td class="c-no sticky-1 total-sticky" (mouseenter)="setHover(FOOTER_ROW,'__no__')"
+            [class.col-hover]="hoverCol === '__no__'" [class.cross]="hoverRow === FOOTER_ROW && hoverCol === '__no__'">
+          </td>
+
+          <td class="c-unit sticky-2 total-sticky" (mouseenter)="setHover(FOOTER_ROW,'__unit__')"
+            [class.col-hover]="hoverCol === '__unit__'"
+            [class.cross]="hoverRow === FOOTER_ROW && hoverCol === '__unit__'">
+            TOTAL
+          </td>
+
+          <ng-container *ngFor="let g of groups">
+            <td *ngFor="let c of g.cols" class="cell total-cell" [class.diaVal]="c.kind==='dia'"
+              (mouseenter)="setHover(FOOTER_ROW, c.key)" [class.col-hover]="hoverCol === c.key"
+              [class.cross]="hoverRow === FOOTER_ROW && hoverCol === c.key"
+              [class.negativo]="c.key?.endsWith('_disp') && colTotal(c.key) < 0"
+              [class.positivo]="c.key?.endsWith('_disp') && colTotal(c.key) > 0">
+              {{ colTotal(c.key) }}
+            </td>
+          </ng-container>
+
+          <td class="cell total-col total-cell" (mouseenter)="setHover(FOOTER_ROW,'__toe_total__')"
+            [class.col-hover]="hoverCol === '__toe_total__'"
+            [class.cross]="hoverRow === FOOTER_ROW && hoverCol === '__toe_total__'">
+            {{ toeTotalAll() }}
+          </td>
+
+          <td class="cell total-col total-cell" (mouseenter)="setHover(FOOTER_ROW,'__dias_total__')"
+            [class.col-hover]="hoverCol === '__dias_total__'"
+            [class.cross]="hoverRow === FOOTER_ROW && hoverCol === '__dias_total__'">
+            {{ diasTotalAll() }}
+          </td>
+
+          <td class="cell total-col total-cell" (mouseenter)="setHover(FOOTER_ROW,'__disp_total__')"
+            [class.col-hover]="hoverCol === '__disp_total__'"
+            [class.cross]="hoverRow === FOOTER_ROW && hoverCol === '__disp_total__'"
+            [class.negativo]="dispTotalAll() < 0" [class.positivo]="dispTotalAll() > 0">
+            {{ dispTotalAll() }}
+          </td>
+        </tr>
+
+
+        <!-- [attr.colspan]="5 + (groups?.reduce((a,g)=>a+g.cols.length,0) || 0)"-->
+        <tr *ngIf="!data?.length">
+          <td class="empty">
+            Sin datos
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

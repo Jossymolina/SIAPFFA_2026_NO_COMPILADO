@@ -60,7 +60,7 @@ export const routes: Routes = [
       {
         path: 'menu-registro',
         canActivate: [permisosGuard],
-        data: { permisos: ["R_0001","R_0002"] },
+        data: { permisos: ["R_0001","R_0002","R_0003"] },
         loadComponent: () =>
           import('./Paginas/registros/menu-registros/menu-registros.component')
             .then(m => m.MenuRegistrosComponent)
@@ -76,7 +76,7 @@ export const routes: Routes = [
       {
         path: 'registras-bajas',
         canActivate: [permisosGuard],
-        data: { permisos: ["R_0002"] },
+        data: { permisos: ["R_0002","R_0003"] },
         loadComponent: () =>
           import('./Paginas/registros/registrar-bajas/registrar-bajas.component')
             .then(m => m.RegistrarBajasComponent)
@@ -207,7 +207,7 @@ export const routes: Routes = [
       {
         path: 'menu-reportes',
         canActivate: [permisosGuard],
-        data: { permisos: ['Re_0002','Re_0003','Re_0001','Re_0004'] },
+        data: { permisos: ['Re_0002','Re_0003','Re_0001','Re_0004','Re_0005'] },
         loadComponent: () =>
           import('./Paginas/reportes/reportes-menu/reportes-menu.component')
             .then(m => m.ReportesMenuComponent)
@@ -220,6 +220,7 @@ export const routes: Routes = [
           import('./Paginas/reportes/menu-repo-unidad/menu-repo-unidad.component')
             .then(m => m.MenuRepoUnidadComponent)
       }
+   
        ,
       {
         path: 'menu-repo-historial',
@@ -253,7 +254,8 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./Paginas/planffaa-conexiones/planillas/planillas.component')
             .then(m => m.PlanillasComponent)
-      }
+      },
+        
     ]
   },
 

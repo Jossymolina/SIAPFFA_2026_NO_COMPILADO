@@ -103,6 +103,9 @@ persona: Persona = {
   usuariologuiado
   ngOnInit(): void {
     this.buscarporIdentidad()
+    this.sacarDepartamento()
+    this.mostrarToast('🔹 Los campos con el cursor en forma de manito son editables');
+
     this.usuariologuiado = JSON.parse(localStorage.getItem('user_login')!).user;
   }
 ngAfterViewInit(): void {
@@ -151,7 +154,6 @@ armaobjetoConsultado
     this._DatospersonalesService.consultaPorIdentidad(parametro).subscribe(
       {
         next: (Response) => {
-          console.log(Response)
    this._ServiciosMensajesService.hide()
           
    if (Response.error) {
@@ -168,7 +170,6 @@ armaobjetoConsultado
             let r = this.sacarVacacionSegunTabla(anio_anti) /*(anio_anti)<=5 ? 15 : (((anio_anti)>=6 && anio_anti<=10?20:
               ((anio_anti)>=12 && (anio_anti)<=15?25:30) ))*/
              
-              console.log(this.ArregloVacacionesTomadas)
              this.dia_vacacion_ley =r
               this.armaobjetoConsultado = Response.arma[0]
             }
@@ -441,7 +442,6 @@ abrirConstanciaVacaciones(){
              
           }
       this.ArregloVacacionesTomadas = []
-        console.log(parametro)
           this._ServiciosMensajesService.show("Cargando constancia de vacaciones")
   
           this._DatospersonalesService.sacarDatosDeReporteVacaciones(parametro).subscribe({
@@ -473,14 +473,37 @@ abrirConstanciaVacaciones(){
 
   return `A los ${dia} días del mes de ${mes} del año ${año}.`;
 }
-  getDiasLaboralesEntreFechas(fechaInicio: string | Date, fechaFin: string | Date) {
+ getDiasLaboralesEntreFechas(fechaInicio: string | Date, fechaFin: string | Date): number {
   const inicio = new Date(fechaInicio);
   const fin = new Date(fechaFin);
 
   if (isNaN(inicio.getTime()) || isNaN(fin.getTime())) {
     throw new Error("Fechas inválidas");
   }
+
+  // Normalizar a 00:00:00 (evita que horas cambien el conteo)
+  inicio.setHours(0, 0, 0, 0);
+  fin.setHours(0, 0, 0, 0);
+
+  // Asegurar orden (si vienen invertidas)
+  let start = inicio;
+  let end = fin;
+  if (start > end) {
+    [start, end] = [end, start];
   }
+
+  let dias = 0;
+  const cursor = new Date(start);
+
+  while (cursor <= end) {
+    const day = cursor.getDay(); // 0=Dom, 6=Sáb
+    if (day !== 0 && day !== 6) dias++;
+    cursor.setDate(cursor.getDate() + 1);
+  }
+
+  return dias;
+}
+
   displayCambiarRTN = false
   @ViewChild("formRNT") formRNT:NgForm
   abrirModalCambiarRTN() {
@@ -491,7 +514,6 @@ async CambioRTNPErsonalAdmin(form: any) {
 
   const rtn = (form?.value?.rtn ?? '').toString().trim();
 
-  console.log(rtn.length);
 
   const respuesta = await this._DatospersonalesService.mensajePregunta(
     "Cambio de RTN",
@@ -534,5 +556,215 @@ async CambioRTNPErsonalAdmin(form: any) {
     }
   });
 }
+ 
 
+cambioestadoCivil
+CambioEstadoCivil(form){
+  let p={
+    updtate:form.value.estado,
+    estado_civil_viejo: this.objetoConsultado.estado_civil,
+    identidad:this.objetoConsultado.identidad,
+    usuario:this.usuariologuiado
+  }
+this._ServiciosMensajesService.show("Cambiando el estado civil")
+  this._DatospersonalesService.actualizarestadoCivil(p).subscribe({
+    next:(response)=>{
+      this._ServiciosMensajesService.hide()
+        if(response.error) return this._ServiciosMensajesService.mensajeMalo(response.error)
+        if(response.mensaje) return this._ServiciosMensajesService.mensajeMalo(response.mensaje)
+        this.buscarporIdentidad()
+    },error:()=>{
+      this._ServiciosMensajesService.hide()
+      this._ServiciosMensajesService.mensajeerrorServer()
+    }
+  })
+}
+arregloDepartamentos = []
+sacarDepartamento(){
+this.arregloDepartamentos = []
+this._ServiciosMensajesService.show("Cargando departamentos")
+let p ={
+  idpaises:137
+}
+this._DatospersonalesService.sacardepartamento(p).subscribe({
+  next:(response)=>{
+    this._ServiciosMensajesService.hide()
+if(response.error) return this._ServiciosMensajesService.mensajeMalo(response.error)
+if(response.mensaje) return this._ServiciosMensajesService.mensajeMalo(response.mensaje)
+
+    this.arregloDepartamentos = response.resultado
+  },error:()=>{
+    this._ServiciosMensajesService.hide()
+    this._ServiciosMensajesService.mensajeerrorServer()
+  }
+})
+
+}
+arregloMunicipios = []
+sacarMunicipio(form){
+this.arregloMunicipios = []
+this._ServiciosMensajesService.show("Cargando departamentos")
+let p ={
+  iddepartamento:form.value.departamento.iddepartamento
+}
+this._DatospersonalesService.sacarmunicipio(p).subscribe({
+  next:(response)=>{
+    this._ServiciosMensajesService.hide()
+if(response.error) return this._ServiciosMensajesService.mensajeMalo(response.error)
+if(response.mensaje) return this._ServiciosMensajesService.mensajeMalo(response.mensaje)
+
+    this.arregloMunicipios = response.resultado
+  },error:()=>{
+    this._ServiciosMensajesService.hide()
+    this._ServiciosMensajesService.mensajeerrorServer()
+  }
+})
+
+}
+
+cambioMunicipioNacimiento
+cambiarDireccion
+guardarLugarNacimiento(form){
+ 
+let p ={
+ idmunicipio:form.value.municipio.idmunicipio,
+ identidad:this.objetoConsultado.identidad,
+ lugarNacimientoViejo:this.objetoConsultado.municipio,
+ lugarNacimientoNuevo:form.value.municipio.municipio,
+ usuario:this.usuariologuiado
+}
+this._ServiciosMensajesService.show("Cambiando el lugar de nacimiento")
+this._DatospersonalesService.ActualizarlugarNacimiento(p).subscribe({
+  next:(response)=>{
+    this._ServiciosMensajesService.hide()
+if(response.error) return this._ServiciosMensajesService.mensajeMalo(response.error)
+if(response.mensaje) return this._ServiciosMensajesService.mensajeMalo(response.mensaje)
+        this.buscarporIdentidad()
+
+  },error:()=>{
+    this._ServiciosMensajesService.hide()
+    this._ServiciosMensajesService.mensajeerrorServer()
+  }
+})
+}
+@ViewChild("formDireccion") formDireccion:NgForm
+agregarDireccion(){
+setTimeout(()=>{
+this.formDireccion.controls['direccion'].setValue(this.objetoConsultado?.direccion);
+
+
+},100)
+}
+guardarDireccion(form){
+   
+let p ={
+ direccion:form.value.direccion,
+ identidad:this.objetoConsultado.identidad,
+ usuario:this.usuariologuiado
+}
+this._ServiciosMensajesService.show("Cambiando la dirección")
+this._DatospersonalesService.actualizarDireccion(p).subscribe({
+  next:(response)=>{
+    this._ServiciosMensajesService.hide()
+if(response.error) return this._ServiciosMensajesService.mensajeMalo(response.error)
+if(response.mensaje) return this._ServiciosMensajesService.mensajeMalo(response.mensaje)
+        this.buscarporIdentidad()
+
+  },error:()=>{
+    this._ServiciosMensajesService.hide()
+    this._ServiciosMensajesService.mensajeerrorServer()
+  }
+})
+}
+
+cambiarPasaporte
+guardarPasaporte(form){
+let p ={
+  updtate:form.value.pasaporte,
+  identidad:this.objetoConsultado.identidad,
+  pasaporteViejo:this.objetoConsultado.numero_pasaporte,
+  pasaporteNuevo:form.value.pasaporte,
+  usuario:this.usuariologuiado
+}
+
+this._ServiciosMensajesService.show("Cambiando el pasaporte")
+this._DatospersonalesService.actualizarPasaporte(p).subscribe({
+  next:(response)=>{
+    this._ServiciosMensajesService.hide()
+if(response.error) return this._ServiciosMensajesService.mensajeMalo(response.error)
+   if(response.mensaje) return this._ServiciosMensajesService.mensajeMalo(response.mensaje)
+        this.buscarporIdentidad()
+
+  },error:()=>{
+    this._ServiciosMensajesService.hide()
+    this._ServiciosMensajesService.mensajeerrorServer()
+  }
+})
+}
+cambiarSexoSangre
+@ViewChild("formSexoSangre") formSexoSangre:NgForm
+cambiarSexoSangreF(){
+setTimeout(()=>{
+  this.formSexoSangre.controls['sexo'].setValue(this.objetoConsultado?.sexo);
+  this.formSexoSangre.controls['sangre'].setValue(this.objetoConsultado?.tipo_sangre);  
+},100)
+}
+
+guardarSexoSangre(form){
+let p ={
+     sexo:form.value.sexo,
+     tipo_sangre:form.value.sangre,
+     identidad:this.objetoConsultado.identidad,
+     usuario:this.usuariologuiado
+}
+
+
+this._ServiciosMensajesService.show("Actualizando sexo y sangre..")
+this._DatospersonalesService.actualizarSexoSangre(p).subscribe({
+  next:(response)=>{
+    this._ServiciosMensajesService.hide()
+if(response.error) return this._ServiciosMensajesService.mensajeMalo(response.error)
+if(response.mensaje) return this._ServiciosMensajesService.mensajeMalo(response.mensaje)
+        this.buscarporIdentidad()
+
+  },error:()=>{
+    this._ServiciosMensajesService.hide()
+    this._ServiciosMensajesService.mensajeerrorServer()
+  }
+})
+}
+cambioMunicipioResidencia
+@ViewChild("formMunicipiRecidencia") formMunicipiRecidencia:NgForm
+guardarLugarResidencia(form){
+ 
+let p ={
+  idmunicipio: this.formMunicipiRecidencia.value.municipio.idmunicipio,
+  identidad:this.objetoConsultado.identidad,
+  usuario:this.usuariologuiado
+}
+this._ServiciosMensajesService.show("Actualizando municipio de residencia")
+this._DatospersonalesService.municipioRecidencia(p).subscribe({
+  next:(response)=>{
+    this._ServiciosMensajesService.hide()
+if(response.error) return this._ServiciosMensajesService.mensajeMalo(response.error)
+if(response.mensaje) return this._ServiciosMensajesService.mensajeMalo(response.mensaje)
+        this.buscarporIdentidad()
+
+  },error:()=>{
+    this._ServiciosMensajesService.hide()
+    this._ServiciosMensajesService.mensajeerrorServer()
+  }
+})
+}
+mensajeFlotante: string = '';
+mostrarMensaje: boolean = false;
+
+mostrarToast(mensaje: string) {
+  this.mensajeFlotante = mensaje;
+  this.mostrarMensaje = true;
+
+  setTimeout(() => {
+    this.mostrarMensaje = false;
+  }, 600000); // desaparece en 3.5 segundos
+}
 }

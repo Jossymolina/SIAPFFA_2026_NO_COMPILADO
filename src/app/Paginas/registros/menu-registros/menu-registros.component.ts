@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
  
@@ -20,7 +20,7 @@ import { ServicioBackendService } from '../../../servicios/servicio-backend.serv
   templateUrl: './menu-registros.component.html',
   styleUrl: './menu-registros.component.css',
 })
-export class MenuRegistrosComponent {
+export class MenuRegistrosComponent implements OnInit {
 
   // Módulos centrales
   modules: ModuleCard[] = [
@@ -36,7 +36,7 @@ export class MenuRegistrosComponent {
       description: 'Aqui se aplican las bajas del personal de FFAA',
       icon: 'pi pi-chart-bar',
       route: '/menu/registras-bajas',
-      code:['R_0002']
+      code:['R_0002','R_0003']
 
     } 
  
@@ -44,8 +44,10 @@ export class MenuRegistrosComponent {
     constructor(private router: Router,private _ServicioBackendService:ServicioBackendService) {
 
   }
+  ngOnInit(): void {
+    
+  }
    openModule(m: ModuleCard) {
-    console.log(m.route)
     if (m.route) {
       this.router.navigate([m.route]);
     }

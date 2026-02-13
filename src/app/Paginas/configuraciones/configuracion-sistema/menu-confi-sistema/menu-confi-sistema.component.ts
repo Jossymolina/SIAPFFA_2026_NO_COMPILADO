@@ -54,7 +54,8 @@ export class MenuConfiSistemaComponent {
       route: '/menu/control-usuario',
       code :['C_0004','C_0005']
 
-    }  
+    } 
+    
  
   ];
     constructor(private router: Router,private _ServicioBackendService:ServicioBackendService) {
