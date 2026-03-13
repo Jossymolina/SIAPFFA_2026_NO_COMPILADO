@@ -135,12 +135,12 @@ this._ServiciosMensajeService.mensajeMalo("Error en el servidor")
         nombrePersonaEjecuto:this.usuarioLogin.nombres+" "+this.usuarioLogin.apellidos,
         nombresPersonaAfectada:this.objetoConsultado.nombres+" "+this.objetoConsultado.apellidos
       }
-      console.log(this.objetoConsultado)
      // if(parametro.idgradonuevo)
-     if(this.objetoConsultado.idcategoria!==this.tarjetaSelected.idcategoria) return this._ServiciosMensajeService.mensajeMalo("La categoria del nuevo grado no coincide con la categoria actual de la persona")
-      if(parametro.idgradonuevo <= this.objetoConsultado.idgrados) return this._DatospersonalesService.mensajeError("El grado nuevo debe ser mayor al grado actual")
    
-        console.log(parametro)
+     if(this.objetoConsultado.idcategoria!==this.tarjetaSelected.idcategoria) return this._ServiciosMensajeService.mensajeMalo("La categoria del nuevo grado no coincide con la categoria actual de la persona")
+  
+    // if(parametro.idgradonuevo <= this.objetoConsultado.idgrados) return this._DatospersonalesService.mensajeError("El grado nuevo debe ser mayor al grado actual")
+   
   
  this._ServiciosMensajeService.show()
       this._DatospersonalesService.guardarascenso(parametro).subscribe(

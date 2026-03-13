@@ -23,6 +23,13 @@
   color: white !important;
 }
 
+ .p-button-rounded2 {
+  border-radius: 20px !important;
+  padding: .6rem 1.5rem !important;
+  background-color: rgb(62, 173, 192) !important;
+  color: white !important;
+}
+
  
 /* Tabla específica */
 .tabla-nombramientos tbody tr > th,

@@ -38,7 +38,8 @@
   <!-- GRID (Bootstrap SOLO GRID) -->
   <div class="container-fluid" *ngIf="!VentanaSeleccionada">
     <div class="row g-3">
-      <div class="col-6 col-md-4 col-lg-3 col-xl-2" *ngFor="let r of filtrados()">
+      <ng-container  *ngFor="let r of filtrados()" >
+      <div class="col-6 col-md-4 col-lg-3 col-xl-2" *ngIf="verificarPermisos(r)">
         <p-card styleClass="app-card" (click)="abrir(r)">
           <ng-template pTemplate="content">
             <div class="app">
@@ -60,6 +61,8 @@
           </ng-template>
         </p-card>
       </div>
+      </ng-container>
+
     </div>
   </div>
 
@@ -310,8 +313,8 @@
               <td>{{ r.fecha_sistema | date: 'dd/MM/yyyy hh:mm:ss':"UTC-6" }}</td>
               <td>{{ r.tipo_baja }}</td>
               <td>{{ r.asignacion }}</td>
-                  <td>{{ r.sueldo_nominal | currency:'':'' }}</td>
-          <td>{{ r.cuenta_banco }}</td>
+              <td>{{ r.sueldo_nominal | currency:'':'' }}</td>
+              <td>{{ r.cuenta_banco }}</td>
               <td>{{ r.observacion }}</td>
 
 
@@ -447,10 +450,10 @@
           </select>
         </label>
 
-         <label for="" class="col-md-2">
+        <label for="" class="col-md-2">
           Combatiente
 
-          <select name="combatiente" class="form-control" id="combatiente" #combatiente="ngModel" ngModel required >
+          <select name="combatiente" class="form-control" id="combatiente" #combatiente="ngModel" ngModel required>
             <option [ngValue]="[0,1]">Todo</option>
 
             <option [ngValue]="[1]">Combatiente</option>
@@ -460,7 +463,7 @@
         </label>
 
 
- 
+
         <label for="" class="col-md-1">
           <br>
           <button class="form-control btn btn-primary" [disabled]="!formbuscar.valid"
@@ -641,7 +644,7 @@
         <label for="" style="margin-left: 5px;" class="col-md-2">
           <br>
           <button [disabled]="!formBuscar.valid" class="btn  btn-primary" (click)="sacarBajas(formBuscar)">Buscar
-            </button>
+          </button>
         </label>
 
       </form>
@@ -696,8 +699,8 @@
               <td>{{ r.fecha_sistema | date: 'dd/MM/yyyy hh:mm:ss':"UTC-6" }}</td>
               <td>{{ r.tipo_baja }}</td>
               <td>{{ r.asignacion }}</td>
-                 <td>{{ r.sueldo_nominal | currency:'':'' }}</td>
-          <td>{{ r.cuenta_banco }}</td>
+              <td>{{ r.sueldo_nominal | currency:'':'' }}</td>
+              <td>{{ r.cuenta_banco }}</td>
               <td>{{ r.observacion }}</td>
 
 
@@ -928,15 +931,15 @@
       </div>
 
 
-        <div class="row align-items-center mb-3">
-         <div class="col-auto">
+      <div class="row align-items-center mb-3">
+        <div class="col-auto">
           <button class="btn btn-sm btn-success" (click)="exportarExcelResumen('resumenToe')">
             <i class="bi bi-file-earmark-excel me-1"></i>
             Exportar
           </button>
         </div>
       </div>
-       <div class="table-responsive">
+      <div class="table-responsive">
         <table id="resumenToe" class="table table-bordered table-hover table-sm align-middle">
           <thead class="table-light">
             <tr>
@@ -944,7 +947,7 @@
               <th>Grado</th>
               <th>Autorizado</th>
               <th>Dia</th>
-              <th  >TOE</th>
+              <th>Disponible</th>
             </tr>
           </thead>
 
@@ -954,9 +957,9 @@
               <td>{{ (formbuscar.value?.fuerza.idfuerza===2? r.equivalente:r.nombre_grado) }}</td>
               <td>{{ r.toe_autorizada }}</td>
               <td> {{r.toe_dia}}</td>
-            <td [ngClass]="r.diferencia < 0 ? 'negativo' : 'positivo'">
-                  {{ r.diferencia }}
-                </td>
+              <td [ngClass]="r.diferencia < 0 ? 'negativo' : 'positivo'">
+                {{ r.diferencia }}
+              </td>
             </tr>
 
             <tr *ngIf="arregloToe?.length === 0">
@@ -1266,7 +1269,7 @@
   </div>
   }
 
-   @if(VentanaSeleccionada?.id==='r9'){
+  @if(VentanaSeleccionada?.id==='r9'){
   <div>
 
     <div class="d-flex align-items-center gap-4">
@@ -1288,7 +1291,7 @@
     <div *ngIf="opcion === 'fuerza'">
 
       <form #formbuscar="ngForm" class="row">
-        <label for="" class="col-md-2" (change)="sacarunidades(formbuscar)">
+        <label for="" class="col-md-2"  >
           Fuerza
 
           <select name="fuerza" class="form-control" id="fuerza" #fuerza="ngModel" ngModel required>
@@ -1297,9 +1300,18 @@
 
           </select>
         </label>
+        <label for="" class="col-md-2" >
+          Categoría
 
- 
- 
+          <select name="categoria" class="form-control" id="categoria" #categoria="ngModel" ngModel required>
+
+            <option *ngFor="let u of arregloParaPromociones" [ngValue]="u">{{ u.nombre }}</option>
+
+          </select>
+        </label>
+
+
+
 
 
         <label for="" class="col-md-1">
@@ -1309,10 +1321,10 @@
             Buscar
           </button>
         </label>
-         <label for="" class="col-md-1">
+        <label for="" class="col-md-1">
           <br>
-          <button class="form-control btn btn-primary" [disabled]="!formbuscar.valid"
-            (click)="  limpiar_organizacion()" style="margin-left: 10px;">
+          <button class="form-control btn btn-primary" [disabled]="!formbuscar.valid" (click)="  limpiar_organizacion()"
+            style="margin-left: 10px;">
             Limpiar
           </button>
         </label>
@@ -1343,7 +1355,7 @@
           </select>
         </label>
 
-     
+
 
 
         <label for="" class="col-md-1">
@@ -1363,7 +1375,58 @@
       </form>
     </div>
 
+ 
+<div *ngIf="opcion === 'seccion'">
 
+      <form #formbuscar="ngForm" class="row">
+        <label for="" class="col-md-2" (change)="sacarunidades(formbuscar)">
+          Fuerza
+
+          <select name="fuerza" class="form-control" id="fuerza" #fuerza="ngModel" ngModel required>
+
+            <option *ngFor="let u of arregloFuerzas" [ngValue]="u">{{ u.nombre }}</option>
+
+          </select>
+        </label>
+
+        <label for="" style="margin-left: 5px;" class="col-md-2">
+          Unidad/Base
+
+          <select name="unidad" class="form-control"   (ngModelChange)="mostrarNombramiento(formbuscar.value.unidad)"  id="unidad" #unidad="ngModel" ngModel required>
+
+            <option *ngFor="let u of ArregloUnidades" [ngValue]="u">{{ u.unidad }}</option>
+
+          </select>
+        </label>
+  <label for="" style="margin-left: 5px;" class="col-md-2">
+          Seccion
+
+          <select name="seccion" class="form-control" id="seccion" #seccion="ngModel" ngModel required>
+
+            <option *ngFor="let u of direcciones" [ngValue]="u">{{ u.descripcion }}</option>
+
+          </select>
+        </label>
+
+
+
+
+        <label for="" class="col-md-1">
+          <br>
+          <button class="form-control btn btn-danger" [disabled]="!formbuscar.valid"
+            (click)="sacarOrganizacion(formbuscar,'seccion')" style="margin-left: 10px;">
+            Buscar
+          </button>
+        </label>
+        <label for="" class="col-md-1">
+          <br>
+          <button class="form-control btn btn-danger" [disabled]="!formbuscar.valid" (click)="limpiar2(formbuscar)"
+            style="margin-left: 10px;">
+            Limpiar
+          </button>
+        </label>
+      </form>
+    </div>
 
 
     <div class="container-fluid py-3">
@@ -1392,7 +1455,7 @@
 
 
         <div class="col-auto">
-          <button class="btn btn-sm btn-success" (click)="exportarExcelResumen('tablaList')">
+          <button class="btn btn-sm btn-success" (click)="exportexcelOrganizacion()">
             <i class="bi bi-file-earmark-excel me-1"></i>
             Exportar
           </button>
@@ -1410,6 +1473,7 @@
           <thead class="table-light">
             <tr>
               <th style="width:60px">#</th>
+              <th>Foto</th>
               <th>Identidad</th>
               <th>Categoria</th>
               <th>Grado</th>
@@ -1423,8 +1487,15 @@
           </thead>
 
           <tbody>
-            <tr *ngFor="let r of arregloOrganizacionCompleta; let i = index">
+            <tr *ngFor="let r of arregloOrganizacionCompleta; let i = index"
+            style="cursor: pointer;"
+            (click)="seleccionarPersonal(r)">
               <td>{{ i + 1 }}</td>
+              <td>
+                <img 
+                width="50px" height="50px" style="object-fit: cover; border-radius: 50%;"
+                src="{{_ServicioBackendService.url2 + 'sacarfoto/' + r.foto}}" alt="">
+              </td>
               <td>{{ r.identidad }}</td>
               <td>{{r.categoria}}</td>
               <td>{{ r.grado }}</td>
@@ -1435,13 +1506,14 @@
               <td>{{r.unidad}}</td>
 
 
-              <td [style]=" r.seccion ? '' : 'background-color: red;color:white'">{{ r.seccion?r.seccion:"Sin  Cargo" }}</td>
-              <td>{{ r.Nombre_Puesto }}</td>
+              <td [style]=" r.seccion ? '' : 'background-color: red;color:white'">{{ r.seccion?r.seccion:"Sin asignacion de Direccion/Seccion" }}
+              </td>
+              <td [style]=" r.Nombre_Puesto ? '' : 'background-color: blue;color:white'">{{ r.Nombre_Puesto?r.Nombre_Puesto:"Sin cargo"  }}</td>
 
             </tr>
 
             <tr *ngIf="arregloOrganizacionCompleta?.length === 0">
-              <td colspan="10" class="text-center text-muted py-3">
+              <td colspan="11" class="text-center text-muted py-3">
                 No hay datos para mostrar
               </td>
             </tr>
@@ -1460,16 +1532,16 @@
   </div>
   }
 
-   @if(VentanaSeleccionada?.id==='r10'){
+  @if(VentanaSeleccionada?.id==='r10'){
   <div>
 
-    
 
 
-    <div  >
+
+    <div>
 
       <form #formbuscar="ngForm" class="row">
-        <label for="" class="col-md-2"  >
+        <label for="" class="col-md-2">
           Fuerza
 
           <select name="fuerza" class="form-control" id="fuerza" #fuerza="ngModel" ngModel required>
@@ -1479,12 +1551,12 @@
           </select>
         </label>
 
-  <label for="" class="col-md-2"  >
+        <label for="" class="col-md-2">
           Mes
-       <input type="month" class="form-control " name="fecha" #fecha="ngModel" ngModel required>
-          
+          <input type="month" class="form-control " name="fecha" #fecha="ngModel" ngModel required>
+
         </label>
- 
+
 
 
         <label for="" class="col-md-1">
@@ -1494,10 +1566,10 @@
             Buscar
           </button>
         </label>
-         <label for="" class="col-md-1">
+        <label for="" class="col-md-1">
           <br>
-          <button class="form-control btn btn-primary" [disabled]="!formbuscar.valid"
-            (click)="  limpiar_organizacion()" style="margin-left: 10px;">
+          <button class="form-control btn btn-primary" [disabled]="!formbuscar.valid" (click)="  limpiar_organizacion()"
+            style="margin-left: 10px;">
             Limpiar
           </button>
         </label>
@@ -1505,7 +1577,7 @@
       </form>
     </div>
 
- 
+
 
 
 
@@ -1561,7 +1633,7 @@
               <th>Asignacion</th>
               <th>Edad</th>
               <th>Antiguedad</th>
-           </tr>
+            </tr>
           </thead>
 
           <tbody>
@@ -1580,7 +1652,7 @@
               <td>{{r.antiguedad}}</td>
 
 
- 
+
 
             </tr>
 
@@ -1604,7 +1676,7 @@
   </div>
   }
 
-    @if(VentanaSeleccionada?.id==='r11'){
+  @if(VentanaSeleccionada?.id==='r11'){
   <div>
 
     <div class="d-flex align-items-center gap-4">
@@ -1626,7 +1698,7 @@
     <div *ngIf="opcion === 'fuerza'">
 
       <form #formbuscar="ngForm" class="row">
-        <label for="" class="col-md-2"  >
+        <label for="" class="col-md-2">
           Fuerza
 
           <select name="fuerza" class="form-control" id="fuerza" #fuerza="ngModel" ngModel required>
@@ -1635,13 +1707,13 @@
 
           </select>
         </label>
-      <label for="" class="col-md-2"  >
+        <label for="" class="col-md-2">
           Fecha
 
-          <input type="month"  class="form-control " name="fecha" #fecha="ngModel" ngModel required>
+          <input type="month" class="form-control " name="fecha" #fecha="ngModel" ngModel required>
         </label>
- 
- 
+
+
 
 
         <label for="" class="col-md-1">
@@ -1651,10 +1723,10 @@
             Buscar
           </button>
         </label>
-         <label for="" class="col-md-1">
+        <label for="" class="col-md-1">
           <br>
-          <button class="form-control btn btn-primary" [disabled]="!formbuscar.valid"
-            (click)="  limpiar_organizacion()" style="margin-left: 10px;">
+          <button class="form-control btn btn-primary" [disabled]="!formbuscar.valid" (click)="  limpiar_organizacion()"
+            style="margin-left: 10px;">
             Limpiar
           </button>
         </label>
@@ -1684,12 +1756,12 @@
 
           </select>
         </label>
- <label for="" class="col-md-2" >
+        <label for="" class="col-md-2">
           Fecha
 
-          <input type="month"  class="form-control " name="fecha" #fecha="ngModel" ngModel required>
+          <input type="month" class="form-control " name="fecha" #fecha="ngModel" ngModel required>
         </label>
-     
+
 
 
         <label for="" class="col-md-1">
@@ -1763,7 +1835,7 @@
               <th>Fecha Ingreso</th>
               <th>Asignacion</th>
               <th>Cuenta</th>
-               
+
 
             </tr>
           </thead>
@@ -1777,8 +1849,8 @@
               <td>{{ r.Nombres }}</td>
               <td>{{ r.Fecha_Ingreso | date: 'dd/MM/yyyy' }}</td>
               <td>{{r.Asignacion}}</td>
-               <td >{{ r.N_Cuenta }}</td>
-                       </tr>
+              <td>{{ r.N_Cuenta }}</td>
+            </tr>
 
             <tr *ngIf="arregloResultado?.length === 0">
               <td colspan="10" class="text-center text-muted py-3">
@@ -1800,22 +1872,22 @@
   </div>
   }
 
-    @if(VentanaSeleccionada?.id==='r12'){
+  @if(VentanaSeleccionada?.id==='r12'){
   <div>
 
-    <div  >
+    <div>
 
       <form #formbuscar="ngForm" class="row">
-     
-     <label for="" class="col-md-2"  >
-          Años 
+
+        <label for="" class="col-md-2">
+          Años
 
           <input type="number" min="1" class="form-control " name="anos" #anos="ngModel" ngModel required>
         </label>
 
-   
-        
- 
+
+
+
 
 
         <label for="" class="col-md-1">
@@ -1825,18 +1897,19 @@
             Buscar
           </button>
         </label>
-         <label for="" class="col-md-1">
+        <label for="" class="col-md-1">
           <br>
-          <button class="form-control btn btn-primary" [disabled]="!formbuscar.valid"
-            (click)="  limpiar_organizacion()" style="margin-left: 10px;">
+          <button class="form-control btn btn-primary" [disabled]="!formbuscar.valid" (click)="  limpiar_organizacion()"
+            style="margin-left: 10px;">
             Limpiar
           </button>
         </label>
 
       </form>
     </div>
- 
-<p style="color: red;">*Segun el numero que coloque se reflejara al cantidad de años  de antiguedad que desea visualizar </p>
+
+    <p style="color: red;">*Segun el numero que coloque se reflejara al cantidad de años de antiguedad que desea
+      visualizar </p>
 
 
     <div class="container-fluid py-3">
@@ -1890,7 +1963,7 @@
               <th>Fecha Ultimo Ascenso</th>
               <th>Asignacion</th>
               <th>Antiguedad</th>
-               
+
 
             </tr>
           </thead>
@@ -1904,8 +1977,8 @@
               <td>{{ r.nombres }}</td>
               <td>{{ r.fecha_ultimo_ascenso | date: 'dd/MM/yyyy' }}</td>
               <td>{{r.asignacion}}</td>
-               <td >{{ r.antiguedad_en_grado }}</td>
-                       </tr>
+              <td>{{ r.antiguedad_en_grado }}</td>
+            </tr>
 
             <tr *ngIf="arregloResultado?.length === 0">
               <td colspan="10" class="text-center text-muted py-3">
@@ -1927,13 +2000,13 @@
   </div>
   }
 
-   @if(VentanaSeleccionada?.id==='r13'){
+  @if(VentanaSeleccionada?.id==='r13'){
   <div>
 
-    <div  >
+    <div>
 
       <form #formbuscar="ngForm" class="row">
-           
+
 
         <label for="" class="col-md-1">
           <br>
@@ -1942,18 +2015,18 @@
             Buscar
           </button>
         </label>
-         <label for="" class="col-md-1">
+        <label for="" class="col-md-1">
           <br>
-          <button class="form-control btn btn-primary" [disabled]="!formbuscar.valid"
-            (click)="  limpiar_organizacion()" style="margin-left: 10px;">
+          <button class="form-control btn btn-primary" [disabled]="!formbuscar.valid" (click)="  limpiar_organizacion()"
+            style="margin-left: 10px;">
             Limpiar
           </button>
         </label>
 
       </form>
     </div>
- 
-<p style="color: red;">*Aqui se visualiza el personal sin cargo (Click en Buscar) </p>
+
+    <p style="color: red;">*Aqui se visualiza el personal sin cargo (Click en Buscar) </p>
 
 
     <div class="container-fluid py-3">
@@ -2006,7 +2079,7 @@
               <th>Cargo</th>
               <th>Fuerza/Depend. </th>
               <th>Unidad</th>
-               
+
 
             </tr>
           </thead>
@@ -2015,13 +2088,13 @@
             <tr *ngFor="let r of arregloResultado; let i = index">
               <td>{{ i + 1 }}</td>
               <td>{{ r.identidad }}</td>
-            
+
               <td>{{ r.grado }}</td>
               <td>{{ r.persona }}</td>
-              <td>{{ r.cargo  }}</td>
+              <td>{{ r.cargo }}</td>
               <td>{{r.nombre}}</td>
-               <td >{{ r.unidad }}</td>
-                       </tr>
+              <td>{{ r.unidad }}</td>
+            </tr>
 
             <tr *ngIf="arregloResultado?.length === 0">
               <td colspan="10" class="text-center text-muted py-3">
@@ -2042,7 +2115,182 @@
 
   </div>
   }
-  @if (VentanaSeleccionada?.id==='r14') {
-       <app-menu-toe [tipoBusqueda]="'EMC'" ></app-menu-toe>
+  @if (VentanaSeleccionada?.id==='r14'  ) {
+  <app-menu-toe [tipoBusqueda]="'EMC'"></app-menu-toe>
   }
+  @if (VentanaSeleccionada?.id==='r15') {
+   <div class="row"   >
+    <form #formBuscar="ngForm" class="col-md-12 row">
+      <label for="" class="col-md-2">Fecha
+        <input type="month" class="form-control" required name="fecha" ngModel #fecha="ngModel">
+
+      </label>
+
+      <label for="" class="col-md-1"><br>
+        <button class="form-control btn btn-primary" [disabled]="!formBuscar.valid" (click)="buscarEmc(formBuscar)">
+          Buscar</button>
+      </label>
+
+
+
+    </form>
+    <div  class="col-md-12" >
+   <div class="tabla-container" *ngIf="arregloAscensos?.length > 0; else sinDatos">
+  <table class="tabla-ascensos">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>ID Personal</th>
+        <th>Nombre Completo</th>
+        <th>Grado Actual</th>
+        <th>Fuerza Actual</th>
+        <th>Fecha Ascenso Actual</th>
+        <th>Grado Anterior</th>
+        <th>Unidad Ejecutora</th>
+        <th>Categoría Actual</th>
+        <th>Fecha Ingreso Anterior</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let item of arregloAscensos; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ item.personal_idpersonal }}</td>
+        <td>{{ item.nombres }}</td>
+        <td>{{ item.grado_actual }}</td>
+        <td>{{ item.fuerza_actual }}</td>
+        <td>{{ item.fecha_ascenso_actual | date:'yyyy-MM-dd' }}</td>
+        <td>{{ item.grado_anterior }}</td>
+        <td>{{ item.unidad_ejecutora }}</td>
+        <td>{{ item.categoria_actual }}</td>
+        <td>{{ item.fecha_ingreso_anterior | date:'yyyy-MM-dd' }}</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
+
+<ng-template #sinDatos>
+  <div class="sin-datos" style="margin-top: 10px">
+   Datos no encontrados para la fecha seleccionada.
+  </div>
+</ng-template>
+
+
+    </div>
+
+   </div>
+  }
+
+@if (VentanaSeleccionada?.id==='r16') {
+   <div class="row"   >
+    <form #formBuscar="ngForm" class="col-md-12 row">
+    <label for="" class="col-md-2">
+          Categoría
+
+          <select name="categoria" class="form-control" id="categoria" #categoria="ngModel" required  ngModel>
+
+            <option *ngFor="let u of arregloParaPromociones" [ngValue]="u">{{ u.nombre }}</option>
+
+          </select>
+        </label>
+
+          <label for="" class="col-md-2">
+          Promociones
+
+          <select name="promocion" class="form-control" id="promocion" #promocion="ngModel"    required  ngModel>
+
+            <option *ngFor="let u of arregloPromocionesAgrupadas" [ngValue]="u">{{ u.nombre }}</option>
+
+          </select>
+        </label>
+
+
+
+      <label for="" class="col-md-1"><br>
+        <button class="form-control btn btn-primary" [disabled]="!formBuscar.valid"
+         (click)="buscarPromocionesAgrupadas(formBuscar)">
+          Buscar</button>
+      </label>
+      <label for="" class="col-md-1"><br>
+        <button class="form-control btn btn-danger" 
+         (click)="exportarExcelConfotoPromociones('tablaPromociones')" >
+          Exportar</button>
+      </label>
+
+
+
+    </form>
+    <div  class="col-md-12" >
+   <div class="tabla-container" *ngIf="arregloBusquedaPromociones?.length > 0; else sinDatos">
+      
+     <table  id="tablaPromociones" class="table table-bordered    table-striped table-sm   "   >
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Foto</th>
+          <th>Identidad</th>
+          <th>Grado</th>
+          <th>Nombres</th>
+          <th>Fecha Ingreso</th>
+          <th>Fecha Ultmo Ascenso</th>
+          <th>Promoción</th>
+          <th>Nota Final</th>
+         </tr>
+      </thead>
+      <tbody>
+        <tr  *ngFor="let item of arregloBusquedaPromociones; let i = index"  style="cursor: pointer;" (click)="seleccionarPersonal(item)">  
+          <td>{{ i + 1 }}</td>
+          <td><img src="{{ _ServicioBackendService.url2 + 'sacarfoto/' + item.foto }}" style="height: 50px; width: 50px;"
+                  alt=""></td>
+          <td>{{ item.identidad }}</td>
+          <td>{{ item.grado }}</td>
+          <td>{{ item.nombres }}</td>
+          <td>{{ item.fecha_ingreso | date:'yyyy-MM-dd' }}</td>
+          <td>{{ item.fecha_ultimo_ascenso | date:'yyyy-MM-dd' }}</td>
+          <td>{{ item.promocion }}</td>
+          <td>{{ item.nota_final }}%</td>
+        </tr>
+      </tbody>
+     </table>
+     
+     
+      
+      </div>
+
+<ng-template #sinDatos>
+  <div class="sin-datos" style="margin-top: 10px">
+   Datos no encontrados
+  </div>
+</ng-template>
+
+
+    </div>
+
+   </div>
+  }
+
+
+
+</div>
+
+<p-dialog
+  header="Visualizar perfil"
+  [(visible)]="verperfil"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '2000px', height: '1500px' }"
+  [contentStyle]="{ overflow: 'auto' }"
+
+  (onHide)="limpiarVariable()"
+>
+  <app-visualizar-perfil
+    *ngIf="personaSeleccionada"
+    [identidad]="personaSeleccionada?.identidad">
+  </app-visualizar-perfil>
+</p-dialog>
+
+
+
+
+ 

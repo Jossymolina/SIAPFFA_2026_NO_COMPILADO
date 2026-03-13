@@ -160,3 +160,92 @@
   background-color: #0011fd4d; /* fondo rojo claro opcional */
 }
 
+
+
+
+
+
+.tabla-container {
+  width: 100%;
+  overflow-x: auto;
+  padding: 15px;
+  background: #f4f6f9;
+  border-radius: 8px;
+}
+
+.tabla-ascensos {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  background: #ffffff;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.tabla-ascensos thead {
+  background: #1f3c88;
+  color: #ffffff;
+}
+
+.tabla-ascensos th {
+  padding: 10px;
+  text-align: left;
+  font-weight: 600;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.tabla-ascensos td {
+  padding: 8px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.tabla-ascensos tbody tr:nth-child(even) {
+  background-color: #f8f9fa;
+}
+
+.tabla-ascensos tbody tr:hover {
+  background-color: #e3f2fd;
+  transition: 0.2s ease-in-out;
+}
+
+.tabla-ascensos td:first-child {
+  font-weight: bold;
+  color: #1f3c88;
+}
+
+.sin-datos {
+  padding: 20px;
+  text-align: center;
+  font-weight: 600;
+  background: #fff3cd;
+  color: #856404;
+  border-radius: 6px;
+}
+
+
+
+
+/* Fuerza fullscreen real */
+.fullscreen-dialog .p-dialog {
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: 100vw !important;
+  max-height: 100vh !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+}
+
+/* Ajusta contenido */
+.fullscreen-dialog .p-dialog-content {
+  height: calc(100vh - 60px);
+  overflow: auto;
+}
+
+/* Elimina espacios */
+.fullscreen-dialog {
+  padding: 0 !important;
+}
+
+.p-dialog-mask {
+  padding: 0 !important;
+}

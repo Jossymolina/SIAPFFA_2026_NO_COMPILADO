@@ -173,6 +173,15 @@
             (click)="sacarPuestos_delNombramiento(item.idNombramiento); mostrarModalPuesto = true">
             <i class="pi pi-clone"></i> Puestos
           </button>
+  <button
+            pButton
+            type="button"
+            class="p-button-rounded2 p-button-success p-button-sm me-1"
+            icon=""
+            title="Editar"
+            (click)="seleccionarModificar(item); modificarNombramiento = true">
+            <i class="pi pi-clone"></i> Modificar
+          </button>
 
           <button
             pButton
@@ -384,4 +393,88 @@
   
   
  
+</p-dialog>
+
+
+
+
+
+
+
+<p-dialog
+  [(visible)]="modificarNombramiento"
+  [modal]="true"
+  [blockScroll]="true"
+  [style]="{ width: '500px' }"
+  [draggable]="false"
+  [resizable]="false"
+  [closable]="true"
+  styleClass="custom-dialog"
+>
+
+  <!-- HEADER PERSONALIZADO -->
+  <ng-template pTemplate="header">
+    <div class="d-flex align-items-center gap-2">
+      <i class="pi pi-pencil text-primary fs-5"></i>
+      <span class="fw-semibold fs-5">Modificar Nombramiento</span>
+    </div>
+  </ng-template>
+
+  <!-- CONTENIDO -->
+  <form #formModificarNombramiento="ngForm" novalidate class="px-2">
+
+    <div class="mb-3">
+      <label class="form-label fw-semibold">
+        Descripción
+      </label>
+      <input
+        type="text"
+        class="form-control custom-input"
+        name="descripcion"
+        #descripcion="ngModel"
+        ngModel
+        required
+      />
+      
+    </div>
+
+    <div class="mb-4">
+      <label class="form-label fw-semibold">
+        Orden
+      </label>
+      <input
+        type="number"
+        class="form-control custom-input"
+        name="orden"
+        #orden="ngModel"
+        ngModel
+        required
+      />
+     
+    </div>
+
+    <!-- FOOTER -->
+    <div class="d-flex justify-content-end gap-2">
+      <button
+        pButton
+        type="button"
+        label="Cancelar"
+        icon="pi pi-times"
+        class="p-button-text"
+        (click)="modificarNombramiento = false"
+      ></button>
+
+      <button
+     
+        type="button"
+ 
+    
+        class="btn btn-success"
+        [disabled]="!formModificarNombramiento.valid"
+        (click)="guardraModificadoNombramniento(formModificarNombramiento)"
+      >Guardar Cambio</button>
+    </div>
+
+  </form>
+
 </p-dialog>

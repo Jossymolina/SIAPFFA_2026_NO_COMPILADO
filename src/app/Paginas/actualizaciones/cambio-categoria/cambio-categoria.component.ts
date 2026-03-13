@@ -51,7 +51,19 @@ export class CambioCategoriaComponent {
   ngOnInit(): void {
     this.usuariologuiado = JSON.parse(localStorage.getItem('user_login')!).user;
     this.sacarUnidadEjecutora()
+    this.sacarfuerzas()
     
+  }
+  arregloFuerzas = []
+  sacarfuerzas(){
+this._DatospersonalesService.sacarFuerza().subscribe({
+  next:(response)=>{
+    this.arregloFuerzas = response.resultado;
+  },
+  error:(error)=>{
+    this._DatospersonalesService.mensajeError("Error al cargar las fuerzas");
+  }
+})
   }
   sacarUnidadEjecutora(){
     this._DatospersonalesService.sacarUnidadEjecutora().subscribe({
@@ -68,13 +80,12 @@ buscarPorIdentidad(){
    {
     next:(Response)=>{
  
-      console.log(Response)
       this._ServicioMensajeService.hide()
       if (Response.error) return  this._DatospersonalesService.mensajeError(Response.error.sqlMessage + "BUSC")
       if (Response.mensaje) return      this._DatospersonalesService.mensajeError(Response.mensaje)
      
           this.objetoConsultado = Response.resultado[0];
-         this.sacarcategorias(this.objetoConsultado.categoria_idcategoria)        
+         this.sacarcategorias(this.objetoConsultado.idcategoria)        
           this.bandera=1
           
         
@@ -153,7 +164,7 @@ guardarcategoriaNueva(){
   var objeto=this.quitarAlgodelTexto(this.cambiarcategoria.numeroAcuerdo," ",""); 
   this.cambiarcategoria.numeroAcuerdo = objeto
   this.cambiarcategoria.ejecutado_por = this.usuariologuiado.identidad
-  
+ 
   this._DatospersonalesService.guardarcambiodeCategoria(this.cambiarcategoria).subscribe(
     Response=>{
       if (Response.mensaje) {
@@ -183,7 +194,7 @@ guardarcategoriaNueva(){
     },error=>{
       this._DatospersonalesService.mensajeError("ERROR DE CONECCION AL CAMBIAR LA CATEGORIA");
     }
-  )
+  ) 
 
 
   

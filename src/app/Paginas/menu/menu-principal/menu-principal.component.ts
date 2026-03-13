@@ -10,6 +10,9 @@ import { ServiciosMensajeService } from '../../../servicios/serviMensaje/servici
 import { VisualizarPerfilComponent } from '../../../Componentes/visualizar-perfil/visualizar-perfil.component';
 import { ServicioBackendService } from '../../../servicios/servicio-backend.service';
 import { ButtonModule } from 'primeng/button';
+
+import { DialogModule } from 'primeng/dialog';
+import { TableModule } from 'primeng/table';
  interface ModuleCard {
   title: string;
   description: string;
@@ -24,6 +27,7 @@ interface MenuItem {
   image?: string;    // si luego quieres usar imagen en vez de icono
 }
 import { Location } from '@angular/common';
+import { FormsModule, NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-menu-principal',
@@ -35,7 +39,9 @@ import { Location } from '@angular/common';
     AvatarModule,
   ButtonModule,
     DrawerModule ,
-    VisualizarPerfilComponent
+    VisualizarPerfilComponent,
+    DialogModule,
+    TableModule,FormsModule
      
  
   ],
@@ -45,7 +51,7 @@ import { Location } from '@angular/common';
 export class MenuPrincipalComponent implements OnInit {
   // Módulos centrales
  permisoPersonal=false
-
+ 
   // Opciones del menú hamburguesa
   menuVisible = false;
 
@@ -61,9 +67,9 @@ export class MenuPrincipalComponent implements OnInit {
       route: '/menu/menu-principal'
     },
     {
-      label: 'Ayuda / Soporte',
-      icon: 'pi pi-question-circle',
-      route: '/ayuda'
+      label: 'Agenda Administrativa',
+      icon: 'pi pi-address-book',
+      route: '/agenda'
     },
     {
       label: 'Cerrar sesión',
@@ -91,11 +97,13 @@ private location: Location
   openModule(m) {
     if (m.route) {
       if(m.route==='/autenticarse') return this.cerrarSesion(m.route)
+      if(m.route==='/agenda') return this.abrirAgenda()
+
       this.router.navigate([m.route]);
     }
   }
   sacarPermisoPersonal(){
-   this.permisoPersonal =   this._ServicioBackendService.verificarPermisos(['User_admin','User_admin02','User_admin01'])
+   this.permisoPersonal =   this._ServicioBackendService.verificarPermisos(['User_admin','User_admin02','User_admin01','User_admin03'])
     //console.log( JSON.parse(localStorage.getItem("permisos") || "[]") as any[])
   }
 cerrarSesion(route){
@@ -122,5 +130,76 @@ cerrarSesion(route){
      
     }
   }
- 
+   visible: boolean = false;
+
+  contactos = [
+    { nombre: 'Juan Pérez', telefono: '9999-9999', empresa: 'Empresa A' },
+    { nombre: 'María López', telefono: '8888-8888', empresa: 'Empresa B' },
+    { nombre: 'Carlos Gómez', telefono: '7777-7777', empresa: 'Empresa C' }
+  ];
+
+  abrirAgenda() {
+    this.visible = true;
+    this.sacarFuerzas()
+  }
+  arreegloUnidad = []
+sacarUnidad(fuerza){
+  this.arreegloUnidad = []
+this._ServiciosMensajeService.show("Cargando unidades 🕓")
+ var parametro={
+     idfuerza:fuerza.value.fuerza.idfuerza
+   }
+  this._ServicioBackendService.sacarunidad(parametro).subscribe(
+  {
+    next: (data) => {
+           this._ServiciosMensajeService.hide()
+          if(data.error) return this._ServiciosMensajeService.mensajeMalo(data.error)
+            if(data.mensaje) return  this._ServiciosMensajeService.mensajeMalo(data.mensaje)
+              this.arreegloUnidad= data.resultado
+    },error: (err) => {
+          this._ServiciosMensajeService.hide()
+this._ServiciosMensajeService.mensajeerrorServer()
+    }
+  }
+  );
 }
+arregloFuerzas = []
+sacarFuerzas(){
+  this.arregloFuerzas = []
+this._ServiciosMensajeService.show("Cargando fuerzas 🕓")
+  this._ServicioBackendService.sacarFuerza().subscribe(
+  {
+    next: (data) => {
+      this._ServiciosMensajeService.hide()
+          if(data.error) return this._ServiciosMensajeService.mensajeMalo(data.error)
+            if(data.mensaje) return  this._ServiciosMensajeService.mensajeMalo(data.mensaje)
+              this.arregloFuerzas= data.resultado
+    },error: (err) => {
+          this._ServiciosMensajeService.hide()
+this._ServiciosMensajeService.mensajeerrorServer()
+    }
+  }
+  );
+}
+
+arregloAgenda = []
+buscarNumero(data:NgForm){
+
+  this._ServiciosMensajeService.show("Buscando numero 🕓")
+  this.arregloAgenda= new Array();
+ this._ServicioBackendService.sacarTelefonodeAdministradoresdeFuuerza(data.value.unidad).subscribe(
+{
+      next: (response) => {
+      this._ServiciosMensajeService.hide()
+
+   if (response.error) return this._ServiciosMensajeService.mensajeMalo(response.error)
+   if (response.mensaje) return this._ServiciosMensajeService.mensajeMalo(response.mensaje)
+   this.arregloAgenda= response.resultado
+      },error: (err) => {
+
+      }
+}
+ )
+}
+}
+

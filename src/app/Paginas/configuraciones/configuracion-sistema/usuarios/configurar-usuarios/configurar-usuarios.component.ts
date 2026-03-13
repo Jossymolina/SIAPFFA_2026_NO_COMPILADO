@@ -460,11 +460,13 @@ export class ConfigurarUsuariosComponent {
   }
 
   cambiarPermiso(data) {
+    console.log(data.permitido)
     var parametro = {
       identidad: this.usuarioBuscado.identidad,
       idpermisos: data.idPermisosDisponibles,
       cambio: data.permitido === 0 ? 1 : 0
     }
+    console.log(parametro)
     this._DatospersonalesService.cambiarPermisoUsuario(parametro).subscribe(
       Response => {
         if (Response.error) {

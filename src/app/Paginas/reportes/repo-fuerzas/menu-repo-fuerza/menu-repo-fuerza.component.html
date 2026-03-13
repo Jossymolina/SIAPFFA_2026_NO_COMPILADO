@@ -50,7 +50,8 @@
   <!-- GRID (Bootstrap SOLO GRID) -->
   <div class="container-fluid" *ngIf="!VentanaSeleccionada">
     <div class="row g-3">
-      <div class="col-6 col-md-4 col-lg-3 col-xl-2" *ngFor="let r of filtrados()">
+          <ng-container  *ngFor="let r of filtrados()" >
+      <div class="col-6 col-md-4 col-lg-3 col-xl-2" *ngIf="verificarPermisos(r)">
         <p-card styleClass="app-card" (click)="abrir(r)">
           <ng-template pTemplate="content">
             <div class="app">
@@ -59,6 +60,7 @@
               </div>
 
               <div class="app-title" [title]="r.titulo">{{ r.titulo }}</div>
+              <div class="app-title" [title]="r.titulo">{{ r.id }}</div>
               <div class="app-desc" *ngIf="r.descripcion">{{ r.descripcion }}</div>
 
               <div class="app-footer">
@@ -71,6 +73,7 @@
           </ng-template>
         </p-card>
       </div>
+      </ng-container>
     </div>
   </div>
  
@@ -830,6 +833,51 @@
       </form>
     </div>
 
+    <div *ngIf="opcion === 'seccion'">
+
+      <form #formbuscar="ngForm" class="row">
+     
+        <label for="" style="margin-left: 5px;" class="col-md-2">
+          Unidad/Base
+
+          <select name="unidad"
+          (ngModelChange)="mostrarNombramiento(formbuscar.value.unidad)"
+          class="form-control" id="unidad" #unidad="ngModel" ngModel required>
+
+            <option *ngFor="let u of ArregloUnidades" [ngValue]="u">{{ u.unidad }}</option>
+
+          </select>
+        </label>
+
+          <label for="" style="margin-left: 5px;" class="col-md-2">
+          Seccion
+
+          <select name="seccion" class="form-control" id="seccion" #seccion="ngModel" ngModel required>
+
+            <option *ngFor="let u of direcciones" [ngValue]="u">{{ u.descripcion }}</option>
+
+          </select>
+        </label>
+
+     
+
+
+        <label for="" class="col-md-1">
+          <br>
+          <button class="form-control btn btn-danger" [disabled]="!formbuscar.valid"
+            (click)="sacarOrganizacion(formbuscar,'seccion')" style="margin-left: 10px;">
+            Buscar
+          </button>
+        </label>
+        <label for="" class="col-md-1">
+          <br>
+          <button class="form-control btn btn-danger" [disabled]="!formbuscar.valid" (click)="limpiar_organizacion()"
+            style="margin-left: 10px;">
+            Limpiar
+          </button>
+        </label>
+      </form>
+    </div>
 
 
 
@@ -859,7 +907,7 @@
 
 
         <div class="col-auto">
-          <button class="btn btn-sm btn-success" (click)="exportarExcelResumen('tablaList')">
+          <button class="btn btn-sm btn-success" (click)="exportexcelOrganizacion()">
             <i class="bi bi-file-earmark-excel me-1"></i>
             Exportar
           </button>
@@ -877,6 +925,8 @@
           <thead class="table-light">
             <tr>
               <th style="width:60px">#</th>
+              <th>Foto</th>
+
               <th>Identidad</th>
               <th>Categoria</th>
               <th>Grado</th>
@@ -890,8 +940,15 @@
           </thead>
 
           <tbody>
-            <tr *ngFor="let r of arregloOrganizacionCompleta; let i = index">
+           <tr *ngFor="let r of arregloOrganizacionCompleta; let i = index"
+            style="cursor: pointer;"
+            (click)="seleccionarPersonal(r)">
               <td>{{ i + 1 }}</td>
+              <td>
+                <img 
+                width="50px" height="50px" style="object-fit: cover; border-radius: 50%;"
+                src="{{_ServicioBackendService.url2 + 'sacarfoto/' + r.foto}}" alt="">
+              </td>
               <td>{{ r.identidad }}</td>
               <td>{{r.categoria}}</td>
               <td>{{ r.grado }}</td>
@@ -902,7 +959,8 @@
               <td>{{r.unidad}}</td>
 
 
-              <td [style]=" r.seccion ? '' : 'background-color: red;color:white'">{{ r.seccion?r.seccion:"Sin  Cargo" }}</td>
+              <td [style]=" r.seccion ? '' : 'background-color: red;color:white'">{{ r.seccion?r.seccion:"Sin Cargo" }}
+              </td>
               <td>{{ r.Nombre_Puesto }}</td>
 
             </tr>
@@ -1112,3 +1170,22 @@
   
  
 </div>
+
+
+
+<p-dialog
+  header="Visualizar perfil"
+  [(visible)]="verperfil"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '2000px', height: '1500px' }"
+  [contentStyle]="{ overflow: 'auto' }"
+
+  (onHide)="limpiarVariable()"
+>
+  <app-visualizar-perfil
+    *ngIf="personaSeleccionada"
+    [identidad]="personaSeleccionada?.identidad">
+  </app-visualizar-perfil>
+</p-dialog>

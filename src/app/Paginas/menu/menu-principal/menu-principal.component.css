@@ -269,3 +269,106 @@
   margin: 100px !important;
   margin-bottom: 100px;
 }
+
+
+
+
+
+
+
+
+
+
+/* Fondo general */
+.agenda-container {
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  padding: 25px;
+  border-radius: 15px;
+  color: white;
+}
+
+/* Alert moderno */
+.alert-modern {
+  background: rgba(255,255,255,0.1);
+  padding: 10px 15px;
+  border-radius: 10px;
+  font-size: 14px;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+/* Labels */
+.form-label-modern {
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #f1f1f1;
+}
+
+.form-select-modern {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  background: rgba(255,255,255,0.9);
+  color: #1e1e1e;   /* 🔥 texto oscuro */
+  backdrop-filter: blur(6px);
+  transition: 0.3s;
+}
+
+.form-select-modern:focus {
+  box-shadow: 0 0 0 2px #00d4ff;
+}
+
+/* Tabla moderna */
+.table-modern {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 10px;
+}
+
+.table-modern thead th {
+  background: rgba(255,255,255,0.15);
+  padding: 12px;
+  border: none;
+  text-align: left;
+  font-weight: 600;
+}
+
+.table-modern tbody tr {
+  background: rgba(255,255,255,0.08);
+  transition: 0.3s;
+}
+
+.table-modern tbody tr:hover {
+  background: rgba(255,255,255,0.18);
+  transform: scale(1.01);
+}
+
+.table-modern td {
+  padding: 12px;
+  vertical-align: middle;
+  border: none;
+}
+
+/* Foto moderna */
+.foto-modern {
+  height: 80px;
+  width: 80px;
+  border-radius: 15px;
+  object-fit: cover;
+  border: 3px solid rgba(255,255,255,0.3);
+  transition: 0.3s;
+}
+
+.foto-modern:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(0,212,255,0.7);
+}
+
+/* Números estilo badge */
+.numero-cell {
+  font-weight: bold;
+  color: #00ffcc;
+}
+

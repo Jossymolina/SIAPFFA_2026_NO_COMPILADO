@@ -36,11 +36,17 @@
   border: 2px solid #2563eb22;
   background: #111827;
 }
-
+/*
 .perfil-photo {
   width: 100%;
   aspect-ratio: 3 / 4;
   object-fit: cover;
+  display: block;
+}*/
+.perfil-photo {
+  width: 100%;
+  height: auto;              /* importante */
+  object-fit: contain;       /* evita recorte */
   display: block;
 }
 
@@ -826,3 +832,6 @@ tr1:nth-child(odd) {
   font-weight: 600;
   box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
+
+
+

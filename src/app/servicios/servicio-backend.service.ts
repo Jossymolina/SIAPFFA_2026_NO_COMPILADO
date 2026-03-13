@@ -13,15 +13,13 @@ import { ServiciosMensajeService } from './serviMensaje/servicios-mensaje.servic
 })
 //ng build --aot --output-hashing=all
 export class ServicioBackendService {
-  public url2 = "https://siapfa.ffaa.mil.hn:4443/" //"http://localhost:3979/" //"https://siapfa.ffaa.mil.hn:4443/"
+  public url2 ="https://siapfa.ffaa.mil.hn:4443/"//"http://localhost:3979/" //"https://siapfa.ffaa.mil.hn:4443/"
   refrescar = 0
-  public url = "https://siapfa.ffaa.mil.hn:4443/"//"http://localhost:3979/" //"https://siapfa.ffaa.mil.hn:4443/"     
+  public url ="https://siapfa.ffaa.mil.hn:4443/"//"http://localhost:3979/" //"https://siapfa.ffaa.mil.hn:4443/"     
   usuarioLogin: any;
   token = "";
 
   arregloPermisos = new Array();
-
-
 
   arregloFirmantes_RRHH = [
     {
@@ -35,6 +33,52 @@ export class ServicioBackendService {
 
 
   ) { }
+
+   async descargarImagenComoArrayBuffer(
+    url: string
+  ): Promise<ArrayBuffer | null> {
+    try {
+      return (await this.http.get(url, {
+        responseType: 'arraybuffer',
+      }).toPromise()) as ArrayBuffer;
+    } catch (e) {
+      console.error('Error descargando imagen', e);
+      return null;
+    }
+  }
+  SacarCuposUnidad(data){
+      return this.metodopost("SacarCuposUnidad",data)
+  }
+  sacarPersonalPromocion(data){
+    return this.metodopost("sacarPersonalPromocion",data)
+  }
+  sacarPrmoionesAgrupadas(){
+    return this.metodoget("sacarPrmoionesAgrupadas")
+  }
+  actualizarIngresoAscenso(data){
+    return this.metodopost("actualizarIngresoAscenso",data)
+  }
+obtenerAscensosPorPersona(data){
+  return this.metodopost("obtenerAscensosPorPersona",data)
+}
+  obtenerPromociones(data){
+    return this.metodopost("obtenerPromociones",data)
+  }
+  actualizarNombramiento(data){
+    return this.metodopost("actualizarNombramiento",data)
+  }
+  desactivarBajoControlPorUnidad(data){
+    return this.metodopost("desactivarBajoControlPorUnidad",data)
+  }
+ sacarBajoControl(data){
+  return this.metodopost("sacarBajoControl",data)
+ }
+  insertarBajoControl(data){
+    return this.metodopost("insertarBajoControl",data)
+  }
+  sacarCambiosCategoriaGeneral(data){
+    return this.metodopost("sacarCambiosCategoriaGeneral",data)
+  }
   municipioRecidencia(data){
     return this.metodopost("sacarMunicipioRecidencia",data)
   }

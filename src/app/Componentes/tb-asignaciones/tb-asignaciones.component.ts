@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, RouterEvent } from '@angular/router';
 import { ServicioBackendService } from '../../servicios/servicio-backend.service';
 import { ServiciosMensajeService } from '../../servicios/serviMensaje/servicios-mensaje.service';
@@ -29,10 +29,11 @@ export class TbAsignacionesComponent {
   ArregloUnidades = [];
   usuariologuiado;
  
-  direccionSelected
+  _direccionSeleccionada
   fechaSelected
   fuerzaSelected;
   arrgloSituacioPersonal=[]
+  buscarCargos=false
   constructor(
  
     public _DatospersonalesService: ServicioBackendService,
@@ -53,9 +54,14 @@ export class TbAsignacionesComponent {
     this.sacarSituacion();
     this.situacion_personal()
     this.sacarPermisoTransferencia()
+    this.sacarBajoControl()
   }
   selecionardireccion(data){
- this.direccionSelected = data;
+     
+   
+    this.buscarCargos=true
+ this._direccionSeleccionada = data
+     
   }
   sacarDireccionDeAsignado() {
     this.arreglosDeMisAsignacionesDirecciones = [];
@@ -176,20 +182,22 @@ this._ServiciosMensajesService.mensajeerrorServer()
     
 
   }
+  @ViewChild("formDireccion") formDireccion:NgForm
   async guardarAsignacionDireccion() {
     let respuesta = await this._ServiciosMensajesService.mensajePregunta("Esta seguro de guardar los cambios")
+    
 if (respuesta) {
-  if (this.fechaSelected === "" || this.fechaSelected === undefined || this.direccionSelected === undefined) {
-    this._DatospersonalesService.mensajeError("RELLENE LOS CAMPOS")
+  if (this.formDireccion.value.fechaSelected === "" || this.formDireccion.value.fechaSelected === undefined || this.formDireccion.value.direccionSelected === undefined) {
+    this._DatospersonalesService.mensajeError("RELLENE LOS CAMPOS 111")
   } else {
     var parametro = {
       identidad: this.objetoConsultado.identidad,
       identidadEjecutora: this.usuariologuiado.identidad,
-      idNombramiento: this.direccionSelected.idNombramiento,
-      direccion: this.direccionSelected.descripcion,
-      fechaAsignacion: this.fechaSelected,
+      idNombramiento: this.formDireccion.value.direccionSelected.idNombramiento,
+      direccion: this.formDireccion.value.direccionSelected.descripcion,
+      fechaAsignacion:  this.formDireccion.value.fechaSelected,
       idgrado: this.objetoConsultado.grado,
-      fechaSalida: this.fechaSelected,
+      fechaSalida:  this.formDireccion.value.fechaSelected,
       unidad: this.unidadSelected
     }
    this._ServiciosMensajesService.show()
@@ -219,37 +227,67 @@ if (respuesta) {
 }
 
   }
-  sacarunidades() {
+  /*sacarunidades() {
+
+  
+
+      this.ArregloUnidades = [];
+    this._ServiciosMensajesService.show()
+    console.log(this.fuerzaSelected)
+    this._DatospersonalesService.sacarunidad(this.fuerzaSelected).subscribe(
+   {
+       next: (Response) => {
+        console.log(Response)
+        this._ServiciosMensajesService.hide()
+        this.ArregloUnidades = Response.resultado;
+      },error:(error) => {
+        this._ServiciosMensajesService.hide()
+      }
+   }
+    )
+
+
+  }*/
+
+  sacarUnidadBajoControl(form) {
 
     this.ArregloUnidades = [];
-    this._DatospersonalesService.sacarunidad(this.fuerzaSelected).subscribe(
-      Response => {
+    this._ServiciosMensajesService.show()
+    this._DatospersonalesService.sacarunidad(form.value.fuerzaSelected).subscribe(
+   {
+       next: (Response) => {
+        this._ServiciosMensajesService.hide()
         this.ArregloUnidades = Response.resultado;
+      },error:(error) => {
+        this._ServiciosMensajesService.hide()
       }
+   }
     )
   }
+  @ViewChild("formAsignar") formAsignar:NgForm
  async reasignar() {
 let respuesta = await this._ServiciosMensajesService.mensajePregunta("Esta seguro de reasignar esta persona")
    if (respuesta) {
-    if (this.unidadSelected === undefined || this.fechaSelected === undefined || this.fuerzaSelected === undefined) return  this._DatospersonalesService.mensajeError("RELLENE TODO LOS CAMPOS")
+    if (this.formAsignar.value.unidadSelected === undefined || this.formAsignar.value.fechaSelected === undefined || this.formAsignar.value.fuerzaSelected === undefined) return  this._DatospersonalesService.mensajeError("RELLENE TODO LOS CAMPOS")
 
     if (this.objetoConsultado.codigo !== "TRO") {
        var fechaIgual = false;
         this.arregloAsignaciones.forEach(element => {
-          if (element.fecha_asignacion.split("T")[0] === this.fechaSelected) {
+          if (element.fecha_asignacion.split("T")[0] === this.formAsignar.value.fechaSelected) {
             fechaIgual = true;
           }
         });
         if (fechaIgual) return   this._ServiciosMensajesService.mensajeAdvertencia( 'No puede haber Dos Asignaciones en la misma fecha')
         var datos = {
           identidad: this.objetoConsultado.identidad,
-          idunidad: this.unidadSelected.idunidad,
-          fecha_asignacion: this.fechaSelected,
+          idunidad: this.formAsignar.value.unidadSelected.idunidad,
+          fecha_asignacion: this.formAsignar.value.fechaSelected,
           idfuerzaActual: this.objetoConsultado.idfuerza,
-          idfueraAmover: this.fuerzaSelected.idfuerza,
+          idfueraAmover: this.formAsignar.value.fuerzaSelected.idfuerza,
           nivel: this.objetoConsultado.nivel,
           idelaborado: this.usuariologuiado.identidad
         }
+      
         this._ServiciosMensajesService.show()
         this._DatospersonalesService.reasignarOficialesAuxSub(datos).subscribe(
           Response => {
@@ -287,17 +325,15 @@ let respuesta = await this._ServiciosMensajesService.mensajePregunta("Esta segur
           });
           var reasignarDatos = {
             identidad: this.objetoConsultado.identidad,
-            idunidad: this.unidadSelected.idunidad,
-            fecha_asignacion: this.fechaSelected,
+            idunidad: this.formAsignar.value.unidadSelected.idunidad,
+            fecha_asignacion: this.formAsignar.value.fechaSelected,
             idfuerzaActual:  asignacionActual === undefined ? this.objetoConsultado.idfuerza : asignacionActual.idfuerza,
-            idfueraAmover: this.fuerzaSelected.idfuerza,
+            idfueraAmover: this.formAsignar.value.fuerzaSelected.idfuerza,
             nivel: this.objetoConsultado.nivel,
             idelaborado: this.usuariologuiado.identidad,
             idunidad_anterior: this.objetoConsultado.idunidad
           }
-          console.log(reasignarDatos)
-
-        
+      
          this._ServiciosMensajesService.show()
           this._DatospersonalesService.asignarpersonalaUnidad(reasignarDatos).subscribe(
             Response => {
@@ -356,6 +392,26 @@ let respuesta = await this._ServiciosMensajesService.mensajePregunta("Esta segur
           this.arregloSituacion= response.resultado
 
       },error:()=>{
+        this._ServiciosMensajesService.mensajeerrorServer();
+      }
+    })
+  }
+  arregloBajoControl = []
+  sacarBajoControl(){
+    this.arregloBajoControl = []
+    let p = {identidad:this.objetoConsultado.identidad}
+    this._ServiciosMensajesService.show()
+    this._DatospersonalesService.sacarBajoControl(p).subscribe({
+      next:(response)=>{
+        this._ServiciosMensajesService.hide()
+          if(response.error) return this._ServiciosMensajesService.mensajeMalo(response.error)
+          if(response.mensaje) return  
+          this.arregloBajoControl= response.data
+              
+
+      },error:()=>{
+        this._ServiciosMensajesService.hide()
+
         this._ServiciosMensajesService.mensajeerrorServer();
       }
     })
@@ -536,5 +592,62 @@ activeTab: string = 'asignar';
    this.permisoTrnsferencia=  this._DatospersonalesService.verificarPermisos(['A_0004'])
      //console.log( JSON.parse(localStorage.getItem("permisos") || "[]") as any[])
    }
+
+   insertarBajoControl(form){
+  var data = {
+       unidad: form.value.unidadSelected,
+      fecha_asignacion:form.value.fechaSelected,
+      activo:1,
+      usuario:this.usuariologuiado,
+      persona:this.objetoConsultado
+  }
+  let  t = this.arregloAsignaciones.find(Element=>Element.actual === 1)
+ 
+  if(  t && t.idunidad === data.unidad.idunidad) return this._ServiciosMensajesService.mensajeMalo("No puede asignar bajo control en la misma unidad")
   
+      this._ServiciosMensajesService.show()
+ this._DatospersonalesService.insertarBajoControl(data).subscribe({
+   next:(response)=>{
+ this._ServiciosMensajesService.hide()
+    
+       if(response.error) return this._ServiciosMensajesService.mensajeMalo(response.error)
+       if(response.mensaje) return this._ServiciosMensajesService.mensajeMalo(response.mensaje)
+        this._ServiciosMensajesService.mensajeBueno(response.resultado)
+      form.reset()
+      this.sacarBajoControl()
+   },error:()=>{
+ this._ServiciosMensajesService.hide()
+
+     this._ServiciosMensajesService.mensajeerrorServer();
+   }
+ }) 
+ 
+   }
+  
+async   desactivarBajoControlPorUnidad(data){
+let r = await this._ServiciosMensajesService.mensajePregunta("Esta seguro de desactivar el bajo control de esta unidad");
+if(!r) return
+      this._ServiciosMensajesService.show()
+      let p = {
+        identidad:this.objetoConsultado.identidad,
+        persona:this.objetoConsultado,
+        usuario:this.usuariologuiado
+        
+      }
+ this._DatospersonalesService.desactivarBajoControlPorUnidad(p).subscribe({
+   next:(response)=>{
+ this._ServiciosMensajesService.hide()
+    
+       if(response.error) return this._ServiciosMensajesService.mensajeMalo(response.error)
+       if(response.mensaje) return this._ServiciosMensajesService.mensajeMalo(response.mensaje)
+        this._ServiciosMensajesService.mensajeBueno(response.resultado)
+      this.sacarBajoControl()
+   },error:()=>{
+ this._ServiciosMensajesService.hide()
+
+     this._ServiciosMensajesService.mensajeerrorServer();
+   }
+ }) 
+
+   }
 }

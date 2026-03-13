@@ -10,8 +10,13 @@ import { ServicioBackendService } from '../../../../servicios/servicio-backend.s
 import { ServiciosMensajeService } from '../../../../servicios/serviMensaje/servicios-mensaje.service';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { MenuToeComponent } from '../../../configuraciones/toe/menu-toe/menu-toe.component';
+import { DialogModule } from 'primeng/dialog';
+import { ButtonModule } from 'primeng/button';
+import { VisualizarPerfilComponent } from '../../../../Componentes/visualizar-perfil/visualizar-perfil.component';
+ import { saveAs } from 'file-saver';
+import * as ExcelJS from 'exceljs';
 
-type Opcion = 'fuerza' | 'unidad' ;
+type Opcion = 'fuerza' | 'unidad'| 'seccion' ;
 
 type Reporte = {
   id: string;
@@ -20,18 +25,19 @@ type Reporte = {
   icon: string;     // PrimeIcons: 'pi pi-...'
   categoria: string;
   ruta?: string;
+   permiso?: string[]; // Array de permisos necesarios para ver el reporte
 };
 @Component({
   selector: 'app-menu-repo-fuerza',
   standalone: true,
-  imports: [CommonModule, FormsModule, CardModule, InputTextModule, TooltipModule,RadioButtonModule,MenuToeComponent],
+  imports: [CommonModule, FormsModule, CardModule, InputTextModule, TooltipModule,RadioButtonModule,MenuToeComponent,DialogModule,ButtonModule,VisualizarPerfilComponent],
   templateUrl: './menu-repo-fuerza.component.html',
   styleUrl: './menu-repo-fuerza.component.css',
 })
 export class MenuRepoFuerzaComponent {
   usuarioLoguiado
   constructor(
-    private _ServicioBackendService: ServicioBackendService,
+    public _ServicioBackendService: ServicioBackendService,
     private _ServiciosMensajeService: ServiciosMensajeService
   ) { }
 
@@ -58,36 +64,38 @@ export class MenuRepoFuerzaComponent {
   opciones = [
     { label: 'Por fuerza', value: 'fuerza' as const },
     { label: 'Por unidad', value: 'unidad' as const },
+    { label: 'Por Sección', value: 'seccion' as const },
+
  
   ];
 
   categoria = signal<'Todos' | string>('Todos');
 
   reportes = signal<Reporte[]>([
-    { id: 'r1', titulo: 'Parte por Unidad', descripcion: 'Parte de toda la Unidad', icon: 'pi pi-wallet', categoria: 'Partes', ruta: '/reportes/planilla' },
+    { id: 'r1', titulo: 'Parte por Unidad', descripcion: 'Parte de toda la Unidad', icon: 'pi pi-wallet', categoria: 'Partes', ruta: '/reportes/planilla',permiso:[]  },
     {
       id: 'r2', titulo: 'Parte de bajas por unidad', descripcion: 'Aqui se muestran las bajas', icon: 'pi pi-percentage',
-      categoria: 'Partes', ruta: '/reportes/isr'
+      categoria: 'Partes', ruta: '/reportes/isr',permiso:[] 
     },
     {
       id: 'r3', titulo: 'Cambio de Categorias', descripcion: 'Aqui estan las personas que cambiaron de categoria',
-      icon: 'pi pi-calendar', categoria: 'RRHH', ruta: '/reportes/vacaciones'
+      icon: 'pi pi-calendar', categoria: 'RRHH', ruta: '/reportes/vacaciones',permiso:[] 
     },
      {
       id: 'r4', titulo: 'Bajas X Fuerza', descripcion: 'Aqui se muestran las bajas por fuerza de un mes seleccionado',
-      icon: 'pi pi-asterisk', categoria: 'RRHH', ruta: '/reportes/vacaciones'
+      icon: 'pi pi-asterisk', categoria: 'RRHH', ruta: '/reportes/vacaciones',permiso:[] 
     },
     {
       id: 'r5', titulo: 'Consulta pago Vacaciones', descripcion: 'Aqui el personal que se le paga vacaciones en un mes determinado',
-      icon: 'pi pi-dollar', categoria: 'RRHH', ruta: '/reportes/vacaciones'
+      icon: 'pi pi-dollar', categoria: 'RRHH', ruta: '/reportes/vacaciones',permiso:[] 
     },
       {
       id: 'r6', titulo: 'Organizacion', descripcion: 'Consulta la organizacion completa ',
-      icon: 'pi pi-clipboard', categoria: 'RRHH', ruta: '/reportes/vacaciones'
+      icon: 'pi pi-clipboard', categoria: 'RRHH', ruta: '/reportes/vacaciones',permiso:[] 
     },
-    { id: 'r7', titulo: 'Parte por Fuerza,Categoria', descripcion: 'Parte de fuerza y categoria', icon: 'pi pi-microchip', categoria: 'Partes', ruta: '/reportes/planilla' },
+    { id: 'r7', titulo: 'Parte por Fuerza,Categoria', descripcion: 'Parte de fuerza y categoria', icon: 'pi pi-microchip', categoria: 'Partes', ruta: '/reportes/planilla',permiso:[]  },
 
-    { id: 'r8', titulo: 'TOE', descripcion: 'Consulta TOE por Fuerza', icon: 'pi pi-asterisk', categoria: 'Partes', ruta: '/reportes/planilla' },
+    { id: 'r8', titulo: 'TOE', descripcion: 'Consulta TOE por Fuerza', icon: 'pi pi-asterisk', categoria: 'Partes', ruta: '/reportes/planilla',permiso:["Re_0005"]},
 
      
 
@@ -350,6 +358,7 @@ this.arregloOrganizacionCompleta =[]
 let q={cadena:``}
    if(objeto === "fuerza") q.cadena=` and unidad.idfuerza=${this.usuarioLoguiado.idfuerza}`
    if(objeto === "unidad") q.cadena=` and unidad.idunidad=${form.value.unidad.idunidad}`
+  if(objeto === "seccion") q.cadena= ` and Nombramiento.idunidad=${form.value.unidad.idunidad}  and Nombramiento.idNombramiento=${form.value.seccion.idNombramiento} `
 
 
    this.ejecucatarConsultaOrganizacion(q)
@@ -491,5 +500,149 @@ personalantiguedadGrado(cadenita){
         this._ServiciosMensajeService.mensajeerrorServer();
       }
     })
+  }
+
+  verificarPermisos(reporte: Reporte): boolean {
+  if (!reporte.permiso || reporte.permiso.length === 0) {
+    return true; 
+  }else{
+    return this._ServicioBackendService.verificarPermisos(reporte.permiso);
+      
+  }
+}
+
+direcciones = []
+mostrarNombramiento(unidad){
+this.direcciones = []
+this._ServiciosMensajeService.show("Cargando Direcciones y Secciones.....");
+  this._ServicioBackendService.mostrarNombramiento(unidad).subscribe({
+    next: (response) => {
+      this._ServiciosMensajeService.hide()
+      if (response.error) return this._ServiciosMensajeService.mensajeMalo(response.error);
+      if (response.mensaje) return this._ServiciosMensajeService.mensajeMalo(response.mensaje);
+       this.direcciones = response.resultado;
+    }, error: (error) => {
+      this._ServiciosMensajeService.hide()
+
+      this._ServiciosMensajeService.mensajeerrorServer();
+    }
+  })
+}
+
+
+
+
+async exportexcelOrganizacion() {
+let pregunta = await this._ServiciosMensajeService.mensajePregunta("Exportar con la foto puede tardar un poco mas, ¿Desea continuar?")
+if(!pregunta)return this.exportarExcelResumen('tablaList')
+  this._ServiciosMensajeService.show();
+
+  const workbook = new ExcelJS.Workbook();
+  const sheet = workbook.addWorksheet('Organización');
+
+  sheet.columns = [
+    { header: '#', key: 'index', width: 6 },
+    { header: 'Identidad', key: 'identidad', width: 20 },
+    { header: 'Categoría', key: 'categoria', width: 18 },
+    { header: 'Grado', key: 'grado', width: 15 },
+    { header: 'Nombres', key: 'nombres', width: 25 },
+    { header: 'Fecha Asignación', key: 'fecha_asignacion', width: 18 },
+    { header: 'Unidad', key: 'unidad', width: 22 },
+    { header: 'Sección', key: 'seccion', width: 20 },
+    { header: 'Puesto', key: 'puesto', width: 25 },
+  ];
+
+  // Insertamos Foto como primera columna después del #
+  sheet.spliceColumns(2, 0, { header: 'Foto', key: 'foto' } as any);
+  sheet.getColumn(2).width = 14;
+
+  // Estilo encabezado
+  sheet.getRow(1).font = { bold: true };
+  sheet.getRow(1).alignment = {
+    vertical: 'middle',
+    horizontal: 'center',
+  };
+  sheet.getRow(1).height = 22;
+
+  const datos = this.arregloOrganizacionCompleta || [];
+
+  let excelRowIndex = 2;
+
+  for (let index = 0; index < datos.length; index++) {
+
+    const r = datos[index];
+    const row = sheet.getRow(excelRowIndex);
+
+    // Columna A -> #
+    row.getCell('A').value = index + 1;
+
+    // Columna C en adelante (porque B es foto)
+    row.getCell('C').value = r.identidad;
+    row.getCell('D').value = r.categoria;
+    row.getCell('E').value = r.grado;
+    row.getCell('F').value = r.nombres;
+    row.getCell('G').value = r.fecha_asignacion;
+    row.getCell('H').value = r.unidad;
+    row.getCell('I').value = r.seccion ? r.seccion : 'Sin Cargo';
+    row.getCell('J').value = r.Nombre_Puesto;
+
+    row.height = 52;
+
+    // FOTO (columna B)
+    if (r.foto) {
+      const urlFoto = this._ServicioBackendService.url2 + 'sacarfoto/' + r.foto;
+      const buffer = await this._ServicioBackendService.descargarImagenComoArrayBuffer(urlFoto);
+
+      if (buffer) {
+        const imageId = workbook.addImage({
+          buffer: buffer,
+          extension: 'jpeg', // o png
+        });
+
+        sheet.addImage(imageId, {
+          tl: { col: 1.2, row: excelRowIndex - 0.8 },
+          ext: { width: 48, height: 48 },
+          editAs: 'oneCell',
+        });
+      }
+    }
+
+    excelRowIndex++;
+  }
+
+  // Bordes
+  sheet.eachRow((row) => {
+    row.eachCell((cell) => {
+      cell.border = {
+        top: { style: 'thin', color: { argb: 'FFE5E7EB' } },
+        left: { style: 'thin', color: { argb: 'FFE5E7EB' } },
+        bottom: { style: 'thin', color: { argb: 'FFE5E7EB' } },
+        right: { style: 'thin', color: { argb: 'FFE5E7EB' } },
+      };
+    });
+  });
+
+  const bufferExcel = await workbook.xlsx.writeBuffer();
+
+  const blob = new Blob([bufferExcel], {
+    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  });
+
+  this._ServiciosMensajeService.hide();
+
+  saveAs(blob, 'organizacion_completa.xlsx');
+}
+
+
+verperfil =false
+personaSeleccionada = null
+seleccionarPersonal(personal){
+  this.verperfil = true
+this.personaSeleccionada = personal
+
+  }
+  limpiarVariable(){
+    
+    this.personaSeleccionada = null
   }
 }

@@ -40,6 +40,50 @@
   </label>
 </form>
 }
+
+@if( tipoBusqueda==='unidad'){
+ <table id="resumenToe" class="table table-bordered table-hover table-sm align-middle">
+          <thead class="table-light">
+            <tr>
+              <th style="width:60px">#</th>
+              <th>Grado</th>
+              <th>Autorizado</th>
+              <th>Dia</th>
+              <th>Disponible</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let r of data; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ r.nombre_grado }}</td>
+              <td>{{ r.toe_autorizada }}</td>
+              <td> {{r.toe_dia}}</td>
+              <td [ngClass]="r.diferencia < 0 ? 'negativo' : 'positivo'">
+                {{ r.diferencia }}
+              </td>
+            </tr>
+            <tr>
+              <td  colspan="2"  >Total</td>
+              <td>{{ sumarPropiedad(data, 'toe_autorizada') }}</td>
+              <td>{{ sumarPropiedad(data, 'toe_dia') }}</td>
+              <td>{{ sumarPropiedad(data, 'diferencia') }}</td>
+          
+
+              
+      
+            </tr>
+
+            <tr *ngIf="data?.length === 0">
+              <td colspan="4" class="text-center text-muted py-3">
+                No hay datos para mostrar
+              </td>
+            </tr>
+          </tbody>
+
+
+        </table>
+}@else{
 <div class="row" style="margin: 3px;">
   <div class="col-md-12">
     <button class="btn btn-success  float-end" (click)="exportar('tablatoe')">Exportar</button>
@@ -181,3 +225,6 @@
     </table>
   </div>
 </div>
+}
+
+

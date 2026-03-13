@@ -64,7 +64,7 @@
 
                 <!-- Fuerza -->
                 <p class="mb-1 text-sm">
-                  Fuerza:
+                  Fuerza: asas 
                   <strong
                     *ngIf="i.NombreFuerzaIngresar === 'Error'; else fuerzaOk"
                     class="text-danger">
@@ -113,6 +113,8 @@
 
           </div>
         </div>
+
+        
     <div *ngIf="banderaPersonal===2">
     
 
@@ -353,7 +355,7 @@
                           name="rtn"
                           #rtn="ngModel"
                           ngModel
-                          required
+                           
                           class="form-control form-control-sm"
                           pattern="^[0-9]*$">
                         
@@ -440,7 +442,7 @@
                            #cuenta_banco="ngModel"
                            ngModel
                            name="cuenta_banco"
-                          class="form-control form-control-sm">
+                           class="form-control form-control-sm">
                     
                       </div>
                     </div>

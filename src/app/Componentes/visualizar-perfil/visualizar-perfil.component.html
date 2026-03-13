@@ -9,7 +9,7 @@
 
       <!-- IZQUIERDA: FOTO -->
       <div class="  col-md-2">
-     
+
         <div class="photo-menu-wrapper d-flex position-relative">
 
           <button type="button" class="photo-menu-btn ms-auto" style="width:50px; height:50px"
@@ -30,39 +30,39 @@
           </div>
 
         </div>
-    <div class="info-box" style="margin-bottom: 4px;">
-  <div class="info-icon">
-    <i class="pi pi-info-circle"></i>
-  </div>
+        <div class="info-box" style="margin-bottom: 4px;">
+          <div class="info-icon">
+            <i class="pi pi-info-circle"></i>
+          </div>
 
-  <div class="info-content">
-    <h6 class="info-title">Información importante</h6>
+          <div class="info-content">
+            <h6 class="info-title">Información importante</h6>
 
-    <div class="info-list">
-      <div class="info-row">
-        <span class="info-label">Vacaciones por ley</span>
-        <span class="info-value">{{ dia_vacacion_ley }}</span>
-      </div>
+            <div class="info-list">
+              <div class="info-row">
+                <span class="info-label">Vacaciones por ley</span>
+                <span class="info-value">{{ dia_vacacion_ley }}</span>
+              </div>
 
-      <div class="info-row">
-        <span class="info-label">Gozados</span>
-        <span class="info-value">
-          {{ objetoConsultado?.dias_vacacion_gozado }}
-        </span>
-      </div>
+              <div class="info-row">
+                <span class="info-label">Gozados</span>
+                <span class="info-value">
+                  {{ objetoConsultado?.dias_vacacion_gozado }}
+                </span>
+              </div>
 
-      <div class="info-row total">
-        <span class="info-label">Restantes</span>
-        <span class="info-value">
-          {{ dia_vacacion_ley - objetoConsultado?.dias_vacacion_gozado }}
-        </span>
-      </div>
-    </div>
-  </div>
-</div>
+              <div class="info-row total">
+                <span class="info-label">Restantes</span>
+                <span class="info-value">
+                  {{ dia_vacacion_ley - objetoConsultado?.dias_vacacion_gozado }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
 
 
-         
+
         <div class="perfil-photo-card">
 
           <img src="{{_DatospersonalesService.url2 + 'sacarfoto/' + objetoConsultado?.foto}}"
@@ -76,6 +76,9 @@
             <h2 class="perfil-nombre">
               {{ objetoConsultado.nombres }} {{ objetoConsultado.apellidos }}
             </h2>
+            @if(objetoConsultado.idcategoria===1){
+
+            } @else {
             @if(objetoConsultado.idfuerza===2){
             <div class="perfil-tag-grado">
               {{ objetoConsultado.equivalente }} / {{armaobjetoConsultado?.NombreArma }}
@@ -85,12 +88,21 @@
               {{ objetoConsultado.nombre_grado }} de {{armaobjetoConsultado?.NombreArma }}
             </div>
             }
+            }
+            <hr style="border: #000000 solid 2px;">
+
             <div class="perfil-tag-grado">
-              {{ objetoConsultado.categoria }}
+              CAT: {{ objetoConsultado.categoria }}
             </div>
+
+            @if(objetoConsultado.idcategoria===1){
+            <div class="perfil-tag-grado"></div>
+            }@else {
             <div class="perfil-tag-grado">
               {{ objetoConsultado.codigo }}-{{ objetoConsultado.numeroSerie }}
             </div>
+            }
+
 
             <div class="perfil-tag-estado" [ngClass]="objetoConsultado.activo === 1 ? 'activo'  : 'inactivo'">
               <i class="bi bi-circle-fill estado-icon"></i>
@@ -101,23 +113,17 @@
 
           <div class="perfil-basic-list">
             <div class="perfil-basic-row">
-              <span class="label">Identidad</span>
-              <span class="value">{{ objetoConsultado.identidad }}</span>
+              <span class="label">Puesto actual:</span>
+              <span class="value" style="color: rgb(12, 12, 156); font-size: 15px;">{{objetoConsultado.puesto}}</span>
             </div>
-            <div class="perfil-basic-row">
-              <span class="label">Cuenta</span>
-              <span class="value">{{ objetoConsultado.cuenta_banco }}</span>
-            </div>
-            <div class="perfil-basic-row">
-              <span class="label">Religion</span>
-              <span class="value">{{ objetoConsultado.religion }}</span>
-            </div>
+
+
           </div>
         </div>
       </div>
 
       <!-- DERECHA: FOLDERS TIPO CARPETA -->
-      <div class="col-md-9">
+      <div class="col-md-10">
 
         <div class="folders-container">
 
@@ -140,18 +146,22 @@
               <!-- TAB: FICHA GENERAL -->
 
               <div *ngSwitchCase="'generales'">
-                <div class="toast-flotante" *ngIf="mostrarMensaje">
+                <!--  <div class="toast-flotante" *ngIf="mostrarMensaje">
                 {{ mensajeFlotante }}
-              </div>
+              </div>-->
                 <div class="form-header mb-3">
-                  <div class="form-title">
+                  <!--     <div class="form-title">
                     {{ objetoConsultado.nombres }} {{ objetoConsultado.apellidos }}
                     <div class="form-subtitle">
                       {{ objetoConsultado?.idfuerza===2 ? objetoConsultado.equivalente :
                       objetoConsultado.nombre_grado }} • {{
                       objetoConsultado.categoria }}
                     </div>
-                  </div>
+                     <div class="form-subtitle">
+                         Cargo: <label for=""  style="color: rgb(12, 12, 150);" >{{objetoConsultado.puesto}}</label>
+                    </div>
+                    
+                  </div>-->
 
                   <div class="d-none d-sm-flex align-items-center gap-2">
                     <span class="badge px-3 py-1"
@@ -169,7 +179,7 @@
                     </div>
 
                     <div class="mini-block" style="cursor: pointer;" (click)="abrirModalCambiarRTN()">
-                       <span class="badge-editable"><i class="pi pi-pencil"></i>  </span>
+                      <span class="badge-editable"><i class="pi pi-pencil"></i> </span>
 
                       <div class="mini-label">RTN</div>
                       <div class="mini-value">{{ objetoConsultado.rtn }}</div>
@@ -177,30 +187,31 @@
 
 
                     <div class="mini-block" style="cursor: pointer;" (click)="cambioestadoCivil=true">
-                       <span class="badge-editable"><i class="pi pi-pencil"></i>  </span>
+                      <span class="badge-editable"><i class="pi pi-pencil"></i> </span>
 
-                      <div class="mini-label">Estado civil</div> 
+                      <div class="mini-label">Estado civil</div>
                       <div class="mini-value">{{ objetoConsultado.estado_civil }}</div>
                     </div>
 
-                    <div class="mini-block"style="cursor: pointer;"  (click)="cambioMunicipioNacimiento=true"  >
-                       <span class="badge-editable"><i class="pi pi-pencil"></i>  </span>
+                    <div class="mini-block" style="cursor: pointer;" (click)="cambioMunicipioNacimiento=true">
+                      <span class="badge-editable"><i class="pi pi-pencil"></i> </span>
 
                       <div class="mini-label">Municipio de Nacimiento</div>
                       <div class="mini-value">{{ objetoConsultado.municipio }}</div>
                     </div>
 
-                     <div class="mini-block" style="cursor: pointer;" *ngIf="objetoConsultado.activo === 1"  (click)="cambioMunicipioResidencia=true"  >
-                     <span class="badge-editable">
-                        <i class="pi pi-pencil"></i>  
+                    <div class="mini-block" style="cursor: pointer;" *ngIf="objetoConsultado.activo === 1"
+                      (click)="cambioMunicipioResidencia=true">
+                      <span class="badge-editable">
+                        <i class="pi pi-pencil"></i>
                       </span>
 
                       <div class="mini-label">Municipio de Residencia</div>
                       <div class="mini-value">{{ objetoConsultado.municipio_recidencia }}</div>
                     </div>
 
-                    <div class="mini-block" style="cursor: pointer;" (click)="cambiarDireccion=true;agregarDireccion()" >
-                       <span class="badge-editable"><i class="pi pi-pencil"></i>  </span>
+                    <div class="mini-block" style="cursor: pointer;" (click)="cambiarDireccion=true;agregarDireccion()">
+                      <span class="badge-editable"><i class="pi pi-pencil"></i> </span>
 
                       <div class="mini-label">Dirección actual detallada</div>
                       <div class="mini-value multi-line">
@@ -215,7 +226,7 @@
                     </div>
 
 
-                    <div class="mini-block"  *ngIf="objetoConsultado.activo === 1">
+                    <div class="mini-block" *ngIf="objetoConsultado.activo === 1">
                       <div class="mini-label" style="color: black;">ANTIGUEDAD EN EL GRADO</div>
                       <div class="mini-value">
                         {{ objetoConsultado?.antiguedad_GradoActual }} AÑOS
@@ -235,7 +246,7 @@
 
                   <div class="col-md-6">
 
-                     <div class="mini-block">
+                    <div class="mini-block">
                       <div class="mini-label">Fecha nacimiento</div>
                       <div class="mini-value">
                         {{ objetoConsultado.fecha_nacimiento | date:'yyyy-MM-dd' }}
@@ -278,8 +289,9 @@
                       </div>
                     </div>
 
-                    <div class="mini-block" style="cursor: pointer;" (click)=" cambiarSexoSangreF();cambiarSexoSangre=true" >
-                       <span class="badge-editable"><i class="pi pi-pencil"></i>  </span>
+                    <div class="mini-block" style="cursor: pointer;"
+                      (click)=" cambiarSexoSangreF();cambiarSexoSangre=true">
+                      <span class="badge-editable"><i class="pi pi-pencil"></i> </span>
 
                       <div class="mini-label">Sexo / Sangre</div>
                       <div class="mini-value">
@@ -304,8 +316,8 @@
                       </div>
                     </div>
 
-                    <div class="mini-block" style="cursor: pointer;" (click)="cambiarPasaporte=true" >
-                       <span class="badge-editable"><i class="pi pi-pencil"></i>  </span>
+                    <div class="mini-block" style="cursor: pointer;" (click)="cambiarPasaporte=true">
+                      <span class="badge-editable"><i class="pi pi-pencil"></i> </span>
                       <div class="mini-label">Pasaporte</div>
                       <div class="mini-value">
                         {{ objetoConsultado.numero_pasaporte }}
@@ -397,6 +409,18 @@
                 <app-tb-asignaciones [persona]="objetoConsultado"></app-tb-asignaciones>
 
               </div>
+
+              <div *ngSwitchCase="'Promoción'">
+                <div class="section-title">
+                  <span class="section-line"></span>
+                  <span>Promoción</span>
+                </div>
+               
+              <app-promociones [persona]="objetoConsultado"> </app-promociones>
+
+              </div>
+
+
               <div *ngSwitchCase="'logistica'">
                 <div class="section-title">
                   <span class="section-line"></span>
@@ -672,14 +696,14 @@
 
       <label class="col-md-12">
         Departamento
-                   <select name="estado" #estado="ngModel" ngModel class="form-control mt-2" required>
-                          <option value="" disabled selected>Seleccione el estado civil</option>
-                         <option value="Soltero(a)">Soltero(a)</option>
-                          <option value="Casado(a)">Casado(a)</option>
-                          <option value="Viudo(a)">Viudo(a)</option>
-                          <option value="Divorciado(a)">Divorciado(a)</option>
-                          <option value="Union Libre">Unión libre</option>
-     </select>
+        <select name="estado" #estado="ngModel" ngModel class="form-control mt-2" required>
+          <option value="" disabled selected>Seleccione el estado civil</option>
+          <option value="Soltero(a)">Soltero(a)</option>
+          <option value="Casado(a)">Casado(a)</option>
+          <option value="Viudo(a)">Viudo(a)</option>
+          <option value="Divorciado(a)">Divorciado(a)</option>
+          <option value="Union Libre">Unión libre</option>
+        </select>
       </label>
       <div class="row mt-1">
         <div class="col d-flex justify-content-end gap-2">
@@ -713,28 +737,25 @@
     <form #formMunicipio="ngForm" class="row">
 
       <label class="col-md-12">
-      Departamento
-         <select name="departamento" 
-         (ngModelChange)="sacarMunicipio(formMunicipio)"
-         #departamento="ngModel" ngModel class="form-control mt-2" required>
-            <option value="" disabled selected>Seleccione el departamento</option>
-            <option [ngValue]="item"  *ngFor="let item of arregloDepartamentos"  >{{item.departamento}}</option>
-                        
-     </select>
+        Departamento
+        <select name="departamento" (ngModelChange)="sacarMunicipio(formMunicipio)" #departamento="ngModel" ngModel
+          class="form-control mt-2" required>
+          <option value="" disabled selected>Seleccione el departamento</option>
+          <option [ngValue]="item" *ngFor="let item of arregloDepartamentos">{{item.departamento}}</option>
 
-       
+        </select>
+
+
       </label>
-        <label class="col-md-12">
-      Municipio
-         <select name="municipio" 
-         
-         #municipio="ngModel" ngModel class="form-control mt-2" required>
-            <option value="" disabled selected>Seleccione el municipio</option>
-            <option [ngValue]="item"  *ngFor="let item of arregloMunicipios"  >{{item.municipio}}</option>
-                        
-     </select>
+      <label class="col-md-12">
+        Municipio
+        <select name="municipio" #municipio="ngModel" ngModel class="form-control mt-2" required>
+          <option value="" disabled selected>Seleccione el municipio</option>
+          <option [ngValue]="item" *ngFor="let item of arregloMunicipios">{{item.municipio}}</option>
 
-       
+        </select>
+
+
       </label>
       <div class="row mt-1">
         <div class="col d-flex justify-content-end gap-2">
@@ -743,7 +764,8 @@
           </button>
 
           <button type="button" class="btn btn-primary col-md-3" [disabled]="!formMunicipio.valid"
-            (click)="guardarLugarNacimiento(formMunicipio);  cambioMunicipioNacimiento = false" title="Guardar el nuevo municipio de nacimiento">
+            (click)="guardarLugarNacimiento(formMunicipio);  cambioMunicipioNacimiento = false"
+            title="Guardar el nuevo municipio de nacimiento">
             Guardar
           </button>
         </div>
@@ -766,28 +788,25 @@
     <form #formMunicipiRecidencia="ngForm" class="row">
 
       <label class="col-md-12">
-      Departamento
-         <select name="departamento" 
-         (ngModelChange)="sacarMunicipio(formMunicipiRecidencia)"
-         #departamento="ngModel" ngModel class="form-control mt-2" required>
-            <option value="" disabled selected>Seleccione el departamento</option>
-            <option [ngValue]="item"  *ngFor="let item of arregloDepartamentos"  >{{item.departamento}}</option>
-                        
-     </select>
+        Departamento
+        <select name="departamento" (ngModelChange)="sacarMunicipio(formMunicipiRecidencia)" #departamento="ngModel"
+          ngModel class="form-control mt-2" required>
+          <option value="" disabled selected>Seleccione el departamento</option>
+          <option [ngValue]="item" *ngFor="let item of arregloDepartamentos">{{item.departamento}}</option>
 
-       
+        </select>
+
+
       </label>
-        <label class="col-md-12">
-      Municipio
-         <select name="municipio" 
-         
-         #municipio="ngModel" ngModel class="form-control mt-2" required>
-            <option value="" disabled selected>Seleccione el municipio</option>
-            <option [ngValue]="item"  *ngFor="let item of arregloMunicipios"  >{{item.municipio}}</option>
-                        
-     </select>
+      <label class="col-md-12">
+        Municipio
+        <select name="municipio" #municipio="ngModel" ngModel class="form-control mt-2" required>
+          <option value="" disabled selected>Seleccione el municipio</option>
+          <option [ngValue]="item" *ngFor="let item of arregloMunicipios">{{item.municipio}}</option>
 
-       
+        </select>
+
+
       </label>
       <div class="row mt-1">
         <div class="col d-flex justify-content-end gap-2">
@@ -796,7 +815,8 @@
           </button>
 
           <button type="button" class="btn btn-primary col-md-3" [disabled]="!formMunicipiRecidencia.valid"
-            (click)="guardarLugarResidencia(formMunicipiRecidencia);  cambioMunicipioResidencia = false" title="Guardar el nuevo municipio de residencia">
+            (click)="guardarLugarResidencia(formMunicipiRecidencia);  cambioMunicipioResidencia = false"
+            title="Guardar el nuevo municipio de residencia">
             Guardar
           </button>
         </div>
@@ -816,8 +836,8 @@
   </ng-template>
   <ng-template pTemplate="content">
     <form #formDireccion="ngForm" class="row">
-       <textarea name="direccion" #direccion="ngModel" ngModel class="form-control mt-2" required></textarea>
-      
+      <textarea name="direccion" #direccion="ngModel" ngModel class="form-control mt-2" required></textarea>
+
       <div class="row mt-1">
         <div class="col d-flex justify-content-end gap-2">
           <button type="button" class="btn btn-secondary col-md-3" (click)="cambiarDireccion = false">
@@ -848,8 +868,8 @@
   </ng-template>
   <ng-template pTemplate="content">
     <form #formPasaporte="ngForm" class="row">
-       <textarea name="pasaporte" #pasaporte="ngModel" ngModel class="form-control mt-2" required></textarea>
-      
+      <textarea name="pasaporte" #pasaporte="ngModel" ngModel class="form-control mt-2" required></textarea>
+
       <div class="row mt-1">
         <div class="col d-flex justify-content-end gap-2">
           <button type="button" class="btn btn-secondary col-md-3" (click)="cambiarPasaporte = false">
@@ -876,7 +896,7 @@
   </ng-template>
   <ng-template pTemplate="content">
     <form #formSexoSangre="ngForm" class="row">
-       <select name="sexo" id="sexo" #sexo="ngModel" ngModel class="form-control mt-2" required>
+      <select name="sexo" id="sexo" #sexo="ngModel" ngModel class="form-control mt-2" required>
         <option value="" disabled selected>Seleccione el sexo</option>
         <option value="M">Masculino</option>
         <option value="F">Femenino</option>
@@ -911,3 +931,5 @@
 
 
 </p-dialog>
+
+

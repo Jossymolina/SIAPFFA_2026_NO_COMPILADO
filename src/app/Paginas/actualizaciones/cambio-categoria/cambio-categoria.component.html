@@ -123,25 +123,25 @@
   <ng-template pTemplate="header">
     <h5 class="m-0">Cambio de categoría</h5>
   </ng-template>
-
+ 
   <ng-template pTemplate="content">
     <!-- Mensaje automático según categoría actual -->
     <form>
-      <ng-container *ngIf="objetoConsultado?.categoria_idcategoria === 2; else second">
+      <ng-container *ngIf="objetoConsultado?.idcategoria === 2; else second">
         <label style="color: rgb(37, 94, 40);">
           (Automático) Su cambio de categoría es de Tropa a Auxiliar.
         </label>
       </ng-container>
 
       <ng-template #second>
-        <ng-container *ngIf="objetoConsultado?.categoria_idcategoria === 3; else third">
+        <ng-container *ngIf="objetoConsultado?.idcategoria === 32; else third">
           <label style="color: rgb(37, 94, 40);">
             (Automático) Su cambio de categoría es de Estudiante a Sub Oficial.
           </label>
         </ng-container>
 
         <ng-template #third>
-          <ng-container *ngIf="objetoConsultado?.categoria_idcategoria === 4; else cuarto">
+          <ng-container *ngIf="objetoConsultado?.idcategoria === 42; else cuarto">
             <label style="color: rgb(37, 94, 40);">
               (Automático) Su cambio de categoría es de Cadete a Oficial.
             </label>
@@ -155,16 +155,29 @@
         </ng-template>
       </ng-template>
     </form>
-
+  
     <hr />
 
     <!-- Formulario para Tropa (categoria_idcategoria === 2) -->
-    <form *ngIf="objetoConsultado?.categoria_idcategoria === 2" class="row">
+    <form *ngIf="objetoConsultado?.idcategoria === 2" class="row">
       <div class="input-group mb-3 col-md-12">
         <span class="input-group-text">Fuerza</span>
-        <label class="form-control">{{ objetoConsultado.nombre }}</label>
-      </div>
+        <select
+          class="form-control"
+          name="fuerza"
+          [(ngModel)]="cambiarcategoria.idfuerza"
+   
+        >
+          <ng-container *ngFor="let item of arregloFuerzas">
+            <option  *ngIf="item.idfuerza===2 || item.idfuerza===3 || item.idfuerza===4 || item.idfuerza===5" [ngValue]="item.idfuerza">
+              {{ item.nombre }} 
+            </option>
+          </ng-container>
+        </select>
 
+   
+      </div>
+{{Arreglocategoria | json}}
       <div class="input-group mb-3 col-md-12">
         <span class="input-group-text">Categoría</span>
         <select

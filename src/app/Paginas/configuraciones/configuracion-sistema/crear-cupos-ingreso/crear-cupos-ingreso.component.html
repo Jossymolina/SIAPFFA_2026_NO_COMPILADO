@@ -355,14 +355,16 @@
             <!-- Fecha ingreso (p-datepicker) -->
             <div class="col-12 md:col-6">
                 <label class="text-600 text-sm font-semibold mb-1 block">Fecha para ingreso</label>
-                <p-datepicker
-                    class="w-full"
-                    [(ngModel)]="agregarNuevoCupo.fechaIngreso"
-                    name="fechaIngreso"
-                    dateFormat="yy-mm-dd"
-                    [showIcon]="true"
-                    required>
-                </p-datepicker>
+              <p-datepicker
+      class="w-100"
+  [(ngModel)]="agregarNuevoCupo.fechaIngreso"
+  name="fechaIngreso"
+  [showIcon]="true"
+  dateFormat="yy-mm-dd"
+  [appendTo]="'body'"
+  required>
+      </p-datepicker>
+            
             </div>
 
             <!-- Unidad ejecutora (condicional con @if) -->

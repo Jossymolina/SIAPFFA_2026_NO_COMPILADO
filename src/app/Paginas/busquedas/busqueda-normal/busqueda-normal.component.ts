@@ -16,13 +16,13 @@ import { VisualizarPerfilComponent } from '../../../Componentes/visualizar-perfi
   selector: 'app-busqueda-normal',
   standalone: true,
 
-  imports: [FormsModule, CommonModule,VisualizarPerfilComponent],
+  imports: [FormsModule, CommonModule, VisualizarPerfilComponent],
   templateUrl: './busqueda-normal.component.html',
   styleUrl: './busqueda-normal.component.css',
 })
 export class BusquedaNormalComponent {
 
- 
+
   arregloResultado = []
   formularioBuscar = 0;
   personaSelecionada
@@ -100,12 +100,12 @@ export class BusquedaNormalComponent {
   filtroTexto = '';
   arregloResultadoFiltrado: any[] | null = null;
   ngOnInit(): void {
+
     this.sacarFuerza()
     //this.sacarGrados()
     this.usuariologuiado = JSON.parse(localStorage.getItem('user_login')!).user;
-
-   /* this.permisoFuerza = this._ServiciosSiapffaaService.verificarPermisos(3);
-    this.permisoUnidad = this._ServiciosSiapffaaService.verificarPermisos(4);;*/
+    /* this.permisoFuerza = this._ServiciosSiapffaaService.verificarPermisos(3);
+     this.permisoUnidad = this._ServiciosSiapffaaService.verificarPermisos(4);;*/
 
   }
   resetEstados() {
@@ -154,10 +154,10 @@ export class BusquedaNormalComponent {
       cadena: "and (activo= 1)" + " and month(fecha_nacimiento) = month('" + d + "')  and edad_proxima=65"
 
     }
-   this._ServiciosMensajesService.show()
+    this._ServiciosMensajesService.show()
     this._ServiciosSiapffaaService.vistaSiapffaa(parametro).subscribe({
       next: (response) => {
-         this._ServiciosMensajesService.hide()
+        this._ServiciosMensajesService.hide()
 
         if (response.error) return this._ServiciosMensajesService.mensajeMalo(response.error)
         if (response.mensaje) return this._ServiciosMensajesService.mensajeMalo(response.mensaje)
@@ -165,7 +165,7 @@ export class BusquedaNormalComponent {
         this.arregloResultado = response.resultado
         this.formularioBuscar = 1;
       }, error: () => {
-         this._ServiciosMensajesService.hide()
+        this._ServiciosMensajesService.hide()
 
         this._ServiciosMensajesService.mensajeerrorServer();
       }
@@ -207,7 +207,7 @@ export class BusquedaNormalComponent {
     this._ServiciosMensajesService.show()
     this._ServiciosSiapffaaService.vistaSiapffaa(parametro).subscribe({
       next: (response) => {
-         this._ServiciosMensajesService.hide()
+        this._ServiciosMensajesService.hide()
         if (response.error) return this._ServiciosMensajesService.mensajeMalo(response.error)
         if (response.mensaje) return this._ServiciosMensajesService.mensajeMalo(response.mensaje)
         this.formularioBuscar = 5;
@@ -215,7 +215,7 @@ export class BusquedaNormalComponent {
         this.arregloResultado = response.resultado
 
       }, error: () => {
-         this._ServiciosMensajesService.hide()
+        this._ServiciosMensajesService.hide()
 
         this._ServiciosMensajesService.mensajeerrorServer();
       }
@@ -305,14 +305,14 @@ export class BusquedaNormalComponent {
         cadena: this.devolverOR(fuerza, "idfuerza", "idfuerza")
       }
       this.ArregloUnidades = [];
-       this._ServiciosMensajesService.show()
+      this._ServiciosMensajesService.show()
       this._ServiciosSiapffaaService.sacarUnidadesArreglo(parametro).subscribe(
         Response => {
-           this._ServiciosMensajesService.hide()
+          this._ServiciosMensajesService.hide()
 
           this.ArregloUnidades = Response.resultado;
         }, error => {
-           this._ServiciosMensajesService.hide()
+          this._ServiciosMensajesService.hide()
           this._ServiciosMensajesService.mensajeerrorServer();
         }
       )
@@ -454,23 +454,34 @@ export class BusquedaNormalComponent {
   }
   arregloResultado_ = []
   busquedaSimple(data) {
-     this._ServiciosMensajesService.show()
+
     let cadena =
       this.crearCadenaestado() +
-      this.crearCadenaLike(data.value.nombre_id, 'nombre_id') +
-      (`${this.permisoUnidad ? 'and (idunidad_asignado = ' + this.usuariologuiado.idunidad + ')' :
-        this.permisoFuerza ?
-          this.usuariologuiado.idfuerza <= 4 ? 'and (idfuerza_pertenece = ' + this.usuariologuiado.idfuerza + ')' :
-            'and (idfuerza_asignada = ' + this.usuariologuiado.idfuerza + ')' : ''}`);
+      this.crearCadenaLike(data.value.nombre_id, 'nombre_id')
+    if (this.sacarPermisoPersonalVista(['User_admin03'])) {
+
+      cadena += ` and (iddireccion_asignacion = ${this.usuariologuiado.idNombramiento}   )`
+    } else if (this.sacarPermisoPersonalVista(['User_admin01'])) {
+      //permiso unidad 
+      cadena += ` and (idunidad_asignado = ${this.usuariologuiado.idunidad}   )`
+    } else if (this.sacarPermisoPersonalVista(['User_admin02'])) {
+      cadena += ` and (idfuerza_pertenece = ${this.usuariologuiado.idfuerza} or idfuerza_asignada = ${this.usuariologuiado.idfuerza} )`
+    } else if (this.sacarPermisoPersonalVista(['User_admin'])) {
+      cadena + ""
+    } else {
+      cadena += ` and (idunidad_asignado = ${this.usuariologuiado.idunidad}  )`
+    }
 
 
     let parametro = {
       cadena: cadena
     }
 
+    this._ServiciosMensajesService.show()
+
     this._ServiciosSiapffaaService.buscarPersonasporNombreID(parametro).subscribe(
       Response => {
-         this._ServiciosMensajesService.hide()
+        this._ServiciosMensajesService.hide()
 
         if (Response.error) {
           this._ServiciosMensajesService.mensajeMalo(Response.error)
@@ -486,7 +497,7 @@ export class BusquedaNormalComponent {
           }
         }
       }, error => {
-      this._ServiciosMensajesService.hide()
+        this._ServiciosMensajesService.hide()
 
         this._ServiciosMensajesService.mensajeerrorServer();
       }
@@ -526,9 +537,9 @@ export class BusquedaNormalComponent {
     });
   }
   async exportarExcel(name) {
-let espera = await this._ServiciosMensajesService.mensajePregunta("¿Desea exportar con las fotos?")
-if (!espera) return this.exportexcel2(name);
-  
+    let espera = await this._ServiciosMensajesService.mensajePregunta("¿Desea exportar con las fotos?")
+    if (!espera) return this.exportexcel2(name);
+
 
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Resultados');
@@ -632,6 +643,11 @@ if (!espera) return this.exportexcel2(name);
   }
   atrasLink(ruta) {
     this._Router.navigate([ruta])
+  }
+
+  sacarPermisoPersonalVista(permiso: string[]) {
+    return this._ServiciosSiapffaaService.verificarPermisos(permiso)
+    //console.log( JSON.parse(localStorage.getItem("permisos") || "[]") as any[])
   }
 }
 

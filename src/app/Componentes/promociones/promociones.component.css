@@ -1,0 +1,77 @@
+
+
+.promo-box {
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  padding: 25px 35px;
+  border-radius: 20px;
+  border: 1px solid #e9ecef;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
+}
+
+.promo-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+}
+
+.promo-logo img {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+  border-radius: 20px;
+}
+
+.promo-content {
+  flex: 1;
+  padding: 0 35px;
+}
+
+.promo-name {
+  font-weight: 800;
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+  letter-spacing: 1px;
+  color: #1a1a1a;
+}
+
+.promo-meta {
+  display: flex;
+  gap: 25px;
+  font-size: 0.95rem;
+  color: #6c757d;
+}
+
+.promo-merit {
+  font-weight: 600;
+  color: #0d6efd;
+}
+
+.promo-nickname {
+  margin-top: 8px;
+  font-style: italic;
+  font-size: 1rem;
+  color: #495057;
+}
+
+.promo-action {
+  display: flex;
+  align-items: center;
+}
+
+.btn-plus {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: none;
+  background: #0d6efd;
+  color: white;
+  font-size: 1.3rem;
+  transition: all 0.2s ease;
+}
+
+.btn-plus:hover {
+  background: #0a58ca;
+  transform: scale(1.1);
+}

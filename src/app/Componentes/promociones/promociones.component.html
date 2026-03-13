@@ -1,0 +1,158 @@
+      <div class="container mt-4">
+                  <div class="promo-box">
+
+                    <!-- IZQUIERDA: LOGO GRANDE -->
+                    <div class="promo-logo">
+                      <img src="/logopromo.jpg" alt="Logo Promoción">
+                    </div>
+
+                    <!-- CENTRO: INFORMACIÓN -->
+
+                    <div class="promo-content">
+                      <h2 class="promo-name">{{PromosionesActual?.nombre_promocion}}  </h2>
+                      <span *ngIf="PromosionesActual?.nombre_promocion_fuerza" >Segun la Fuerza: <strong>{{PromosionesActual?.nombre_promocion_fuerza}}</strong> </span>
+
+                      <div class="promo-meta">
+                        <span class="promo-date" style="color: blue; font-size: 20px;">Ascendio: {{PromosionesActual?.fecha | date : 'dd/MM/yyyy'}}</span> 
+                        
+                      </div>
+                         <div class="promo-nickname"  style="color: blue;" >
+                                        Nota:  {{PromosionesActual?.nota_final_ascenso_primer_ascenso}}%
+                            </div>
+                    <div class="promo-nickname" *ngIf="PromosionesActual?.apodo_promo_ascenso">
+                       Apodo: {{PromosionesActual.apodo_promo_ascenso}}
+                      </div>
+                    </div>
+        
+
+
+                     <div class="promo-content" *ngIf="PromosionesActual?.nombre_promocion_posterga">
+                        
+                      <h6 style="color: red;">Postergado <br> </h6>
+                      <h3  class="promo-name">{{PromosionesActual?.nombre_promocion_posterga}}</h3>
+                                              
+                    </div>
+
+                    <!-- DERECHA: BOTÓN -->
+                    <div class="promo-action">
+                      <button class="btn-plus"
+                      *ngIf="sacarPermisoPersonalVista(['A_0006'])"
+                      (click)="sacarpromocionnes();porposionventana=true">
+                        +
+                      </button>
+                    </div>
+
+                  </div>
+                </div>
+
+
+
+
+<p-dialog 
+  [(visible)]="porposionventana"
+  [modal]="true"
+  [closable]="true"
+  [dismissableMask]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '550px' }"
+  styleClass="custom-promocion-dialog"
+>
+
+  <!-- HEADER -->
+  <ng-template pTemplate="header">
+    <div class="d-flex align-items-center gap-2">
+      <i class="pi pi-sync text-primary" style="font-size: 1.3rem;"></i>
+      <h5 class="m-0 fw-bold">Cambio de Promoción</h5>
+    </div>
+  </ng-template>
+
+  <!-- CONTENT -->
+  <ng-template pTemplate="content">
+    <form #formPromocionAscenso="ngForm" class="p-3">
+
+      <!-- PROMOCIÓN ASCENSO -->
+      <div class="mb-4">
+        <label class="form-label fw-semibold text-danger">
+          Promoción Ascenso
+        </label>
+
+        <select 
+          name="promociones"
+          #promocionesSelect="ngModel"
+          ngModel
+          id="promocionesSelect"
+          class="form-select custom-input"
+        >
+          <option [ngValue]="{id:-1}">Ninguna</option>
+
+          <option *ngFor="let promocion of arregloPromosiones"
+                  [ngValue]="promocion">
+            {{promocion.nombre_promocion}} 
+            {{promocion.apodo ? '/' + promocion.apodo : ''}}
+          </option>
+        </select>
+      </div>
+
+      <!-- NOTA -->
+      <div class="mb-4">
+        <label class="form-label fw-semibold text-primary">
+          Nota Final
+        </label>
+
+        <input
+          type="number"
+          name="nota_final_ascenso"
+          #nota_final_ascenso="ngModel"
+          ngModel
+          required
+          step="0.0001"
+          min="0"
+          pattern="^\d+(\.\d{1,4})?$"
+          class="form-control custom-input"
+          placeholder="Ingrese la nota (máx 4 decimales)"
+        />
+
+        <small class="text-muted">
+          Se permiten hasta 4 decimales.
+        </small>
+      </div>
+
+      <!-- PROMOCIÓN POSTERGA -->
+      <div class="mb-4">
+        <label class="form-label fw-semibold text-primary">
+          Promoción Posterga
+        </label>
+
+        <select 
+          name="promocionPosterga"
+          #promocionPosterga="ngModel"
+          ngModel
+          id="promocionPosterga"
+          class="form-select custom-input"
+        >
+          <option [ngValue]="{id:-1}">Ninguna</option>
+
+          <option *ngFor="let promocion of arregloPromosiones"
+                  [ngValue]="promocion">
+            {{promocion.nombre_promocion}} 
+            {{promocion.apodo ? '/' + promocion.apodo : ''}}
+          </option>
+        </select>
+      </div>
+
+      <!-- BOTONES -->
+      <div class="text-center mt-4">
+        <button 
+          type="button"
+          class="btn btn-primary px-4 py-2 custom-btn"
+          (click)="actualizarIngresoAscenso(formPromocionAscenso)"
+        >
+          <i class="pi pi-check me-2"></i>
+          Modificar
+        </button>
+      </div>
+
+    </form>
+  </ng-template>
+</p-dialog>

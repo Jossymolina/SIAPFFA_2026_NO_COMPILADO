@@ -603,6 +603,42 @@
       </form>
     </div>
 
+    <div *ngIf="opcion === 'seccion'">
+
+      <form #formbuscar="ngForm" class="row">
+     
+
+       <label for="" style="margin-left: 5px;" class="col-md-2">
+          Seccion
+
+          <select name="seccion" 
+          
+          
+          class="form-control" id="seccion" #seccion="ngModel" ngModel required>
+
+            <option *ngFor="let u of direcciones" [ngValue]="u">{{ u.descripcion }}</option>
+
+          </select>
+        </label>
+
+         <label for="" style="margin-left: 5px;" class="col-md-2">
+          <br>
+
+         <button  class="btn btn-success" (click)="sacarOrganizacion(formbuscar,'seccion')"   >Buscar</button>
+        </label>
+ 
+
+
+        <label for="" class="col-md-1">
+          <br>
+          <button class="form-control btn btn-danger" [disabled]="!formbuscar.valid" (click)="limpiar_organizacion()"
+            style="margin-left: 10px;">
+            Limpiar
+          </button>
+        </label>
+      </form>
+    </div>
+
 
 
 
@@ -632,7 +668,7 @@
 
 
         <div class="col-auto">
-          <button class="btn btn-sm btn-success" (click)="exportarExcelResumen('tablaList')">
+          <button class="btn btn-sm btn-success" (click)="exportexcelOrganizacion()">
             <i class="bi bi-file-earmark-excel me-1"></i>
             Exportar
           </button>
@@ -650,6 +686,8 @@
           <thead class="table-light">
             <tr>
               <th style="width:60px">#</th>
+              <th>Foto</th>
+
               <th>Identidad</th>
               <th>Categoria</th>
               <th>Grado</th>
@@ -663,8 +701,15 @@
           </thead>
 
           <tbody>
-            <tr *ngFor="let r of arregloOrganizacionCompleta; let i = index">
+          <tr *ngFor="let r of arregloOrganizacionCompleta; let i = index"
+            style="cursor: pointer;"
+            (click)="seleccionarPersonal(r)">
               <td>{{ i + 1 }}</td>
+              <td>
+                <img 
+                width="50px" height="50px" style="object-fit: cover; border-radius: 50%;"
+                src="{{_ServicioBackendService.url2 + 'sacarfoto/' + r.foto}}" alt="">
+              </td>
               <td>{{ r.identidad }}</td>
               <td>{{r.categoria}}</td>
               <td>{{ r.grado }}</td>
@@ -675,7 +720,8 @@
               <td>{{r.unidad}}</td>
 
 
-              <td [style]=" r.seccion ? '' : 'background-color: red;color:white'">{{ r.seccion?r.seccion:"Sin  Cargo" }}</td>
+              <td [style]=" r.seccion ? '' : 'background-color: red;color:white'">{{ r.seccion?r.seccion:"Sin Cargo" }}
+              </td>
               <td>{{ r.Nombre_Puesto }}</td>
 
             </tr>
@@ -705,3 +751,21 @@
   }
    
 </div>
+
+
+<p-dialog
+  header="Visualizar perfil"
+  [(visible)]="verperfil"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '2000px', height: '1500px' }"
+  [contentStyle]="{ overflow: 'auto' }"
+
+  (onHide)="limpiarVariable()"
+>
+  <app-visualizar-perfil
+    *ngIf="personaSeleccionada"
+    [identidad]="personaSeleccionada?.identidad">
+  </app-visualizar-perfil>
+</p-dialog>

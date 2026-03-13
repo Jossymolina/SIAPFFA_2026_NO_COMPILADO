@@ -30,7 +30,7 @@ usuarioLoguiado
   columnas: string[] = []; // todas las keys
   groups: Array<{ name: string; cols: Array<{ key: string; label: string; kind: string }> }> = [];
 
-  titulo = 'EFECTIVO AUTORIZADO POR LA DIRECCION DE PLANEAMIENTO, PROGRAMACION Y PRESUPUESTO POR UNIDADES DEL FFAA 2026';
+  titulo = 'Tabla de Organizacion de Efectivo (TOE) de Tropa';
 
 
   getToePivotPorCorto(form) {
@@ -56,15 +56,14 @@ usuarioLoguiado
  
     this._servicioMensaje.show()
     let p ={
-      cadena: ` and u.idunidad=${this.usuarioLoguiado.idunidad} `,
-      idfuerza:this.usuarioLoguiado.idfuerza
+       idunidad:this.usuarioLoguiado.idunidad
     }
 
-    this._servicioBackend.getToePivotPorCorto(p).subscribe({
+    this._servicioBackend.sacarToeUnidad(p).subscribe({
       next: (Response) => {
         this._servicioMensaje.hide();
-        this.data = Response?.data ?? [];
-        this.buildPivotHeader();
+        this.data = Response?.resultado ?? [];
+
       },
       error: (error) => {
         this._servicioMensaje.hide();
@@ -211,4 +210,20 @@ this.arregloFuerza =[]
 exportar(nombre:string){
   this._servicioBackend.exportexcel2(nombre,'TOE')
 }
+
+
+  sumarPropiedad(arreglo, propiedad) {
+  if (!Array.isArray(arreglo)) return 0;
+
+  return arreglo.reduce((total, item) => {
+    if (item && Object.prototype.hasOwnProperty.call(item, propiedad)) {
+      const valor = parseFloat(item[propiedad]);
+      return total + (isNaN(valor) ? 0 : valor);
+    }
+    return total;
+  }, 0);
+}
+
+
+
 }

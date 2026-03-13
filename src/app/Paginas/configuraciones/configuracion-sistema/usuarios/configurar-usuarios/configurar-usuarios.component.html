@@ -394,7 +394,7 @@
                 <ng-template pTemplate="header">
                   <tr>
                     <th style="width: 3rem;">#</th>
-                    <th>Permiso  de Fuerza</th>
+                    <th>Permiso de Fuerza</th>
                     <th class="text-center">Permitido </th>
                   </tr>
                 </ng-template>
@@ -403,13 +403,15 @@
                   <tr *ngIf="item.idPermisosDisponibles === 36 || item.idPermisosDisponibles === 37
                    || item.idPermisosDisponibles === 38 
                    ||  item.idPermisosDisponibles === 41 ||  item.idPermisosDisponibles === 20
-                   ||  item.idPermisosDisponibles === 21 ||  item.idPermisosDisponibles === 22  ||  item.idPermisosDisponibles === 34">
+                   ||  item.idPermisosDisponibles === 21 ||  item.idPermisosDisponibles === 22  ||  item.idPermisosDisponibles === 34
+                   ||  item.idPermisosDisponibles === 52
+                   ">
                     <td>{{ i + 1 }}</td>
                     <td>{{ item.NombrePermiso  }}  </td>
                     <td class="text-center">
                       <p-checkbox
                         [binary]="true"
-                        [ngModel]="item.permitido"
+                         [ngModel]="item.permitido===1?true:false"
                      
                         (onChange)="cambiarPermiso(item)"
                       >
@@ -437,14 +439,16 @@
                   </ng-template>
 
                   <ng-template pTemplate="body" let-item let-i="rowIndex">
-                    <tr *ngIf="item.idPermisosDisponibles === 38 
+                    <tr *ngIf="item.idPermisosDisponibles === 38
+                     ||  item.idPermisosDisponibles === 52 
+                     ||  item.idPermisosDisponibles === 21 ||  item.idPermisosDisponibles === 22 
                         ">
                       <td>{{ i + 1 }}</td>
                       <td>{{ item.NombrePermiso }}   </td>
                       <td class="text-center">
                         <p-checkbox
                           [binary]="true"
-                          [ngModel]="item.permitido"
+                           [ngModel]="item.permitido===1?true:false"
                          
                           (onChange)="cambiarPermiso(item)"
                         >

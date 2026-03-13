@@ -27,8 +27,12 @@
   </div>
 
   <!-- TABLA: ASIGNACIONES -->
+   <hr style="border: 2px solid black;">
+  <p class="mt-1 text-primary small fw-semibold">
+    * Asignación
+  </p>
   <div class="card table-card mt-2">
-    <div class="card-body p-2">
+    <div class="card-body p-2" style="overflow-y: auto; height: 200px;">
       <table class="table table-bordered table-hover table-sm table-striped mb-0">
         <thead class="bg-header-soft">
           <tr>
@@ -87,12 +91,62 @@
     </div>
   </div>
 
+
+ <hr style="border: 2px solid black;">
+  <p class="mt-1 text-success small fw-semibold">
+    * Bajo Control
+  </p>
+
+  <!-- TABLA: SITUACIÓN PERSONAL -->
+  <div class="card table-card mt-2">
+    <div class="card-body p-2">
+      <table class="table table-bordered table-hover table-sm table-striped mb-0">
+        <thead class="bg-header-soft">
+          <tr >
+            <th>Unidad/Base/Dependencia</th>
+            <th>Fecha Asignacion</th>
+            <td>Opt</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of arregloBajoControl"  style="background-color: rgba(31, 61, 233, 0.432) !important;">
+            <td>{{ item.unidad }}</td>
+            <td>{{ item.fecha_asignacion  | date : 'yyyy/MM/dd' : 'UTC' }}</td>
+                <td class="text-center">
+                  @if(permisoTrnsferencia){
+                    <i class="estado-icon"
+                      (click)="desactivarBajoControlPorUnidad(item)"
+                      [class]="item.estado === 'activo' ? 'pi pi-thumbs-up-fill' : 'pi pi-thumbs-down-fill'"
+                      aria-hidden="true"></i>
+                  }@else {
+                    <p>No Administrador</p>
+                  }
+                </td>
+         
+          </tr>
+          <tr *ngIf="arregloBajoControl.length === 0">
+            <td colspan="3"  class="text-center text-muted">
+              <p style="color: rgb(28, 28, 190);" > Esta persona no esta bajo control de ninguna unidad, base o dependencia.</p>
+             
+            </td>
+
+          </tr>
+        </tbody>
+       
+      </table>
+    </div>
+  </div>
+
+
+
+
+ <hr style="border: 2px solid black;">
   <p class="mt-1 text-danger small fw-semibold">
     * Situación del personal
   </p>
 
   <!-- TABLA: SITUACIÓN PERSONAL -->
-  <div class="card table-card mt-2">
+  <div class="card table-card mt-2" style="overflow-y: auto; height: 200px;">
     <div class="card-body p-2">
       <table class="table table-bordered table-hover table-sm table-striped mb-0">
         <thead class="bg-header-soft">
@@ -129,6 +183,12 @@
            
             </td>
           </tr>
+          <tr *ngIf="arrgloSituacioPersonal.length === 0">
+            <td colspan="6" class="text-center text-muted">
+              Esta persona no tiene situaciones especiales registradas.
+            </td>
+
+          </tr>
         </tbody>
       </table>
     </div>
@@ -153,13 +213,14 @@
                       || _DatospersonalesService.verificarPermisos(3)  
                       || _DatospersonalesService.verificarPermisos(4)" -->
     <ng-container >
-
-      <div class="col-md-8">
+<form #formDireccion="ngForm" class="row g-2">
+<div class="col-md-8">
         <label class="form-label fw-semibold">
           Seleccione la Dirección | Sección
         </label>
         <select name="direccionSelected"
-                [(ngModel)]="direccionSelected"
+              #direccionSelected="ngModel" required
+              ngModel
                 class="form-control">
           <option [ngValue]="i" *ngFor="let i of ArregloNombramiento">
             {{ i.descripcion }}
@@ -173,9 +234,11 @@
         </label>
         <input type="date"
                class="form-control"
-               [(ngModel)]="fechaSelected"
+               #fechaSelected="ngModel" ngModel required
                name="fechaSelected">
       </div>
+</form>
+      
     </ng-container>
 
     <!-- Tabla de asignaciones -->
@@ -264,10 +327,11 @@
   [style]="{ width: '85vw', maxWidth: '1000px' }"
   appendTo="body"
   class="dialog-dashboard">
+  
   <app-tb-cargo
-    *ngIf="direccionSelected"
+    *ngIf="buscarCargos"
     [persona]="objetoConsultado"
-    [direccion]="direccionSelected">
+    [direccion]="_direccionSeleccionada">
   </app-tb-cargo>
 
   <ng-template pTemplate="footer">
@@ -295,6 +359,9 @@
         <p-tab value="asignar">
           Asignar
         </p-tab>
+        <p-tab value="bajoControl">
+          Bajo control
+        </p-tab>
         <p-tab value="situacion">
           Situación
         </p-tab>
@@ -305,14 +372,19 @@
 
         <!-- TAB: Asignar -->
         <p-tabpanel value="asignar">
-          <div class="row g-2">
+            <div style="text-align: center;" >
+                   <h3 style="color: rgb(44, 165, 115);"  >Reasignar el personal</h3>
+              </div>
+              <hr  style="border: 2px solid black;"  >
+          <form  #formAsignar="ngForm" class="row g-2">
             <div class="col-md-12">
               <label class="form-label fw-semibold">
                 Seleccione la Fuerza:
               </label>
               <select class="form-control"
-                      (change)="sacarunidades()"
-                      [(ngModel)]="fuerzaSelected"
+                      (change)="sacarUnidadBajoControl(formAsignar)"
+                      #fuerzaSelected="ngModel"
+                      ngModel required
                       name="fuerzaSelected">
                 <ng-container *ngFor="let y of arregloFuerzas">
                   <option [ngValue]="y">{{ y.nombre }}</option>
@@ -324,7 +396,9 @@
               <label class="form-label fw-semibold">
                 Seleccione la unidad:
               </label>
-              <select [(ngModel)]="unidadSelected"
+              <select 
+                      #unidadSelected="ngModel"
+                      ngModel required
                       name="unidadSelected"
                       class="form-control">
                 <option *ngFor="let y of ArregloUnidades" [ngValue]="y">
@@ -357,11 +431,15 @@
                 Guardar
               </button>
             </div>
-          </div>
+          </form>
         </p-tabpanel>
 
         <!-- TAB: Situación -->
         <p-tabpanel value="situacion">
+            <div style="text-align: center;" >
+                   <h3 style="color: rgb(44, 106, 165);"  >Situación del personal</h3>
+              </div>
+              <hr  style="border: 2px solid black;"  >
           <form #ngFromsituacion="ngForm" class="row g-2">
             <div class="col-md-4">
               <label class="form-label fw-semibold">
@@ -400,8 +478,9 @@
               </label>
               <select class="form-control"
                       required
-                      (change)="sacarunidades()"
-                      [(ngModel)]="fuerzaSelected"
+                     #fuerzaSelected="ngModel"
+                      ngModel required
+                (change)="sacarUnidadBajoControl(ngFromsituacion)"
                       name="fuerzaSelected">
                 <ng-container *ngIf="objetoConsultado?.idfuerza === 2">
                   <ng-container *ngFor="let y of arregloFuerzas">
@@ -510,6 +589,74 @@
             </div>
           </form>
         </p-tabpanel>
+
+
+
+          <p-tabpanel value="bajoControl">
+              <div style="text-align: center;" >
+                   <h3 style="color: rgb(42, 163, 42);"  >Colocar personal bajo Control</h3>
+              </div>
+              <hr  style="border: 2px solid black;"  >
+         <form #formBajoControl="ngForm" class="row g-2">
+            <div class="col-md-12">
+              <label class="form-label fw-semibold">
+                Seleccione la Fuerza:
+              </label>
+              <select class="form-control"
+                      (change)="sacarUnidadBajoControl(formBajoControl)"
+                 
+                      name="fuerzaSelected"
+                      #fuerzaSelected="ngModel"
+                      ngModel
+                      required
+                      >
+                <ng-container *ngFor="let y of arregloFuerzas">
+                  <option [ngValue]="y">{{ y.nombre }}</option>
+                </ng-container>
+              </select>
+            </div>
+
+            <div class="col-md-12">
+              <label class="form-label fw-semibold">
+                Seleccione la unidad:
+              </label>
+              <select #unidadSelected="ngModel" ngModel required
+                      name="unidadSelected"
+                      class="form-control">
+                <option *ngFor="let y of ArregloUnidades" [ngValue]="y">
+                  {{ y.unidad }}
+                </option>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">
+                Seleccione la Fecha de Asignación:
+              </label>
+              <input  #fechaSelected="ngModel" ngModel required
+                     class="form-control"
+                     type="date"
+                     name="fechaSelected">
+            </div>
+
+            <div class="col-md-12 mt-3 d-flex justify-content-end gap-2">
+              <button type="button"
+                      class="btn btn-outline-secondary"
+                      (click)="mostrarModalAsignaciones = false">
+                <i class="fa fa-times-circle" aria-hidden="true"></i>
+                Cerrar
+              </button>
+              <button type="button"
+                      class="btn btn-primary"
+                      [disabled]="!formBajoControl.valid"
+                      (click)="insertarBajoControl(formBajoControl)">
+                <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                Guardar
+              </button>
+            </div>
+          </form>
+        </p-tabpanel>
+        
 
       </p-tabpanels>
     </p-tabs>

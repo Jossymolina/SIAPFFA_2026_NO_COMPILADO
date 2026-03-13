@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormsModule, NgForm, ReactiveFormsModule, UntypedFormControl,UntypedFormGroup, Validators  } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ServicioBackendService } from '../../../../servicios/servicio-backend.service';
@@ -499,7 +499,6 @@ this._ServiciosMensajeService.show()
     this._DatospersonalesService.mostrarNombramiento(parametros).subscribe(
       {
         next:(Response) => {
-          console.log(Response)
           this._ServiciosMensajeService.hide()  
 
            this.ArregloNombramiento = Response.resultado
@@ -639,7 +638,6 @@ guardarPuesto() {
       this.sacarPuestos_delNombramiento(this.nombramientoSelected);
     },
     error: (err) => {
-      console.error('ERROR DE CONEXION | GUARDAR PUESTO', err);
       this._ServiciosMensajeService.hide();
       this._DatospersonalesService.mensajeError('ERROR DE CONEXIÓN | GUARDAR PUESTO');
     }
@@ -3890,5 +3888,38 @@ this.puestoSeleccionado = data
   mostrarModalPuesto
   mostrarCambioNombrePuesto
   nuevoNombrePuesto
+  modificarNombramiento = false
+
+  nombraMientoSeleccionado 
+  @ViewChild("formModificarNombramiento") formModificarNombramiento:NgForm
+  seleccionarModificar(data){
+      this.nombraMientoSeleccionado = data
+     setTimeout(() => {
+       this.formModificarNombramiento.controls["descripcion"].setValue(this.nombraMientoSeleccionado.descripcion)
+      this.formModificarNombramiento.controls["orden"].setValue(this.nombraMientoSeleccionado.orden)
+     }, 100);
+  }
+  guardraModificadoNombramniento(form){
+     
+    let p = {
+        idNombramiento:this.nombraMientoSeleccionado.idNombramiento,
+        descripcion:form.value.descripcion,
+        orden:form.value.orden
+    }
+    this._DatospersonalesService.actualizarNombramiento(p).subscribe(
+      Response=>{
+        if (Response.error) {
+          this._DatospersonalesService.mensajeError(Response.error)
+        } else {
+          this._DatospersonalesService.mensajeBueno(Response.resultado)
+          this.modificarNombramiento = false
+     
+          this.sacarNombranmiento()
+        }
+      },error=>{
+        this._DatospersonalesService.mensajeError("Error de Conexion")
+      }
+    )
+  }
 }
 

@@ -1,7 +1,8 @@
 import { Component, computed, OnInit, signal, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
-
+import { saveAs } from 'file-saver';
+import * as ExcelJS from 'exceljs';
 // PrimeNG
 import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
@@ -10,8 +11,11 @@ import { ServiciosMensajeService } from '../../../servicios/serviMensaje/servici
 import { ServicioBackendService } from '../../../servicios/servicio-backend.service';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { MenuToeComponent } from '../../configuraciones/toe/menu-toe/menu-toe.component';
-
-type Opcion =   'unidad' ;
+import { DialogModule } from 'primeng/dialog';
+import { ButtonModule } from 'primeng/button';
+import { VisualizarPerfilComponent } from '../../../Componentes/visualizar-perfil/visualizar-perfil.component';
+ 
+type Opcion =   'unidad'| 'seccion' ;
 type Reporte = {
   id: string;
   titulo: string;
@@ -24,14 +28,14 @@ type Reporte = {
 @Component({
   selector: 'app-menu-repo-unidad',
   standalone:true,
-   imports: [CommonModule, FormsModule, CardModule, InputTextModule, TooltipModule,RadioButtonModule,MenuToeComponent],
+   imports: [CommonModule, FormsModule, CardModule, InputTextModule, TooltipModule,RadioButtonModule,MenuToeComponent,VisualizarPerfilComponent,DialogModule,ButtonModule],
   templateUrl: './menu-repo-unidad.component.html',
   styleUrl: './menu-repo-unidad.component.css',
 })
 export class MenuRepoUnidadComponent implements OnInit {
   usuarioLoguiado
 constructor(
-  private _ServicioBackendService:ServicioBackendService,
+  public _ServicioBackendService:ServicioBackendService,
   private _ServiciosMensajeService:ServiciosMensajeService
 ){}
   arregloCategorias =[
@@ -51,10 +55,13 @@ constructor(
   @ViewChild('formbuscar') formbuscar!: NgForm;
   opciones = [
     { label: 'Por unidad', value: 'unidad' as const },
+    { label: 'Por sección', value: 'seccion' as const },
+
  
   ];
 ngOnInit(): void {
   this.usuarioLoguiado = JSON.parse(localStorage.getItem('user_login')!).user;
+  this.mostrarNombramiento()
 }
   q = signal('');
 
@@ -278,6 +285,7 @@ this.arregloOrganizacionCompleta =[]
 let q={cadena:``}
  
    if(objeto === "unidad") q.cadena=` and unidad.idunidad=${this.usuarioLoguiado.idunidad}`
+  if(objeto === "seccion") q.cadena= ` and Nombramiento.idunidad=${this.usuarioLoguiado.idunidad}  and Nombramiento.idNombramiento=${form.value.seccion.idNombramiento} `
 
 
    this.ejecucatarConsultaOrganizacion(q)
@@ -331,4 +339,137 @@ buscarPersonal_65_anos(cadenita){
   );
 
 }
+direcciones = []
+mostrarNombramiento( ){
+this.direcciones = []
+this._ServiciosMensajeService.show("Cargando Direcciones y Secciones.....");
+  this._ServicioBackendService.mostrarNombramiento({idunidad:this.usuarioLoguiado.idunidad}).subscribe({
+    next: (response) => {
+      this._ServiciosMensajeService.hide()
+      if (response.error) return this._ServiciosMensajeService.mensajeMalo(response.error);
+      if (response.mensaje) return this._ServiciosMensajeService.mensajeMalo(response.mensaje);
+       this.direcciones = response.resultado;
+    }, error: (error) => {
+      this._ServiciosMensajeService.hide()
+
+      this._ServiciosMensajeService.mensajeerrorServer();
+    }
+  })
+}
+
+verperfil =false
+personaSeleccionada = null
+seleccionarPersonal(personal){
+  this.verperfil = true
+this.personaSeleccionada = personal
+
+  }
+  limpiarVariable(){
+    
+    this.personaSeleccionada = null
+  }
+
+
+
+  async exportexcelOrganizacion() {
+  let pre = await this._ServiciosMensajeService.mensajePregunta("Descargar con imagen")
+  if(!pre) return this.exportarExcelResumen('tablaList')
+
+    this._ServiciosMensajeService.show();
+  
+    const workbook = new ExcelJS.Workbook();
+    const sheet = workbook.addWorksheet('Organización');
+  
+    sheet.columns = [
+      { header: '#', key: 'index', width: 6 },
+      { header: 'Identidad', key: 'identidad', width: 20 },
+      { header: 'Categoría', key: 'categoria', width: 18 },
+      { header: 'Grado', key: 'grado', width: 15 },
+      { header: 'Nombres', key: 'nombres', width: 25 },
+      { header: 'Fecha Asignación', key: 'fecha_asignacion', width: 18 },
+      { header: 'Unidad', key: 'unidad', width: 22 },
+      { header: 'Sección', key: 'seccion', width: 20 },
+      { header: 'Puesto', key: 'puesto', width: 25 },
+    ];
+  
+    // Insertamos Foto como primera columna después del #
+    sheet.spliceColumns(2, 0, { header: 'Foto', key: 'foto' } as any);
+    sheet.getColumn(2).width = 14;
+  
+    // Estilo encabezado
+    sheet.getRow(1).font = { bold: true };
+    sheet.getRow(1).alignment = {
+      vertical: 'middle',
+      horizontal: 'center',
+    };
+    sheet.getRow(1).height = 22;
+  
+    const datos = this.arregloOrganizacionCompleta || [];
+  
+    let excelRowIndex = 2;
+  
+    for (let index = 0; index < datos.length; index++) {
+  
+      const r = datos[index];
+      const row = sheet.getRow(excelRowIndex);
+  
+      // Columna A -> #
+      row.getCell('A').value = index + 1;
+  
+      // Columna C en adelante (porque B es foto)
+      row.getCell('C').value = r.identidad;
+      row.getCell('D').value = r.categoria;
+      row.getCell('E').value = r.grado;
+      row.getCell('F').value = r.nombres;
+      row.getCell('G').value = r.fecha_asignacion;
+      row.getCell('H').value = r.unidad;
+      row.getCell('I').value = r.seccion ? r.seccion : 'Sin Cargo';
+      row.getCell('J').value = r.Nombre_Puesto;
+  
+      row.height = 52;
+  
+      // FOTO (columna B)
+      if (r.foto) {
+        const urlFoto = this._ServicioBackendService.url2 + 'sacarfoto/' + r.foto;
+        const buffer = await this._ServicioBackendService.descargarImagenComoArrayBuffer(urlFoto);
+  
+        if (buffer) {
+          const imageId = workbook.addImage({
+            buffer: buffer,
+            extension: 'jpeg', // o png
+          });
+  
+          sheet.addImage(imageId, {
+            tl: { col: 1.2, row: excelRowIndex - 0.8 },
+            ext: { width: 48, height: 48 },
+            editAs: 'oneCell',
+          });
+        }
+      }
+  
+      excelRowIndex++;
+    }
+  
+    // Bordes
+    sheet.eachRow((row) => {
+      row.eachCell((cell) => {
+        cell.border = {
+          top: { style: 'thin', color: { argb: 'FFE5E7EB' } },
+          left: { style: 'thin', color: { argb: 'FFE5E7EB' } },
+          bottom: { style: 'thin', color: { argb: 'FFE5E7EB' } },
+          right: { style: 'thin', color: { argb: 'FFE5E7EB' } },
+        };
+      });
+    });
+  
+    const bufferExcel = await workbook.xlsx.writeBuffer();
+  
+    const blob = new Blob([bufferExcel], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    });
+  
+    this._ServiciosMensajeService.hide();
+  
+    saveAs(blob, 'organizacion_completa.xlsx');
+  }
 }

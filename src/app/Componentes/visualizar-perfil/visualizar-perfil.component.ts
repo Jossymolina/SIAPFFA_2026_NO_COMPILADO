@@ -14,6 +14,7 @@ import { TarjetaCarpetasComponent } from '../control-archivos/tarjeta-carpetas/t
 import { DialogModule } from 'primeng/dialog';
 import { jsPDF } from "jspdf";
 import { FormsModule, NgForm } from '@angular/forms';
+import { PromocionesComponent } from '../promociones/promociones.component';
 
 interface Persona {
   nombreCompleto: string;
@@ -32,7 +33,7 @@ interface Persona {
 }
 
 interface FolderTab {
-  id: 'generales' | 'educacion' | 'familiares' | 'telefonoCorreo' | 'ascensos'| 'controlDisciplinario'| 'asignaciones'| 'archivos'| 'logistica';
+  id: 'generales' | 'educacion' | 'familiares' | 'telefonoCorreo' | 'ascensos'| 'controlDisciplinario'| 'asignaciones'| 'Promoción'|'archivos'| 'logistica';
   titulo: string;
   icon: string;   // clase de Bootstrap Icons
 }
@@ -50,6 +51,7 @@ TbAsignacionesComponent,
 TbLogisticaComponent,
 DialogModule,
 TarjetaCarpetasComponent,
+PromocionesComponent,
 FormsModule],
   templateUrl: './visualizar-perfil.component.html',
   styleUrl: './visualizar-perfil.component.css',
@@ -81,8 +83,9 @@ persona: Persona = {
     { id: 'telefonoCorreo',     titulo: 'Correo,Paises y otros',            icon: 'bi-journal-text' },
     { id: 'ascensos',     titulo: 'Ascensos',            icon: 'bi-journal-text' },
     { id: 'controlDisciplinario',     titulo: 'Control Disciplinario',            icon: 'bi-journal-text' },
-      { id: 'asignaciones',     titulo: 'Asignaciones',     icon: 'bi-journal-text' },
+    { id: 'asignaciones',     titulo: 'Asignaciones',     icon: 'bi-journal-text' },
     { id: 'archivos',     titulo: 'Archivos',            icon: 'bi-journal-text' },
+     { id: 'Promoción',     titulo: 'Promoción',            icon: 'bi-journal-text' },
     { id: 'logistica',     titulo: 'Logística',            icon: 'bi-journal-text' },
 
   
@@ -104,7 +107,7 @@ persona: Persona = {
   ngOnInit(): void {
     this.buscarporIdentidad()
     this.sacarDepartamento()
-    this.mostrarToast('🔹 Los campos con el cursor en forma de manito son editables');
+   // this.mostrarToast('🔹 Los campos con el cursor en forma de manito son editables');
 
     this.usuariologuiado = JSON.parse(localStorage.getItem('user_login')!).user;
   }
@@ -155,9 +158,9 @@ armaobjetoConsultado
       {
         next: (Response) => {
    this._ServiciosMensajesService.hide()
-          
+   
    if (Response.error) {
-          
+   
             this._DatospersonalesService.mensajeError(Response.error.sqlMessage + "BUSC")
           } else {
             if (Response.mensaje) {
@@ -767,4 +770,12 @@ mostrarToast(mensaje: string) {
     this.mostrarMensaje = false;
   }, 600000); // desaparece en 3.5 segundos
 }
+porposionventana = false
+
+
+
+
+
+
+
 }

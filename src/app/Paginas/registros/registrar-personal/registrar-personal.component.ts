@@ -575,9 +575,11 @@ fechaingreso
       activo:1,
       idunidad:JSON.parse(localStorage.getItem('user_login')!).user.idunidad
     }
+   
     this._ServiciosMensajeService.show()
-    this._DatospersonalesService.sacarToeUnidad(parametro).subscribe({
+    this._DatospersonalesService.SacarCuposUnidad(parametro).subscribe({
       next: (Response)=>{
+       
         this._ServiciosMensajeService.hide()
          if (Response.error)  return  this._DatospersonalesService.mensajeError(Response.error)
         if (Response.mensaje) return 

@@ -141,13 +141,13 @@ export class BusquedaPersonalizadaComponent implements OnInit {
 
   crearCadenaestado() {
     if (this.estado.activos === true && this.estado.bajas === true) {
-      return 'and (activo= 1 or activo=2) ';
+      return 'and (siapffa_personas.activo= 1 or siapffa_personas.activo=2) ';
     } else if (this.estado.activos === true) {
-      return 'and (activo= 1)';
+      return 'and (siapffa_personas.activo= 1)';
     } else if (this.estado.bajas === true) {
-      return 'and (activo= 2)';
+      return 'and (siapffa_personas.activo= 2)';
     } else {
-      return 'and (activo= 1) ';
+      return 'and (siapffa_personas.activo= 1) ';
     }
   }
 
@@ -191,7 +191,9 @@ export class BusquedaPersonalizadaComponent implements OnInit {
         ) +
         (formulario.value.fecha
           ? `and ( month(fecha_nacimiento) = month('${formulario.value.fecha}-1'))`
-          : '') +
+          : ''),
+    };
+    /* +
         `${
           this.permisoUnidad
             ? 'and (idunidad_asignado = ' + this.usuariologuiado.idunidad + ')'
@@ -200,13 +202,28 @@ export class BusquedaPersonalizadaComponent implements OnInit {
               ? 'and (idfuerza_pertenece = ' + this.usuariologuiado.idfuerza + ')'
               : 'and (idfuerza_asignada = ' + this.usuariologuiado.idfuerza + ')'
             : ''
-        }`,
-    };
+        }` */
 
     if (parametro.cadena.length === 0)
       return this._ServiciosMensajesService.mensajeAdvertencia(
         'Porfavor selecione por lo menos un criterio de busqueda'
       );
+
+
+    if (this.sacarPermisoPersonalVista(['User_admin03'])) {
+
+      parametro.cadena += ` and (d.idNombramiento = ${this.usuariologuiado.idNombramiento}   )`
+    } else if(this.sacarPermisoPersonalVista(['User_admin01'])){
+         //permiso unidad
+        parametro.cadena += ` and (idunidad_asignado = ${this.usuariologuiado.idunidad}   )`
+      } else    if(this.sacarPermisoPersonalVista(['User_admin02']))  {
+         parametro.cadena += ` and (idfuerza_pertenece = ${this.usuariologuiado.idfuerza} or idfuerza_asignada = ${this.usuariologuiado.idfuerza} )`
+      }else if(this.sacarPermisoPersonalVista(['User_admin']))  {
+         parametro.cadena +""
+      } else {
+         parametro.cadena += ` and (idunidad_asignado = ${this.usuariologuiado.idunidad}  )`
+      }
+
 
     this.arregloResultado = [];
     this.arregloResultadoFiltrado = [];
@@ -214,6 +231,7 @@ export class BusquedaPersonalizadaComponent implements OnInit {
     this._ServiciosMensajesService.show();
     this._ServiciosSiapffaaService.vistaSiapffaa(parametro).subscribe({
       next: (response) => {
+        console.log(response)
         this._ServiciosMensajesService.hide();
         if (response.error)
           return this._ServiciosMensajesService.mensajeMalo(response.error);
@@ -230,6 +248,11 @@ export class BusquedaPersonalizadaComponent implements OnInit {
         this._ServiciosMensajesService.mensajeerrorServer();
       },
     });
+  }
+
+   sacarPermisoPersonalVista(permiso:string[]){
+   return this._ServiciosSiapffaaService.verificarPermisos(permiso)
+    //console.log( JSON.parse(localStorage.getItem("permisos") || "[]") as any[])
   }
 
   // ============================

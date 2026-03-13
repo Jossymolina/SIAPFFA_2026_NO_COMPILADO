@@ -5,12 +5,9 @@
     <!-- TOP BAR -->
     <header class="top-bar shadow-sm">
       <div class="top-bar-left">
-    <p-avatar
-  [image]="_ServicioBackendService.url2 + 'sacarfoto/' + usuariologuiado?.foto"
-  shape="circle"
-  size="large"
-  style="width:70px;height:70px">
-</p-avatar>
+        <p-avatar [image]="_ServicioBackendService.url2 + 'sacarfoto/' + usuariologuiado?.foto" shape="circle"
+          size="large" style="width:70px;height:70px">
+        </p-avatar>
 
         <div class="top-bar-text">
           <div class="welcome">Hola, {{usuariologuiado.nombres}}</div>
@@ -29,18 +26,15 @@
         </button>
       </div>
     </header>
-<div style="margin: 10px 0;">
-  <p-button
-    label="Atrás"
-    icon="pi pi-angle-double-left"
-    (onClick)="volverAtras()">
-  </p-button>
-</div>
+    <div style="margin: 10px 0;">
+      <p-button label="Atrás" icon="pi pi-angle-double-left" (onClick)="volverAtras()">
+      </p-button>
+    </div>
 
     <!-- GRID DE MÓDULOS   <app-cuerpo-principal></app-cuerpo-principal>
        <app-visualizar-perfil></app-visualizar-perfil>
         <router-outlet></router-outlet>-->
-
+ 
     <router-outlet></router-outlet>
   </div>
   <!-- MENÚ HAMBURGUESA (SIDEBAR) -->
@@ -48,8 +42,8 @@
     styleClass="menu-sidebar">
 
     <div class="menu-header">
-      <p-avatar [image]="_ServicioBackendService.url2 + 'sacarfoto/' + usuariologuiado?.foto"
-        shape="circle" size="large">
+      <p-avatar [image]="_ServicioBackendService.url2 + 'sacarfoto/' + usuariologuiado?.foto" shape="circle"
+        size="large">
       </p-avatar>
       <div class="menu-header-text">
         <div class="name">{{usuariologuiado.nombres}}</div>
@@ -81,3 +75,76 @@
   <app-visualizar-perfil [identidad]="this.usuariologuiado.identidad"></app-visualizar-perfil>
 </div>
 }
+
+
+
+
+
+<p-dialog header="📞 Agenda Telefónica" [(visible)]="visible" [modal]="true" [style]="{ width: '65vw' }"
+  [breakpoints]="{ '960px': '80vw', '640px': '95vw' }" [draggable]="false" [resizable]="false"
+  styleClass="agenda-dialog">
+
+  <div class="agenda-container">
+
+    <!-- FORMULARIO -->
+    <form class="row g-3 mb-4" #formularioAgenda="ngForm">
+
+      <div class="col-12">
+        <div class="alert-modern">
+          * Agenda de administradores de Unidad/Bases
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label-modern">Fuerza</label>
+        <select name="fuerza" ngModel required (change)="sacarUnidad(formularioAgenda)" class="form-select-modern">
+
+          <option [ngValue]="item" *ngFor="let item of arregloFuerzas">
+            {{item.nombre}}
+          </option>
+
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label-modern">Unidad</label>
+        <select name="unidad" ngModel required (change)="buscarNumero(formularioAgenda)" class="form-select-modern">
+
+          <option [ngValue]="item" *ngFor="let item of arreegloUnidad">
+            {{item.unidad}}
+          </option>
+
+        </select>
+      </div>
+
+    </form>
+
+    <!-- TABLA MODERNA -->
+    <div class="">
+      <table class="table-modern">
+        <thead>
+          <tr>
+            <th>Foto</th>
+            <th>Grado / Rango</th>
+            <th>Nombre</th>
+            <th>Números</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let item of arregloAgenda">
+            <td>
+              <img class="foto-modern" [src]="_ServicioBackendService.url2 + 'sacarfoto/' + item?.Foto" alt="Foto">
+            </td>
+
+            <td class="fw-semibold">{{item.grado}}</td>
+            <td>{{item.Nombres}}</td>
+            <td class="numero-cell">{{item.Numeros}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+</p-dialog>

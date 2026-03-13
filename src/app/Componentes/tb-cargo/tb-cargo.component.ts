@@ -30,7 +30,7 @@ export class TbCargoComponent {
   fechaSelected
   desplegarFormulario = false;
   usuariologuiado;
-  activar = false;
+  
   constructor(
  
     public _DatospersonalesService: ServicioBackendService,
@@ -61,10 +61,10 @@ export class TbCargoComponent {
         identidad: this.objetoConsultado.identidad
       }
       if (respuesta) {
-        this.activar = !this.activar
+       this._ServiciosMensajesService.show()
         this._DatospersonalesService.desactivarPuesto(parametro).subscribe(
           Response => {
-            this.activar = !this.activar
+            this._ServiciosMensajesService.hide()
 
             if (Response.error) {
               this._DatospersonalesService.mensajeError(Response.error)
@@ -78,7 +78,7 @@ export class TbCargoComponent {
               }
             }
           }, error => {
-            this.activar = !this.activar
+            this._ServiciosMensajesService.hide()
             this._ServiciosMensajesService.mensajeerrorServer()
           }
         )
@@ -94,10 +94,12 @@ export class TbCargoComponent {
     var parametro = {
       identidad: this.objetoConsultado.identidad
     }
-    this.activar = !this.activar
+           this._ServiciosMensajesService.show()
+
     this._DatospersonalesService.sacarCargoDeUnapersona(parametro).subscribe(
-      Response => {
-        this.activar = !this.activar
+     {
+       next:(Response) => {
+        this._ServiciosMensajesService.hide()
 
         if (Response.error) {
           this._DatospersonalesService.mensajeError(Response.error)
@@ -110,11 +112,12 @@ export class TbCargoComponent {
           }
         }
 
-      }, error => {
-        this.activar = !this.activar
+      }, error:(error) => {
+        this._ServiciosMensajesService.hide()
 
         this._DatospersonalesService.mensajeError("ERROR DE CONECCION AL RELIZAR LA CONSULTA POR CARGO")
       }
+     }
     )
   }
   sacarDirecionesNombramiento() {
@@ -129,11 +132,13 @@ export class TbCargoComponent {
     var data = {
       idnombramiento: this.seccionselected.idNombramiento
     }
-    this.activar = !this.activar
+         this._ServiciosMensajesService.show()
+
 
     this._DatospersonalesService.MostrarPuesto(data).subscribe(
-      Response => {
-        this.activar = !this.activar
+    {
+        next:(Response) => {
+        this._ServiciosMensajesService.hide()
 
         if (Response.error) {
           this._DatospersonalesService.mensajeError(Response.error)
@@ -144,10 +149,11 @@ export class TbCargoComponent {
             this.arregloPuestos = Response.resultado;
           }
         }
-      }, error => {
-        this.activar = !this.activar
+      },  error:(error) => {
+        this._ServiciosMensajesService.hide()
         this._ServiciosMensajesService.mensajeerrorServer();
       }
+    }
     )
   }
   sacarasignaciondireccionActual(identidad?) {
@@ -254,10 +260,11 @@ export class TbCargoComponent {
           elaborado_por: this.usuariologuiado.identidad,
           idgrado: this.objetoConsultado.grado
         }
-        this.activar = !this.activar
+               this._ServiciosMensajesService.show()
+
         this._DatospersonalesService.agregarPersonaenOrganizacion(parametros).subscribe(
           Response => {
-            this.activar = !this.activar
+            this._ServiciosMensajesService.hide()
 
             if (Response.error) {
               if (Response.error.sqlMessage.includes("Duplicate")) return this._DatospersonalesService.mensajeError("Esta persona ya tiene o tuvo una asignación en esta fecha")
@@ -270,10 +277,12 @@ export class TbCargoComponent {
                 this.desplegarFormulario = false;
                 //this._DatospersonalesService.mensajeBueno(Response.resultado)
                 this.sacsarcargodelapersona();
+    this.sacarpuestos();
+
               }
             }
           }, error => {
-            this.activar = !this.activar
+            this._ServiciosMensajesService.hide()
             this._ServiciosMensajesService.mensajeerrorServer();
           }
         )
