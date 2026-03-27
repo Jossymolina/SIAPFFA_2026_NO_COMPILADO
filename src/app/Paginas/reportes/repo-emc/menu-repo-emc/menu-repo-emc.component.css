@@ -249,3 +249,372 @@
 .p-dialog-mask {
   padding: 0 !important;
 }
+
+
+.modern-table {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* HEADER */
+.table-header {
+  background: linear-gradient(45deg, #1e3c72, #2a5298);
+  color: white;
+}
+
+.sub-header {
+  background-color: #f1f3f5;
+  font-size: 13px;
+}
+
+/* FILAS */
+.fila-hover:hover {
+  background-color: #f8f9fa;
+  transition: 0.2s ease-in-out;
+}
+
+/* CELDAS */
+.total-cell {
+  background-color: #eef2ff;
+  font-weight: bold;
+}
+
+.grand-total {
+  background: #212529;
+  color: white;
+  font-weight: bold;
+}
+
+/* FOOTER */
+.footer-total {
+  background-color: #dee2e6;
+  font-weight: bold;
+}
+
+/* BOTONES */
+.btn {
+  border-radius: 10px;
+  padding: 8px 16px;
+}
+
+
+
+.tabla-container {
+  max-height: 800px;
+  overflow: auto;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+  background: #fff;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*css tabla situwacuion*/
+ /* ========================================= */
+/* CONTENEDOR TABLA */
+/* ========================================= */
+
+.tabla-container {
+  max-height: 800px;
+  overflow: auto;
+  position: relative;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  background: #fff;
+}
+
+
+/* ========================================= */
+/* TABLA GENERAL */
+/* ========================================= */
+
+.table-elegante {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: max-content;
+  min-width: 100%;
+  font-size: 12px;
+}
+
+
+/* ========================================= */
+/* CELDAS */
+/* ========================================= */
+
+.table-elegante th,
+.table-elegante td {
+
+  white-space: nowrap;
+  padding: 6px 10px;
+  border: 1px solid #e5e7eb;
+
+  position: relative;
+  z-index: 1;
+
+  transition: background 0.15s ease;
+
+}
+
+
+/* ========================================= */
+/* HEADER FIJO */
+/* ========================================= */
+
+.table-elegante thead th {
+
+  position: sticky;
+  top: 0;
+
+  z-index: 20;
+
+  background: linear-gradient(
+    135deg,
+    #1e293b,
+    #334155
+  );
+
+  color: #fff;
+  font-weight: 600;
+
+}
+
+
+/* SEGUNDA FILA HEADER */
+
+.table-elegante thead tr:nth-child(2) th {
+
+  top: 40px;
+  background: #475569;
+
+}
+
+
+/* ========================================= */
+/* PRIMERA COLUMNA FIJA */
+/* ========================================= */
+
+.table-elegante .sticky-col {
+
+  position: sticky;
+  left: 0;
+
+  z-index: 25;
+
+  background: #f8fafc;
+
+  min-width: 140px;
+
+  font-weight: 600;
+
+  box-shadow:
+    4px 0 8px rgba(201, 8, 8, 0.08);
+
+}
+
+
+/* HEADER + COLUMNA */
+
+.table-elegante thead .sticky-col {
+
+  z-index: 30;
+
+  background: linear-gradient(
+    135deg,
+    #1e293b,
+    #0a60da
+  );
+
+  color: #fff;
+
+}
+
+
+/* ========================================= */
+/* FILAS */
+/* ========================================= */
+
+.table-elegante tbody tr:nth-child(even) {
+
+  background: #f9fafb;
+
+}
+
+
+/* ========================================= */
+/* EFECTO CRUZ PERFECTO */
+/* ========================================= */
+
+/* FILA */
+
+.table-elegante tbody tr:hover td {
+
+  background: #e0f2fe;
+
+}
+
+
+/* COLUMNA (AHORA FUNCIONA) */
+
+.table-elegante td:hover,
+.table-elegante th:hover {
+
+  box-shadow:
+
+    inset 0 -9999px 0 rgba(186,230,253,0.25),
+    inset 0  9999px 0 rgba(186,230,253,0.25);
+
+}
+
+
+/* ========================================= */
+/* COLORES DINÁMICOS */
+/* ========================================= */
+
+.celda-cero {
+  background: #f1f5f9;
+  color: #94a3b8;
+}
+
+.celda-baja {
+  background: #fee2e2;
+  color: #991b1b;
+  font-weight: 600;
+}
+
+.celda-media {
+  background: #fef9c3;
+  color: #854d0e;
+  font-weight: 600;
+}
+
+.celda-alta {
+  background: #dcfce7;
+  color: #166534;
+  font-weight: bold;
+}
+
+
+/* ========================================= */
+/* FILA TOTAL */
+/* ========================================= */
+
+.fila-total {
+
+  background: #0f172a !important;
+  color: #fff;
+  font-weight: bold;
+
+}
+
+
+
+
+.hover-row {
+
+  background: #e0f2fe !important;
+
+}
+
+
+/* COLUMNA */
+
+.hover-col {
+
+  background: rgba(186,230,253,0.35) !important;
+
+}
+
+
+.table-elegante thead tr:nth-child(2) th {
+  top: 40px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.foto-tabla {
+  width: 90px;           /* tamaño pequeño */
+  height: 90px;
+  border-radius: 50%;    /* la hace redonda */
+ 
+  object-fit: cover;
+  border: 2px solid #0b8607; /* azul elegante */
+}
+
+/* efecto elegante al pasar mouse */
+.foto-tabla:hover {
+  transform: scale(1.1);
+}

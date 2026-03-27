@@ -15,7 +15,7 @@ import { ServiciosMensajeService } from './serviMensaje/servicios-mensaje.servic
 export class ServicioBackendService {
   public url2 ="https://siapfa.ffaa.mil.hn:4443/"//"http://localhost:3979/" //"https://siapfa.ffaa.mil.hn:4443/"
   refrescar = 0
-  public url ="https://siapfa.ffaa.mil.hn:4443/"//"http://localhost:3979/" //"https://siapfa.ffaa.mil.hn:4443/"     
+  public url ="http://localhost:3979/"//"http://localhost:3979/" //"https://siapfa.ffaa.mil.hn:4443/"     
   usuarioLogin: any;
   token = "";
 
@@ -34,6 +34,11 @@ export class ServicioBackendService {
 
   ) { }
 
+sacarPersonalDEtallesituacion(data){
+  return this.metodopost("sacarPersonalDEtallesituacion",data)
+}
+
+
    async descargarImagenComoArrayBuffer(
     url: string
   ): Promise<ArrayBuffer | null> {
@@ -45,6 +50,12 @@ export class ServicioBackendService {
       console.error('Error descargando imagen', e);
       return null;
     }
+  }
+  sacarParteSituacion(data){
+    return this.metodopost("sacarParteSituacion",data)
+  }
+  sacarParteGeneralFFAA(data){
+    return  this.metodopost("sacarParteGeneralFFAA",data)
   }
   SacarCuposUnidad(data){
       return this.metodopost("SacarCuposUnidad",data)

@@ -1168,6 +1168,142 @@
   }
 
   
+@if (VentanaSeleccionada?.id==='r9') {
+  <div class="container py-4">
+
+  <!-- HEADER -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h3 class="fw-bold mb-0">Parte General por Asignación de su fuerza</h3>
+      <small class="text-muted">Resumen de personal por categoría,Sexo y combatiente</small>
+    </div>
+
+    <div class="d-flex gap-2">
+      <button class="btn btn-primary shadow-sm"
+              (click)="sacarParteGeneralFFAA()">
+        <i class="fa fa-sync"></i> Generar
+      </button>
+
+      <button class="btn btn-success shadow-sm"
+              (click)="exportarExcelResumen('tabla-expo-reporFFaa')">
+        <i class="fa fa-file-excel"></i> Exportar
+      </button>
+    </div>
+  </div>
+
+  <!-- CARD -->
+  <div class="card shadow border-0 rounded-4">
+
+    <div class="card-body">
+
+      <div class="table-responsive">
+
+        <table id="tabla-expo-reporFFaa" class="table table-hover align-middle text-center modern-table">
+
+          <thead>
+            <tr class="table-header">
+              <th rowspan="2" class="text-start">Categoría</th>
+              <th colspan="3">Hombres</th>
+              <th colspan="3">Mujeres</th>
+              <th rowspan="2">Total</th>
+            </tr>
+            <tr class="sub-header">
+              <th>Combatientes</th>
+              <th>No Combatientes</th>
+              <th>Total</th>
+              <th>Combatientes</th>
+              <th>No Combatientes</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let item of arregloParteGeneralFFAA" class="fila-hover">
+
+              <td class="text-start fw-semibold">
+                {{ item.categoria }}
+              </td>
+
+              <!-- HOMBRES -->
+              <td class="text-primary fw-bold">
+                {{ item.hombres_combatientes }}
+              </td>
+
+              <td>
+                {{ item.hombres_no_combatientes }}
+              </td>
+
+              <td class="total-cell">
+                {{
+                (+item.hombres_combatientes || 0) +
+                (+item.hombres_no_combatientes || 0)
+                }}
+              </td>
+
+              <!-- MUJERES -->
+              <td class="text-danger fw-bold">
+                {{ item.mujeres_combatientes }}
+              </td>
+
+              <td>
+                {{ item.mujeres_no_combatientes }}
+              </td>
+
+              <td class="total-cell">
+                {{
+                (+item.mujeres_combatientes || 0) +
+                (+item.mujeres_no_combatientes || 0)
+                }}
+              </td>
+
+              <!-- TOTAL -->
+              <td class="grand-total">
+                {{
+                (+item.hombres_combatientes || 0) +
+                (+item.hombres_no_combatientes || 0) +
+                (+item.mujeres_combatientes || 0) +
+                (+item.mujeres_no_combatientes || 0)
+                }}
+              </td>
+
+            </tr>
+          </tbody>
+
+          <!-- FOOTER -->
+          <tfoot>
+            <tr class="footer-total">
+              <td>TOTAL</td>
+
+              <td>{{ totales.hombres_combatientes }}</td>
+              <td>{{ totales.hombres_no_combatientes }}</td>
+              <td class="text-primary fw-bold">
+                {{ totales.hombres_combatientes + totales.hombres_no_combatientes }}
+              </td>
+
+              <td>{{ totales.mujeres_combatientes }}</td>
+              <td>{{ totales.mujeres_no_combatientes }}</td>
+              <td class="text-danger fw-bold">
+                {{ totales.mujeres_combatientes + totales.mujeres_no_combatientes }}
+              </td>
+
+              <td class="bg-dark text-white fw-bold">
+                {{ totales.total }}
+              </td>
+            </tr>
+          </tfoot>
+
+        </table>
+
+      </div>
+
+    </div>
+  </div>
+
+</div>
+  }
+
+
+
  
 </div>
 

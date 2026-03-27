@@ -95,8 +95,11 @@ export class MenuRepoFuerzaComponent {
     },
     { id: 'r7', titulo: 'Parte por Fuerza,Categoria', descripcion: 'Parte de fuerza y categoria', icon: 'pi pi-microchip', categoria: 'Partes', ruta: '/reportes/planilla',permiso:[]  },
 
-    { id: 'r8', titulo: 'TOE', descripcion: 'Consulta TOE por Fuerza', icon: 'pi pi-asterisk', categoria: 'Partes', ruta: '/reportes/planilla',permiso:["Re_0005"]},
-
+    { id: 'r8', titulo: 'TOE', descripcion: 'Consulta TOE por Fuerza', icon: 'pi pi-asterisk', categoria: 'Partes', ruta: '/reportes/planilla',permiso:["Re_0005"]}
+,{
+      id: 'r9', titulo: 'Parte por fuerza,combatinete y genero', descripcion: 'Parte segun el genero y si es combatiente o no',
+      icon: 'pi pi-crown', categoria: 'RRHH', ruta: '/reportes/promociones',permiso:[] 
+    }
      
 
   ]);
@@ -645,4 +648,72 @@ this.personaSeleccionada = personal
     
     this.personaSeleccionada = null
   }
+
+
+
+
+arregloParteGeneralFFAA = []
+  sacarParteGeneralFFAA() {
+  this._ServiciosMensajeService.show("Cargando parte general de las FFAA.....");
+  this.arregloParteGeneralFFAA = [];
+let p ={
+  cadena:this.usuarioLoguiado.idfuerza ? ` and f.idfuerza=${this.usuarioLoguiado.idfuerza} ` : ""
+}
+  this._ServicioBackendService.sacarParteGeneralFFAA(p).subscribe({
+    next: (response: any) => {
+      console.log(response);
+      this._ServiciosMensajeService.hide();
+
+      if (response.error) {
+        return this._ServiciosMensajeService.mensajeMalo(response.error);
+      }
+
+      if (response.mensaje) {
+        return this._ServiciosMensajeService.mensajeMalo(response.mensaje);
+      }
+
+      this.arregloParteGeneralFFAA = response.resultado;
+      console.log(this.arregloParteGeneralFFAA);
+      this.calcularTotales();
+    },
+    error: () => {
+      this._ServiciosMensajeService.hide();
+      this._ServiciosMensajeService.mensajeerrorServer();
+    }
+  });
+}
+ totales = {
+  hombres_combatientes: 0,
+  hombres_no_combatientes: 0,
+  mujeres_combatientes: 0,
+  mujeres_no_combatientes: 0,
+  total: 0
+};
+
+calcularTotales() {
+
+  this.totales = {
+    hombres_combatientes: 0,
+    hombres_no_combatientes: 0,
+    mujeres_combatientes: 0,
+    mujeres_no_combatientes: 0,
+    total: 0
+  };
+
+  this.arregloParteGeneralFFAA.forEach(item => {
+    this.totales.hombres_combatientes += +parseFloat(item.hombres_combatientes) || 0;
+    this.totales.hombres_no_combatientes += +parseFloat(item.hombres_no_combatientes) || 0;
+    this.totales.mujeres_combatientes += +parseFloat(item.mujeres_combatientes) || 0;
+    this.totales.mujeres_no_combatientes += +parseFloat(item.mujeres_no_combatientes) || 0;
+  });
+
+  this.totales.total =
+    this.totales.hombres_combatientes +
+    this.totales.hombres_no_combatientes +
+    this.totales.mujeres_combatientes +
+    this.totales.mujeres_no_combatientes;
+}
+
+
+
 }

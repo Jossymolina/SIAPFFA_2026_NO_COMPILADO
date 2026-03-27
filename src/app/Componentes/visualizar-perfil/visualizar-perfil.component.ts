@@ -156,6 +156,7 @@ armaobjetoConsultado
     this._ServiciosMensajesService.show()
     this._DatospersonalesService.consultaPorIdentidad(parametro).subscribe(
       {
+         
         next: (Response) => {
    this._ServiciosMensajesService.hide()
    

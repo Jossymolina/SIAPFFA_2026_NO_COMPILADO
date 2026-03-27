@@ -20,6 +20,10 @@ import { from } from 'rxjs';
  
 
 
+import { TableModule } from 'primeng/table';
+import { TagModule } from 'primeng/tag';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+
 type Opcion = 'fuerza' | 'unidad' | 'seccion' ;
 type Reporte = {
   id: string;
@@ -28,12 +32,16 @@ type Reporte = {
   icon: string;     // PrimeIcons: 'pi pi-...'
   categoria: string;
   ruta?: string;
-  permiso?: string[]; // Array de permisos necesarios para ver el reporte
+  permiso?: string[];
+  peso_orden:number; // Array de permisos necesarios para ver el reporte
 };
 @Component({
   selector: 'app-menu-repo-emc',
   standalone: true,
-    imports: [CommonModule, FormsModule, CardModule, InputTextModule, TooltipModule, RadioButtonModule,MenuToeComponent,ButtonModule,DialogModule,VisualizarPerfilComponent],
+    imports: [CommonModule, FormsModule, CardModule, InputTextModule, 
+      TooltipModule, RadioButtonModule,MenuToeComponent,
+      ButtonModule,DialogModule,VisualizarPerfilComponent,
+    TableModule,TagModule,ProgressSpinnerModule],
   templateUrl: './menu-repo-emc.component.html',
   styleUrl: './menu-repo-emc.component.css',
 })
@@ -91,74 +99,83 @@ export class MenuRepoEmcComponent implements OnInit,OnDestroy {
     { label: 'Por Direccion/Seccion', value: 'seccion' as const },
  
   ];
-  categoria = signal<'Todos' | string>('Todos');
+  categoria = signal<'Todos' | string>('Partes');
 
   reportes = signal<Reporte[]>([
-    { id: 'r1', titulo: 'Parte por Unidad', descripcion: 'Parte de toda la Unidad', icon: 'pi pi-wallet', categoria: 'Partes', ruta: '/reportes/planilla',permiso:[]  },
-    { id: 'r4', titulo: 'Parte por Fuerza,Categoria', descripcion: 'Parte de fuerza y categoria', icon: 'pi-microchip', categoria: 'Partes', ruta: '/reportes/planilla',permiso:[] },
+    { id: 'r1', titulo: 'Parte por Unidad', descripcion: 'Parte de toda la Unidad', 
+      icon: 'pi pi-wallet', categoria: 'Partes', ruta: '/reportes/planilla',permiso:[] 
+    ,peso_orden:18 },
+    { id: 'r4', titulo: 'Parte por Combatiente,Fuerza,Categoria', descripcion: 'Parte de fuerza y categoria', icon: 'pi-microchip', 
+      categoria: 'Partes', ruta: '/reportes/planilla',permiso:[]  ,peso_orden:17},
     {
       id: 'r2', titulo: 'Parte de bajas por unidad', descripcion: 'Aqui se muestran las bajas', icon: 'pi pi-percentage',
-      categoria: 'Partes', ruta: '/reportes/isr',permiso:[] 
+      categoria: 'Listados', ruta: '/reportes/isr',permiso:[] ,peso_orden:16
     },
       {
       id: 'r5', titulo: 'Parte de bajas por fuerza,categoria', descripcion: 'Aqui se muestran las bajas por fuerza', icon: 'pi pi-prime',
-      categoria: 'Partes', ruta: '/reportes/isr',permiso:[] 
+      categoria: 'Listados', ruta: '/reportes/isr',permiso:[] ,peso_orden:15
     },
     {
       id: 'r3', titulo: 'Cambio de Categorias x mes', descripcion: 'Aqui estan las personas que cambiaron de categoria',
-      icon: 'pi pi-calendar', categoria: 'RRHH', ruta: '/reportes/vacaciones',permiso:[] 
+      icon: 'pi pi-calendar', categoria: 'Listados', ruta: '/reportes/vacaciones',permiso:[] ,peso_orden:14
     }
    ,
       {
       id: 'r6', titulo: 'Buscar personal para Ascender', descripcion: 'Aqui estan las personas que pueden ascender segun su antiguedad',
-      icon: 'pi pi-chart-line', categoria: 'RRHH', ruta: '/reportes/vacaciones',permiso:[] 
+      icon: 'pi pi-chart-line', categoria: 'Listados', ruta: '/reportes/vacaciones',permiso:[] ,peso_orden:13
     },
-     ,
+     
       {
       id: 'r7', titulo: 'Parte por Fuerza,Categoria y Unidad', descripcion: 'Aqui se busca el parte por unidad y categoria',
-      icon: 'pi pi-building-columns', categoria: 'RRHH', ruta: '/reportes/vacaciones',permiso:[] 
+      icon: 'pi pi-building-columns', categoria: 'Partes', ruta: '/reportes/vacaciones',permiso:[] ,peso_orden:12
     },
-    ,
+    
       {
       id: 'r8', titulo: 'Consulta pago Vacaciones', descripcion: 'Aqui  el personal que se le paga vacaciones en un mes determinado',
-      icon: 'pi pi-dollar', categoria: 'RRHH', ruta: '/reportes/vacaciones',permiso:[] 
+      icon: 'pi pi-dollar', categoria: 'Listados', ruta: '/reportes/vacaciones',permiso:[] ,peso_orden:11
     }
      ,
       {
       id: 'r9', titulo: 'Organizacion', descripcion: 'Consulta la organizacion completa de las fuerzas',
-      icon: 'pi pi-clipboard', categoria: 'RRHH', ruta: '/reportes/vacaciones',permiso:[] 
+      icon: 'pi pi-clipboard', categoria: 'Organizacion', ruta: '/reportes/vacaciones',permiso:[] ,peso_orden:3
     }
      ,
       {
       id: 'r10', titulo: 'Personal 65 Años', descripcion: 'Personal de 65 años o mas',
-      icon: 'pi pi-gift', categoria: 'RRHH', ruta: '/reportes/vacaciones',permiso:[] 
+      icon: 'pi pi-gift', categoria: 'Listados', ruta: '/reportes/vacaciones',permiso:[] ,peso_orden:9
     }
  ,
       {
       id: 'r11', titulo: 'Personal Primer Ingreso', descripcion: 'Se muestra el personal que tuvo su primer ingreso en un mes determinado',
-      icon: 'pi pi-twitter', categoria: 'RRHH', ruta: '/reportes/vacaciones',permiso:[] 
+      icon: 'pi pi-twitter', categoria: 'Listados', ruta: '/reportes/vacaciones',permiso:[] ,peso_orden:8
     }
     ,
       {
       id: 'r12', titulo: 'Antiguedad en el Grado', descripcion: 'Se muestra el personal con antiguedad en el grado',
-      icon: 'pi pi-check', categoria: 'RRHH', ruta: '/reportes/vacaciones',permiso:[] 
+      icon: 'pi pi-check', categoria: 'Listados', ruta: '/reportes/vacaciones',permiso:[] ,peso_orden:7
     },
      
       {
       id: 'r13', titulo: 'Lista de Personal de sin cargo', descripcion: 'Se muestra el personal que esta sin cargo asignado',
-      icon: 'pi pi-bars', categoria: 'RRHH', ruta: '/reportes/vacaciones',permiso:[] 
+      icon: 'pi pi-bars', categoria: 'Listados', ruta: '/reportes/vacaciones',permiso:[],peso_orden:6
     },
     {
       id: 'r14', titulo: 'TOE', descripcion: 'Se muestra el personal con TOE',
-      icon: 'pi pi-asterisk', categoria: 'RRHH', ruta: '/reportes/toe',permiso:['Re_0005'] 
+      icon: 'pi pi-asterisk', categoria: 'TOE', ruta: '/reportes/toe',permiso:['Re_0005'] ,peso_orden:5
     },
     {
       id: 'r15', titulo: 'Cambio de categoria que pasaron a Oficiales y Suboficiales', descripcion: 'Personal que cambio a oficiales y suboficiales',
-      icon: 'pi pi-discord', categoria: 'RRHH', ruta: '/reportes/cambio-categoria',permiso:[] 
+      icon: 'pi pi-discord', categoria: 'Listados', ruta: '/reportes/cambio-categoria',permiso:[] ,peso_orden:4
     },
     {
       id: 'r16', titulo: 'Reporte por Promocion', descripcion: 'Reporte de personal por promociones',
-      icon: 'pi pi-bell', categoria: 'RRHH', ruta: '/reportes/promociones',permiso:[] 
+      icon: 'pi pi-bell', categoria: 'Organizacion', ruta: '/reportes/promociones',permiso:[] ,peso_orden:10
+    },{
+      id: 'r17', titulo: 'Parte General FFAA', descripcion: 'Parte general de las FFAA',
+      icon: 'pi pi-address-book', categoria: 'Partes', ruta: '/reportes/promociones',permiso:[] ,peso_orden:1
+    },{
+      id: 'r18', titulo: 'Parte por situacion', descripcion: 'Parte segun la situacion del personal',
+      icon: 'pi pi-crown', categoria: 'Partes', ruta: '/reportes/promociones',permiso:[] ,peso_orden:2
     }
   ]);
 
@@ -168,7 +185,7 @@ export class MenuRepoEmcComponent implements OnInit,OnDestroy {
     return ['Todos', ...Array.from(set)];
   });
 
-
+/*
   filtrados = computed(() => {
     const texto = this.q().trim().toLowerCase();
     const cat = this.categoria();
@@ -183,7 +200,40 @@ export class MenuRepoEmcComponent implements OnInit,OnDestroy {
 
       return matchCat && matchText;
     });
-  });
+  });*/
+
+  filtrados = computed(() => {
+
+  const texto = this.q().trim().toLowerCase();
+  const cat = this.categoria();
+
+  return this.reportes()
+    .filter(r => {
+
+      const titulo = (r.titulo ?? '').toLowerCase();
+      const descripcion = (r.descripcion ?? '').toLowerCase();
+      const categoria = (r.categoria ?? '').toLowerCase();
+
+      const matchCat =
+        cat === 'Todos' || categoria === cat.toLowerCase();
+
+      if (!texto) return matchCat;
+
+      return (
+        matchCat &&
+        (
+          titulo.includes(texto) ||
+          descripcion.includes(texto) ||
+          categoria.includes(texto)
+        )
+      );
+
+    })
+    .sort((a, b) => 
+      (a.peso_orden ?? 0) - (b.peso_orden ?? 0)
+    );
+
+});
 
   VentanaSeleccionada
   destruir() {
@@ -1206,4 +1256,385 @@ this.arregloBusquedaPromociones =  response.resultado
      saveAs(blob, 'resultados_consulta_combinada.xlsx');
      this._ServiciosMensajeService.hide()
    }
+    arregloParteGeneralFFAA = []
+    
+sacarParteGeneralFFAA() {
+  this._ServiciosMensajeService.show("Cargando parte general de las FFAA.....");
+  this.arregloParteGeneralFFAA = [];
+let p ={
+  cadena:""
+}
+  this._ServicioBackendService.sacarParteGeneralFFAA(p).subscribe({
+    next: (response: any) => {
+      this._ServiciosMensajeService.hide();
+
+      if (response.error) {
+        return this._ServiciosMensajeService.mensajeMalo(response.error);
+      }
+
+      if (response.mensaje) {
+        return this._ServiciosMensajeService.mensajeMalo(response.mensaje);
+      }
+
+      this.arregloParteGeneralFFAA = response.resultado;
+      this.calcularTotales();
+    },
+    error: () => {
+      this._ServiciosMensajeService.hide();
+      this._ServiciosMensajeService.mensajeerrorServer();
+    }
+  });
+}
+ totales = {
+  hombres_combatientes: 0,
+  hombres_no_combatientes: 0,
+  mujeres_combatientes: 0,
+  mujeres_no_combatientes: 0,
+  total: 0
+};
+
+calcularTotales() {
+
+  this.totales = {
+    hombres_combatientes: 0,
+    hombres_no_combatientes: 0,
+    mujeres_combatientes: 0,
+    mujeres_no_combatientes: 0,
+    total: 0
+  };
+
+  this.arregloParteGeneralFFAA.forEach(item => {
+    this.totales.hombres_combatientes += +parseFloat(item.hombres_combatientes) || 0;
+    this.totales.hombres_no_combatientes += +parseFloat(item.hombres_no_combatientes) || 0;
+    this.totales.mujeres_combatientes += +parseFloat(item.mujeres_combatientes) || 0;
+    this.totales.mujeres_no_combatientes += +parseFloat(item.mujeres_no_combatientes) || 0;
+  });
+
+  this.totales.total =
+    this.totales.hombres_combatientes +
+    this.totales.hombres_no_combatientes +
+    this.totales.mujeres_combatientes +
+    this.totales.mujeres_no_combatientes;
+}
+
+ 
+dataTransformada
+asignaciones
+categoriasPorAsignacion  
+situaciones
+ordenCategoriasGlobal: any = {
+  'Auxiliar': 7,
+  'Tropa': 4,
+  'Estudiante': 6,
+  'Cadete': 5,
+  'Sub oficial': 3,
+  'Oficial Auxiliar': 2,
+  'Oficial de las Armas': 0,
+  'Oficial de los Servicios': 1,
+  'Pensionados': 8,
+  'Catedraticos': 8
+};
+ordenarCategorias(categoriasFinal: any) {
+  const ordenadas: any = {};
+
+  Object.keys(categoriasFinal).forEach(asig => {
+    ordenadas[asig] = categoriasFinal[asig].sort((a: string, b: string) => {
+      const ordenA = this.ordenCategoriasGlobal[a] ?? 999;
+      const ordenB = this.ordenCategoriasGlobal[b] ?? 999;
+
+      return ordenA - ordenB;
+    });
+  });
+
+  return ordenadas;
+}
+tipoBusquedaSituacion;
+sacarParteSituacion(tipo_consulta){
+  this._ServiciosMensajeService.show("Cargando parte situacional de las FFAA.....");
+  this.arregloParteGeneralFFAA = [];
+  this.tipoBusquedaSituacion = tipo_consulta
+let p ={
+  tipo_consulta:tipo_consulta
+}
+  this._ServicioBackendService.sacarParteSituacion(p).subscribe({
+    next: (response: any) => {
+      this._ServiciosMensajeService.hide(); 
+      if (response.error) {
+        return this._ServiciosMensajeService.mensajeMalo(response.error);
+      }
+
+      if (response.mensaje) {
+        return this._ServiciosMensajeService.mensajeMalo(response.mensaje);
+      }
+      let res = this.transformarData(response.resultado)
+
+       this.dataTransformada = res.data;
+      this.asignaciones = res.asignaciones;
+      this.categoriasPorAsignacion = res.categoriasPorAsignacion;
+      this.situaciones =  res.situaciones;
+ 
+      
+    },
+    error: () => {
+      this._ServiciosMensajeService.hide();
+      this._ServiciosMensajeService.mensajeerrorServer();
+    }
+  });
+
+}
+
+
+/**
+ * 
+ * POR SI QUIERO ORDE3NAR POR RECOMENDACION ASIGNACION 
+ */
+ordenAsignaciones = [
+  'EJERCITO',
+  'FUERZA NAVAL',
+  'FUERZA AEREA',
+  'SEDENA'
+];
+
+
+ordenarAsignaciones(asignaciones: string[]) {
+  return asignaciones.sort((a, b) => {
+    const indexA = this.ordenAsignaciones.indexOf(a);
+    const indexB = this.ordenAsignaciones.indexOf(b);
+
+    if (indexA === -1) return 1;
+    if (indexB === -1) return -1;
+
+    return indexA - indexB;
+  });
+}
+
+transformarData(data: any[]) {
+  const resultado: any = {};
+  const asignaciones = new Set();
+  const categoriasPorAsignacion: any = {};
+
+  data.forEach(item => {
+
+    const asignacion = item.asignacion?.trim();
+    const categoria = item.categoria?.trim();
+    const situacion = item.situacion?.trim();
+
+    asignaciones.add(asignacion);
+
+    if (!categoriasPorAsignacion[asignacion]) {
+      categoriasPorAsignacion[asignacion] = new Set();
+    }
+    categoriasPorAsignacion[asignacion].add(categoria);
+
+    if (!resultado[situacion]) {
+      resultado[situacion] = {};
+    }
+
+    if (!resultado[situacion][asignacion]) {
+      resultado[situacion][asignacion] = {};
+    }
+
+    resultado[situacion][asignacion][categoria] = item.cantidad;
+  });
+
+  const categoriasFinal: any = {};
+  Object.keys(categoriasPorAsignacion).forEach(asig => {
+    categoriasFinal[asig] = Array.from(categoriasPorAsignacion[asig]);
+  });
+
+  const categoriasOrdenadas = this.ordenarCategorias(categoriasFinal);
+
+  const situacionesOrdenadas = Object.keys(resultado).sort((a, b) =>
+    a.localeCompare(b, undefined, { sensitivity: 'base' })
+  );
+
+ 
+  return {
+    data: resultado,
+    asignaciones: Array.from(asignaciones),
+    categoriasPorAsignacion: categoriasOrdenadas,
+    situaciones: situacionesOrdenadas
+  };
+}
+
+
+filtroAsignacion: string = '';
+mostrarTotales = false;
+soloActivos = false;
+
+toggleTotales() {
+  this.mostrarTotales = !this.mostrarTotales;
+}
+
+resetTabla() {
+  this.filtroAsignacion = '';
+  this.mostrarTotales = false;
+  this.soloActivos = false;
+}
+
+filtrarActivos() {
+  this.soloActivos = !this.soloActivos;
+}
+
+situacionesFiltradas() {
+  if (!this.soloActivos) return this.situaciones;
+
+  return this.situaciones.filter(sit => {
+    return this.asignaciones.some(asig =>
+      this.categoriasPorAsignacion[asig]?.some(cat =>
+        (this.dataTransformada[sit]?.[asig]?.[cat] || 0) > 0
+      )
+    );
+  });
+}
+
+/* COLORES DINÁMICOS */
+getColorCelda(valor: number) {
+  //if (!valor) return 'celda-cero';
+  //if (valor < 5) return 'celda-baja';
+   if (valor >0 || valor === 100) return 'celda-media';
+  return '' // 'celda-alta';
+}
+
+/* TOTAL POR COLUMNA */
+getTotalColumna(asig: string, cat: string) {
+  return this.situaciones.reduce((acc, sit) => {
+    return acc + (this.dataTransformada[sit]?.[asig]?.[cat] || 0);
+  }, 0);
+}
+
+
+
+displayDetalleModal: boolean = false;
+
+detallePersonas: any[] = [];
+
+loadingDetalle = false;
+
+tituloDetalle = '';
+
+mostrarDetalle(
+  situacion: string,
+  asig: string,
+  cat: string,
+  cantidad: number
+) {
+
+  if (!cantidad || cantidad === 0) return;
+
+  this.displayDetalleModal = true;
+
+  this.tituloDetalle =
+    `${situacion} - ${asig} - ${cat}`;
+
+  this.loadingDetalle = true;
+let payload = {
+    tipo_:this.tipoBusquedaSituacion,
+    cadena: ""
+    
+  };
+
+if(this.tipoBusquedaSituacion===1){
+   payload.cadena= `
+                and ingreso_ascenso.activo=1 and actual=1 and grados.idgrados<>113 
+          and fuerza.nombre="${asig}" and categoria="${cat}" and ${situacion==='Disponible'? "detalle_situacion.descripcion is null": `detalle_situacion.descripcion="${situacion}"`}
+    `
+}else if(this.tipoBusquedaSituacion===2){
+  payload.cadena =`
+    and categoria ="${cat}"  and unidad.corto="${asig}" 
+  and  ${situacion==='Disponible'? "detalle_situacion.descripcion is null": `detalle_situacion.descripcion="${situacion}"`}
+  `
+}else if(this.tipoBusquedaSituacion===3){
+  payload.cadena =`
+           and n.descripcion="${asig}"   and categoria="${cat}"
+  and  ${situacion==='Disponible'? "detalle_situacion.descripcion is null": `detalle_situacion.descripcion="${situacion}"`}
+    
+     `
+      
+    
+      
+    
+    
+}
+  
+ 
+  
+  console.log(payload)
+  this._ServicioBackendService
+   .sacarPersonalDEtallesituacion(payload)
+    .subscribe({
+      next: (res: any) => {
+console.log(res)
+        this.detallePersonas = res.resultado || [];
+
+        this.loadingDetalle = false;
+        console.log(res)
+      },
+      error: () => {
+
+        this.loadingDetalle = false;
+
+      }
+    });
+
+}
+
+
+ 
+
+getGlobalColIndex(asigIndex: number, catIndex: number): number {
+
+  let index = 0;
+
+  for (let i = 0; i < asigIndex; i++) {
+
+    const asig = this.asignaciones[i];
+
+    if (!this.filtroAsignacion || this.filtroAsignacion === asig) {
+
+      index += this.categoriasPorAsignacion[asig]?.length || 0;
+
+    }
+
+  }
+
+  return index + catIndex;
+
+}
+
+
+hoverRowIndex: number | null = null;
+hoverColIndex: number | null = null;
+
+hoverCelda(row: number, col: number) {
+
+  this.hoverRowIndex = row;
+  this.hoverColIndex = col;
+
+}
+
+clearHover() {
+
+  this.hoverRowIndex = null;
+  this.hoverColIndex = null;
+
+}
+
+isHoverRow(row: number) {
+
+  return this.hoverRowIndex === row;
+
+}
+
+isHoverCol(col: number) {
+
+  return this.hoverColIndex === col;
+
+}
+
+
+
+
+
+
 }

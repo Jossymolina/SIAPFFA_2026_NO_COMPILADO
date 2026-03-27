@@ -10,7 +10,7 @@
       </div>
     </div>
 
-    <!-- ✅ CORREGIDO: NO usar [(ngModel)]="q()" -->
+ 
     <div class="search">
       <span class="p-input-icon-left w-100">
 
@@ -26,7 +26,7 @@
       <button type="button" class="chip" *ngFor="let c of categorias()" [class.active]="categoria() === c"
         (click)="seleccionarCategoria(c)">
         <i class="pi pi-tag"></i>
-        <span>{{ c }}</span>
+        <span>{{ c }}  </span>
       </button>
     </div>
 
@@ -2268,8 +2268,253 @@
 
    </div>
   }
+@if (VentanaSeleccionada?.id==='r17') {
+  <div class="container py-4">
+
+  <!-- HEADER -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h3 class="fw-bold mb-0">Parte General FFAA</h3>
+      <small class="text-muted">Resumen de personal por categoría,Sexo y combatiente</small>
+    </div>
+
+    <div class="d-flex gap-2">
+      <button class="btn btn-primary shadow-sm"
+              (click)="sacarParteGeneralFFAA()">
+        <i class="fa fa-sync"></i> Generar
+      </button>
+
+      <button class="btn btn-success shadow-sm"
+              (click)="exportarExcelResumen('tabla-expo-reporFFaa')">
+        <i class="fa fa-file-excel"></i> Exportar
+      </button>
+    </div>
+  </div>
+
+  <!-- CARD -->
+  <div class="card shadow border-0 rounded-4">
+
+    <div class="card-body">
+
+      <div class="table-responsive">
+
+        <table id="tabla-expo-reporFFaa" class="table table-hover align-middle text-center modern-table">
+
+          <thead>
+            <tr class="table-header">
+              <th rowspan="2" class="text-start">Categoría</th>
+              <th colspan="3">Hombres</th>
+              <th colspan="3">Mujeres</th>
+              <th rowspan="2">Total</th>
+            </tr>
+            <tr class="sub-header">
+              <th>Combatientes</th>
+              <th>No Combatientes</th>
+              <th>Total</th>
+              <th>Combatientes</th>
+              <th>No Combatientes</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let item of arregloParteGeneralFFAA" class="fila-hover">
+
+              <td class="text-start fw-semibold">
+                {{ item.categoria }}
+              </td>
+
+              <!-- HOMBRES -->
+              <td class="text-primary fw-bold">
+                {{ item.hombres_combatientes }}
+              </td>
+
+              <td>
+                {{ item.hombres_no_combatientes }}
+              </td>
+
+              <td class="total-cell">
+                {{
+                (+item.hombres_combatientes || 0) +
+                (+item.hombres_no_combatientes || 0)
+                }}
+              </td>
+
+              <!-- MUJERES -->
+              <td class="text-danger fw-bold">
+                {{ item.mujeres_combatientes }}
+              </td>
+
+              <td>
+                {{ item.mujeres_no_combatientes }}
+              </td>
+
+              <td class="total-cell">
+                {{
+                (+item.mujeres_combatientes || 0) +
+                (+item.mujeres_no_combatientes || 0)
+                }}
+              </td>
+
+              <!-- TOTAL -->
+              <td class="grand-total">
+                {{
+                (+item.hombres_combatientes || 0) +
+                (+item.hombres_no_combatientes || 0) +
+                (+item.mujeres_combatientes || 0) +
+                (+item.mujeres_no_combatientes || 0)
+                }}
+              </td>
+
+            </tr>
+          </tbody>
+
+          <!-- FOOTER -->
+          <tfoot>
+            <tr class="footer-total">
+              <td>TOTAL</td>
+
+              <td>{{ totales.hombres_combatientes }}</td>
+              <td>{{ totales.hombres_no_combatientes }}</td>
+              <td class="text-primary fw-bold">
+                {{ totales.hombres_combatientes + totales.hombres_no_combatientes }}
+              </td>
+
+              <td>{{ totales.mujeres_combatientes }}</td>
+              <td>{{ totales.mujeres_no_combatientes }}</td>
+              <td class="text-danger fw-bold">
+                {{ totales.mujeres_combatientes + totales.mujeres_no_combatientes }}
+              </td>
+
+              <td class="bg-dark text-white fw-bold">
+                {{ totales.total }}
+              </td>
+            </tr>
+          </tfoot>
+
+        </table>
+
+      </div>
+
+    </div>
+  </div>
+
+</div>
+  }
 
 
+  @if (VentanaSeleccionada?.id==='r18') {
+ 
+<div   >
+<div class="toolbar mb-3 d-flex gap-2 flex-wrap">
+  <button class="btn btn-dark"  (click)="exportarExcelResumen('miTablaSituacion')"  >
+    📥 Exportar Excel
+  </button>
+
+  <button class="btn btn-outline-primary" (click)="sacarParteSituacion(1)">
+    📊 Parte Diario Situanción FFAA
+  </button>
+
+  <button class="btn btn-outline-success" (click)="sacarParteSituacion(2)">
+    🔍  Parte Diario Situanción EMC y sus Unidades Organicas
+  </button>
+
+   <button class="btn btn-outline-success" (click)="sacarParteSituacion(3)">
+    📄  Parte Diario Situanción EMC Direcciones
+  </button>
+
+  <button class="btn btn-outline-danger" (click)="resetTabla()">
+    ♻️ Resetear
+  </button>
+</div>
+<div class="mb-3">
+  <select class="form-select w-auto" [(ngModel)]="filtroAsignacion">
+    <option value="">Todas las asignaciones</option>
+    <option *ngFor="let asig of asignaciones" [value]="asig">
+      {{ asig }}
+    </option>
+  </select>
+</div>
+
+
+<div style="overflow-y: auto; height: 600px;" >
+   <div>
+      <table id="miTablaSituacion" class="  table-elegante text-center" style="font-size: 15px;">
+      
+        <thead>
+          <tr>
+            <th rowspan="2" class="sticky-col">Situación</th>
+      
+            <ng-container *ngFor="let asig of asignaciones">
+              <th *ngIf="!filtroAsignacion || filtroAsignacion === asig"
+                [attr.colspan]="categoriasPorAsignacion[asig]?.length || 0">
+                {{ asig }}
+              </th>
+            </ng-container>
+          </tr>
+      
+          <tr>
+            <ng-container *ngFor="let asig of asignaciones">
+              <ng-container *ngIf="!filtroAsignacion || filtroAsignacion === asig">
+                <th *ngFor="let cat of categoriasPorAsignacion[asig]">
+                  {{ cat }}
+                </th>
+              </ng-container>
+            </ng-container>
+          </tr>
+        </thead>
+      
+        <tbody>
+          <tr style="cursor: pointer;" *ngFor="let situacion of situacionesFiltradas(); let rowIndex = index">
+      
+            <td class="sticky-col">
+              {{ situacion }}
+            </td>
+      
+            <ng-container *ngFor="let asig of asignaciones; let asigIndex = index">
+      
+              <ng-container *ngIf="!filtroAsignacion || filtroAsignacion === asig">
+      
+                <td *ngFor="
+        let cat of categoriasPorAsignacion[asig];
+        let catIndex = index
+      " (mouseenter)="hoverCelda(rowIndex, getGlobalColIndex(asigIndex, catIndex))" (mouseleave)="clearHover()" (click)="mostrarDetalle(
+        situacion,
+        asig,
+        cat,
+        dataTransformada[situacion]?.[asig]?.[cat]
+      )" [ngClass]="[
+        getColorCelda(dataTransformada[situacion]?.[asig]?.[cat]),
+      
+        isHoverRow(rowIndex)
+          ? 'hover-row'
+          : '',
+      
+        isHoverCol(
+          getGlobalColIndex(asigIndex, catIndex)
+        )
+          ? 'hover-col'
+          : ''
+      ]">
+      
+                  {{ dataTransformada[situacion]?.[asig]?.[cat] || 0 }}
+      
+                </td>
+      
+              </ng-container>
+      
+            </ng-container>
+      
+          </tr>
+        </tbody>
+      </table>
+   </div>
+</div>
+</div>
+
+  
+  }
+  
 
 </div>
 
@@ -2290,6 +2535,135 @@
   </app-visualizar-perfil>
 </p-dialog>
 
+
+
+
+<p-dialog
+  [(visible)]="displayDetalleModal"
+  [modal]="true"
+  [style]="{ width: '70vw' }"
+  [draggable]="false"
+  [resizable]="false"
+  [closable]="true"
+  [dismissableMask]="false"
+[closeOnEscape]="false"
+  styleClass="modal-detalle-elegante"
+>
+
+  <!-- HEADER -->
+  <ng-template pTemplate="header">
+
+    <div class="header-detalle">
+
+      <div>
+        <i class="pi pi-users icon-header"></i>
+      </div>
+
+      <div class="titulo-header">
+
+        <span class="titulo-principal">
+          ⚙️
+        </span>
+
+        <span class="subtitulo">
+          {{ tituloDetalle }}
+        </span>
+
+        <span 
+        style="color : red"
+        class="subtitulo">
+          -Total-{{ detallePersonas.length }}
+        </span>
+
+      </div>
+
+    </div>
+
+  </ng-template>
+
+  <!-- CONTENIDO -->
+
+  <div *ngIf="loadingDetalle" class="text-center p-4">
+
+    <p-progressSpinner></p-progressSpinner>
+
+    <div class="mt-2">
+      Cargando información...
+    </div>
+
+  </div>
+<button class="btn btn-danger"
+(click)="exportarExcelResumen('tablaTatalDetalle')"
+>Exportar</button>
+  <div *ngIf="!loadingDetalle">
+
+    <p-table
+    id="tablaTatalDetalle"
+      [value]="detallePersonas"
+   
+      responsiveLayout="scroll"
+      styleClass="p-datatable-sm p-datatable-striped"
+    >
+
+      <ng-template pTemplate="header">
+
+        <tr>
+<th>Foto</th>
+          <th>Identidad</th>
+
+          <th>Nombre</th>
+
+          <th>Grado</th>
+
+          <th>Unidad</th>
+
+          <th>Situación</th>
+
+        </tr>
+
+      </ng-template>
+
+      <ng-template pTemplate="body" let-persona>
+
+        <tr style="cursor: pointer;" (click)="seleccionarPersonal(persona)" >
+<td>
+    <img class="foto-tabla" src="{{ _ServicioBackendService.url2 + 'sacarfoto/' + persona.foto }}" style="height: 50px; width: 50px;"
+                  alt="">
+</td>
+          <td>
+            {{ persona.identidad }}
+          </td>
+
+          <td>
+            {{ persona.nombre }}
+          </td>
+
+          <td>
+            {{ persona.grado }}
+          </td>
+
+          <td>
+            {{ persona.asignacion }}
+          </td>
+
+          <td>
+
+            <p-tag
+              [value]="persona.descripcion"
+              severity="info"
+            ></p-tag>
+
+          </td>
+
+        </tr>
+
+      </ng-template>
+
+    </p-table>
+
+  </div>
+
+</p-dialog>
 
 
 

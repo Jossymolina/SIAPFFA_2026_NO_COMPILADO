@@ -98,6 +98,14 @@ export class CuerpoPrincipalComponent {
       route: '/menu/menu-programador',
              code:['PRG_0001']
 
+    },
+     {
+      title: 'Generador de Documentos',
+      description: 'Aqui se pueden generar documentos autorizados.',
+      icon: 'pi pi-file-word',
+      route: '/menu/menu-programador',
+             code:['PRG_0001']
+
     }
   ];
     constructor(private router: Router,private _ServicioBackendService:ServicioBackendService) {

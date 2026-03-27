@@ -95,7 +95,7 @@ export class BusquedaNormalComponent {
   ) { }
   estado = {
     activos: true,
-    bajas: false
+    bajas: true
   }
   filtroTexto = '';
   arregloResultadoFiltrado: any[] | null = null;

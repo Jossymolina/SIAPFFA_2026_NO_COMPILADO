@@ -146,3 +146,94 @@
   border: 1px solid rgba(255,255,255,0.10);
 }
 .go{ opacity: .65; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Fuerza fullscreen real */
+.fullscreen-dialog .p-dialog {
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: 100vw !important;
+  max-height: 100vh !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+}
+
+/* Ajusta contenido */
+.fullscreen-dialog .p-dialog-content {
+  height: calc(100vh - 60px);
+  overflow: auto;
+}
+
+/* Elimina espacios */
+.fullscreen-dialog {
+  padding: 0 !important;
+}
+
+.p-dialog-mask {
+  padding: 0 !important;
+}
+
+
+.modern-table {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* HEADER */
+.table-header {
+  background: linear-gradient(45deg, #1e3c72, #2a5298);
+  color: white;
+}
+
+.sub-header {
+  background-color: #f1f3f5;
+  font-size: 13px;
+}
+
+/* FILAS */
+.fila-hover:hover {
+  background-color: #f8f9fa;
+  transition: 0.2s ease-in-out;
+}
+
+/* CELDAS */
+.total-cell {
+  background-color: #eef2ff;
+  font-weight: bold;
+}
+
+.grand-total {
+  background: #212529;
+  color: white;
+  font-weight: bold;
+}
+
+/* FOOTER */
+.footer-total {
+  background-color: #dee2e6;
+  font-weight: bold;
+}
+
+/* BOTONES */
+.btn {
+  border-radius: 10px;
+  padding: 8px 16px;
+}
