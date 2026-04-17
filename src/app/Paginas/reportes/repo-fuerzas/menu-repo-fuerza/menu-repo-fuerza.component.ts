@@ -661,7 +661,6 @@ let p ={
 }
   this._ServicioBackendService.sacarParteGeneralFFAA(p).subscribe({
     next: (response: any) => {
-      console.log(response);
       this._ServiciosMensajeService.hide();
 
       if (response.error) {
@@ -673,7 +672,6 @@ let p ={
       }
 
       this.arregloParteGeneralFFAA = response.resultado;
-      console.log(this.arregloParteGeneralFFAA);
       this.calcularTotales();
     },
     error: () => {

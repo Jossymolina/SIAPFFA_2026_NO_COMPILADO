@@ -60,10 +60,19 @@ export class BusquedaPersonalizadaComponent implements OnInit {
   ];
 
   arregloReligion = [
-    { religion: 'Catolico' },
+    { religion: 'Catolica' },
+
     { religion: 'Evangelico' },
+    { religion: 'Adventista' },
+    { religion: 'Ateo' },
+    { religion: 'Judaista' },
+    { religion: 'Musulman' },
     { religion: 'Mormon' },
+    { religion: 'Protestante' },
     { religion: 'Testigo de Jehova' },
+    { religion: 'Sin Religion' },
+
+
   ];
 
   arregloSexo = [

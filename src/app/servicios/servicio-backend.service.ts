@@ -15,7 +15,7 @@ import { ServiciosMensajeService } from './serviMensaje/servicios-mensaje.servic
 export class ServicioBackendService {
   public url2 ="https://siapfa.ffaa.mil.hn:4443/"//"http://localhost:3979/" //"https://siapfa.ffaa.mil.hn:4443/"
   refrescar = 0
-  public url ="http://localhost:3979/"//"http://localhost:3979/" //"https://siapfa.ffaa.mil.hn:4443/"     
+  public url ="https://siapfa.ffaa.mil.hn:4443/"//"http://localhost:3979/" //"https://siapfa.ffaa.mil.hn:4443/"     
   usuarioLogin: any;
   token = "";
 

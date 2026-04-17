@@ -1559,16 +1559,13 @@ if(this.tipoBusquedaSituacion===1){
   
  
   
-  console.log(payload)
   this._ServicioBackendService
    .sacarPersonalDEtallesituacion(payload)
     .subscribe({
       next: (res: any) => {
-console.log(res)
         this.detallePersonas = res.resultado || [];
 
         this.loadingDetalle = false;
-        console.log(res)
       },
       error: () => {
 

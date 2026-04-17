@@ -62,7 +62,6 @@ export class ReportesMenuComponent {
 
   }
    openModule(m: ModuleCard) {
-    console.log(m.route)
     if (m.route) {
       this.router.navigate([m.route]);
     }

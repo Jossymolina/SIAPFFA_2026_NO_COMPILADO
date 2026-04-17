@@ -1627,7 +1627,13 @@ this._ServiciosMensajeService.show()
       inputOptions: {
         'Catolica': 'Catolica',
         'Evangelico': 'Evangelico',
+        'Adventista': 'Adventista',
+        'Ateo': 'Ateo',
+        'Judaista': 'Judaista',
+        'Musulman': 'Musulman',
         'Mormon': 'Mormon',
+        'Protestante': 'Protestante',
+        'Testigo de Jehovah': 'Testigo de Jehova',
         'Sin Religion': 'Sin Religion'
       },
 
