@@ -108,11 +108,11 @@ export class MenuRepoEmcComponent implements OnInit,OnDestroy {
     { id: 'r4', titulo: 'Parte por Combatiente,Fuerza,Categoria', descripcion: 'Parte de fuerza y categoria', icon: 'pi-microchip', 
       categoria: 'Partes', ruta: '/reportes/planilla',permiso:[]  ,peso_orden:17},
     {
-      id: 'r2', titulo: 'Parte de bajas por unidad', descripcion: 'Aqui se muestran las bajas', icon: 'pi pi-percentage',
+      id: 'r2', titulo: 'Lista de baja por Unidad', descripcion: 'Lista de baja por Unidad', icon: 'pi pi-percentage',
       categoria: 'Listados', ruta: '/reportes/isr',permiso:[] ,peso_orden:16
     },
       {
-      id: 'r5', titulo: 'Parte de bajas por fuerza,categoria', descripcion: 'Aqui se muestran las bajas por fuerza', icon: 'pi pi-prime',
+      id: 'r5', titulo: 'Listado de baja por fuerza y categoría', descripcion: 'Listado de baja por fuerza y categoría', icon: 'pi pi-prime',
       categoria: 'Listados', ruta: '/reportes/isr',permiso:[] ,peso_orden:15
     },
     {
@@ -168,7 +168,7 @@ export class MenuRepoEmcComponent implements OnInit,OnDestroy {
       icon: 'pi pi-discord', categoria: 'Listados', ruta: '/reportes/cambio-categoria',permiso:[] ,peso_orden:4
     },
     {
-      id: 'r16', titulo: 'Reporte por Promocion', descripcion: 'Reporte de personal por promociones',
+      id: 'r16', titulo: 'Reporte por Promoción', descripcion: 'Reporte de personal por promociones',
       icon: 'pi pi-bell', categoria: 'Organizacion', ruta: '/reportes/promociones',permiso:[] ,peso_orden:10
     },{
       id: 'r17', titulo: 'Parte General FFAA', descripcion: 'Parte general de las FFAA',
@@ -176,6 +176,13 @@ export class MenuRepoEmcComponent implements OnInit,OnDestroy {
     },{
       id: 'r18', titulo: 'Parte por situacion', descripcion: 'Parte segun la situacion del personal',
       icon: 'pi pi-crown', categoria: 'Partes', ruta: '/reportes/promociones',permiso:[] ,peso_orden:2
+    },{
+      id: 'r19', titulo: 'Lista de licencia extraordinaria sin Goce de Sueldo', descripcion: 'Lista de personal Licencia extraordinaria sin goce de sueldo',
+      icon: 'pi pi-hammer', categoria: 'Partes', ruta: '/reportes/promociones',permiso:[] ,peso_orden:2
+    }
+    ,{
+      id: 'r20', titulo: 'Personal para quinquenios', descripcion: 'Personal que le corresponde quinquenio',
+      icon: 'pi pi-bookmark', categoria: 'Partes', ruta: '/reportes/promociones',permiso:[] ,peso_orden:2
     }
   ]);
 
@@ -243,6 +250,9 @@ export class MenuRepoEmcComponent implements OnInit,OnDestroy {
     this.arregloCambioCategoria = []
     this.VentanaSeleccionada = null
     this.arregloResultado = []
+    this.arregloListaAscenso = []
+     this.listaPersonal = []
+     this.personaSeleccionada = null
   }
   abrir(r: Reporte) {
     // Aquí luego lo cambias por Router navigate.
@@ -345,6 +355,7 @@ export class MenuRepoEmcComponent implements OnInit,OnDestroy {
     this._ServiciosMensajeService.show("Cargando parte de la unidad......");
     this._ServicioBackendService.sacarParteMenuInicio(param).subscribe({
       next: (response) => {
+        console.log(response)
         this._ServiciosMensajeService.hide()
         if (response.error) return this._ServiciosMensajeService.mensajeMalo(response.error);
         if (response.mensaje) return this._ServiciosMensajeService.mensajeMalo(response.mensaje);
@@ -1172,6 +1183,10 @@ this.arregloBusquedaPromociones =  response.resultado
        { header: 'Grado', key: 'grado', width: 15 },
        { header: 'Nombres', key: 'nombres', width: 22 },
 
+       { header: 'Asignación', key: 'corto', width: 22 },
+       { header: 'Dirección', key: 'descripcion', width: 22 },
+       { header: 'Cargo', key: 'Nombre_Puesto', width: 22 },
+
        { header: 'Fecha Ingreso', key: 'fecha_ingreso', width: 22 },
        { header: 'Fecha Ultimo Ascenso', key: 'fecha_ultimo_ascenso', width: 22 },
        { header: 'Promoción', key: 'promocion', width: 22 },
@@ -1204,13 +1219,17 @@ this.arregloBusquedaPromociones =  response.resultado
   
     
        row.getCell('D').value = i.nombres;
- 
-       
-       row.getCell('E').value = i.fecha_ingreso;
+       row.getCell('E').value = i.corto;
+       row.getCell('F').value = i.descripcion;
+       row.getCell('G').value = i.Nombre_Puesto;
 
-       row.getCell('F').value = i.fecha_ultimo_ascenso;
-      row.getCell('G').value = i.promocion;
-      row.getCell('H').value = i.nota_final;
+ 
+ 
+       row.getCell('H').value = i.fecha_ingreso;
+
+       row.getCell('I').value = i.fecha_ultimo_ascenso;
+      row.getCell('J').value = i.promocion;
+      row.getCell('K').value = i.nota_final;
 
 
  
@@ -1372,7 +1391,7 @@ let p ={
       this.asignaciones = res.asignaciones;
       this.categoriasPorAsignacion = res.categoriasPorAsignacion;
       this.situaciones =  res.situaciones;
- 
+ this.calcularGranTotal()
       
     },
     error: () => {
@@ -1520,6 +1539,8 @@ mostrarDetalle(
   cantidad: number
 ) {
 
+
+
   if (!cantidad || cantidad === 0) return;
 
   this.displayDetalleModal = true;
@@ -1632,6 +1653,131 @@ isHoverCol(col: number) {
 
 
 
+getTotalFila(situacion: string): number {
+
+  let total = 0;
+
+  for (let asig of this.asignaciones) {
+
+    if (!this.filtroAsignacion || this.filtroAsignacion === asig) {
+
+      for (let cat of this.categoriasPorAsignacion[asig]) {
+
+        total +=
+          this.dataTransformada[situacion]?.[asig]?.[cat] || 0;
+
+      }
+
+    }
+
+  }
+
+  return total;
+}
+
+granTotal = 0;
+
+calcularGranTotal() {
+
+  const situaciones = this.situacionesFiltradas();
+
+  if (!situaciones) return;
+
+  this.granTotal = 0;
+
+  for (let situacion of situaciones) {
+
+    this.granTotal += this.getTotalFila(situacion);
+
+  }
+
+}
+
+getTotalColumnaSituacion(asig: string, cat: string): number {
+
+  let total = 0;
+
+  const situaciones = this.situacionesFiltradas();
+
+  for (let situacion of situaciones) {
+
+    total +=
+      this.dataTransformada[situacion]?.[asig]?.[cat] || 0;
+
+  }
+
+  return total;
+}
+listaPersonal: any[] = [];
+verDEtalleCombatiente(detalle,combatiente,genero){
+  let p  =  {
+    cadena : `  and c.categoria="${detalle.categoria}" and combatiente=${combatiente} and sexo="${genero}" and i.activo=1`
+  }
+  this.listaPersonal = []
+  this._ServiciosMensajeService.show()
+   this._ServicioBackendService.sacarListapersonasCadena(p).subscribe({
+    next: (response: any) => {
+       
+      this._ServiciosMensajeService.hide(); 
+      if (response.error)   return this._ServiciosMensajeService.mensajeMalo(response.error);
+        if (response.mensaje) return this._ServiciosMensajeService.mensajeMalo(response.mensaje);
+        this.listaPersonal = response.resultado
+        this.listarPersonal = true
+   },
+    error: () => {
+      this._ServiciosMensajeService.hide();
+      this._ServiciosMensajeService.mensajeerrorServer();
+    }
+  });
+ 
+}
 
 
+verpersonaPorsituacion(){
+ 
+  this.listaPersonal = []
+  this._ServiciosMensajeService.show()
+   this._ServicioBackendService.sacarPersonaXSituacion({}).subscribe({
+    next: (response: any) => {
+       
+      this._ServiciosMensajeService.hide(); 
+      if (response.error)   return this._ServiciosMensajeService.mensajeMalo(response.error);
+        if (response.mensaje) return this._ServiciosMensajeService.mensajeMalo(response.mensaje);
+        this.listaPersonal = response.resultado
+   
+   },
+    error: () => {
+      this._ServiciosMensajeService.hide();
+      this._ServiciosMensajeService.mensajeerrorServer();
+    }
+  });
+ 
+}
+ 
+listarPersonal=false
+ sacarPersonalQuinquenio(data){
+   
+  this.listaPersonal = []
+  let p = {
+    fecha:data.fecha
+  }
+  this._ServiciosMensajeService.show()
+   this._ServicioBackendService.sacarPersonalQuinquenio(p).subscribe({
+    next: (response: any) => {
+      this._ServiciosMensajeService.hide(); 
+      if (response.error)   return this._ServiciosMensajeService.mensajeMalo(response.error);
+        if (response.mensaje) return this._ServiciosMensajeService.mensajeMalo(response.mensaje);
+        this.listaPersonal = response.data
+   
+   },
+    error: () => {
+      this._ServiciosMensajeService.hide();
+      this._ServiciosMensajeService.mensajeerrorServer();
+    }
+  });
+ 
+ }
+Limpiar(){
+  this.listaPersonal = []
+}
 }

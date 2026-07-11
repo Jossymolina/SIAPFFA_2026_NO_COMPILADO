@@ -42,11 +42,19 @@ export class MenuConexionPlanffaaComponent {
 
     },
     {
-      title: 'Solicitud constancia',
+      title: 'Solicitud constancia de sueldo',
       description: 'Aqui puedes solicitar constancias',
       icon: 'pi pi-tablet',
       route: '/menu/solicitud-constancias-planffaa',
       code :['P_0003']
+
+    },
+      {
+      title: 'Solicitud constancia C-1',
+      description: 'Aqui puedes solicitar constancias de miembro Activo',
+      icon: 'pi pi-tablet',
+      route: '/menu/solicitud-constancias-c1',
+      code :['P_0006']
 
     },
     {
@@ -63,7 +71,7 @@ export class MenuConexionPlanffaaComponent {
 
   }
    openModule(m: ModuleCard) {
-    console.log(m.route)
+        console.log(m)
     if (m.route) {
       this.router.navigate([m.route]);
     }

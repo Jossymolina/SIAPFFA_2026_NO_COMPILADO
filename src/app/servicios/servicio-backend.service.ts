@@ -13,26 +13,87 @@ import { ServiciosMensajeService } from './serviMensaje/servicios-mensaje.servic
 })
 //ng build --aot --output-hashing=all
 export class ServicioBackendService {
-  public url2 ="https://siapfa.ffaa.mil.hn:4443/"//"http://localhost:3979/" //"https://siapfa.ffaa.mil.hn:4443/"
+  public url2 ="https://siapfa.ffaa.mil.hn:4443/" //"http://localhost:3979/" //"https://siapfa.ffaa.mil.hn:4443/"
   refrescar = 0
-  public url ="https://siapfa.ffaa.mil.hn:4443/"//"http://localhost:3979/" //"https://siapfa.ffaa.mil.hn:4443/"     
+  public url ="http://localhost:3979/" //"http://localhost:3979/" //"https://siapfa.ffaa.mil.hn:4443/"     
   usuarioLogin: any;
   token = "";
-
   arregloPermisos = new Array();
-
   arregloFirmantes_RRHH = [
     {
       nombre: "Gerardo Antonio Arguijo Valenzuela", grado: "Capitan Auxiliar de Administración",
       serie: "FAHOA-0513", titulo_doc: "El suscrito Jefe de Recursos Humanos de la SEDENA", cargo: "", idunidad: 107
     }
   ]
+  obtenerResultadosEvaluacion(data){
+    return this.metodopost("obtenerResultadosEvaluacion",data)
+  }
+  guardarResultadosEvaluacion(data){
+    return this.metodopost("guardarResultadosEvaluacion",data)
+  }
+  obtenerCriteriosTipoEvaluacion(data){
+    return this.metodopost("obtenerCriteriosTipoEvaluacion",data)
+  }
+obtenerTernas(data){
+  return this.metodopost("obtenerTernas",data)
+}
+  registrarEvalTerna(data){
+    return this.metodopost("registrarEvalTerna",data)
+  }
+
+  obtenerArchivo(id: number) {
+    console.log(`${this.url}/obtenerArchivo/${id}`)
+  return this.http.get( `${this.url}obtenerArchivo/${id}`, { responseType: 'blob'  } );
+}
+
+  buscarDocumento_en_archivos(data){
+    return this.metodopost("buscarDocumento_en_archivos",data)
+  }
+  obtenerArchivos_(data){
+    return this.metodopost("obtenerArchivos_",data)
+  }
+    crear_archivo_documentos(data: FormData): Observable<any> {
+   var headers = new HttpHeaders({
+      "Authorization": this.getToken()
+    });
+    return this.http.post(this.url + "crear_archivo_documentos", data, { headers: headers });
+  }
+ 
+sacarTodalasUnidades(){
+  return this.metodoget("sacarTodalasUnidades")
+}
+
+crearCarpeta(data){
+  return this.metodopost("crearCarpeta",data)
+}
+  obtenerCategoriaArchivos(){
+    return this.metodoget("obtenerCategoriaArchivos") 
+  }
+  obtenerTiposEvaluador(){
+    return this.metodoget("obtenerTiposEvaluador")
+  }
+
+  sacarPersonalQuinquenio(data){
+    return this.metodopost("sacarPersonalQuinquenio",data)
+  }
+
+  getToePivotPorCortoGeneralCompleto(data){
+    return this.metodopost('getToePivotPorCortoGeneralCompleto', data);
+  }
+
+  sacarPersonaXSituacion(data){
+    return this.metodopost("sacarPersonaXSituacion",data)
+  }
   constructor(public http: HttpClient,
     private router: Router,
     private _ServiciosMensajeService: ServiciosMensajeService
 
 
   ) { }
+
+sacarListapersonasCadena(data){
+  return this.metodopost("sacarListapersonasCadena",data)
+}
 
 sacarPersonalDEtallesituacion(data){
   return this.metodopost("sacarPersonalDEtallesituacion",data)

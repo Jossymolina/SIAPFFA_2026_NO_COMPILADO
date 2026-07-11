@@ -1,16 +1,42 @@
 @if (tipoBusqueda==='EMC') {
 <form #formBuscar="ngForm" class="row" style="margin: 20px;">
+  
+<label class="col-md-2">
+  Unidad Ejecutora
+
+  <p-multiselect
+  class="form-control"
+ 
+    [options]="arregloFuerza"
+    optionLabel="nombre"
+    name="fuerzas"
+    #fuerzas="ngModel"
+    [(ngModel)]="fuerzasSeleccionadas"
+    placeholder="Seleccione"
+    [showClear]="true"
+    [filter]="true"
+    required>
+  </p-multiselect>
+
+</label>
+
+<!-- 
   <label for="" class="col-md-2">
     Unidad Ejecutora 
     <select class="form-control" name="fuerza" #fuerza="ngModel" required ngModel id="">
       <option *ngFor="let fuerza of arregloFuerza" [ngValue]="fuerza">{{ fuerza.nombre }}</option>
     </select>
   </label>
+-->
   <label for="" class="col-md-2">
     <br>
-    <button class="btn btn-danger" (click)="getToePivotPorCorto(formBuscar)"
-      [disabled]="!formBuscar.valid">Buscar</button>
+    <button 
+    [disabled]="!fuerzasSeleccionadas || fuerzasSeleccionadas.length === 0"
+    class="btn btn-danger" (click)="getToePivotPorCortoGeneralCompleto(formBuscar)"
+    >Buscar</button>
   </label>
+ 
+  
 </form>
 }@else if(tipoBusqueda==='fuerza') {
 <form #formBuscar="ngForm" class="row" style="margin: 20px;">
@@ -89,6 +115,7 @@
     <button class="btn btn-success  float-end" (click)="exportar('tablatoe')">Exportar</button>
   </div>
 </div>
+
 <div class="toe-wrap">
 
   <div class="toe-title">

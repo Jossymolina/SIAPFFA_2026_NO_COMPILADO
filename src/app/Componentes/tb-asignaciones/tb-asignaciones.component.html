@@ -14,12 +14,9 @@
              || _DatospersonalesService.verificarPermisos(3)  
              || _DatospersonalesService.verificarPermisos(4)"-->
 
-    <div class="top-bar-right"
-    *ngIf="permisoTrnsferencia"
-       >
-      <button class="btn btn-main-action btn-dashboard-action"
-              (click)="sacarFuerza(); mostrarModalAsignaciones = true"
-              title="Reasignar personal">
+    <div class="top-bar-right" *ngIf="permisoTrnsferencia">
+      <button class="btn btn-main-action btn-dashboard-action" (click)="this.limpiar(); mostrarModalAsignaciones = true"
+        title="Reasignar personal">
         <i class="fa fa-exchange" aria-hidden="true"></i>
         <span>Reasignar personal</span>
       </button>
@@ -27,7 +24,7 @@
   </div>
 
   <!-- TABLA: ASIGNACIONES -->
-   <hr style="border: 2px solid black;">
+  <hr style="border: 2px solid black;">
   <p class="mt-1 text-primary small fw-semibold">
     * Asignación
   </p>
@@ -61,17 +58,14 @@
               <td>{{ f.SERVICIO }} años</td>
               <td class="text-center">
                 @if(permisoTrnsferencia){
-         <button type="button"
-               
-                        class="btn btn-outline-primary btn-sm btn-icon-only"
-                        title="Dirección a la que pertenece"
-                        (click)="Sacar_Direcciones(f); mostrarModalDirecciones = true">
+                <button type="button" class="btn btn-outline-primary btn-sm btn-icon-only"
+                  title="Dirección a la que pertenece" (click)="Sacar_Direcciones(f); mostrarModalDirecciones = true">
                   <i class="pi pi-plus" aria-hidden="true"></i>
                 </button>
                 }@else {
-                  <p>No Administrador</p>
+                <p>No Administrador</p>
                 }
-               
+
               </td>
             </tr>
 
@@ -92,7 +86,7 @@
   </div>
 
 
- <hr style="border: 2px solid black;">
+  <hr style="border: 2px solid black;">
   <p class="mt-1 text-success small fw-semibold">
     * Bajo Control
   </p>
@@ -102,37 +96,37 @@
     <div class="card-body p-2">
       <table class="table table-bordered table-hover table-sm table-striped mb-0">
         <thead class="bg-header-soft">
-          <tr >
+          <tr>
             <th>Unidad/Base/Dependencia</th>
             <th>Fecha Asignacion</th>
             <td>Opt</td>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let item of arregloBajoControl"  style="background-color: rgba(31, 61, 233, 0.432) !important;">
+          <tr *ngFor="let item of arregloBajoControl" style="background-color: rgba(31, 61, 233, 0.432) !important;">
             <td>{{ item.unidad }}</td>
-            <td>{{ item.fecha_asignacion  | date : 'yyyy/MM/dd' : 'UTC' }}</td>
-                <td class="text-center">
-                  @if(permisoTrnsferencia){
-                    <i class="estado-icon"
-                      (click)="desactivarBajoControlPorUnidad(item)"
-                      [class]="item.estado === 'activo' ? 'pi pi-thumbs-up-fill' : 'pi pi-thumbs-down-fill'"
-                      aria-hidden="true"></i>
-                  }@else {
-                    <p>No Administrador</p>
-                  }
-                </td>
-         
+            <td>{{ item.fecha_asignacion | date : 'yyyy/MM/dd' : 'UTC' }}</td>
+            <td class="text-center">
+              @if(permisoTrnsferencia){
+              <i class="estado-icon" (click)="desactivarBajoControlPorUnidad(item)"
+                [class]="item.estado === 'activo' ? 'pi pi-thumbs-up-fill' : 'pi pi-thumbs-down-fill'"
+                aria-hidden="true"></i>
+              }@else {
+              <p>No Administrador</p>
+              }
+            </td>
+
           </tr>
           <tr *ngIf="arregloBajoControl.length === 0">
-            <td colspan="3"  class="text-center text-muted">
-              <p style="color: rgb(28, 28, 190);" > Esta persona no esta bajo control de ninguna unidad, base o dependencia.</p>
-             
+            <td colspan="3" class="text-center text-muted">
+              <p style="color: rgb(28, 28, 190);"> Esta persona no esta bajo control de ninguna unidad, base o
+                dependencia.</p>
+
             </td>
 
           </tr>
         </tbody>
-       
+
       </table>
     </div>
   </div>
@@ -140,7 +134,7 @@
 
 
 
- <hr style="border: 2px solid black;">
+  <hr style="border: 2px solid black;">
   <p class="mt-1 text-danger small fw-semibold">
     * Situación del personal
   </p>
@@ -166,21 +160,19 @@
             <td>{{ item.desde | date : 'yyyy/MM/dd' : 'UTC' }}</td>
             <td>{{ item.hasta | date : 'yyyy/MM/dd' : 'UTC' }}</td>
             <td>
-              <span class="estado-chip"
-                    [ngClass]="item.estado === 'activo' ? 'estado-activo' : 'estado-inactivo'">
+              <span class="estado-chip" [ngClass]="item.estado === 'activo' ? 'estado-activo' : 'estado-inactivo'">
                 {{ item.estado }}
               </span>
             </td>
             <td class="text-center">
-               @if(permisoTrnsferencia){
-   <i class="estado-icon"
-                 (click)="desactivarSituacion(item)"
-                 [class]="item.estado === 'activo' ? 'pi pi-thumbs-up-fill' : 'pi pi-thumbs-down-fill'"
-                 aria-hidden="true"></i>
-               }@else {
-   <p>No Administrador</p>
-               }
-           
+              @if(permisoTrnsferencia){
+              <i class="estado-icon" (click)="desactivarSituacion(item)"
+                [class]="item.estado === 'activo' ? 'pi pi-thumbs-up-fill' : 'pi pi-thumbs-down-fill'"
+                aria-hidden="true"></i>
+              }@else {
+              <p>No Administrador</p>
+              }
+
             </td>
           </tr>
           <tr *ngIf="arrgloSituacioPersonal.length === 0">
@@ -197,48 +189,40 @@
 
 
 <!-- MODAL DIRECCIONES -->
-<p-dialog
-  header="Asignación de Dirección | Sección"
-  [(visible)]="mostrarModalDirecciones"
-  [modal]="true"
-  [style]="{ width: '90vw', maxWidth: '1100px' }"
-  [contentStyle]="{ 'max-height': '70vh', 'overflow': 'auto' }"
-  [dismissableMask]="true"
-  appendTo="body"
-  class="dialog-dashboard">
+<p-dialog header="Asignación de Dirección | Sección" [(visible)]="mostrarModalDirecciones" [modal]="true"
+  [style]="{ width: '90vw', maxWidth: '1100px' }" [contentStyle]="{ 'max-height': '70vh', 'overflow': 'auto' }"
+  [dismissableMask]="true" appendTo="body" class="dialog-dashboard">
 
   <div class="row g-2 modal-body-grid">
     <!-- Controles solo si tiene permiso s *ngIf="_DatospersonalesService.verificarPermisos(1) 
                       || _DatospersonalesService.verificarPermisos(2) 
                       || _DatospersonalesService.verificarPermisos(3)  
                       || _DatospersonalesService.verificarPermisos(4)" -->
-    <ng-container >
-<form #formDireccion="ngForm" class="row g-2">
-<div class="col-md-8">
-        <label class="form-label fw-semibold">
-          Seleccione la Dirección | Sección
-        </label>
-        <select name="direccionSelected"
-              #direccionSelected="ngModel" required
-              ngModel
-                class="form-control">
-          <option [ngValue]="i" *ngFor="let i of ArregloNombramiento">
-            {{ i.descripcion }}
-          </option>
-        </select>
-      </div>
+    <ng-container>
+      <form #formDireccion="ngForm" class="row g-2">
 
-      <div class="col-md-4">
-        <label class="form-label fw-semibold">
-          Fecha Asignación
-        </label>
-        <input type="date"
-               class="form-control"
-               #fechaSelected="ngModel" ngModel required
-               name="fechaSelected">
-      </div>
-</form>
-      
+         <div class="col-md-6">
+              <label class="form-label fw-semibold">
+                Seleccione Direccion/Depto/Sección
+              </label>
+              <p-treeselect appendTo="body" style="width: 100%;" required name="unidad" #unidad="ngModel" ngModel
+              required
+                [options]="arbolDireccionSeccion" [(ngModel)]="unidadesSeleccionadas" [filter]="true" [showClear]="true"
+                placeholder="Seleccione la direccion o seccion" styleClass="w-full">
+              </p-treeselect>
+ 
+            </div>
+
+   
+
+        <div class="col-md-4">
+          <label class="form-label fw-semibold">
+            Fecha Asignación
+          </label>
+          <input type="date" class="form-control" #fechaSelected="ngModel" ngModel required name="fechaSelected">
+        </div>
+      </form>
+
     </ng-container>
 
     <!-- Tabla de asignaciones -->
@@ -256,10 +240,7 @@
             </tr>
           </thead>
           <tbody>
-            <!-- Actual  *ngIf="_DatospersonalesService.verificarPermisos(1) 
-                              || _DatospersonalesService.verificarPermisos(2) 
-                              || _DatospersonalesService.verificarPermisos(3)  
-                              || _DatospersonalesService.verificarPermisos(4)"-->
+         
             <ng-container *ngFor="let item of arreglosDeMisAsignacionesDirecciones">
               <tr *ngIf="item.activo === 1" class="fila-actual-direccion">
                 <td>{{ item.unidad }}</td>
@@ -269,15 +250,12 @@
                 <td><span class="badge badge-actual">Actual</span></td>
                 <td class="text-center">
                   <button class="btn btn-outline-danger btn-sm btn-icon-only"
-                          
-                          title="Desactivar la asignación de esta dirección"
-                          (click)="desactivarAsignacionDireccion(item)">
+                    title="Desactivar la asignación de esta dirección" (click)="desactivarAsignacionDireccion(item)">
                     <i class="pi pi-times-circle" aria-hidden="true"></i>
                   </button>
 
-                  <button class="btn btn-success btn-sm btn-icon-only ms-1"
-                          title="Dirección a la que pertenece"
-                          (click)="selecionardireccion(item); mostrarModalCargo = true">
+                  <button class="btn btn-success btn-sm btn-icon-only ms-1" title="Dirección a la que pertenece"
+                    (click)="selecionardireccion(item); mostrarModalCargo = true">
                     <i class="pi pi-plus-circle" aria-hidden="true"></i>
                   </button>
                 </td>
@@ -309,29 +287,52 @@
                 || _DatospersonalesService.verificarPermisos(2) 
                 || _DatospersonalesService.verificarPermisos(3)  
                 || _DatospersonalesService.verificarPermisos(4)"-->
-    <button 
-            type="button"
-            class="btn btn-primary"
-            (click)="guardarAsignacionDireccion()">
+    <button type="button" class="btn btn-primary" (click)="guardarAsignacionDireccion()">
       Guardar
     </button>
   </ng-template>
 </p-dialog>
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!-- MODAL CARGO -->
-<p-dialog
-  header="Cargo"
-  [(visible)]="mostrarModalCargo"
-  [modal]="true"
-  [style]="{ width: '85vw', maxWidth: '1000px' }"
-  appendTo="body"
-  class="dialog-dashboard">
-  
-  <app-tb-cargo
-    *ngIf="buscarCargos"
-    [persona]="objetoConsultado"
-    [direccion]="_direccionSeleccionada">
+<p-dialog header="Cargo" [(visible)]="mostrarModalCargo" [modal]="true" [style]="{ width: '85vw', maxWidth: '1000px' }"
+  appendTo="body" class="dialog-dashboard">
+
+  <app-tb-cargo *ngIf="buscarCargos" [persona]="objetoConsultado" [direccion]="_direccionSeleccionada">
   </app-tb-cargo>
 
   <ng-template pTemplate="footer">
@@ -343,26 +344,21 @@
 
 
 <!-- MODAL ASIGNACIONES -->
-<p-dialog
-  header="Asignaciones"
-  [(visible)]="mostrarModalAsignaciones"
-  [modal]="true"
-  [style]="{ width: '90vw', maxWidth: '1100px' }"
-  [contentStyle]="{ 'max-height': '75vh', 'overflow': 'auto' }"
-  appendTo="body"
-  class="dialog-dashboard">
+<p-dialog header="Asignaciones" [(visible)]="mostrarModalAsignaciones" [modal]="true"
+  [style]="{ width: '90vw', maxWidth: '1100px' }" [contentStyle]="{ 'max-height': '75vh', 'overflow': 'auto' }"
+  appendTo="body" class="dialog-dashboard">
 
   <div class="row">
     <p-tabs [(value)]="activeTab" class="tabs-dashboard">
       <!-- LISTA DE TABS (ENCABEZADOS) -->
       <p-tablist>
-        <p-tab value="asignar">
+        <p-tab value="asignar"  (click)="limpiar()" >
           Asignar
         </p-tab>
-        <p-tab value="bajoControl">
+        <p-tab value="bajoControl"  (click)="limpiar()" >
           Bajo control
         </p-tab>
-        <p-tab value="situacion">
+        <p-tab value="situacion"  (click)="limpiar()" >
           Situación
         </p-tab>
       </p-tablist>
@@ -371,64 +367,71 @@
       <p-tabpanels>
 
         <!-- TAB: Asignar -->
-        <p-tabpanel value="asignar">
-            <div style="text-align: center;" >
-                   <h3 style="color: rgb(44, 165, 115);"  >Reasignar el personal</h3>
-              </div>
-              <hr  style="border: 2px solid black;"  >
-          <form  #formAsignar="ngForm" class="row g-2">
-            <div class="col-md-12">
+        <p-tabpanel value="asignar"   >
+          <div style="text-align: center;">
+            <h3 style="color: rgb(44, 165, 115);">Reasignar el personal</h3>
+          </div>
+          <hr style="border: 2px solid black;">
+          <form #formAsignar="ngForm" class="row g-2">
+
+           
+
+            <div class="col-md-6">
+
+              <label class="form-label fw-semibold">
+                Seleccione el destino
+              </label>
+              <p-treeselect appendTo="body" style="width: 100%;" required name="unidad" #unidad="ngModel" ngModel
+              required
+                [options]="treeUnidades" [(ngModel)]="unidadesSeleccionadas" [filter]="true" [showClear]="true"
+                placeholder="Seleccione las unidades" styleClass="w-full">
+              </p-treeselect>
+
+
+<!-- 
               <label class="form-label fw-semibold">
                 Seleccione la Fuerza:
               </label>
-              <select class="form-control"
-                      (change)="sacarUnidadBajoControl(formAsignar)"
-                      #fuerzaSelected="ngModel"
-                      ngModel required
-                      name="fuerzaSelected">
+              <select class="form-control" (change)="sacarUnidadBajoControl(formAsignar)" #fuerzaSelected="ngModel"
+                ngModel required name="fuerzaSelected">
                 <ng-container *ngFor="let y of arregloFuerzas">
                   <option [ngValue]="y">{{ y.nombre }}</option>
                 </ng-container>
               </select>
+            -->
             </div>
-
+<!--
             <div class="col-md-12">
               <label class="form-label fw-semibold">
                 Seleccione la unidad:
               </label>
-              <select 
-                      #unidadSelected="ngModel"
-                      ngModel required
-                      name="unidadSelected"
-                      class="form-control">
+              <select #unidadSelected="ngModel" ngModel required name="unidadSelected" class="form-control">
                 <option *ngFor="let y of ArregloUnidades" [ngValue]="y">
                   {{ y.unidad }}
                 </option>
               </select>
             </div>
-
+-->
             <div class="col-md-6">
               <label class="form-label fw-semibold">
-                Seleccione la Fecha de Asignación:
+                Seleccione la Fecha de asignación:
               </label>
-              <input [(ngModel)]="fechaSelected"
-                     class="form-control"
-                     type="date"
-                     name="fechaSelected">
+              <input  
+              class="form-control" type="date" 
+              #fechaSelected="ngModel" ngModel
+              name="fechaSelected" required>
             </div>
 
             <div class="col-md-12 mt-3 d-flex justify-content-end gap-2">
-              <button type="button"
-                      class="btn btn-outline-secondary"
-                      (click)="mostrarModalAsignaciones = false">
+              <button type="button" class="btn btn-outline-secondary" (click)="mostrarModalAsignaciones = false">
                 <i class="fa fa-times-circle" aria-hidden="true"></i>
                 Cerrar
               </button>
-              <button type="button"
-                      class="btn btn-primary"
-                      (click)="reasignar()">
+              <button type="button" 
+              [disabled]="!formAsignar.valid"
+              class="btn btn-primary" (click)="reasignar()">
                 <i class="fa fa-floppy-o" aria-hidden="true"></i>
-                Guardar
+                Guardar Nueva asignación
               </button>
             </div>
           </form>
@@ -436,37 +439,18 @@
 
         <!-- TAB: Situación -->
         <p-tabpanel value="situacion">
-            <div style="text-align: center;" >
-                   <h3 style="color: rgb(44, 106, 165);"  >Situación del personal</h3>
-              </div>
-              <hr  style="border: 2px solid black;"  >
+          <div style="text-align: center;">
+            <h3 style="color: rgb(44, 106, 165);">Situación del personal</h3>
+          </div>
+          <hr style="border: 2px solid black;">
           <form #ngFromsituacion="ngForm" class="row g-2">
-            <div class="col-md-4">
+            <div class="col-md-6">
               <label class="form-label fw-semibold">
                 Situación:
               </label>
-              <select (change)="sacarDetalleSicuacion(ngFromsituacion)"
-                      name="situacion"
-                      #situacion="ngModel"
-                      ngModel
-                      required
-                      class="form-control">
+              <select (change)="sacarDetalleSicuacion(ngFromsituacion)" name="situacion" #situacion="ngModel" ngModel
+                required class="form-control">
                 <option *ngFor="let y of arregloSituacion" [ngValue]="y">
-                  {{ y.descripcion }}
-                </option>
-              </select>
-            </div>
-
-            <div class="col-md-4">
-              <label class="form-label fw-semibold">
-                Detalle:
-              </label>
-              <select name="detalleSituacion"
-                      #detalleSituacion="ngModel"
-                      ngModel
-                      required
-                      class="form-control">
-                <option *ngFor="let y of arregloSituacionDetalle" [ngValue]="y">
                   {{ y.descripcion }}
                 </option>
               </select>
@@ -474,14 +458,33 @@
 
             <div class="col-md-6">
               <label class="form-label fw-semibold">
+                Detalle:
+              </label>
+              <select name="detalleSituacion" #detalleSituacion="ngModel" ngModel required class="form-control">
+                <option *ngFor="let y of arregloSituacionDetalle" [ngValue]="y">
+                  {{ y.descripcion }}
+                </option>
+              </select>
+            </div>
+          <div class="col-md-6">
+
+              <label class="form-label fw-semibold">
+                Seleccione el destino de la situación
+              </label>
+              <p-treeselect appendTo="body" style="width: 100%;" required name="unidad" #unidad="ngModel" ngModel
+              required
+                [options]="treeUnidades" [(ngModel)]="unidadesSeleccionadas" [filter]="true" [showClear]="true"
+                placeholder="Seleccione las unidades" styleClass="w-full">
+              </p-treeselect>
+ 
+            </div>
+<!--
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">
                 Seleccione la Fuerza:
               </label>
-              <select class="form-control"
-                      required
-                     #fuerzaSelected="ngModel"
-                      ngModel required
-                (change)="sacarUnidadBajoControl(ngFromsituacion)"
-                      name="fuerzaSelected">
+              <select class="form-control" required #fuerzaSelected="ngModel" ngModel required
+                (change)="sacarUnidadBajoControl(ngFromsituacion)" name="fuerzaSelected">
                 <ng-container *ngIf="objetoConsultado?.idfuerza === 2">
                   <ng-container *ngFor="let y of arregloFuerzas">
                     <option [ngValue]="y" *ngIf="y.idfuerza !== 3 && y.idfuerza !== 4">
@@ -512,31 +515,24 @@
                 </ng-container>
               </select>
             </div>
+       
 
             <div class="col-md-6">
               <label class="form-label fw-semibold">
                 Seleccione la unidad:
               </label>
-              <select [(ngModel)]="unidadSelected"
-                      required
-                      name="unidadSelected"
-                      class="form-control">
+              <select [(ngModel)]="unidadSelected" required name="unidadSelected" class="form-control">
                 <option *ngFor="let y of ArregloUnidades" [ngValue]="y">
                   {{ y.unidad }}
                 </option>
               </select>
             </div>
-
+ -->
             <div class="col-md-6">
               <label class="form-label fw-semibold">
                 Fecha Inicio:
               </label>
-              <input type="date"
-                     class="form-control"
-                     required
-                     #fechaInicio="ngModel"
-                     ngModel
-                     name="fechaInicio">
+              <input type="date" class="form-control" required #fechaInicio="ngModel" ngModel name="fechaInicio">
             </div>
 
             <!-- Fecha fin obligatoria si idsituacion === 17 -->
@@ -544,16 +540,10 @@
               <label class="form-label fw-semibold">
                 Fecha Fin:
               </label>
-              <input type="date"
-                     class="form-control"
-                     #fechaFin="ngModel"
-                     ngModel
-                     name="fechaFin"
-                     required>
+              <input type="date" class="form-control" #fechaFin="ngModel" ngModel name="fechaFin" required>
             </div>
 
-            <div class="col-md-4 d-flex align-items-end"
-                 *ngIf="ngFromsituacion.value.situacion?.idsituacion === 17">
+            <div class="col-md-4 d-flex align-items-end" *ngIf="ngFromsituacion.value.situacion?.idsituacion === 17">
               <span class="fw-semibold">
                 Disponibles:
                 <strong class="text-danger">{{ dias_vaca_disponible }}</strong>
@@ -565,25 +555,17 @@
               <label class="form-label fw-semibold">
                 Fecha Fin:
               </label>
-              <input type="date"
-                     class="form-control"
-                     #fechaFin="ngModel"
-                     ngModel
-                     name="fechaFin">
+              <input type="date" class="form-control" #fechaFin="ngModel" ngModel name="fechaFin">
             </div>
 
             <div class="col-md-12 mt-3 d-flex justify-content-end gap-2">
-              <button class="btn btn-primary"
-                      *ngIf="ngFromsituacion.value.situacion?.idsituacion === 17"
-                      [disabled]="!ngFromsituacion.valid"
-                      (click)="guardarSituacion_vacaciones(ngFromsituacion)">
+              <button class="btn btn-primary" *ngIf="ngFromsituacion.value.situacion?.idsituacion === 17"
+                [disabled]="!ngFromsituacion.valid" (click)="guardarSituacion_vacaciones(ngFromsituacion)">
                 Guardar
               </button>
 
-              <button class="btn btn-success"
-                      *ngIf="ngFromsituacion.value.situacion?.idsituacion !== 17"
-                      [disabled]="!ngFromsituacion.valid"
-                      (click)="guardarSituacion(ngFromsituacion)">
+              <button class="btn btn-success" *ngIf="ngFromsituacion.value.situacion?.idsituacion !== 17"
+                [disabled]="!ngFromsituacion.valid" (click)="guardarSituacion(ngFromsituacion)">
                 Guardar
               </button>
             </div>
@@ -592,24 +574,32 @@
 
 
 
-          <p-tabpanel value="bajoControl">
-              <div style="text-align: center;" >
-                   <h3 style="color: rgb(42, 163, 42);"  >Colocar personal bajo Control</h3>
-              </div>
-              <hr  style="border: 2px solid black;"  >
-         <form #formBajoControl="ngForm" class="row g-2">
+        <p-tabpanel value="bajoControl"    >
+          <div style="text-align: center;">
+            <h3 style="color: rgb(42, 163, 42);">Colocar personal bajo Control</h3>
+          </div>
+          <hr style="border: 2px solid black;">
+          <form #formBajoControl="ngForm" class="row g-2">
+
+             <div class="col-md-6">
+
+              <label class="form-label fw-semibold">
+                Seleccione el destino
+              </label>
+              <p-treeselect appendTo="body" style="width: 100%;" required name="unidad" #unidad="ngModel" ngModel
+              required
+                [options]="treeUnidades" [(ngModel)]="unidadesSeleccionadas" [filter]="true" [showClear]="true"
+                placeholder="Seleccione las unidades" styleClass="w-full">
+              </p-treeselect>
+ 
+            </div>
+            <!-- 
             <div class="col-md-12">
               <label class="form-label fw-semibold">
                 Seleccione la Fuerza:
               </label>
-              <select class="form-control"
-                      (change)="sacarUnidadBajoControl(formBajoControl)"
-                 
-                      name="fuerzaSelected"
-                      #fuerzaSelected="ngModel"
-                      ngModel
-                      required
-                      >
+              <select class="form-control" (change)="sacarUnidadBajoControl(formBajoControl)" name="fuerzaSelected"
+                #fuerzaSelected="ngModel" ngModel required>
                 <ng-container *ngFor="let y of arregloFuerzas">
                   <option [ngValue]="y">{{ y.nombre }}</option>
                 </ng-container>
@@ -620,43 +610,34 @@
               <label class="form-label fw-semibold">
                 Seleccione la unidad:
               </label>
-              <select #unidadSelected="ngModel" ngModel required
-                      name="unidadSelected"
-                      class="form-control">
+              <select #unidadSelected="ngModel" ngModel required name="unidadSelected" class="form-control">
                 <option *ngFor="let y of ArregloUnidades" [ngValue]="y">
                   {{ y.unidad }}
                 </option>
               </select>
             </div>
-
+-->
             <div class="col-md-6">
               <label class="form-label fw-semibold">
-                Seleccione la Fecha de Asignación:
+                Seleccione la Fecha de asignación:
               </label>
-              <input  #fechaSelected="ngModel" ngModel required
-                     class="form-control"
-                     type="date"
-                     name="fechaSelected">
+              <input #fechaSelected="ngModel" ngModel required class="form-control" type="date" name="fechaSelected">
             </div>
 
             <div class="col-md-12 mt-3 d-flex justify-content-end gap-2">
-              <button type="button"
-                      class="btn btn-outline-secondary"
-                      (click)="mostrarModalAsignaciones = false">
+              <button type="button" class="btn btn-outline-secondary" (click)="mostrarModalAsignaciones = false">
                 <i class="fa fa-times-circle" aria-hidden="true"></i>
                 Cerrar
               </button>
-              <button type="button"
-                      class="btn btn-primary"
-                      [disabled]="!formBajoControl.valid"
-                      (click)="insertarBajoControl(formBajoControl)">
+              <button type="button" class="btn btn-primary" [disabled]="!formBajoControl.valid"
+                (click)="insertarBajoControl(formBajoControl)">
                 <i class="fa fa-floppy-o" aria-hidden="true"></i>
                 Guardar
               </button>
             </div>
           </form>
         </p-tabpanel>
-        
+
 
       </p-tabpanels>
     </p-tabs>

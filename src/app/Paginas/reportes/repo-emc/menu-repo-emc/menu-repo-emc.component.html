@@ -194,7 +194,9 @@
           </thead>
 
           <tbody>
-            <tr *ngFor="let r of arregloListaParteUnidad; let i = index">
+            <tr 
+            style="cursor: pointer;"
+             (click)="seleccionarPersonal(r)" *ngFor="let r of arregloListaParteUnidad; let i = index">
               <td>{{ i + 1 }}</td>
               <td>{{ r.identidad }}</td>
               <td>{{r.categoria}}</td>
@@ -303,7 +305,10 @@
           </thead>
 
           <tbody>
-            <tr *ngFor="let r of arregloBajas; let i = index">
+            <tr 
+            style="cursor: pointer;"
+             (click)="seleccionarPersonal(r)"
+            *ngFor="let r of arregloBajas; let i = index">
               <td>{{ i + 1 }}</td>
               <td>{{ r.identidad }}</td>
               <td>{{ r.nombres }}</td>
@@ -392,7 +397,7 @@
           </thead>
 
           <tbody>
-            <tr *ngFor="let r of arregloCambioCategoria; let i = index">
+            <tr style="cursor: pointer;"  (click)="seleccionarPersonal(r)" *ngFor="let r of arregloCambioCategoria; let i = index">
               <td>{{ i + 1 }}</td>
               <td>{{ r.identidad }}</td>
               <td>{{ r.nombre }}</td>
@@ -577,7 +582,7 @@
           </thead>
 
           <tbody>
-            <tr *ngFor="let r of arregloListaParteUnidad; let i = index">
+            <tr  style="cursor: pointer;" (click)="seleccionarPersonal(r)" *ngFor="let r of arregloListaParteUnidad; let i = index">
               <td>{{ i + 1 }}</td>
               <td>{{ r.identidad }}</td>
               <td>{{r.categoria}}</td>
@@ -689,7 +694,7 @@
           </thead>
 
           <tbody>
-            <tr *ngFor="let r of arregloBajas; let i = index">
+            <tr  style="cursor: pointer;" (click)="seleccionarPersonal(r)" *ngFor="let r of arregloBajas; let i = index">
               <td>{{ i + 1 }}</td>
               <td>{{ r.identidad }}</td>
               <td>{{ r.nombres }}</td>
@@ -785,7 +790,7 @@
           </thead>
 
           <tbody>
-            <tr *ngFor="let r of arregloListaAscenso; let i = index">
+            <tr  style="cursor: pointer;" (click)="seleccionarPersonal(r)" *ngFor="let r of arregloListaAscenso; let i = index">
               <td>{{ i + 1 }}</td>
               <td>
                 <img src="{{ _ServicioBackendService.url2 + 'sacarfoto/' + r.Foto }}" style="height: 50px; width: 50px;"
@@ -828,10 +833,10 @@
   @if(VentanaSeleccionada?.id==='r7'){
   <div>
     <div class="container-fluid py-3">
-
+  
       <form #formbuscar="ngForm" class="row">
         <label for="" class="col-md-2" (change)="sacarunidades(formbuscar)">
-          Fuerza
+          Fuerza asa
 
           <select name="fuerza" class="form-control" id="fuerza" #fuerza="ngModel" ngModel required>
 
@@ -866,7 +871,7 @@
           <br>
           <button class="form-control btn btn-primary" [disabled]="!formbuscar.valid"
             (click)="sacarParteFuerzaYUnidad(formbuscar)" style="margin-left: 10px;">
-            Buscar
+            Buscar 11
           </button>
         </label>
         <label for="" class="col-md-1">
@@ -989,13 +994,8 @@
         </div>
       </div>
 
-
-
       <!-- TABLA -->
       <div class="table-responsive">
-
-
-
         <table id="tablaList" class="table table-bordered table-hover table-sm align-middle">
           <thead class="table-light">
             <tr>
@@ -1009,16 +1009,13 @@
               <th>Fecha Ingreso</th>
               <th>Fecha Ascenso</th>
               <th>Fecha Asignación</th>
+              <th>Combatiente</th>
               <th>Unidad</th>
-
-
-
-
             </tr>
-          </thead>
+        </thead>
 
           <tbody>
-            <tr *ngFor="let r of arregloListaParteUnidad; let i = index">
+            <tr  style="cursor: pointer;" (click)="seleccionarPersonal(r)" *ngFor="let r of arregloListaParteUnidad; let i = index">
               <td>{{ i + 1 }}</td>
               <td>{{ r.identidad }}</td>
               <td>{{r.categoria}}</td>
@@ -1030,13 +1027,15 @@
               <td>{{ r.fecha_ingreso | date: 'dd/MM/yyyy' }}</td>
               <td>{{ r.fecha_ascenso | date: 'dd/MM/yyyy' }}</td>
               <td>{{ r.fecha_asignacion | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ r.combatiente===1?"Si":"No" }}</td>
+
               <td>{{formbuscar.value.unidad?.corto}}</td>
 
 
             </tr>
 
             <tr *ngIf="arregloListaParteUnidad?.length === 0">
-              <td colspan="10" class="text-center text-muted py-3">
+              <td colspan="101" class="text-center text-muted py-3">
                 No hay datos para mostrar
               </td>
             </tr>
@@ -1232,7 +1231,7 @@
           </thead>
 
           <tbody>
-            <tr *ngFor="let r of arregloListaVacacioens; let i = index">
+            <tr style="cursor: pointer;"  (click)="seleccionarPersonal(r)" *ngFor="let r of arregloListaVacacioens; let i = index">
               <td>{{ i + 1 }}</td>
               <td>{{ r.identidad }}</td>
               <td>{{r.categoria}}</td>
@@ -1637,7 +1636,7 @@
           </thead>
 
           <tbody>
-            <tr *ngFor="let r of arregloResultado; let i = index">
+            <tr  style="cursor: pointer;" (click)="seleccionarPersonal(r)" *ngFor="let r of arregloResultado; let i = index">
               <td>{{ i + 1 }}</td>
               <td>{{ r.identidad }}</td>
               <td>{{r.grado}}</td>
@@ -1841,7 +1840,7 @@
           </thead>
 
           <tbody>
-            <tr *ngFor="let r of arregloResultado; let i = index">
+            <tr style="cursor: pointer;"  (click)="seleccionarPersonal(r)" *ngFor="let r of arregloResultado; let i = index">
               <td>{{ i + 1 }}</td>
               <td>{{ r.Identidad }}</td>
               <td>{{r.Categoria}}</td>
@@ -1969,7 +1968,7 @@
           </thead>
 
           <tbody>
-            <tr *ngFor="let r of arregloResultado; let i = index">
+            <tr style="cursor: pointer;"  (click)="seleccionarPersonal(r)" *ngFor="let r of arregloResultado; let i = index">
               <td>{{ i + 1 }}</td>
               <td>{{ r.identidad }}</td>
               <td>{{r.categoria}}</td>
@@ -2085,7 +2084,7 @@
           </thead>
 
           <tbody>
-            <tr *ngFor="let r of arregloResultado; let i = index">
+            <tr style="cursor: pointer;"  (click)="seleccionarPersonal(r)" *ngFor="let r of arregloResultado; let i = index">
               <td>{{ i + 1 }}</td>
               <td>{{ r.identidad }}</td>
 
@@ -2231,6 +2230,11 @@
           <th>Identidad</th>
           <th>Grado</th>
           <th>Nombres</th>
+          <th>Asignación</th>
+          <th>Dirección</th>
+          <th>Cargo</th>
+
+
           <th>Fecha Ingreso</th>
           <th>Fecha Ultmo Ascenso</th>
           <th>Promoción</th>
@@ -2245,6 +2249,10 @@
           <td>{{ item.identidad }}</td>
           <td>{{ item.grado }}</td>
           <td>{{ item.nombres }}</td>
+          <td>{{ item.corto }}</td>
+          <td>{{ item.descripcion }}</td>
+          <td>{{ item.Nombre_Puesto }}</td>
+
           <td>{{ item.fecha_ingreso | date:'yyyy-MM-dd' }}</td>
           <td>{{ item.fecha_ultimo_ascenso | date:'yyyy-MM-dd' }}</td>
           <td>{{ item.promocion }}</td>
@@ -2325,15 +2333,25 @@
               </td>
 
               <!-- HOMBRES -->
-              <td class="text-primary fw-bold">
+              <td 
+              style="cursor: pointer;"
+              (click)="verDEtalleCombatiente(item,1,'M')"
+              class="text-primary fw-bold">
                 {{ item.hombres_combatientes }}
               </td>
 
-              <td>
+           
+              <td 
+                 style="cursor: pointer;"
+                   (click)="verDEtalleCombatiente(item,0,'M')"
+              >
                 {{ item.hombres_no_combatientes }}
               </td>
 
-              <td class="total-cell">
+              <td class="total-cell"
+              
+              
+              >
                 {{
                 (+item.hombres_combatientes || 0) +
                 (+item.hombres_no_combatientes || 0)
@@ -2341,11 +2359,17 @@
               </td>
 
               <!-- MUJERES -->
-              <td class="text-danger fw-bold">
+              <td 
+                 style="cursor: pointer;"
+              (click)="verDEtalleCombatiente(item,1,'F')"
+              class="text-danger fw-bold">
                 {{ item.mujeres_combatientes }}
               </td>
 
-              <td>
+              <td
+                 style="cursor: pointer;"
+               (click)="verDEtalleCombatiente(item,0,'F')"
+              >
                 {{ item.mujeres_no_combatientes }}
               </td>
 
@@ -2403,8 +2427,7 @@
   }
 
 
-  @if (VentanaSeleccionada?.id==='r18') {
- 
+@if (VentanaSeleccionada?.id==='r18') {
 <div   >
 <div class="toolbar mb-3 d-flex gap-2 flex-wrap">
   <button class="btn btn-dark"  (click)="exportarExcelResumen('miTablaSituacion')"  >
@@ -2428,7 +2451,9 @@
   </button>
 </div>
 <div class="mb-3">
-  <select class="form-select w-auto" [(ngModel)]="filtroAsignacion">
+  <select class="form-select w-auto" 
+  (change)="calcularGranTotal()"
+  [(ngModel)]="filtroAsignacion">
     <option value="">Todas las asignaciones</option>
     <option *ngFor="let asig of asignaciones" [value]="asig">
       {{ asig }}
@@ -2451,6 +2476,9 @@
                 {{ asig }}
               </th>
             </ng-container>
+
+             <th rowspan="2">TOTAL</th>
+
           </tr>
       
           <tr>
@@ -2504,9 +2532,48 @@
               </ng-container>
       
             </ng-container>
-      
+          <!-- NUEVA COLUMNA TOTAL FILA -->
+              <td class="fw-bold bg-light">
+
+                {{ getTotalFila(situacion) }}
+
+              </td>
           </tr>
         </tbody>
+        <tfoot>
+            <tr class="fila-totales">
+
+              <!-- Primera columna -->
+              <td class="sticky-col fw-bold">
+                TOTALES
+              </td>
+
+              <!-- Columnas dinámicas -->
+              <ng-container *ngFor="let asig of asignaciones; let asigIndex = index">
+
+                <ng-container *ngIf="!filtroAsignacion || filtroAsignacion === asig">
+
+                  <td *ngFor="
+              let cat of categoriasPorAsignacion[asig];
+              let catIndex = index
+            " class="fw-bold bg-light">
+
+                    {{ getTotalColumnaSituacion(asig, cat) }}
+
+                  </td>
+
+                </ng-container>
+
+              </ng-container>
+
+              <td class="fw-bold bg-warning">
+
+            {{ granTotal }} 
+
+              </td>
+
+            </tr>
+          </tfoot>
       </table>
    </div>
 </div>
@@ -2515,6 +2582,262 @@
   
   }
   
+  @if(VentanaSeleccionada?.id==='r19'){
+   <div class="card shadow-sm border-0 historial-card">
+
+  <!-- Encabezado -->
+  <div class="card-header bg-white border-bottom">
+    <div class="d-flex justify-content-between align-items-center">
+
+      <div>
+        <h5 class="mb-0 fw-semibold">
+          <i class="fas fa-history me-2 text-secondary"></i>
+         Personal con licensia Extraordinaria sin Goce de Sueldo
+        </h5>
+        <small class="text-muted">
+          Aqui se muestran las personas que se encuentran con licencia extraordinaria, para visualizar el detalle de cada persona haga click en la fila correspondiente.
+        </small>
+      </div>
+
+      <div class="d-flex gap-2">
+        <button
+          type="button"
+          class="btn btn-outline-secondary"
+           (click)="exportarExcelResumen('tabla-historial-asignaciones')">
+          <i class="fas fa-file-excel me-2"></i>
+          Exportar
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="verpersonaPorsituacion()">
+          <i class="fas fa-sync-alt me-2"></i>
+          Buscar
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Tabla -->
+  <div class="card-body p-0">
+
+    <div class="table-responsive">
+      <table class="table table-hover table-striped align-middle mb-0" id="tabla-historial-asignaciones">
+
+        <thead class="table-light">
+          <tr>
+            <th width="60">#</th>
+            <th>Identidad</th>
+            <th>Nombre Completo</th>
+            <th>Grado</th>
+            <th>Asignación</th>
+            <th>Fecha Inicio</th>
+            <th>Fecha Fin</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr
+            *ngFor="let item of listaPersonal; let i = index"
+            (click)="seleccionarPersonal(item)"
+            style="cursor:pointer">
+
+            <td class="fw-semibold text-muted">
+              {{ i + 1 }}
+            </td>
+
+            <td>
+              {{ item.identidad }}
+            </td>
+
+            <td class="fw-semibold">
+              {{ item.nombres }}
+            </td>
+
+            <td>
+              {{ item.grado }}
+            </td>
+
+            <td>
+              {{ item.asignacion }}
+            </td>
+
+            <td>
+              {{ item.fecha_inicio | date:'dd/MM/yyyy' }}
+            </td>
+
+            <td>
+              {{ item.fecha_fin | date:'dd/MM/yyyy' }}
+            </td>
+
+          </tr>
+
+        <tr *ngIf="!listaPersonal?.length">
+  <td colspan="7">
+    <div class="empty-state">
+      <i class="fas fa-folder-open"></i>
+      No existen registros para mostrar.
+    </div>
+  </td>
+</tr>
+
+        </tbody>
+
+      </table>
+    </div>
+
+  </div>
+
+</div>
+  }
+
+
+
+
+    
+  @if(VentanaSeleccionada?.id==='r20'){
+<div class="qn-wrapper">
+
+    <form #FormBuscarQui="ngForm" class="qn-header">
+
+        <div class="qn-title">
+            <h5>Personal Próximo a Quinquenio</h5>
+            <span>
+                Listado de personal que cumple quinquenio según período seleccionado
+            </span>
+        </div>
+
+   
+
+        <div class="qn-actions">
+     <div  >
+            
+            Fecha: <input
+                type="month"
+                class="form-control"
+                name="fecha"
+                #fecha="ngModel"
+                ngModel
+                required>
+        </div>
+            <button
+                type="button"
+                class="qn-btn qn-btn-search"
+                [disabled]="FormBuscarQui.invalid"
+                (click)="sacarPersonalQuinquenio(FormBuscarQui.value)">
+
+              
+                Buscar
+            </button>
+
+            <button
+                type="button"
+                class="qn-btn qn-btn-export"
+                (click)="exportarExcelResumen('tabla-quinquenio')">
+
+                <i class="fas fa-file-excel"></i>
+                Exportar
+            </button>
+            <button
+                type="button"
+                class="qn-btn qn-btn-export"
+                style="background-color: #dc3545; border-color: #dc3545;"
+                (click)="Limpiar()">
+
+                <i class="fas fa-file-excel"></i>
+                Limpiar
+            </button>
+
+        </div>
+
+    </form>
+
+    <div class="table-responsive">
+
+        <table class="qn-table" id="tabla-quinquenio">
+
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Identidad</th>
+                    <th>Nombre Completo</th>
+                    <th>Antigüedad</th>
+                    <th>Fecha Ingreso</th>
+                    <th>Fecha Auxiliar</th>
+                    <th>Sueldo Actual</th>
+                    <th>Quinquenio</th>
+                    <th>Sueldo Nuevo</th>
+                    <th>Unidad Ejecutora</th>
+                    <th>Asignación</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr
+                    *ngFor="let item of listaPersonal; let i = index"
+                    style="cursor:pointer"
+                    (click)="seleccionarPersonal(item)">
+
+                    <td>{{ i + 1 }}</td>
+
+                    <td>
+                        <strong>{{ item.identidad }}</strong>
+                    </td>
+
+                    <td>{{ item.nombre_completo }}</td>
+
+                    <td class="qn-years">
+                        {{ item.antiguedad }} años
+                    </td>
+
+                    <td>
+                        {{ item.fecha_ingreso | date:'dd/MM/yyyy' }}
+                    </td>
+
+                    <td>
+                        {{ item.fecha_auxiliar | date:'dd/MM/yyyy' }}
+                    </td>
+
+                    <td class="qn-money">
+                        L {{ item.sueldo | number:'1.2-2' }}
+                    </td>
+
+                    <td class="qn-money">
+                        L {{ item.quinquenio | number:'1.2-2' }}
+                    </td>
+
+                    <td class="qn-money qn-salary-new">
+                        L {{ item.sueldo_con_quinquenio | number:'1.2-2' }}
+                    </td>
+
+                    <td>{{ item.unidad_ejecutora }}</td>
+
+                    <td>{{ item.asignacion }}</td>
+
+                </tr>
+
+                <tr *ngIf="!listaPersonal?.length">
+                    <td colspan="11" class="qn-empty">
+                        No existen registros para mostrar.
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+  }
+
+
+ 
+
 
 </div>
 
@@ -2668,3 +2991,135 @@
 
 
  
+
+<p-dialog
+  [(visible)]="listarPersonal"
+  [modal]="true"
+  [style]="{ width: '70vw' }"
+  [draggable]="false"
+  [resizable]="false"
+  [closable]="true"
+  [dismissableMask]="false"
+[closeOnEscape]="false"
+  styleClass="modal-detalle-elegante"
+>
+
+  <!-- HEADER -->
+  <ng-template pTemplate="header">
+
+    <div class="header-detalle">
+
+      <div>
+        <i class="pi pi-users icon-header"></i>
+      </div>
+
+      <div class="titulo-header">
+
+        <span class="titulo-principal">
+          ⚙️
+        </span>
+
+        <span class="subtitulo">
+             Lista
+        </span>
+ 
+
+      </div>
+
+    </div>
+
+  </ng-template>
+
+  <!-- CONTENIDO -->
+
+  <div *ngIf="loadingDetalle" class="text-center p-4">
+
+    <p-progressSpinner></p-progressSpinner>
+
+    <div class="mt-2">
+      Cargando información...
+    </div>
+
+  </div>
+<button class="btn btn-danger"
+(click)="exportarExcelResumen('tablaTatalDetalle')"
+>Exportar</button>
+  <div *ngIf="!loadingDetalle">
+
+
+    <p style="color: red; margin-top: 10px;">*Click en la fila para visualizar el perfil del personal <br>Total: {{ listaPersonal.length }} </p>
+   
+    <p-table
+    id="tablaTatalDetalle"
+      [value]="listaPersonal"
+   
+      responsiveLayout="scroll"
+      styleClass="p-datatable-sm p-datatable-striped"
+    >
+
+      <ng-template pTemplate="header">
+
+        <tr>
+<th>Foto</th>
+          <th>Identidad</th>
+
+          <th>Nombre</th>
+          <th>Apellido</th>
+
+          <th>Genero</th>
+          <th>
+            Combatiente
+          </th>
+
+
+          <th>Grado</th>
+
+          <th>Unidad-corto</th>
+
+        
+
+        </tr>
+
+      </ng-template>
+
+      <ng-template pTemplate="body" let-persona>
+
+        <tr style="cursor: pointer;" (click)="seleccionarPersonal(persona)" >
+<td>
+    <img class="foto-tabla" src="{{ _ServicioBackendService.url2 + 'sacarfoto/' + persona.foto }}" style="height: 50px; width: 50px;"
+                  alt="">
+</td>
+          <td>
+            {{ persona.identidad }}
+          </td>
+
+          <td>
+            {{ persona.nombres }}
+          </td>
+          <td>
+            {{ persona.apellidos }}
+          </td>
+<td>
+            {{ persona.sexo }}
+          </td>
+          <td>{{ persona.combatiente===1 ? 'Sí' : 'No' }}</td>
+          <td>
+            {{ persona.grado }}
+          </td>
+
+          
+
+          <td>
+ 
+             {{persona.corto}}
+          </td>
+
+        </tr>
+
+      </ng-template>
+
+    </p-table>
+
+  </div>
+
+</p-dialog>

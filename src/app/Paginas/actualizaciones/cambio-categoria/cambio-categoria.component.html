@@ -127,38 +127,41 @@
   <ng-template pTemplate="content">
     <!-- Mensaje automático según categoría actual -->
     <form>
-      <ng-container *ngIf="objetoConsultado?.idcategoria === 2; else second">
+      @if(objetoConsultado?.idcategoria === 2){
         <label style="color: rgb(37, 94, 40);">
           (Automático) Su cambio de categoría es de Tropa a Auxiliar.
         </label>
-      </ng-container>
-
-      <ng-template #second>
-        <ng-container *ngIf="objetoConsultado?.idcategoria === 32; else third">
-          <label style="color: rgb(37, 94, 40);">
-            (Automático) Su cambio de categoría es de Estudiante a Sub Oficial.
-          </label>
-        </ng-container>
-
-        <ng-template #third>
-          <ng-container *ngIf="objetoConsultado?.idcategoria === 42; else cuarto">
-            <label style="color: rgb(37, 94, 40);">
-              (Automático) Su cambio de categoría es de Cadete a Oficial.
-            </label>
-          </ng-container>
-
-          <ng-template #cuarto>
-            <label style="color: rgb(37, 94, 40);">
-              (Automático) No soportado el cambio.
-            </label>
-          </ng-template>
-        </ng-template>
-      </ng-template>
+      }@else{
+          @if(objetoConsultado?.idcategoria === 32){
+              <label style="color: rgb(37, 94, 40);">
+                (Automático) Su cambio de categoría es de Estudiante a Sub Oficial.
+              </label>
+          }@else{
+              @if(objetoConsultado?.idcategoria === 42){
+                  <label style="color: rgb(37, 94, 40);">
+                    (Automático) Su cambio de categoría es de Cadete a Oficial.
+                  </label>
+              }@else{
+                 @if(objetoConsultado?.idcategoria === 4){
+                    <label style="color: rgb(37, 94, 40);">
+                    (Automático) Su cambio de categoría es de Tropa
+                  </label>
+                 }@else{
+                  <label style="color: rgb(37, 94, 40);">
+                                    (Automático) No soportado el cambio.
+                                  </label>
+                 }
+                
+              }
+          }
+      
+      }
+ 
     </form>
   
     <hr />
 
-    <!-- Formulario para Tropa (categoria_idcategoria === 2) -->
+ <!-- 
     <form *ngIf="objetoConsultado?.idcategoria === 2" class="row">
       <div class="input-group mb-3 col-md-12">
         <span class="input-group-text">Fuerza</span>
@@ -232,7 +235,7 @@
       </div>
     </form>
 
-    <!-- Formulario para Cadetes / Estudiantes (categoria_idcategoria === 3 o 4) -->
+ 
     <form
       *ngIf="objetoConsultado?.categoria_idcategoria === 3 || objetoConsultado?.categoria_idcategoria === 4"
       class="row"
@@ -316,10 +319,105 @@
         />
       </div>
     </form>
-  </ng-template>
 
-  <ng-template pTemplate="footer">
-    <button
+-->
+
+    <form
+     #formCambioCategoria="ngForm"
+      class="row"
+    >
+ 
+      <div class="input-group mb-3 col-md-12">
+        <span class="input-group-text">Categoría</span>
+    
+        <select
+          class="form-control"
+          name="categoria"
+          #categoria="ngModel"
+           ngModel
+          
+        >
+           <option [ngValue]="item" *ngFor="let item of Cambios_Categoria" >{{item?.nombre}}</option>
+        </select>
+
+
+      </div>
+
+
+       <div class="input-group mb-3 col-md-12">
+        <span class="input-group-text">Grado Rango</span>
+    
+        <select
+          class="form-control"
+          name="grado"
+          #grado="ngModel"
+           ngModel
+        >
+           <option [ngValue]="item" *ngFor="let item of formCambioCategoria.value.categoria?.grados" >{{item?.nombre}}</option>
+        </select>
+
+
+      </div>
+
+
+          <div class="input-group mb-3 col-md-12">
+        <span class="input-group-text">Fuerza</span>
+    
+        <select
+          class="form-control"
+          name="fuerza"
+          #fuerza="ngModel"
+            ngModel
+        >
+           <option [ngValue]="item" *ngFor="let item of   formCambioCategoria.value.grado?.fuerza" >{{item?.nombre}}</option>
+        </select>
+
+
+      </div>
+
+
+        <div class="input-group mb-3 col-md-12">
+        <span class="input-group-text">Unidad Ejecutora</span>
+    
+        <select
+          class="form-control"
+          name="ue"
+          #ue="ngModel"
+            ngModel
+        >
+           <option [ngValue]="item" *ngFor="let item of  arreglounidadEjecutora" >{{item?.ue}}</option>
+        </select>
+
+
+      </div>
+
+
+      
+     
+
+      <div class="input-group mb-3 col-md-12">
+        <span class="input-group-text">Fecha de cambio</span>
+        <input
+          type="date"
+          name="fechaAscenso"
+          class="form-control"
+           #fechaAscenso="ngModel"
+           ngModel
+        />
+      </div>
+
+      <div class="input-group mb-3 col-md-12">
+        <span class="input-group-text">Número Acuerdo</span>
+        <input
+          type="text"
+          name="numeroAcuerdo"
+          class="form-control"
+         #numeroAcuerdo="ngModel"
+         ngModel
+        />
+      </div>
+
+       <button
       type="button"
       class="btn btn-secondary"
       (click)="displayCambioCategoria = false"
@@ -329,9 +427,14 @@
     <button
       type="button"
       class="btn btn-primary"
-      (click)="guardarcategoriaNueva(); displayCambioCategoria = false"
+      (click)="guardarcategoriaNueva(formCambioCategoria); "
     >
       Guardar cambio
     </button>
+    </form>
+
+
   </ng-template>
+
+   
 </p-dialog>

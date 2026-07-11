@@ -1,0 +1,481 @@
+/*
+Aqui es el diseño de las carpetas
+*/
+
+.explorer-content{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(10,1fr);
+
+    gap:25px;
+
+    padding:20px;
+}
+
+
+.archivo-card{
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:5px;
+    border-radius:12px;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.archivo-card:hover{
+
+    background:#f5f7fa;
+}
+
+
+
+.folder{
+
+    width:120px;
+
+    position:relative;
+}
+
+.folder-tab{
+
+    width:50px;
+
+    height:18px;
+
+    background:#f8d04a;
+
+    border-radius:8px 8px 0 0;
+
+    margin-left:12px;
+}
+
+.folder-body{
+
+    height:80px;
+
+    background:#ffd95a;
+
+    border-radius:10px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    box-shadow:
+        0 8px 20px rgba(0,0,0,.12);
+}
+
+.folder-body i{
+
+    font-size:2rem;
+
+    color:#d79d00;
+}
+
+
+
+
+
+
+.file{
+
+    width:90px;
+
+    height:100px;
+
+    background:white;
+
+    border-radius:10px;
+
+    border:1px solid #e5e7eb;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    box-shadow:
+        0 8px 20px rgba(0,0,0,.08);
+}
+
+.file i{
+
+    font-size:2.5rem;
+
+    color:#dc3545;
+}
+
+
+
+
+
+
+
+
+
+.archivo-nombre{
+
+    margin-top:12px;
+
+    text-align:center;
+
+    font-size:.9rem;
+
+    font-weight:500;
+
+    color:#374151;
+
+    max-width:140px;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+}
+
+.btn-opciones{
+    background-color: red;
+    position:absolute;
+    top:5px;
+    right:5px;
+    border:none;
+    background:none;
+    opacity:1;
+    transition:.2s;
+    z-index: 100;
+}
+
+.archivo-card:hover .btn-opciones{
+    opacity:1;
+}
+
+
+/*
+Fin de los diseños de carpetas*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*Inicio de la bara de navegacion*/
+
+.explorer-toolbar{
+
+    height:70px;
+
+    background:white;
+
+    border-bottom:1px solid #e5e7eb;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:0 20px;
+
+    box-shadow:
+        0 2px 10px rgba(0,0,0,.04);
+}
+.toolbar-left{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+}
+
+.toolbar-btn{
+
+    width:38px;
+
+    height:38px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#f3f4f6;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.toolbar-btn:hover{
+
+    background:#e5e7eb;
+}
+
+
+
+.breadcrumb-container{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    margin-left:10px;
+}
+
+.breadcrumb-item{
+
+    cursor:pointer;
+
+    font-weight:500;
+
+    color:#374151;
+}
+
+.breadcrumb-item:hover{
+
+    color:#2563eb;
+}
+.toolbar-right{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+}
+
+.toolbar-right input{
+
+    width:250px;
+
+    border-radius:10px;
+}
+/*
+Fin de diseño de la barra de navegacion
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ============================
+   MODAL ARCHIVOS
+============================ */
+
+::ng-deep .dlg-archivo-personalizado {
+    border-radius: 18px;
+    overflow: hidden;
+}
+
+/* Header */
+
+::ng-deep .dlg-archivo-personalizado .p-dialog-header {
+    background: linear-gradient(
+        135deg,
+        #0f4c81,
+        #1e88e5
+    );
+    color: white;
+    padding: 1rem 1.5rem;
+    border: none;
+}
+
+::ng-deep .dlg-archivo-personalizado .p-dialog-title {
+    font-size: 1.15rem;
+    font-weight: 600;
+}
+
+/* Body */
+
+::ng-deep .dlg-archivo-personalizado .p-dialog-content {
+    background: #f5f7fa;
+    padding: 1.5rem;
+}
+
+/* Tarjetas */
+
+::ng-deep .dlg-archivo-personalizado .campo-formulario {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 15px;
+    transition: all .25s ease;
+}
+
+::ng-deep .dlg-archivo-personalizado .campo-formulario:hover {
+    border-color: #1e88e5;
+    box-shadow: 0 3px 10px rgba(0,0,0,.08);
+}
+
+/* Labels */
+
+::ng-deep .dlg-archivo-personalizado label {
+    display: block;
+    margin-bottom: 10px;
+    color: #334155;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+::ng-deep .dlg-archivo-personalizado label i {
+    margin-right: 6px;
+    color: #1e88e5;
+}
+
+/* TreeSelect */
+
+::ng-deep .dlg-archivo-personalizado .p-treeselect {
+    width: 100%;
+}
+
+::ng-deep .dlg-archivo-personalizado .p-treeselect .p-treeselect-label {
+    padding: 12px;
+}
+
+/* TextArea */
+
+::ng-deep .dlg-archivo-personalizado textarea {
+    border-radius: 10px;
+    border: 1px solid #dce3ea;
+    padding: 12px;
+    font-size: 14px;
+    resize: vertical;
+    transition: all .2s ease;
+}
+
+::ng-deep .dlg-archivo-personalizado textarea:focus {
+    border-color: #1e88e5;
+    box-shadow: 0 0 0 4px rgba(30,136,229,.15);
+    outline: none;
+}
+
+/* Texto ayuda */
+
+::ng-deep .dlg-archivo-personalizado .texto-ayuda {
+    color: #64748b;
+    display: block;
+    margin-top: 5px;
+    font-size: 12px;
+}
+
+/* File Upload */
+
+::ng-deep .dlg-archivo-personalizado input[type="file"] {
+    width: 100%;
+    border: 2px dashed #cbd5e1;
+    border-radius: 12px;
+    padding: 20px;
+    background: #fafafa;
+    cursor: pointer;
+    transition: all .25s ease;
+}
+
+::ng-deep .dlg-archivo-personalizado input[type="file"]:hover {
+    border-color: #1e88e5;
+    background: #eef6ff;
+}
+
+/* Footer */
+
+::ng-deep .dlg-archivo-personalizado .p-dialog-footer {
+    background: white;
+    border-top: 1px solid #e5e7eb;
+    padding: 1rem 1.5rem;
+}
+
+/* Botón cancelar */
+
+::ng-deep .dlg-archivo-personalizado .p-button-text {
+    color: #64748b;
+}
+
+/* Botón guardar */
+
+::ng-deep .dlg-archivo-personalizado .p-button:not(.p-button-text) {
+    border-radius: 10px;
+    font-weight: 600;
+    padding: .75rem 1.2rem;
+}
+
+/* Animación */
+
+::ng-deep .dlg-archivo-personalizado.p-dialog {
+    animation: modalArchivoEntrada .25s ease-out;
+}
+
+@keyframes modalArchivoEntrada {
+
+    from {
+        opacity: 0;
+        transform: translateY(-20px) scale(.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+}
+
+/* Scroll bonito */
+
+::ng-deep .dlg-archivo-personalizado ::-webkit-scrollbar {
+    width: 8px;
+}
+
+::ng-deep .dlg-archivo-personalizado ::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 20px;
+}
+
+::ng-deep .dlg-archivo-personalizado ::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}

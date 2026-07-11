@@ -618,3 +618,371 @@
 .foto-tabla:hover {
   transform: scale(1.1);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.card {
+  border-radius: 15px;
+}
+
+.table thead th {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+
+.table tbody tr:hover {
+  background-color: rgba(13, 110, 253, 0.05);
+}
+
+.badge {
+  padding: 8px 12px;
+  border-radius: 20px;
+}
+
+.card-header {
+  border-radius: 15px 15px 0 0 !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ==========================
+   HISTORIAL DE ASIGNACIONES
+   ========================== */
+
+.historial-card {
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.historial-card .card-header {
+  background: #ffffff;
+  border-bottom: 1px solid #dee2e6;
+  padding: 1rem 1.25rem;
+}
+
+.historial-card .card-header h5 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #212529;
+}
+
+.historial-card .card-header small {
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+.historial-card .btn {
+  min-width: 120px;
+  font-weight: 500;
+}
+
+.historial-card .table {
+  margin-bottom: 0;
+}
+
+.historial-card .table thead th {
+  background: #f8f9fa;
+  color: #495057;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  border-bottom: 1px solid #dee2e6;
+  white-space: nowrap;
+}
+
+.historial-card .table tbody td {
+  font-size: 14px;
+  color: #212529;
+  padding: 0.85rem;
+  vertical-align: middle;
+}
+
+.historial-card .table tbody tr {
+  transition: all .15s ease-in-out;
+}
+
+.historial-card .table tbody tr:hover {
+  background-color: #f5f7f9;
+}
+
+.historial-card .table tbody tr:hover td {
+  color: #000;
+}
+
+.historial-card .table tbody tr td:first-child {
+  font-weight: 600;
+  color: #6c757d;
+}
+
+.historial-card .empty-state {
+  padding: 3rem;
+  text-align: center;
+  color: #6c757d;
+}
+
+.historial-card .empty-state i {
+  font-size: 1.8rem;
+  margin-bottom: .5rem;
+  display: block;
+}
+
+.historial-card .table-responsive {
+  min-height: 250px;
+}
+
+/* Scroll elegante */
+.historial-card .table-responsive::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+.historial-card .table-responsive::-webkit-scrollbar-thumb {
+  background: #c8cdd2;
+  border-radius: 10px;
+}
+
+.historial-card .table-responsive::-webkit-scrollbar-track {
+  background: #f1f3f5;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ===========================
+   QUINQUENIO TABLE COMPONENT
+   =========================== */
+
+.qn-wrapper {
+    background: #fff;
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e8edf3;
+}
+
+/* Encabezado */
+.qn-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.qn-title h5 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.qn-title span {
+    color: #6b7280;
+    font-size: 0.9rem;
+}
+
+/* Formulario */
+.qn-field {
+    min-width: 180px;
+}
+
+.qn-field label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #4b5563;
+    margin-bottom: 6px;
+}
+
+.qn-field input {
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    height: 42px;
+}
+
+.qn-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+/* Botones */
+.qn-btn {
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-weight: 600;
+    transition: all .25s ease;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.qn-btn-search {
+    background: #0f4c81;
+    color: #fff;
+}
+
+.qn-btn-search:hover:not(:disabled) {
+    background: #0b3b64;
+}
+
+.qn-btn-export {
+    background: #0e7c3a;
+    color: #fff;
+}
+
+.qn-btn-export:hover {
+    background: #0b5f2d;
+}
+
+.qn-btn:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+}
+
+/* Tabla */
+.qn-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 0.9rem;
+}
+
+.qn-table thead th {
+    background: #1f2937;
+    color: #fff;
+    padding: 13px 12px;
+    font-weight: 600;
+    text-align: center;
+    border: none;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+.qn-table thead th:first-child {
+    border-top-left-radius: 10px;
+}
+
+.qn-table thead th:last-child {
+    border-top-right-radius: 10px;
+}
+
+.qn-table tbody td {
+    padding: 12px;
+    border-bottom: 1px solid #eef2f7;
+    vertical-align: middle;
+}
+
+.qn-table tbody tr {
+    transition: all .2s ease;
+}
+
+.qn-table tbody tr:hover {
+    background: #f8fafc;
+    transform: scale(1.002);
+}
+
+.qn-table tbody tr:nth-child(even) {
+    background: #fbfcfd;
+}
+
+.qn-money {
+    text-align: right;
+    font-weight: 600;
+}
+
+.qn-salary-new {
+    color: #0e7c3a;
+    font-weight: 700;
+}
+
+.qn-years {
+    text-align: center;
+}
+
+.qn-empty {
+    text-align: center;
+    padding: 25px !important;
+    color: #6b7280;
+    font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+
+    .qn-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .qn-actions {
+        width: 100%;
+        justify-content: flex-start;
+    }
+}

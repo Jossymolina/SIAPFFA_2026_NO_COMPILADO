@@ -13,7 +13,8 @@ import { DrawerModule } from 'primeng/drawer';
   description: string;
   icon: string;
   route?: string;
-  code:string[]
+  code:string[],
+  stilos?:string
 }
 import { ButtonModule } from 'primeng/button';
 import { ServicioBackendService } from '../../../servicios/servicio-backend.service';
@@ -25,7 +26,7 @@ import { ServicioBackendService } from '../../../servicios/servicio-backend.serv
     CommonModule,
     Card,
     DrawerModule,
-    ButtonModule   // 👈 aquí
+    ButtonModule   
   ],
   templateUrl: './cuerpo-principal.component.html',
   styleUrl: './cuerpo-principal.component.css',
@@ -96,16 +97,34 @@ export class CuerpoPrincipalComponent {
       description: 'Aqui el Ingeniero puede ver las herramientas de consulta por query',
       icon: 'pi pi-sitemap',
       route: '/menu/menu-programador',
-             code:['PRG_0001']
+      code:['PRG_0001']
 
     },
      {
-      title: 'Generador de Documentos',
+      title: 'Generador de Documentos (Desarrollo)',
       description: 'Aqui se pueden generar documentos autorizados.',
       icon: 'pi pi-file-word',
       route: '/menu/menu-programador',
-             code:['PRG_0001']
+      code:['PRG_0001']
 
+    }
+    ,
+     {
+      title: 'Evaluación fisica (Desarrollo)',
+      description: 'Aqui se evalua la parte fisica del personal.',
+      icon: 'pi pi-hammer',
+      stilos:"",
+      route: '/menu/crear-ternas',
+      code:['PRG_0001']
+
+    },
+     {
+      title: 'Control de Acuerdos (Desarrollo)',
+      description: 'Control de los archivos de acuerdos',
+      icon: 'pi pi-apple',
+      stilos:"",
+      route: '/menu/acuerdos-archivos',
+      code:['Arch_0001']
     }
   ];
     constructor(private router: Router,private _ServicioBackendService:ServicioBackendService) {
@@ -116,8 +135,8 @@ export class CuerpoPrincipalComponent {
       this.router.navigate([m.route]);
     }
   }
-   sacarPermisoPersonalVista(permiso:string[]){
-   return this._ServicioBackendService.verificarPermisos(permiso)
+  sacarPermisoPersonalVista(permiso:string[]){
+      return this._ServicioBackendService.verificarPermisos(permiso)
     //console.log( JSON.parse(localStorage.getItem("permisos") || "[]") as any[])
   }
 

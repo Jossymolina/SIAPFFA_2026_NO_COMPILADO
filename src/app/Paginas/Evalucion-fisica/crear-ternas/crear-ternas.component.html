@@ -1,0 +1,1222 @@
+<p-card styleClass="shadow-4 border-round-xl">
+
+    <ng-template pTemplate="header">
+        <div class="flex justify-content-between align-items-center p-4 ">
+
+            <div>
+                <h2 class="m-0 text-900 font-bold">
+                    Control de Ternas Evaluadoras
+                </h2>
+                <small class="text-500">
+                    Administracion de ternas
+                </small>
+            </div>
+
+            <button pButton type="button" icon="pi pi-plus" label="Agregar" (click)="mostrarModal=true;"
+                class="p-button-success p-button-lg border-round-xl">
+            </button>
+
+        </div>
+    </ng-template>
+
+    <!-- Filtros -->
+    <form #buscarTerna="ngForm" class="grid">
+
+        <div class="col-md-2">
+
+            <label class="font-semibold block mb-2">
+                Fecha
+            </label>
+
+            <p-datepicker name="fecha" #fecha="ngModel" ngModel appendTo="body" view="month" dateFormat="mm/yy"
+                [showIcon]="true" styleClass="w-full">
+            </p-datepicker>
+        </div>
+
+        <div class="col-md-1 flex align-items-end">
+
+            <button (click)="buscarTernas(buscarTerna)" pButton type="button" icon="pi pi-search" label="Buscar"
+                class="w-full p-button-primary">
+            </button>
+
+        </div>
+
+    </form>
+
+    <!-- Tabla -->
+
+    <p-accordion>
+
+        <p-accordion-panel *ngFor="let terna of listaTernas" [value]="terna.ideval_terna">
+
+            <p-accordion-header (click)="seleccionarTerna(terna)">
+
+                <div class="d-flex justify-content-between w-100 align-items-center">
+
+                    <div>
+                        <strong>{{ terna.fecha | date:'dd/MM/yyyy' }}</strong>
+                        <strong  style="color: rgb(22, 22, 129);" > &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    {{  terna.unidad_evaluadora }}</strong>
+                        <strong  style="color: rgb(43, 73, 4);" > &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -> &nbsp;&nbsp;{{  terna.tipo }}</strong>
+
+                    </div>
+
+                    <div>
+                        {{ terna.evaluadores.length }} Integrante(s)
+                    </div>
+
+                </div>
+
+            </p-accordion-header>
+
+            <p-accordion-content>
+
+                <div *ngIf="terna.observacion">
+                    <strong>Observación:</strong>
+                    {{ terna.observacion }}
+                </div>
+
+                <hr>
+                <p-table [value]="terna.evaluadores" responsiveLayout="scroll">
+
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Grado</th>
+                            <th>Nombre</th>
+                        </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="body" let-e>
+                        <tr (click)="seleccionarPersona(e)" style="cursor: pointer;">
+                            <td>{{ e.tipo_evaluador }}</td>
+                            <td>{{ e.idfuerza ===2 ? e.equivalente : e.nombre_grado }}</td>
+                            <td>{{ e.persona }}</td>
+                        </tr>
+                    </ng-template>
+
+                </p-table>
+
+            </p-accordion-content>
+
+        </p-accordion-panel>
+
+    </p-accordion>
+
+
+
+</p-card>
+
+
+
+
+
+<p-dialog header="Nueva Terna de Evaluación" [(visible)]="mostrarModal" [modal]="true" [draggable]="false"
+    [resizable]="false" [style]="{ width: '75rem' }" [baseZIndex]="100">
+    <!-- DATOS DE LA TERNA -->
+    <form #formTerna="ngForm" class="card mb-3" style="padding: 10px;">
+
+        <div style="margin: 10px;" class="titulo-seccion">
+            <i class="pi pi-file"></i>
+            Datos Generales
+        </div>
+
+        <div class="grid">
+
+
+            <!-- OBSERVACIÓN -->
+            <div class="col-4">
+
+                <div class="flex align-items-center gap-2 mb-2">
+                    <label class="m-0">Observación de la Terna</label>
+
+                    <i class="pi pi-question-circle text-primary cursor-pointer"
+                        (click)="popObservacion.toggle($event)">
+                    </i>
+                </div>
+
+                <input pInputText class="w-full" name="observacionTerna" #observacionTerna="ngModel" ngModel required
+                    placeholder="Ej. Terna de Ascenso 2026">
+
+                <p-popover #popObservacion>
+                    <div style="max-width:320px">
+
+                        <div class="flex align-items-center gap-2 mb-2">
+                            <i class="pi pi-info-circle text-blue-500"></i>
+                            <span class="font-bold">Observación</span>
+                        </div>
+
+                        <p class="m-0">
+                            Escriba una descripción breve que identifique
+                            la terna o alguna observación importante que
+                            desee reflejar en el documento.
+                        </p>
+
+                    </div>
+                </p-popover>
+
+            </div>
+
+            <!-- UNIDAD -->
+            <div class="col-4">
+
+                <div class="flex align-items-center gap-2 mb-2">
+                    <label class="m-0">Unidad que evalúa</label>
+
+                    <i class="pi pi-question-circle text-primary cursor-pointer" (click)="popUnidad.toggle($event)">
+                    </i>
+                </div>
+
+              <p-treeselect
+    appendTo="body"
+    style="width:100%"
+    [options]="treeUnidades"
+    [(ngModel)]="unidadesSeleccionadas"
+    [ngModelOptions]="{ standalone: true }"
+    [filter]="true"
+    [showClear]="true"
+    placeholder="Seleccione las unidades"
+    styleClass="w-full">
+</p-treeselect>
+
+                <p-popover #popUnidad>
+                    <div style="max-width:320px">
+
+                        <div class="flex align-items-center gap-2 mb-2">
+                            <i class="pi pi-building text-blue-500"></i>
+                            <span class="font-bold">Unidad evaluadora</span>
+                        </div>
+
+                        <p class="m-0">
+                            Indique la unidad, dependencia o institución
+                            responsable de realizar la evaluación.
+                        </p>
+
+                    </div>
+                </p-popover>
+
+            </div>
+
+            <!-- TITULO -->
+            <div class="col-4">
+
+                <div class="flex align-items-center gap-2 mb-2">
+
+                    <label class="m-0">Nombre de la Unidad para el doc.</label>
+
+                    <i class="pi pi-question-circle text-primary cursor-pointer" (click)="popTitulo.toggle($event)">
+                    </i>
+
+                </div>
+
+                <input pInputText class="w-full" name="tituloDocumento" #tituloDocumento="ngModel" ngModel required
+                    placeholder="Ej. INSPECTORIA GENERAL">
+
+                <p-popover #popTitulo>
+
+                    <div style="max-width:340px">
+
+                        <div class="flex align-items-center gap-2 mb-3">
+                            <i class="pi pi-info-circle text-blue-500" style="font-size:1.2rem">
+                            </i>
+
+                            <span class="font-bold">
+                                ¿Para qué sirve este campo?
+                            </span>
+                        </div>
+
+                        <p class="m-0 mb-3" style="line-height:1.5">
+                            El texto que escriba aquí será utilizado como el
+                            <strong>título principal del documento PDF.</strong>
+                        </p>
+
+                        <div class="border-1 border-round p-3 surface-50">
+
+                            <div class="text-center mb-2">
+                                <img src="fuerzasArmadas2.jpg" width="60">
+                            </div>
+
+                            <div class="text-center font-bold text-lg">
+                                FUERZAS ARMADAS DE HONDURAS
+                            </div>
+
+                            <div class="text-center text-500 text-sm mt-1">
+                                INSPECTORÍA GENERAL -> (CAMBIO AQUI)
+                            </div>
+                            <div class="text-center text-500 text-sm mt-1">
+                                HOJA INDIVIDUAL DE EVALUACIÓN DE DISPARO
+                            </div>
+
+                            <hr>
+
+                            <small class="text-500">
+                                Así se visualizará el encabezado del documento.
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </p-popover>
+
+            </div>
+
+
+
+            <!-- FECHA -->
+            <div class="col-4">
+
+                <div class="flex align-items-center gap-2 mb-2">
+                    <label class="m-0">Fecha</label>
+
+                    <i class="pi pi-question-circle text-primary cursor-pointer" (click)="popFecha.toggle($event)">
+                    </i>
+                </div>
+
+                <p-datepicker name="fecha" #fecha="ngModel" ngModel required appendTo="body" [showIcon]="true"
+                    class="w-full">
+                </p-datepicker>
+
+                <p-popover #popFecha>
+                    <div style="max-width:320px">
+
+                        <div class="flex align-items-center gap-2 mb-2">
+                            <i class="pi pi-calendar text-blue-500"></i>
+                            <span class="font-bold">Fecha de la evaluación</span>
+                        </div>
+
+                        <p class="m-0">
+                            Seleccione la fecha oficial en la que se realizara
+                            la evaluación o sesión de la terna. Esta fecha
+                            aparecerá en el documento generado.
+                        </p>
+
+                    </div>
+                </p-popover>
+
+            </div>
+
+            
+<!-- Tipo de prueba -->
+
+ <div class="col-4">
+
+                <div class="flex align-items-center gap-2 mb-2">
+                    <label class="m-0">Tipo de pruba</label>
+                    <i class="pi pi-question-circle text-primary cursor-pointer" (click)="tipoPrueba_.toggle($event)">
+                    </i>
+                </div>
+
+                <p-select
+                    [options]="tiposPrueba_terna_arreglo"
+                    optionLabel="nombre"
+                    optionValue="id"
+                  name="tipo"
+                  #tipo="ngModel"
+                  ngModel
+                    placeholder="Seleccione el tipo de prueba"
+                    styleClass="w-full">
+                </p-select>
+
+                <p-popover #tipoPrueba_>
+                    <div style="max-width:320px">
+
+                        <div class="flex align-items-center gap-2 mb-2">
+                            <i class="pi pi-calendar text-blue-500"></i>
+                            <span class="font-bold">Tipo</span>
+                        </div>
+
+                        <p class="m-0">
+                              Seleccione el tipo de evaluación para identificar el propósito de la prueba
+                               (diagnóstico,Ascenso u otro)
+                        </p>
+
+                    </div>
+                </p-popover>
+
+            </div>
+
+        </div>
+
+    </form>
+
+    <!-- AGREGAR EVALUADOR -->
+    <div class="card mb-3" style="padding: 10px;">
+
+        <div style="margin: 10px;" class="titulo-seccion">
+            <i class="pi pi-user-plus"></i>
+            Agregar Evaluador
+        </div>
+
+        <form #formBuscarPersona="ngForm">
+            @if(!personaBuscada){
+            <div *ngIf="!activeSpiner" class="grid align-items-end">
+
+                <div class="col-10">
+                    <label>Buscar por Identidad</label>
+
+                    <input pInputText name="identidad" #identidad="ngModel" ngModel class="w-full"
+                        placeholder="0801199912345"
+                        (keydown.enter)="buscarPersonaIdentidad(formBuscarPersona.value.identidad)">
+                </div>
+
+                <div class="col-2">
+                    <p-button label="Buscar" icon="pi pi-search" class="w-full">
+                    </p-button>
+                </div>
+
+            </div>
+            <div *ngIf="activeSpiner" class="flex justify-content-center align-items-center">
+                <p-progressSpinner strokeWidth="4" fill="transparent" animationDuration=".8s">
+                </p-progressSpinner>
+            </div>
+
+
+            }@else {
+            <form #formbuscar="ngForm" class="grid mt-3" *ngIf="personaBuscada">
+
+                <div class="col-5">
+                    <label>Persona Encontrada</label>
+
+                    <input pInputText readonly class="w-full" [value]="(personaBuscada.idfuerza===3? personaBuscada.nombre_grado :personaBuscada.equivalente)  + ' ' +
+                                 personaBuscada.nombres + ' ' +
+                                 personaBuscada.apellidos">
+                </div>
+
+                <div class="col-3">
+                    <label>Tipo de Evaluador</label>
+
+                    <select class="form-control" name="tipoEvaluador" #tipoEvaluador="ngModel" ngModel>
+                        <option [ngValue]="item" *ngFor="let item of arregloTiposdeEvaluadores">{{item.nombre}}</option>
+
+                    </select>
+                </div>
+
+                <div class="col-2 flex align-items-end">
+                    <p-button (onClick)="agregarEvaluador(personaBuscada,formbuscar.value.tipoEvaluador)"
+                        label="Agregar" icon="pi pi-plus" severity="success" class="w-full">
+                    </p-button>
+                </div>
+                <div class="col-2 flex align-items-end">
+                    <p-button label="Cancelar" (onClick)="cancelarBuscado()" icon="pi pi-minus" severity="danger"
+                        class="w-full">
+                    </p-button>
+                </div>
+
+            </form>
+            }
+
+
+
+
+        </form>
+
+    </div>
+
+    <!-- TABLA -->
+    <div class="card" style="padding: 10px;">
+
+        <div class="titulo-seccion">
+            <i class="pi pi-users"></i>
+            Integrantes de la Terna
+        </div>
+
+        <p-table [value]="arregloEvaluadores" responsiveLayout="scroll">
+
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width:70px">#</th>
+                    <th>Grado</th>
+
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+
+                    <th style="width:250px">Tipo Evaluador</th>
+                    <th style="width:120px">Acciones</th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-item let-i="rowIndex">
+                <tr>
+                    <td>{{i+1}}</td>
+                    <td>{{(item.idfuerza===3? item.nombre_grado :item.equivalente) }}</td>
+
+                    <td>{{item.nombres}}</td>
+                    <td>{{item.apellidos}}</td>
+                    <td>
+                        {{item.tipo_evaluador.nombre}}
+                    </td>
+                    <td>
+                        <p-button (onClick)="quitarLitaEvaluador(i)" icon="pi pi-trash" severity="danger" [text]="true">
+                        </p-button>
+                    </td>
+                </tr>
+            </ng-template>
+
+        </p-table>
+
+    </div>
+
+    <ng-template pTemplate="footer">
+
+        <div class="flex justify-content-end gap-2">
+
+            <p-button label="Cancelar" severity="secondary" (click)="mostrarModal=false">
+            </p-button>
+<!--[disabled]="!formTerna.valid || arregloEvaluadores.length <= 6"-->
+            <p-button (click)="guardarTerna()" 
+                label="Guardar Terna" icon="pi pi-save">
+            </p-button>
+
+        </div>
+
+    </ng-template>
+
+</p-dialog>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<p-dialog *ngIf="personaSeleccionada" [header]="'Expediente : '
++ (personaSeleccionada.idfuerza===3 ? personaSeleccionada.nombre_grado:
+                                personaSeleccionada.equivalente )
++' '+this.personaSeleccionada.persona" [(visible)]="verExpedienteTernaIndividual" [modal]="true" [maximizable]="true"
+    [draggable]="false" [resizable]="false" [style]="{ width: '85vw', height: '85vh' }" [breakpoints]="{
+        '1200px': '90vw',
+        '768px': '95vw'
+    }">
+
+    <p-tabs value="0">
+
+        <p-tablist>
+            <p-tab value="0">Datos Generales</p-tab>
+            <p-tab value="1" (click)="obtenerResultadosEvaluacion(1)">Médico</p-tab>
+            <p-tab value="2" (click)="obtenerResultadosEvaluacion(2);">Físico</p-tab>
+            <p-tab value="3" (click)="obtenerResultadosEvaluacion(3)">Disparo</p-tab>
+        </p-tablist>
+
+        <p-tabpanels>
+
+            <p-tabpanel value="0">
+                <div class="surface-card border-round-xl shadow-2 p-4">
+
+                    <div class="grid" *ngIf="personaSeleccionada">
+
+                        <!-- FOTO -->
+                        <div class="col-12 lg:col-3 text-center">
+
+                            <img [src]="_ServicioBackendService.url2 + 'sacarfoto/' + personaSeleccionada?.foto" style="
+                                        width:200px;
+                                        height:250px;
+                                        object-fit:cover;
+                                        border-radius:10px;
+                                        border:3px solid var(--primary-color);
+                                    ">
+
+                            <h3 class="mt-3 mb-1">
+                                {{personaSeleccionada.persona}}
+                            </h3>
+
+                            <span class="text-600">
+                                {{personaSeleccionada.idfuerza===3 ? personaSeleccionada.nombre_grado:
+                                personaSeleccionada.equivalente }}
+                            </span> <br>
+                            <span class="text-600">
+                                {{personaSeleccionada.categoria}}
+                            </span>
+
+                        </div>
+
+                        <!-- DATOS -->
+                        <div class="col-12 lg:col-9">
+
+                            <div class="flex justify-content-between align-items-center mb-4">
+
+                                <h2 class="m-0">
+                                    Información General
+                                </h2>
+
+                                <button pButton type="button" (click)="limpiarCriterios(); verNuevoFormulario = true"
+                                    icon="pi pi-check-circle" label="Evaluar"
+                                    class="p-button-primary p-button-lg px-5 py-3 font-bold">
+                                </button>
+
+                            </div>
+
+                            <div class="grid">
+
+                                <!-- FILA 1 -->
+
+                                <div class="col-4">
+                                    <label class="font-semibold text-500">
+                                        Identidad
+                                    </label>
+
+                                    <div class="text-xl">
+                                        {{personaSeleccionada.identidad}}
+                                    </div>
+                                </div>
+
+                                <div class="col-4">
+                                    <label class="font-semibold text-500">
+                                        Edad
+                                    </label>
+
+                                    <div class="text-xl">
+                                        {{personaSeleccionada.edad}} años
+                                    </div>
+                                </div>
+
+                                <div class="col-4">
+                                    <label class="font-semibold text-500">
+                                        Categoría
+                                    </label>
+
+                                    <div class="text-xl">
+                                        {{personaSeleccionada.categoria}}
+                                    </div>
+                                </div>
+
+                                <div class="col-4">
+                                    <label class="font-semibold text-500">
+                                        Genero
+                                    </label>
+
+                                    <div class="text-xl">
+                                        {{personaSeleccionada.sexo}}
+                                    </div>
+                                </div>
+
+
+                                <!-- FILA 2 -->
+
+                                <div class="col-4">
+                                    <label class="font-semibold text-500">
+                                        Serie
+                                    </label>
+
+                                    <div class="text-xl">
+                                        {{personaSeleccionada.serie}}
+                                    </div>
+                                </div>
+
+                                <div class="col-4">
+                                    <label class="font-semibold text-500">
+                                        Antigüedad en el grado
+                                    </label>
+
+                                    <div class="text-xl">
+                                        {{personaSeleccionada.antiguedadGrado}} Años
+                                    </div>
+                                </div>
+
+                                <div class="col-4">
+                                    <label class="font-semibold text-500">
+                                        Tiempo Servicio
+                                    </label>
+
+                                    <div class="text-xl">
+                                        {{personaSeleccionada.tiempoServicio}} Años
+                                    </div>
+                                </div>
+
+                                <!-- FILA 3 -->
+
+                                <div class="col-4">
+                                    <label class="font-semibold text-500">
+                                        Fecha Ingreso
+                                    </label>
+
+                                    <div class="text-xl">
+                                        {{personaSeleccionada.fechaIngreso | date:'yyyy/MM/dd':'UTC-6' }}
+                                    </div>
+                                </div>
+
+                                <div class="col-8">
+                                    <label class="font-semibold text-500">
+                                        Unidad de Asignación
+                                    </label>
+
+                                    <div class="text-xl">
+                                        {{personaSeleccionada.unidad}}
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </p-tabpanel>
+
+            <p-tabpanel value="1">
+                <!--Aqui es para mostrar Evaluacion Medica-->
+                @if(arregloResultados.length!==0){
+                <div class="surface-card border-round-xl shadow-2 p-4 mt-4">
+
+                    <div class="flex align-items-center mb-4">
+
+                        <div class="mr-3">
+                            <i class="pi pi-file-pdf text-red-500" style="font-size:2.2rem"></i>
+                        </div>
+
+                        <div>
+                            <h3 class="m-0">Documentación Médica</h3>
+                            <small class="text-600">
+                                Genere la información del examen médico o exporte el informe en formato PDF.
+                            </small>
+                        </div>
+
+                    </div>
+
+                    <div class="flex gap-3 flex-wrap justify-content-end">
+
+
+
+                        <button pButton type="button" icon="pi pi-file-pdf" label="Generar PDF Médico"
+                            class="p-button-danger" (click)="crearPFMedico()">
+                        </button>
+
+                    </div>
+
+                </div>
+                <p-table style="margin-top: 5px;" [value]="arregloResultados" responsiveLayout="scroll"
+                    styleClass="p-datatable-sm p-datatable-gridlines">
+
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th style="width:5%">#</th>
+                            <th style="width:45%">Criterio</th>
+                            <th style="width:15%">Valor</th>
+
+                        </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="body" let-item let-i="rowIndex">
+                        <tr>
+                            <td class="text-center">
+                                {{ i + 1 }}
+                            </td>
+
+                            <td>
+                                <span class="font-semibold">
+                                    {{ item.criterio }}
+                                </span>
+                            </td>
+
+
+                            <td class="text-center">
+                                <ng-container *ngIf="esNumero(item.respuesta); else texto">
+                                    {{ item.respuesta | number:'1.2-2' }} {{item.unidad_medida}}
+                                </ng-container>
+                                <ng-template #texto>
+                                    {{ item.respuesta }} {{item.unidad_medida}}
+                                </ng-template>
+
+                            </td>
+
+
+                        </tr>
+                    </ng-template>
+
+                </p-table>
+
+
+
+
+                }@else {
+                <div *ngIf="!personaSeleccionada.tieneEvaluacionMedica"
+                    class="surface-50 border-1 border-yellow-300 border-round-xl p-4 mb-4">
+
+                    <div class="flex align-items-center">
+
+                        <div class="mr-4">
+                            <i class="pi pi-exclamation-triangle text-yellow-500" style="font-size:3rem"></i>
+                        </div>
+
+                        <div class="flex-1">
+
+                            <h3 class="m-0 text-yellow-700">
+                                Evaluación médica pendiente
+                            </h3>
+
+                            <p class="mt-2 mb-0 text-700" style="line-height:1.6">
+                                Este evaluado <strong>aún no posee una evaluación médica registrada</strong>.
+                                Para continuar con el proceso de evaluación física es necesario registrar
+                                previamente su evaluación médica.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+                }
+            </p-tabpanel>
+
+            <p-tabpanel value="2">
+                <!--Evaluacion Fisica-->
+                @if(arregloResultados.length!==0){
+
+                <div class="surface-card border-round-xl shadow-2 p-4 mt-4">
+
+                    <div class="flex align-items-center mb-4">
+
+                        <div class="mr-3">
+                            <i class="pi pi-file-pdf text-red-500" style="font-size:2.2rem"></i>
+                        </div>
+
+                        <div>
+                            <h3 class="m-0">Documentación Examen Físico</h3>
+                            <small class="text-600">
+                                Genere la información del examen físico o exporte el informe en formato PDF.
+                            </small>
+                        </div>
+
+                    </div>
+
+                    <div class="flex gap-3 flex-wrap justify-content-end">
+
+
+
+                        <button pButton type="button" icon="pi pi-file-pdf" label="Generar PDF Físico"
+                            class="p-button-danger" (click)="generarPDF()">
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <p-table style="margin-top: 5px;" [value]="arregloResultados" responsiveLayout="scroll"
+                    styleClass="p-datatable-sm p-datatable-gridlines">
+
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th style="width:5%">#</th>
+                            <th style="width:45%">Criterio</th>
+                            <th style="width:15%">Valor</th>
+
+                        </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="body" let-item let-i="rowIndex">
+                        <tr>
+                            <td class="text-center">
+                                {{ i + 1 }}
+                            </td>
+
+                            <td>
+                                <span class="font-semibold">
+                                    {{ item.criterio }}
+                                </span>
+                            </td>
+
+                            <td class="text-center">
+                                <ng-container *ngIf="esNumero(item.respuesta); else texto">
+                                    {{ item.respuesta | number:'1.2-2' }} {{item.unidad_medida}}
+                                </ng-container>
+                                <ng-template #texto>
+                                    {{ item.respuesta }} {{item.unidad_medida}}
+                                </ng-template>
+
+                            </td>
+                        </tr>
+                    </ng-template>
+
+                </p-table>
+
+
+
+
+                }@else {
+                <div *ngIf="!personaSeleccionada.tieneEvaluacionMedica"
+                    class="surface-50 border-1 border-yellow-300 border-round-xl p-4 mb-4">
+
+                    <div class="flex align-items-center">
+
+                        <div class="mr-4">
+                            <i class="pi pi-exclamation-triangle text-yellow-500" style="font-size:3rem"></i>
+                        </div>
+
+                        <div class="flex-1">
+
+                            <h3 class="m-0 text-yellow-700">
+                                Evaluación fisica pendiente
+                            </h3>
+
+                            <p class="mt-2 mb-0 text-700" style="line-height:1.6">
+                                Este evaluado <strong>aún no posee una evaluación fisica registrada</strong>.
+                                Para continuar con el proceso de evaluación física es necesario registrar
+                                previamente su evaluación.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+                }
+            </p-tabpanel>
+
+            <p-tabpanel value="3">
+                @if(arregloResultados.length!==0){
+
+
+
+                <div class="surface-card border-round-xl shadow-2 p-4 mt-4">
+                    <div class="flex align-items-center mb-4">
+                        <div class="mr-3">
+                            <i class="pi pi-file-pdf text-red-500" style="font-size:2.2rem"></i>
+                        </div>
+
+                        <div>
+                            <h3 class="m-0">Documentación Examen disparo</h3>
+                            <small class="text-600">
+                                Genere la información del examen de disparo o exporte el informe en formato PDF.
+                            </small>
+                        </div>
+                    </div>
+                    <div class="flex gap-3 flex-wrap justify-content-end">
+                        <button pButton type="button" icon="pi pi-file-pdf" label="Generar PDF disparo"
+                            class="p-button-danger" (click)="generarpdfDisparo()">
+                        </button>
+                    </div>
+                </div>
+
+                <p-table style="margin-top: 5px;" [value]="arregloResultados" responsiveLayout="scroll"
+                    styleClass="p-datatable-sm p-datatable-gridlines">
+
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th style="width:5%">#</th>
+                            <th style="width:45%">Criterio</th>
+                            <th style="width:15%">Valor</th>
+
+                        </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="body" let-item let-i="rowIndex">
+                        <tr>
+                            <td class="text-center">
+                                {{ i + 1 }}
+                            </td>
+                            <td>
+                                <span class="font-semibold">
+                                    {{ item.criterio }}
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="font-semibold">
+                                    {{ item.respuesta }}
+                                </span>
+                            </td>
+
+
+
+
+                        </tr>
+                    </ng-template>
+
+                </p-table>
+
+
+
+                }@else {
+                <div *ngIf="!personaSeleccionada.tieneEvaluacionMedica"
+                    class="surface-50 border-1 border-yellow-300 border-round-xl p-4 mb-4">
+
+                    <div class="flex align-items-center">
+
+                        <div class="mr-4">
+                            <i class="pi pi-exclamation-triangle text-yellow-500" style="font-size:3rem"></i>
+                        </div>
+
+                        <div class="flex-1">
+
+                            <h3 class="m-0 text-yellow-700">
+                                Evaluación de disparo pendiente
+                            </h3>
+
+                            <p class="mt-2 mb-0 text-700" style="line-height:1.6">
+                                Este evaluado <strong>aún no posee una evaluación disparo registrada</strong>.
+                                Para continuar con el proceso de evaluación disparo es necesario registrar
+                                previamente su evaluación.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+                }
+            </p-tabpanel>
+
+        </p-tabpanels>
+
+    </p-tabs>
+
+</p-dialog>
+
+
+
+
+
+
+
+
+<p-dialog header="Ingresar Resultados" [(visible)]="verNuevoFormulario" [modal]="true" [maximizable]="true"
+    [draggable]="false" [resizable]="false" [style]="{ width: '85vw', height: '85vh' }" [breakpoints]="{
+        '1200px': '90vw',
+        '768px': '95vw'
+    }">
+    @if(!tipoPrueba){
+    <div class="contenedor-pruebas">
+        <div class="fondo-pruebas"></div>
+        <div class="tipo-prueba">
+            <div class="tipo-prueba">
+                <div class="opcion" [class.activa]="tipoPrueba==='MEDICO'"
+                    (click)="tipoPrueba='MEDICO';obtenerCriteriosTipoEvaluacion(1,1)">
+
+                    <i class="pi pi-heart"></i>
+
+                    <h3>Examenes medico</h3>
+
+                    <p>Evaluación medico.</p>
+
+                </div>
+
+                <div class="opcion" [class.activa]="tipoPrueba==='PECHADAS'"
+                    (click)="tipoPrueba='PECHADAS';obtenerCriteriosTipoEvaluacion(2,1)">
+
+                    <i class="pi pi-arrow-up"></i>
+
+                    <h3>Pechadas</h3>
+
+                    <p>Evaluación de resistencia de brazos.</p>
+
+                </div>
+
+                <div class="opcion" [class.activa]="tipoPrueba==='ABDOMINALES'"
+                    (click)="tipoPrueba='ABDOMINALES';obtenerCriteriosTipoEvaluacion(2,2)">
+
+                    <i class="pi pi-stopwatch"></i>
+
+                    <h3>Abdominales</h3>
+
+                    <p>Evaluación de resistencia abdominal.</p>
+
+                </div>
+
+                <div class="opcion" [class.activa]="tipoPrueba==='CORRIDA'"
+                    (click)="tipoPrueba='CORRIDA';obtenerCriteriosTipoEvaluacion(2,3)">
+                    <i class="pi pi-directions"></i>
+                    <h3>Corrida</h3>
+                    <p>Evaluación de velocidad y resistencia.</p>
+
+                </div>
+
+                <div class="opcion" [class.activa]="tipoPrueba==='DISPARO'"
+                    (click)="tipoPrueba='DISPARO';obtenerCriteriosTipoEvaluacion(3,1)">
+
+
+                    <i class="pi pi-bullseye"></i> <!-- si está disponible -->
+
+                    <h3>Disparo</h3>
+
+                    <p>Evaluación de velocidad y resistencia.</p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    }@else {
+    <form *ngIf="criterios.length!==0" #frmEvaluacion="ngForm">
+
+        <div class="grid mt-3">
+
+            <div style="width: 100%;">
+                <!--Botones-->
+                <div>
+                    <div class="surface-card border-round-xl shadow-2 p-3 mt-4">
+                        <div class="flex justify-content-between align-items-center flex-wrap gap-3">
+
+                            <div>
+                                <h3 class="m-0">Acciones</h3>
+                                <small class="text-600">
+                                    Recalcule, guarde o cancele la evaluación.
+                                </small>
+                            </div>
+
+                            <div class="flex gap-2">
+
+                                <button pButton type="button" icon="pi pi-refresh" label="Recalcular"
+                                    class="p-button-info p-button-outlined" (click)="recalcularCriterios()">
+                                </button>
+
+                                <button pButton type="button" icon="pi pi-times" label="Cancelar"
+                                    class="p-button-secondary" (click)="atras_criterios()">
+                                </button>
+
+                                <button pButton type="button" icon="pi pi-check" label="Guardar Evaluación"
+                                    class="p-button-success" (click)="guardarEvaluacion()">
+                                </button>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!--Cuerpo-->
+                <div style="height: 600px; overflow-y: auto;">
+                    <ng-container *ngFor="let criterio of criterios">
+
+                        <div class="col-12 md:col-6 xl:col-4" *ngIf="criterio.visible">
+
+                            <div     [ngClass]="criterio.readonly ? 'criterio-card-read' : 'criterio-card'"  >
+
+                                <!-- Encabezado -->
+                                <div class="criterio-header">
+
+                                    <div>
+                                        <div class="criterio-titulo">
+                                            {{ criterio.descripcion }}
+                                        </div>
+
+                                        <small class="text-500" *ngIf="criterio.observacion">
+                                            {{ criterio.observacion }}
+                                        </small>
+                                    </div>
+
+                                    <span class="criterio-badge" *ngIf="criterio.porcentaje>0">
+                                        {{ criterio.porcentaje }}%
+                                    </span>
+
+                                </div>
+
+                                <!-- NUMERICA -->
+                                <p-inputNumber *ngIf="criterio.tipo_respuesta==='NUMERICA'"
+                                (ngModelChange)="programarRecalculo()"
+                                [ngClass]="{'criterio-readonly': criterio.readonly}"
+
+                                    [(ngModel)]="criterio.respuesta" [readonly]="criterio.readonly"
+                                    [useGrouping]="false" mode="decimal" [minFractionDigits]="0" [maxFractionDigits]="2"
+                                    required 
+                                   
+                                    name="criterio{{criterio.id_tipo_criterios}}" class="w-full">
+                                </p-inputNumber>
+
+
+
+                                <!-- NUMERICA  con regex -->
+                                <div *ngIf="criterio.tipo_respuesta === 'NUMERICA_REGEX'">
+                                    <input pInputText name="criterio{{criterio.id_tipo_criterios}}" type="text"
+                                        class="w-full" [(ngModel)]="criterio.respuesta" [readonly]="criterio.readonly"
+                                        [pattern]="criterio.regex || null" required #rnxt="ngModel"
+                                             (ngModelChange)="programarRecalculo()"
+                                        >
+
+                                    <small class="p-error block mt-1"
+                                        *ngIf="criterio.regex && rnxt.invalid && (rnxt.dirty || rnxt.touched)">
+                                        {{ criterio.mensaje_regex || 'El formato ingresado no es válido.' }}
+                                    </small>
+
+                                </div>
+
+
+
+
+                                <!-- TEXTO -->
+                                <textarea *ngIf="criterio.tipo_respuesta==='TEXTO'" pInputTextarea
+                                     (ngModelChange)="programarRecalculo()"
+                                    [(ngModel)]="criterio.respuesta" [readonly]="criterio.readonly" rows="4" required
+                                    name="criterio{{criterio.id_tipo_criterios}}" class="w-full">
+                            </textarea>
+
+
+                                <div *ngIf="criterio.tipo_respuesta === 'TEXTO_REGEX'">
+
+                                    <input pInputText type="text" class="w-full" required
+                                         (ngModelChange)="programarRecalculo()"
+                                        name="criterio{{criterio.id_tipo_criterios}}" [(ngModel)]="criterio.respuesta"
+                                        [readonly]="criterio.readonly" [pattern]="criterio.regex || null"
+                                        #txt="ngModel">
+
+                                    <small class="p-error block mt-1"
+                                        *ngIf="criterio.regex && txt.invalid && (txt.dirty || txt.touched)">
+                                        {{ criterio.mensaje_regex || 'El formato ingresado no es válido.' }}
+                                    </small>
+
+                                </div>
+
+                                <!-- SI / NO -->
+                                <p-selectButton class="si-no-button" 
+                                *ngIf="criterio.tipo_respuesta==='SI_NO'" 
+                                (ngModelChange)="programarRecalculo()"
+                                    [options]="[
+                                                        {label:'Sí',value:true},
+                                                        {label:'No',value:false}
+                                                    ]" [(ngModel)]="criterio.respuesta" optionLabel="label" optionValue="value" required
+                                    name="criterio{{criterio.id_tipo_criterios}}" [disabled]="criterio.readonly">
+                                </p-selectButton>
+                                
+                                <!-- OPCION -->
+                                <p-select
+                              
+                                
+                                *ngIf="criterio.tipo_respuesta==='OPCION_UNICA'" 
+                                     (ngModelChange)="programarRecalculo()"
+                                     [options]="criterio.opciones"
+                                    optionLabel="label" optionValue="value" [(ngModel)]="criterio.respuesta"
+                                    [disabled]="criterio.readonly" placeholder="Seleccione" required
+                                    name="criterio{{criterio.id_tipo_criterios}}" class="w-full">
+                                </p-select>
+
+                                <!-- MULTIPLE -->
+                                <p-multiSelect *ngIf="criterio.tipo_respuesta==='MULTIPLE'"
+                                     (ngModelChange)="programarRecalculo()"
+                                    [options]="criterio.opciones" optionLabel="label" optionValue="value"
+                                    [(ngModel)]="criterio.respuesta" [disabled]="criterio.readonly"
+                                    placeholder="Seleccione" display="chip" required
+                                    name="criterio{{criterio.id_tipo_criterios}}" class="w-full">
+                                </p-multiSelect>
+
+                            </div>
+
+                        </div>
+
+                    </ng-container>
+                </div>
+            </div>
+
+        </div>
+
+    </form>
+    }
+
+
+
+
+
+</p-dialog>

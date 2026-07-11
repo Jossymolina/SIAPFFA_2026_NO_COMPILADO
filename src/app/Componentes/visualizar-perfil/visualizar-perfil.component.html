@@ -229,7 +229,7 @@
                     <div class="mini-block" *ngIf="objetoConsultado.activo === 1">
                       <div class="mini-label" style="color: black;">ANTIGUEDAD EN EL GRADO</div>
                       <div class="mini-value">
-                        {{ objetoConsultado?.antiguedad_GradoActual }} AÑOS
+                         {{ objetoConsultado?.fechaPrimerIngreso | date:'yyyy-MM-dd' }} -> ({{fecha_detallado}}) 
                       </div>
                     </div>
 

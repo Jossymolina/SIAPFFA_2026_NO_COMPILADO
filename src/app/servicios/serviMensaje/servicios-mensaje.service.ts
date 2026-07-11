@@ -5,7 +5,7 @@ import Swal from 'sweetalert2'
 })
 export class ServiciosMensajeService {
   
-  piedeMensaje="SIAPFFAA 1111"
+  piedeMensaje="SIAPFFAA"
   constructor() { 
 
   }

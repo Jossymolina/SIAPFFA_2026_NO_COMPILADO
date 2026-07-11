@@ -3,12 +3,12 @@ import { ServicioBackendService } from '../../../../servicios/servicio-backend.s
 import { ServiciosMensajeService } from '../../../../servicios/serviMensaje/servicios-mensaje.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-
+import { MultiSelectModule } from 'primeng/multiselect';
 ServiciosMensajeService
 @Component({
   selector: 'app-menu-toe',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule,MultiSelectModule,MultiSelectModule],
   templateUrl: './menu-toe.component.html',
   styleUrl: './menu-toe.component.css',
 })
@@ -19,6 +19,7 @@ export class MenuToeComponent implements OnInit {
   ) {
 
   }
+  fuerzasSeleccionadas: any[] = [];
 @Input('tipoBusqueda') tipoBusqueda
 usuarioLoguiado
   ngOnInit() {
@@ -31,6 +32,36 @@ usuarioLoguiado
   groups: Array<{ name: string; cols: Array<{ key: string; label: string; kind: string }> }> = [];
 
   titulo = 'Tabla de Organizacion de Efectivo (TOE) de Tropa';
+armarFiltroFuerza(): string {
+
+  if (!this.fuerzasSeleccionadas?.length) {
+    return '';
+  }
+
+  // Solo una fuerza
+  if (this.fuerzasSeleccionadas.length === 1) {
+    return ` and u.idfuerza=${this.fuerzasSeleccionadas[0].idfuerza}`;
+  }
+
+  // Varias fuerzas
+  const condiciones = this.fuerzasSeleccionadas
+    .map((f: any) => `u.idfuerza=${f.idfuerza}`)
+    .join(' or ');
+
+  return ` and (${condiciones})`;
+}
+  armarFiltroIdFuerza(): string {
+
+  let filtro = '';
+
+  this.fuerzasSeleccionadas.forEach((fuerza: any) => {
+    filtro += ` and idfuerza=${fuerza.idfuerza}`;
+  });
+ 
+
+  return filtro;
+}
+
 
 
   getToePivotPorCorto(form) {
@@ -43,6 +74,7 @@ usuarioLoguiado
       next: (Response) => {
         this._servicioMensaje.hide();
         this.data = Response?.data ?? [];
+        
         this.buildPivotHeader();
       },
       error: (error) => {
@@ -51,6 +83,39 @@ usuarioLoguiado
       }
     });
   }
+
+
+  getToePivotPorCortoGeneralCompleto(form) {
+    this._servicioMensaje.show()
+    let p ={
+      cadena:this.armarFiltroFuerza(),
+      idfuerza_cadena: this.armarFiltroIdFuerza()
+    }
+    console.log(p)
+    this._servicioBackend.getToePivotPorCortoGeneralCompleto(p).subscribe({
+      next: (Response) => {
+        this._servicioMensaje.hide();
+        
+        this.data = Response?.data ?? [];
+        console.log("*******************************")
+        console.log(Response)
+        this.buildPivotHeader();
+      },
+      error: (error) => {
+        this._servicioMensaje.hide();
+        this._servicioMensaje.mensajeMalo('Error al obtener los datos del TOE Pivot por corto');
+      }
+    });
+  }
+
+
+
+
+
+
+
+
+
 
     getToePivotPorCortoUnidad( ) {
  
@@ -98,7 +163,7 @@ usuarioLoguiado
     // Orden de subcolumnas como en tu imagen (TOE primero, luego DIA, luego DISP si existe)
     const order = (kind: string) => kind === 'aut' ? 1 : kind === 'dia' ? 2 : 3;
     const label = (kind: string) => kind === 'aut' ? 'TOE' : kind === 'dia' ? 'DIA' : 'DISP';
-
+/*
     this.groups = Array.from(map.entries())
       .sort((a, b) => a[0].localeCompare(b[0])) // si tenés orden real por jerarquía lo ajustamos
       .map(([base, cols]) => ({
@@ -107,6 +172,35 @@ usuarioLoguiado
           .sort((a, b) => order(a.kind) - order(b.kind))
           .map(c => ({ key: c.key, kind: c.kind, label: label(c.kind) }))
       }));
+*/
+    this.groups = Array.from(map.entries())
+
+      .filter(([base, cols]) => {
+
+        return this.data.some(row => {
+
+          return cols.some(c => {
+            const valor = Number(row[c.key] ?? 0);
+            return valor !== 0;
+          });
+
+        });
+
+      })
+
+      .sort((a, b) => a[0].localeCompare(b[0]))
+
+      .map(([base, cols]) => ({
+        name: base.replaceAll('_', ' '),
+        cols: cols
+          .sort((a, b) => order(a.kind) - order(b.kind))
+          .map(c => ({
+            key: c.key,
+            kind: c.kind,
+            label: label(c.kind)
+          }))
+      }));
+
   }
 
   // helper

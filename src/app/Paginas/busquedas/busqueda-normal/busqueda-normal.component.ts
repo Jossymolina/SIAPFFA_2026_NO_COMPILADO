@@ -492,6 +492,7 @@ export class BusquedaNormalComponent {
 
           } else {
             this.resetEstados()
+            console.log("Resultado de busqueda simple:", Response.resultado);
             this.arregloResultado_ = Response.resultado
             this.formularioBuscar = 1;
           }

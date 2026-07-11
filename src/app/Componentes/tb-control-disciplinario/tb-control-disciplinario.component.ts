@@ -9,8 +9,6 @@ import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import {
   ReactiveFormsModule,
-
-
 } from '@angular/forms';
 @Component({
   selector: 'app-tb-control-disciplinario',
@@ -80,14 +78,22 @@ export class TbControlDisciplinarioComponent {
     this._DatospersonalesService.sacarAresto(params).subscribe(
       Response => {
         this._ServiciosMensajesService.hide()
-
         if (Response.error) {
           this._DatospersonalesService.mensajeError(Response.error.sqlMessage)
         } else {
           if (Response.mensaje) {
             // this._DatospersonalesService.mensajeError(Response.mensaje)
           } else {
-            this.arregloArestos = Response.resultado;
+          let  ordenado =   Response.resultado.sort((a, b) => {
+                const [da, ma, ya] = a.fecha.split('/').map(Number);
+                const [db, mb, yb] = b.fecha.split('/').map(Number);
+
+                const fechaA = new Date(ya, ma - 1, da).getTime();
+                const fechaB = new Date(yb, mb - 1, db).getTime();
+
+                return fechaB - fechaA;
+              });
+            this.arregloArestos = ordenado
 
           }
         }
@@ -343,10 +349,26 @@ export class TbControlDisciplinarioComponent {
   mostrarModalDocumentoArresto = false;
   mostrarModalBuscarPersona = false;
   agregarArestoT = false
-  sacarPermisoPersonal() {
 
+  sacarPermisoPersonal() {
     this.agregarArestoT = this._DatospersonalesService.verificarPermisos(['User_admin', 'User_admin01', 'User_admin02'])
     //console.log( JSON.parse(localStorage.getItem("permisos") || "[]") as any[])
   }
+
+formatearHoras(horas: number): string {
+  const dias = Math.floor(horas / 24);
+  const horasRestantes = horas % 24;
+  if(dias===0){
+       return `${horasRestantes} ${horasRestantes>=2?'horas':' hora'}`;
+    }else{
+      if(horasRestantes===0){
+               return `${dias} ${dias>=2?' dias':' dia'}`;
+      }else{
+            return `${dias} ${dias>=2?' dias':' dia'} y ${horasRestantes} ${horasRestantes>=2?'horas':' hora'}`;
+      }
+     
+
+  }
+}
 
 }

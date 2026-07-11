@@ -1,0 +1,320 @@
+     <p-contextMenu #cm [model]="menuOpciones">
+        </p-contextMenu>
+
+       <p-treeselect
+        appendTo="body"
+        style="width: 100%;"
+        required
+        name="unidad"
+        #unidad="ngModel"
+        ngModel
+        selectionMode="multiple"
+        [options]="treeUnidades" [(ngModel)]="unidadesSeleccionadas"
+  [filter]="true" [showClear]="true"
+            placeholder="Seleccione las unidades" styleClass="w-full">
+        </p-treeselect>
+
+
+
+<div *ngIf="categoriaSeleccionadaDetalle" class="mt-3">
+
+    <small class="text-muted">
+
+        Ruta:
+
+        {{ categoriaSeleccionadaDetalle.ruta }}
+
+    </small>
+
+</div>
+
+ 
+<div class="explorer-toolbar">
+
+    <div class="toolbar-left">
+
+        <button class="toolbar-btn" (click)="volver()">
+            <i class="pi pi-arrow-left"></i>
+        </button>
+
+        <button class="toolbar-btn" (click)="irInicio()">
+            <i class="pi pi-home"></i>
+        </button>
+
+        <div class="breadcrumb-container">
+
+            <span class="breadcrumb-item" (click)="irRaiz()">
+                {{ categoriaSeleccionada?.nombre }}
+            </span>
+
+            <ng-container *ngFor="let item of breadcrumb">
+
+                <i class="pi pi-angle-right"></i>
+
+                <span class="breadcrumb-item" (click)="abrirDesdeRuta(item)">
+                    {{ item.nombre }}
+                </span>
+
+            </ng-container>
+
+        </div>
+
+    </div>
+
+    <div class="toolbar-right">
+
+        <button pButton class="btn-action" (click)="crearCarpeta();">
+            <i class="pi pi-folder-plus"></i>
+            Nueva Carpeta 1
+        </button>
+
+        <button pButton class="btn-action" (click)=" modalSubirArchivo=true">
+            <i class="pi pi-upload"></i>
+            Subir Archivo
+        </button>
+        <form #formbuscarArchivos="ngForm">
+
+
+            <span class="p-input-icon-left">
+
+                <i class="pi pi-search"></i>
+
+                <input type="text" pInputText name="texto" #texto="ngModel" ngModel required
+                    (keydown.enter)="buscarDocumento_en_archivos(formbuscarArchivos)" placeholder="Buscar..." />
+
+            </span>
+        </form>
+    </div>
+
+</div>
+
+<div class="explorer-content">
+
+    <div *ngFor="let item of archivos" class="archivo-card" (dblclick)="abrir(item)">
+
+        <button class="btn-opciones" (click)="mostrarMenuBoton($event,item)">
+            <i class="pi pi-ellipsis-v"> </i>
+            
+        </button>
+
+        <ng-container *ngIf="item.tipo === 'CARPETA'">
+
+            <div class="folder">
+
+                <div class="folder-tab"></div>
+
+                <div class="folder-body">
+
+                    <i class="pi pi-folder-open"></i>
+
+                </div>
+
+            </div>
+
+        </ng-container>
+
+        <ng-container *ngIf="item.tipo === 'ARCHIVO'">
+
+            <div class="file" (click)="descargarArchivo(item)">
+
+                <i class="pi pi-file-pdf"></i>
+
+            </div>
+
+        </ng-container>
+
+        <div class="archivo-nombre">
+
+            {{ item.nombre }}
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<p-dialog header="Nueva Carpeta" [(visible)]="mostrarModalCarpeta" [modal]="true" [style]="{width:'450px'}"
+    [closable]="false">
+
+    <form #FormNombre="ngForm" class="p-fluid">
+        <div class="field">
+
+            <br>
+            <input id="nombreCarpeta" type="text" pInputText name="nombre" #nombre="ngModel" ngModel required
+                style="width: 100%;" placeholder="Ingrese el nombre de la carpeta" maxlength="255">
+        </div>
+
+
+
+    </form>
+    <ng-template pTemplate="footer">
+        <button pButton type="button" label="Cancelar" icon="pi pi-times" class="p-button-text"
+            (click)="mostrarModalCarpeta=false">
+        </button>
+
+        <button pButton type="button" label="Guardar" icon="pi pi-check" (click)="crear_archivo_documento(FormNombre)">
+        </button>
+    </ng-template>
+</p-dialog>
+
+
+
+<p-dialog
+    header="📁 Nuevo Archivo"
+    [(visible)]="modalSubirArchivo"
+    [modal]="true"
+    [style]="{width:'650px'}"
+    [closable]="false"
+    styleClass="dlg-archivo-personalizado">
+
+    <form #formArchivo="ngForm" class="p-fluid">
+
+        <div class="campo-formulario">
+            <label>
+                <i class="pi pi-sitemap"></i>
+                Unidades que pueden buscar este archivo
+            </label>
+
+            <p-treeselect
+                appendTo="body"
+                style="width:100%"
+                required
+                name="unidades"
+                selectionMode="multiple"
+                [options]="treeUnidades"
+                [(ngModel)]="unidadesSeleccionadas"
+                [filter]="true"
+                [showClear]="true"
+                placeholder="Seleccione las unidades"
+                styleClass="w-full">
+            </p-treeselect>
+        </div>
+
+        <div class="campo-formulario">
+            <label>
+                <i class="pi pi-folder"></i>
+                Categoría a la que pertenece este archivo
+            </label>
+
+            <p-treeselect
+                appendTo="body"
+                style="width:100%"
+                required
+                name="categoria"
+                #categoria="ngModel"
+                [options]="treeCategorias"
+                [(ngModel)]="categoriaSeleccionada"
+                (ngModelChange)="onCategoriaChange($event)"
+                [filter]="true"
+                [showClear]="true"
+                placeholder="Seleccione una categoría"
+                styleClass="w-full">
+            </p-treeselect>
+        </div>
+
+        <div class="campo-formulario">
+            <label>
+                <i class="pi pi-file-edit"></i>
+                Descripción del archivo
+            </label>
+
+            <textarea
+                class="form-control"
+                maxlength="500"
+                rows="4"
+                #descripcion="ngModel"
+                ngModel
+                name="descripcion"
+                required
+                placeholder="Ingrese una descripción del archivo..."
+                style="width:100%">
+            </textarea>
+
+            <small class="texto-ayuda">
+                Máximo 500 caracteres.
+            </small>
+        </div>
+
+        <div class="campo-formulario">
+            <label>
+                <i class="pi pi-upload"></i>
+                Archivo a cargar
+            </label>
+
+            <input
+                type="file"
+                name="archivo"
+                required
+                (change)="seleccionarArchivo($event)">
+        </div>
+
+    </form>
+
+    <ng-template pTemplate="footer">
+
+        <button
+            pButton
+            type="button"
+            label="Cancelar"
+            icon="pi pi-times"
+            class="p-button-text"
+            (click)="modalSubirArchivo=false">
+        </button>
+
+        <button
+            pButton
+            type="button"
+            label="Guardar"
+            icon="pi pi-check"
+            [disabled]="!formArchivo.valid || !archivo_documento"
+            (click)="subirArchivo()">
+        </button>
+
+    </ng-template>
+
+</p-dialog>
+
+<!--
+<div class="row">
+
+    <div
+        *ngFor="let item of archivos"
+        class="col-md-3 mb-3"
+    >
+
+        <div
+            class="card shadow-sm cursor-pointer"
+            (click)="abrir(item)"
+        >
+
+            <div class="card-body text-center">
+
+                <i
+                    class="pi pi-folder text-warning"
+                    style="font-size: 3rem"
+                    *ngIf="item.tipo === 'CARPETA'"
+                ></i>
+
+                <i
+                    class="pi pi-file text-primary"
+                    style="font-size: 3rem"
+                    *ngIf="item.tipo === 'ARCHIVO'"
+                ></i>
+
+                <h6 class="mt-3">
+                    {{ item.nombre }}
+                </h6>
+
+                <small class="text-muted">
+                    {{ item.descripcion }}
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+-->

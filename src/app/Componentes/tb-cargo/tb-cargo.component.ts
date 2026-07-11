@@ -128,18 +128,20 @@ export class TbCargoComponent {
 
   }
   sacarpuestos() {
+    console.log("Puestosss")
+    console.log(this.seccionselected)
     this.arregloPuestos = [];
     var data = {
-      idnombramiento: this.seccionselected.idNombramiento
+      idunidad: this.seccionselected.idunidad
     }
          this._ServiciosMensajesService.show()
-
+console.log(data)
 
     this._DatospersonalesService.MostrarPuesto(data).subscribe(
     {
         next:(Response) => {
         this._ServiciosMensajesService.hide()
-
+console.log(Response)
         if (Response.error) {
           this._DatospersonalesService.mensajeError(Response.error)
         } else {

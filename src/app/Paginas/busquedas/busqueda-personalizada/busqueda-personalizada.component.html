@@ -89,6 +89,15 @@
                     </div>
                 </div>
 
+                 <!-- # Telefono -->
+                <div class="col-12 col-sm-6 col-md-3">
+                    <div class="form-group-custom">
+                        <label class="form-label-custom"># Telefono</label>
+                        <input type="text" name="numeroTelefono" #numeroTelefono="ngModel" ngModel class="form-control form-control-sm"
+                            placeholder="9766-6826" />
+                    </div>
+                </div>
+
                 <!-- Combatiente -->
                 <div class="col-12 col-sm-6 col-md-3">
                     <div class="form-group-custom">
@@ -100,14 +109,7 @@
                     </div>
                 </div>
 
-                <!-- Usuario -->
-                <div class="col-12 col-sm-6 col-md-3">
-                    <div class="form-group-custom">
-                        <label class="form-label-custom">Usuario</label>
-                        <input type="text" name="usuario" #usuario="ngModel" ngModel
-                            class="form-control form-control-sm" placeholder="Usuario del sistema" />
-                    </div>
-                </div>
+              
 
                 <!-- Pasaporte -->
                 <div class="col-12 col-sm-6 col-md-3">
@@ -115,6 +117,15 @@
                         <label class="form-label-custom">Número Pasaporte</label>
                         <input type="text" name="pasaporte" #pasaporte="ngModel" ngModel
                             class="form-control form-control-sm" placeholder="Ingrese pasaporte" />
+                    </div>
+                </div>
+                <!-- Fecha ascenso -->
+
+                <div class="col-12 col-sm-6 col-md-3">
+                    <div class="form-group-custom">
+                        <label class="form-label-custom">Fecha de Ascenso</label>
+                        <input type="month" name="fecha_ascenso" #fecha_ascenso="ngModel" ngModel
+                            class="form-control form-control-sm"  />
                     </div>
                 </div>
 
@@ -246,13 +257,13 @@
                         <button pButton type="button" (click)="buscar(buscarGenerales)" label="Buscar"
                             style="background-color: black; color: white; border-radius: 20px;height: 50px;"
                             iconPos="left">
-                            <i class="pi pi-search"></i> Buscar
+                            <i class="pi pi-search"></i>  
                         </button>
 
                         <button pButton type="button" (click)="limpiar(buscarGenerales)" label="Limpiar"
                             style="background-color: rgb(38, 116, 31); color: white; border-radius: 20px;height: 50px;"
                             styleClass="btn-pill btn-pill-danger">
-                            <i class="pi pi-filter-slash"></i> Limpiar
+                            <i class="pi pi-filter-slash"></i>  
                         </button>
                     </div>
                 </div>

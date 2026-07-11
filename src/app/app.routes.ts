@@ -3,7 +3,6 @@ import { authGuard } from './guards/guard-sesion/auth.guard';
 import { permisosGuard } from './guards/guard-sesion/permisos.guard';
 import { homeGuard } from './guards/guard-sesion/home.guard';
  
- 
 export const routes: Routes = [
   // Opcional: si alguien entra a '/', lo mandas al menú
   {
@@ -153,6 +152,7 @@ export const routes: Routes = [
           import('./Paginas/planffaa-conexiones/pagos-x-cargo/menu-conexion-planffaa/menu-conexion-planffaa.component')
             .then(m => m.MenuConexionPlanffaaComponent)
       },
+      
       {
         path: 'lista-personal-pagos-cargo',
         canActivate: [permisosGuard],
@@ -176,6 +176,14 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./Paginas/planffaa-conexiones/solicitud-constancias-planffaa/solicitud-constancias-planffaa.component')
             .then(m => m.SolicitudConstanciasPlanffaaComponent)
+      },
+      {
+        path: 'solicitud-constancias-c1',
+        canActivate: [permisosGuard],
+        data: { permisos: ["P_0001","P_0002","P_0003","P_0004","P_0005"] },
+        loadComponent: () =>
+          import('./Paginas/planffaa-conexiones/solicitud-constanicas-c1/solicitud-constanicas-c1.component')
+            .then(m => m.SolicitudConstanicasC1Component)
       },
       {
         path: 'control-usuario',
@@ -254,7 +262,22 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./Paginas/planffaa-conexiones/planillas/planillas.component')
             .then(m => m.PlanillasComponent)
-      },
+      }, {
+        path: 'crear-ternas',
+        canActivate: [permisosGuard],
+        data: { permisos: ['PRG_0001'] },
+        loadComponent: () =>
+          import('./Paginas/Evalucion-fisica/crear-ternas/crear-ternas.component')
+            .then(m => m.CrearTernasComponent)
+      }, {
+        path: 'acuerdos-archivos',
+        canActivate: [permisosGuard],
+        data: { permisos: ['PRG_0001'] },
+        loadComponent: () =>
+          import('./Paginas/Gestor-Archivo/ventanas-archivos/ventanas-archivos.component')
+            .then(m => m.VentanasArchivosComponent)
+      }
+        
         
     ]
   },

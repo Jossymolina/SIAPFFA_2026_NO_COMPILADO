@@ -40,7 +40,6 @@ buscar(form){
 this._ServiciosMensajeService.show('Buscando información...')
       this._ServicioBackendService.sacarHistorialPorPersona(p).subscribe({
     next: (response) => {
-      console.log(response)
       this._ServiciosMensajeService.hide()
       if (response.error) return this._ServiciosMensajeService.mensajeMalo(response.error);
       if (response.mensaje) return this._ServiciosMensajeService.mensajeMalo(response.mensaje);

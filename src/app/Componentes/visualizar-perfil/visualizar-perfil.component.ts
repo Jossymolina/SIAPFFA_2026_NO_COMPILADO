@@ -149,6 +149,36 @@ sacarVacacionSegunTabla(antigedad){
 }
 objetoConsultado
 armaobjetoConsultado
+fecha_detallado
+calcularAntiguedad(fecha: string | Date): string {
+  const inicio = new Date(fecha);
+  const hoy = new Date();
+
+  let años = hoy.getFullYear() - inicio.getFullYear();
+  let meses = hoy.getMonth() - inicio.getMonth();
+  let dias = hoy.getDate() - inicio.getDate();
+
+  // Ajustar días negativos
+  if (dias < 0) {
+    meses--;
+
+    const ultimoDiaMesAnterior = new Date(
+      hoy.getFullYear(),
+      hoy.getMonth(),
+      0
+    ).getDate();
+
+    dias += ultimoDiaMesAnterior;
+  }
+
+  // Ajustar meses negativos
+  if (meses < 0) {
+    años--;
+    meses += 12;
+  }
+
+  return `${años} año${años !== 1 ? 's' : ''}, ${meses} mes${meses !== 1 ? 'es' : ''} y ${dias} día${dias !== 1 ? 's' : ''}`;
+}
  buscarporIdentidad() {
     let parametro = {
       identidad: this.identidad_
@@ -167,8 +197,10 @@ armaobjetoConsultado
             if (Response.mensaje) {
              // this._DatospersonalesService.mensajeError(Response.mensaje)
             } else {
-            
+        
               this.objetoConsultado = Response.resultado[0];
+             
+                  this.fecha_detallado = this.calcularAntiguedad(this.objetoConsultado.fechaPrimerIngreso.split("T")[0])
               let anio_anti = this.calcularano(this.objetoConsultado.fecha.split("T")[0]) 
 
             let r = this.sacarVacacionSegunTabla(anio_anti) /*(anio_anti)<=5 ? 15 : (((anio_anti)>=6 && anio_anti<=10?20:

@@ -60,7 +60,7 @@
               <td>{{ index + 1 }}</td>
               <td>{{ f.fecha }}</td>
               <td>{{ f.motivo }}</td>
-              <td>{{ f.horas }}</td>
+              <td>{{formatearHoras( f.horas)  }}</td>
               <td>{{ f.nombres }} {{ f.apellidos }}</td>
               <td>
                 <!-- SIN ARCHIVO: SUBIR       *ngIf="
