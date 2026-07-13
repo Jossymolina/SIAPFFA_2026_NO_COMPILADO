@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { ServicioBackendService } from '../../../servicios/servicio-backend.service';
 import { ServiciosMensajeService } from '../../../servicios/serviMensaje/servicios-mensaje.service';
 import { TreeSelectModule } from 'primeng/treeselect';
@@ -27,7 +27,7 @@ import { InputTextModule } from 'primeng/inputtext';
   templateUrl: './ventanas-archivos.component.html',
   styleUrl: './ventanas-archivos.component.css',
 })
-export class VentanasArchivosComponent implements OnInit {
+export class VentanasArchivosComponent implements OnInit,AfterViewInit  {
 mostrarModalCarpeta = false
 
 permisosVisualizacion = [
@@ -57,10 +57,16 @@ permisosVisualizacion = [
 
   categoriaSeleccionadaDetalle: any = null;
 unidadesSeleccionadas: any[] = [];
+usuarioLoguiado = null
   ngOnInit(): void {
+  this.usuarioLoguiado = JSON.parse(localStorage.getItem('user_login')!).user;
     this.sacarCategorias();
-    this.cargarContenido()
+  
    this.sacarTodalasUnidades()
+  }
+  ngAfterViewInit(): void {
+    console.log(this.usuarioLoguiado )
+    this.cargarContenido()
   }
 
 sacarTodalasUnidades(){
@@ -284,6 +290,7 @@ sacarTodalasUnidades(){
       texto_extraido: null,
       usuario_creacion: 2,
       estado: "activo",
+      idunidad_direccion:this.usuarioLoguiado.idunidad_direccion
       
     }
  
@@ -313,7 +320,11 @@ sacarTodalasUnidades(){
 
     if (this.archivoPadreActual) {
       params.id_archivo_padre = this.archivoPadreActual.id_archivo;
+    
+     
     }
+      params.idunidad_dir = this.usuarioLoguiado.idunidad_direccion;
+    console.log(params)
     this._ServiciosMensajeService.show()
     this._ServicioBackendService.obtenerArchivos_(params).subscribe({
       next: (response) => {
@@ -634,11 +645,11 @@ subirArchivo() {
             data: unidad.data
           }));
  
+          console.log(unidadesLimpias)
+
   if(this.formArchivo.value.descripcion.length >400) return this._ServiciosMensajeService.mensajeMalo("Descripcion en menos de 400 caracteres")
 
- 
     
-
   if (!this.archivo_documento) {
 
     this._ServiciosMensajeService.mensajeAdvertencia(
@@ -670,7 +681,7 @@ subirArchivo() {
 
   formData.append(
     'usuario_creacion',
-    '2'
+    this.usuarioLoguiado.identidadusuario
   );
 
   formData.append(
@@ -687,6 +698,11 @@ subirArchivo() {
     'unidades',
     JSON.stringify( unidadesLimpias)
   );
+   formData.append(
+    'idunidad_direccion',
+    this.usuarioLoguiado.idunidad_direccion
+  );
+
   
   this._ServiciosMensajeService.show();
  
@@ -713,13 +729,18 @@ subirArchivo() {
 }
 
 buscarDocumento_en_archivos(form){
+  console.log(this.usuarioLoguiado)
   let  p  = {
-    texto : form.value.texto
+    texto : form.value.texto,
+    id_direccion:this.usuarioLoguiado.idunidad_direccion
   }
+  console.log(p)
   if( form.value.texto.trim()==="") return this.cargarContenido()
   this._ServiciosMensajeService.show()
+console.log("22222222222222222")
 this._ServicioBackendService.buscarDocumento_en_archivos(p).subscribe({
   next:(response)=>{
+    console.log(response)
       this._ServiciosMensajeService.hide()
       
       this.archivos = response.resultado
