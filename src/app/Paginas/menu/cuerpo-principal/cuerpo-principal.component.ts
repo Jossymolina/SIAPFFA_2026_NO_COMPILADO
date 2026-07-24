@@ -110,18 +110,18 @@ export class CuerpoPrincipalComponent {
     }
     ,
      {
-      title: 'Evaluación fisica (Desarrollo)',
-      description: 'Aqui se evalua la parte fisica del personal.',
-      icon: 'pi pi-hammer',
+      title: 'Control de Evaluación Física',
+      description: 'permite registrar y administrar las evaluaciones médicas y las pruebas de aptitud física del personal, incluyendo pechadas, abdominales, carrera y disparo, manteniendo un historial de resultados para el seguimiento del desempeño',
+      icon: 'pi pi-trophy',
       stilos:"",
       route: '/menu/crear-ternas',
-      code:['PRG_0001']
+      code:['PF_0001']
 
     },
      {
-      title: 'Control de Acuerdos (Desarrollo)',
-      description: 'Control de los archivos de acuerdos',
-      icon: 'pi pi-apple',
+      title: 'Archivo Digital',
+      description: 'Archivo Digital es el módulo encargado de almacenar, organizar y administrar documentos electrónicos de forma segura.',
+      icon: 'pi pi-folder-open',
       stilos:"",
       route: '/menu/acuerdos-archivos',
       code:['Arch_0001']

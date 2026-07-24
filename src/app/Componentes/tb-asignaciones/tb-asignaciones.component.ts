@@ -73,10 +73,13 @@ unidadesSeleccionadas: any[] = [];
     var parametro = {
       identidad: this.objetoConsultado.identidad
     }
+  
+    
     this._ServiciosMensajesService.show()
     this._DatospersonalesService.sacarDireccionDeAsignado(parametro).subscribe(
       Response => {
-        console.log(Response)
+       
+        
     this._ServiciosMensajesService.hide()
 
         this.arreglosDeMisAsignacionesDirecciones = Response.resultado;
@@ -92,15 +95,18 @@ unidadesSeleccionadas: any[] = [];
   Sacar_Direcciones(data) {
     //8,1,3
 
- 
-    this.ArregloNombramiento = [];
+     this.ArregloNombramiento = [];
     this.unidadSelected = data.unidad;
     var parametros = {
       idunidad: data.idunidad
     }
+   
+    
 this._ServiciosMensajesService.show()
     this._DatospersonalesService.mostrarNombramiento(parametros).subscribe(
       Response => {
+     
+        
         this._ServiciosMensajesService.hide()
         this.ArregloNombramiento = Response.resultado
         this.sacarDireccionDeAsignado();
@@ -186,13 +192,20 @@ this._ServiciosMensajesService.mensajeerrorServer()
   }
   @ViewChild("formDireccion") formDireccion:NgForm
   async guardarAsignacionDireccion() {
-    console.log(this.unidadesSeleccionadas)
+        var parametro = {
+      identidad: this.objetoConsultado.identidad,
+      identidadEjecutora: this.usuariologuiado.identidad,
+      idunidad: this.unidadesSeleccionadas["idunidad"],
+      direccion: this.unidadesSeleccionadas["label"],
+      fechaAsignacion:  this.formDireccion.value.fechaSelected,
+      idgrado: this.objetoConsultado.grado,
+      fechaSalida:  this.formDireccion.value.fechaSelected,
+      unidad: this.unidadSelected
+    }
+ 
     let respuesta = await this._ServiciosMensajesService.mensajePregunta("Esta seguro de guardar los cambios")
-    
 if (respuesta) {
-  if (this.formDireccion.value.fechaSelected === "" || this.formDireccion.value.fechaSelected === undefined || this.formDireccion.value.direccionSelected === undefined) {
-    this._DatospersonalesService.mensajeError("RELLENE LOS CAMPOS 111")
-  } else {
+   
     var parametro = {
       identidad: this.objetoConsultado.identidad,
       identidadEjecutora: this.usuariologuiado.identidad,
@@ -226,7 +239,7 @@ if (respuesta) {
         this._DatospersonalesService.mensajeError("ERROR CONEXION AL INGRESAR ASIGNACION (DIRECCION | ASIGNACION)")
       }
     )
-  }
+ 
 }
 
   }
@@ -724,8 +737,8 @@ hacerSeleccionables(
 }
 
 obtenerSubArbol(arbol: any[], idUnidad: number): any | null {
- console.log("Noooooo")
- console.log(arbol)
+
+  
     for (const nodo of arbol) {
 
         if (nodo.data.idunidad === idUnidad) {
@@ -783,16 +796,18 @@ obtenerHijosPorTipo(
 
     return resultado;
 }
-  sacarTodalasUnidades() {
 
+ 
+treeUnidadesSeccion: any[] = [];
+
+  sacarTodalasUnidades() {
     this._ServiciosMensajesService.show();
 
     this._DatospersonalesService.sacarTodalasUnidades().subscribe({
       next: (response) => {
-
         this._ServiciosMensajesService.hide();
-
         const unidades = response.resultado || [];
+        const seccionesDirecciones =   response.resultado || [];
         let nodo = unidades.filter((x: any) => x.id_unidad_padre == null)
           .map((x: any) =>
             this.construirJerarquiaUnidades(
@@ -800,16 +815,26 @@ obtenerHijosPorTipo(
               unidades
             )
           );
-        this.treeUnidades = nodo.map((x: any) => this.convertirTreeNodeUnidad(x));
-       
-        console.log(this.treeUnidades)
 
-        let verAsignacionActual = this.arregloAsignaciones.find(elemet => {return elemet.actual===1})
+          let nodo_direcciones = seccionesDirecciones.filter((x: any) => x.id_unidad_padre == null)
+          .map((x: any) =>
+            this.construirJerarquiaUnidades(
+              x,
+              unidades
+            )
+          );
+
+         this.treeUnidades = nodo.map((x: any) => this.convertirTreeNodeUnidad(x));
+
+         this.treeUnidadesSeccion = nodo_direcciones.map((x: any) => this.convertirTreeNodeUnidadDirecciones(x));
        
+       
+        let verAsignacionActual = this.arregloAsignaciones.find(elemet => {return elemet.actual===1})
+ 
     
         if(verAsignacionActual.idunidad===94){
           //Estado Mayor Conjunto
-               this.arbolDireccionSeccion = this.buscarSubArbol(
+        this.arbolDireccionSeccion = this.buscarSubArbol(
                                             this.treeUnidades,
                                             verAsignacionActual.idunidad,  
                                             nodo => nodo.data.idunidad===3071,
@@ -939,7 +964,7 @@ obtenerHijosPorTipo(
   nodo: any
 ): any {
 
-  const esHoja = (nodo.unidad_tipo===5 || nodo.unidad_tipo ===4 || nodo.unidad_tipo ===6 || nodo.unidad_tipo ===7) ? true : false // nodo.hijos.length === 0;
+  const esHoja = (nodo.unidad_tipo===5 || nodo.unidad_tipo ===4 || nodo.unidad_tipo ===6 || nodo.unidad_tipo ===7 || nodo.unidad_tipo ===11) ? true : false // nodo.hijos.length === 0;
 
   return {
 
@@ -967,6 +992,37 @@ obtenerHijosPorTipo(
 }
 
 
+    private convertirTreeNodeUnidadDirecciones(
+  nodo: any
+): any {
+
+  const esHoja = (nodo.unidad_tipo===1 || nodo.unidad_tipo ===8 || nodo.unidad_tipo ===12 || nodo.unidad_tipo ===13
+    || nodo.unidad_tipo ===14 || nodo.unidad_tipo ===3 || nodo.unidad_tipo ===9 || nodo.unidad_tipo ===3 || nodo.unidad_tipo ===9
+     
+  ) ? true : false // nodo.hijos.length === 0;
+
+  return {
+
+    key: String(nodo.idunidad),
+
+    label: nodo.unidad_nombre,
+
+    data: nodo,
+    unidad_tipo:nodo.unidad_tipo,
+    idunidad:nodo.idunidad,
+    selectable: esHoja,
+
+    icon: esHoja
+      ? 'pi pi-lock-open'
+      : 'pi pi-lock',
+
+    children: nodo.hijos.map((h: any) =>
+      this.convertirTreeNodeUnidadDirecciones(h)
+    )
+
+  };
+
+}
 establecerSelectablePorTipo(arbol: any[], unidadTipo: number): void {
     for (const nodo of arbol) {
         const esHoja = !nodo.children || nodo.children.length === 0;

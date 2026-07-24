@@ -7,29 +7,10 @@
   border-radius: 10px !important;
 }
 
-.p-button-rounded {
-  border-radius: 20px !important;
-  padding: .6rem 1.5rem !important;
-  background-color: rgb(243, 176, 176) !important;
-  color: white !important;
-}
+ 
 
 
-
- .p-button-rounded1 {
-  border-radius: 20px !important;
-  padding: .6rem 1.5rem !important;
-  background-color: rgb(104, 100, 100) !important;
-  color: white !important;
-}
-
- .p-button-rounded2 {
-  border-radius: 20px !important;
-  padding: .6rem 1.5rem !important;
-  background-color: rgb(62, 173, 192) !important;
-  color: white !important;
-}
-
+ 
  
 /* Tabla específica */
 .tabla-nombramientos tbody tr > th,
@@ -43,14 +24,7 @@
   white-space: nowrap;
 }
 
-/* Botones de acciones compactos */
-.tabla-nombramientos .acciones-nombramiento .p-button {
-  padding: 0.2rem 0.4rem !important;
-}
-
-.tabla-nombramientos .acciones-nombramiento .p-button .pi {
-  font-size: 0.85rem;
-}
+ 
 
 
 

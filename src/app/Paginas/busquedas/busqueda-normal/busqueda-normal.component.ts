@@ -492,7 +492,7 @@ export class BusquedaNormalComponent {
 
           } else {
             this.resetEstados()
-            console.log("Resultado de busqueda simple:", Response.resultado);
+            
             this.arregloResultado_ = Response.resultado
             this.formularioBuscar = 1;
           }
@@ -638,7 +638,8 @@ export class BusquedaNormalComponent {
         reader.readAsDataURL(blob);
       });
     } catch (e) {
-      console.error('Error cargando imagen', e);
+
+      
       return null;
     }
   }

@@ -287,7 +287,9 @@
                 || _DatospersonalesService.verificarPermisos(2) 
                 || _DatospersonalesService.verificarPermisos(3)  
                 || _DatospersonalesService.verificarPermisos(4)"-->
-    <button type="button" class="btn btn-primary" (click)="guardarAsignacionDireccion()">
+    <button type="button" class="btn btn-primary" 
+    [disabled]="!formDireccion.valid"
+    (click)="guardarAsignacionDireccion()">
       Guardar
     </button>
   </ng-template>
@@ -473,7 +475,7 @@
               </label>
               <p-treeselect appendTo="body" style="width: 100%;" required name="unidad" #unidad="ngModel" ngModel
               required
-                [options]="treeUnidades" [(ngModel)]="unidadesSeleccionadas" [filter]="true" [showClear]="true"
+                [options]="treeUnidadesSeccion" [(ngModel)]="unidadesSeleccionadas" [filter]="true" [showClear]="true"
                 placeholder="Seleccione las unidades" styleClass="w-full">
               </p-treeselect>
  

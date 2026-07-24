@@ -249,7 +249,8 @@ export class BusquedaPersonalizadaComponent implements OnInit {
     this._ServiciosMensajesService.show();
     this._ServiciosSiapffaaService.vistaSiapffaa(parametro).subscribe({
       next: (response) => {
-        console.log(response)
+       
+        
         this._ServiciosMensajesService.hide();
         if (response.error)
           return this._ServiciosMensajesService.mensajeMalo(response.error);
@@ -270,7 +271,8 @@ export class BusquedaPersonalizadaComponent implements OnInit {
 
   sacarPermisoPersonalVista(permiso: string[]) {
     return this._ServiciosSiapffaaService.verificarPermisos(permiso)
-    //console.log( JSON.parse(localStorage.getItem("permisos") || "[]") as any[])
+   
+    
   }
 
   // ============================
@@ -705,7 +707,8 @@ export class BusquedaPersonalizadaComponent implements OnInit {
         reader.readAsDataURL(blob);
       });
     } catch (e) {
-      console.error('Error cargando imagen', e);
+    
+      
       return null;
     }
   }
@@ -725,7 +728,8 @@ export class BusquedaPersonalizadaComponent implements OnInit {
         responseType: 'arraybuffer',
       }).toPromise()) as ArrayBuffer;
     } catch (e) {
-      console.error('Error descargando imagen', e);
+      
+      
       return null;
     }
   }

@@ -8,6 +8,7 @@ import { InputText } from 'primeng/inputtext';
 import { ServiciosMensajeService } from '../../../servicios/serviMensaje/servicios-mensaje.service';
 import { ServicioBackendService } from '../../../servicios/servicio-backend.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ButtonModule } from 'primeng/button';
  
  
 
@@ -19,7 +20,8 @@ import { ActivatedRoute, Router } from '@angular/router';
     CommonModule,
     FormsModule,
        Card,
-    InputText 
+    InputText,
+    ButtonModule 
   ],
   templateUrl: './busqueda-global.component.html',
   styleUrl: './busqueda-global.component.css',
@@ -51,21 +53,22 @@ export class BusquedaGlobalComponent {
   }
 
    buscar_persona(data){
-    console.log(data)
+
+    
      this._ServiciosMensajesService.show()
 
     this._DatospersonalesService.busquedaglobal(data).subscribe({
       next:(Response)=>{
-        console.log(Response)
+     
+        
           this._ServiciosMensajesService.hide()
           if(Response.error) return this._ServiciosMensajesService.mensajeMalo(Response.error)
           if(Response.mensaje) return this._ServiciosMensajesService.mensajeMalo(Response.mensaje)
           this.atras(0,1)
          this.arregloResultados= Response.resultado;
   },error:()=>{
-              this._ServiciosMensajesService.hide()
-
-        this._ServiciosMensajesService.mensajeerrorServer()
+         this._ServiciosMensajesService.hide()
+         this._ServiciosMensajesService.mensajeerrorServer()
       }
     })
   }

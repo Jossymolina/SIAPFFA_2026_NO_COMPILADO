@@ -71,7 +71,6 @@ export class MenuConexionPlanffaaComponent {
 
   }
    openModule(m: ModuleCard) {
-        console.log(m)
     if (m.route) {
       this.router.navigate([m.route]);
     }

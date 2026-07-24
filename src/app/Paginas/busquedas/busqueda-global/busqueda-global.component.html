@@ -3,7 +3,7 @@
         <!-- HEADER DEL FORMULARIO -->
         <div class="form-header">
             <button pButton type="button" icon="pi pi-arrow-left" label="Atrás" class="btn-back-modern"
-                (click)="onAtras('menu/menu-busqueda')"> <i class="pi pi-arrow-left"></i>
+                (click)="onAtras('menu/menu-busqueda')">  
             </button>
 
             <div class="form-title">
@@ -39,7 +39,7 @@
 
     <!-- BOTÓN -->
     <div class="col-12 col-md-4">
-      <label class="form-label">Buscar</label>
+     <br>
 
       <button
         pButton
@@ -152,6 +152,9 @@
 
 
     </p-card>
+
+
+
     <p-card *ngIf="segundaVentana === 2 ">
         <ng-container  >
 
@@ -212,9 +215,7 @@
                                     <div class="profile-force-badge">
                                         {{ objetoConsultado?.fuerza }}
                                     </div>
-                                    <div class="profile-serie">
-                                        Serie: <span>{{ objetoConsultado?.serie }}</span>
-                                    </div>
+                                  
                                 </div>
                             </div>
                         </div>

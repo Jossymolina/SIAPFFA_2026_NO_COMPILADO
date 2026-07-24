@@ -91,14 +91,15 @@ armarFiltroFuerza(): string {
       cadena:this.armarFiltroFuerza(),
       idfuerza_cadena: this.armarFiltroIdFuerza()
     }
-    console.log(p)
+   
+    
     this._servicioBackend.getToePivotPorCortoGeneralCompleto(p).subscribe({
       next: (Response) => {
         this._servicioMensaje.hide();
         
         this.data = Response?.data ?? [];
-        console.log("*******************************")
-        console.log(Response)
+       
+        
         this.buildPivotHeader();
       },
       error: (error) => {

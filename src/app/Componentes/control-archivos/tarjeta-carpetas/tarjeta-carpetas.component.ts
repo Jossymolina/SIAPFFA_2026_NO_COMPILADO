@@ -5,9 +5,9 @@ import { ServicioBackendService } from '../../../servicios/servicio-backend.serv
 import { ServiciosMensajeService } from '../../../servicios/serviMensaje/servicios-mensaje.service';
 import Swal from 'sweetalert2';
 import { TarjetaArchivosComponent } from '../tarjeta-archivos/tarjeta-archivos.component';
-
  import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
 @Component({
   selector: 'app-tarjeta-carpetas',
   standalone:true,
@@ -16,16 +16,24 @@ import { ButtonModule } from 'primeng/button';
 FormsModule,
 TarjetaArchivosComponent,
 DialogModule,
-ButtonModule
+ButtonModule,
+FormsModule,
+CommonModule,
+InputTextModule
+
+
+
   ],
   templateUrl: './tarjeta-carpetas.component.html',
   styleUrl: './tarjeta-carpetas.component.css',
 })
 export class TarjetaCarpetasComponent {
  arreglocarpetaprincipal = []
+ mostrarDialogo
   verCarpeta = 0
   usuariologuiado;
   @Input("identidad") identidad_
+  @Input("persona_seleccionada") persona_seleccionada;
    dropdownPrincipalId: number | null = null;
 dropdownSecundariaId: number | null = null;
   arreglocarpetasegunda = []
@@ -48,6 +56,7 @@ dropdownSecundariaId: number | null = null;
     this.usuariologuiado = JSON.parse(localStorage.getItem('user_login')!).user;
   }
   ngOnInit(): void {
+    console.log(this.persona_seleccionada)
     this.archivoPrincipal()
   }
 toggleDropdownPrincipal(id: number, event: MouseEvent) {
@@ -620,5 +629,78 @@ visible = false;
 
   cerrarModal() {
     this.visible = false;
+  }
+
+  crearEstructura(){
+let p = {
+  nombre_carpeta_principal: `${this.persona_seleccionada.idfuerza===2? this.persona_seleccionada.equivalente : this.persona_seleccionada.nombre_grado } `,
+  identidadpropietario:this.identidad_,
+  idgrado:this.persona_seleccionada.grado,
+  idcategoria:this.persona_seleccionada.idcategoria,
+  sub_carpetas: [
+    { sub: "1. Hoja de Servicios, Currículum Vitae y Biografía", codigo: "carp_1",
+      archivo_obligatorio:[
+         {nombre:'Hoja de Servicios'},
+         {nombre:'Currículum'},
+         {nombre:'Biografía'},
+      ]
+     },
+    { sub: "2. Documentos Personales",
+       codigo: "carp_2",
+       archivo_obligatorio: [
+        {nombre:'DNI Frontal'},
+        {nombre:'DNI Reverso'},
+        {nombre:'licencia de Conducir Frontal'},
+        {nombre:'licencia de Conducir Reverso'},
+        {nombre:'Identificación Militar Frontal'},
+        {nombre:'Identificación Militar Reverso'},
+        {nombre:'Pasaporte'},
+        {nombre:'RTN Frontal'},
+        {nombre:'RTN Reverso'},
+        {nombre:'Antecedentes Penales'},
+        {nombre:'Antecedentes Policiales'},
+        {nombre:'Antecedentes Militares'},
+        {nombre:'Croquis'},
+        {nombre:'Finiquito IPM'},
+        {nombre:'Carnet Seguro Atlantida Frontal'},
+        {nombre:'Carnet Seguro Atlantida Reverso'},
+        {nombre:'Cretificado de Fhema'},
+        {nombre:'Declaración Jurada'},
+        {nombre:'Acta Matrimonio o Divorcio'},
+        {nombre:'Permiso de Portacion de Armas'},
+      ]
+      },
+    { sub: "3. Acuerdos", codigo: "",archivo_obligatorio:[] },
+    { sub: "4. Reportes de Eficiencia", codigo: "",archivo_obligatorio:[] },
+    { sub: "5. Exámenes Médicos", codigo: "" ,archivo_obligatorio:[]},
+    { sub: "6. Cursos y Seminarios Militares", codigo: "",archivo_obligatorio:[] },
+    { sub: "7. Cursos y Seminarios Civiles", codigo: "",archivo_obligatorio:[] },
+    { sub: "8. Condecoraciones y Distinciones", codigo: "",archivo_obligatorio:[] },
+    { sub: "9. Despachos y Títulos", codigo: "",archivo_obligatorio:[] },
+    { sub: "10. Evaluaciones Físicas", codigo: "",archivo_obligatorio:[] },
+    { sub: "11. Evaluaciones de Disparo", codigo: "" ,archivo_obligatorio:[]},
+    { sub: "12. Calificaciones de Cursos", codigo: "",archivo_obligatorio:[] },
+    { sub: "13. Constancias de Misiones", codigo: "",archivo_obligatorio:[] },
+    { sub: "14. Fotografías", codigo: "" ,archivo_obligatorio:[]},
+    { sub: "15. Control Disciplinario", codigo: "",archivo_obligatorio:[] },
+    { sub: "16. Otros Documentos", codigo: "" ,archivo_obligatorio:[]}
+  ]
+};
+//crearCarpetaEstructura
+this._ServiciosMensajesService.show()
+this._DatospersonalesService.crearCarpetaEstructura(p).subscribe({
+  next:(response)=>{
+    this._ServiciosMensajesService.hide()
+    if(!response.ok) return this._ServiciosMensajesService.mensajeMalo(response.mensaje)
+      this._ServiciosMensajesService.mensajeBueno(response.mensaje)
+      this.mostrarDialogo = false
+      this.archivoPrincipal();
+  },error:()=>{
+    this._ServiciosMensajesService.hide()
+    this._ServiciosMensajesService.mensajeerrorServer()
+  }
+})
+    console.log(p)
+
   }
 }

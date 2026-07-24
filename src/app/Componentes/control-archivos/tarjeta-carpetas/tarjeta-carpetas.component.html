@@ -37,6 +37,16 @@
           <span>Nueva carpeta </span>
         </button>
 
+        <button class="btn btn-outline-secondary btn-dashboard-action" 
+        
+        title="Crear carpeta"
+          (click)="mostrarDialogo =true"
+          style="background-color: black; color: white;margin-left: 5px;"
+          >
+          <i class="pi plus" aria-hidden="true"></i>
+          <span>Generar Estructura </span>
+        </button>
+
        <!-- <a class="btn btn-outline-primary btn-dashboard-action"
         style="background-color: black; color: white; margin-left: 2px;"
           href="../../../assets/Manual de usuario para ingreso de la hoja de servicio.pdf"
@@ -73,7 +83,7 @@
         (click)="abrirModal()"
         style="margin-left: 5px;"
         title="Adjuntar documentos" data-bs-toggle="modal"
-          data-bs-target="#cargarDocumentos">
+           >
           <i class="fa fa-plus-square-o" aria-hidden="true"></i>
           <span>Adjuntar documentos</span>
         </button>
@@ -125,7 +135,7 @@
 
 
           <!-- Icono carpeta -->
-          <div class="folder-icon-wrapper" (click)="buscarSegundacarpeta(i.idcarpetaPrincipal)">
+          <div class="folder-icon-wrapper" [title]="i.nombrecarpeta" (click)="buscarSegundacarpeta(i.idcarpetaPrincipal)">
             <img class="folder-icon" src="cajon.gif" alt="Carpeta principal">
           </div>
 
@@ -209,7 +219,7 @@
         <h6 class="mb-0">Control de documentos</h6>
       </div>
       <div class="card-body p-2">
-        <app-tarjeta-archivos [idcarpetaSegundaria]="idcarpetaSegundaria" [identidad]="identidad_"
+        <app-tarjeta-archivos  (repsonderPadre)="this.buscardocumentos(this.idcarpetaSegundaria)" [idcarpetaSegundaria]="idcarpetaSegundaria" [identidad]="identidad_"
           [arreglodeDocumentos]="arreglodeDocumentos"></app-tarjeta-archivos>
 
       </div>
@@ -262,5 +272,92 @@
         </div>
       </form>
  
+
+</p-dialog>
+
+
+
+<p-dialog
+    [(visible)]="mostrarDialogo"
+    [modal]="true"
+    [closable]="false"
+    [style]="{width:'30rem'}"
+    header="Crear carpeta principal">
+
+    <!-- Información -->
+    <div class="alerta-creacion">
+
+        <i class="pi pi-folder-open"></i>
+
+        <div>
+            <div class="titulo">
+                Nueva carpeta principal
+            </div>
+
+            <div class="descripcion">
+                Se creará una carpeta principal para el grado y la categoría
+                seleccionados. Esta estructura servirá como plantilla para los
+                expedientes del personal.
+            </div>
+
+            <small>
+                <strong>Nota:</strong> Solo puede existir una carpeta por cada
+                combinación de grado y categoría.
+            </small>
+
+        </div>
+
+    </div>
+
+    <!-- Datos -->
+    <div class="card-datos">
+
+        <div class="dato">
+            <span class="etiqueta">
+                <i class="pi pi-briefcase"></i>
+                Grado
+            </span>
+
+            <span class="valor">
+                {{
+                persona_seleccionada?.idfuerza===2
+                ? persona_seleccionada?.equivalente
+                : persona_seleccionada?.nombre_grado
+                }}
+            </span>
+        </div>
+
+        <div class="dato">
+            <span class="etiqueta">
+                <i class="pi pi-tag"></i>
+                Categoría
+            </span>
+
+            <span class="valor">
+                {{ persona_seleccionada?.categoria }}
+            </span>
+        </div>
+
+    </div>
+
+    <ng-template pTemplate="footer">
+
+        <button
+            pButton
+            label="Cancelar"
+            severity="secondary"
+            text
+            (click)="mostrarDialogo=false">
+        </button>
+
+        <button
+            pButton
+            icon="pi pi-check"
+            label="Crear carpeta"
+            [disabled]="!persona_seleccionada"
+            (click)="crearEstructura()">
+        </button>
+
+    </ng-template>
 
 </p-dialog>

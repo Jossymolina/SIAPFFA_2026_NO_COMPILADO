@@ -67,8 +67,32 @@
     <div class="container-fluid py-3">
 
       <!-- HEADER -->
-      <div class="row align-items-center mb-3">
-        <div class="col">
+      <form  #formBuscar="ngForm" class="row align-items-center mb-3"   >
+        <label for="" style="margin-left: 5px;" class="col-md-2">
+          Unidad
+             <p-treeselect appendTo="body" style="width: 100%;" required name="seccion" #seccion="ngModel" ngModel
+              required
+                [options]="treeUnidades"  [filter]="true" [showClear]="true"
+                placeholder="Seleccione la unidad" styleClass="w-full">
+              </p-treeselect>
+        </label>
+ 
+            <label for="" style="margin-left: 5px;" class="col-md-2"> 
+              <br>
+             <button 
+               [disabled]="!formBuscar.valid"
+               (click)="sacarParteUnidad(formBuscar)"
+               class="btn btn-danger"
+             >
+                Buscar
+             </button>
+            </label>
+           
+         
+           
+        
+
+        <div class="col-md-12" style="margin-top: 10px;">
           <h5 class="mb-0">Parte de su unidad</h5>
           <small class="text-muted">{{usuarioLoguiado.unidad}}</small>
         </div>
@@ -79,7 +103,7 @@
             Exportar
           </button>
         </div>
-      </div>
+      </form>
 
 
 
@@ -202,6 +226,15 @@
   <div>
     <div class="container-fluid py-3">
       <form #formBuscar="ngForm">
+           <label for="" style="margin-left: 5px; margin-right: 3px;" class="col-md-2">
+          Unidad
+             <p-treeselect appendTo="body" style="width: 100%;" required name="seccion" #seccion="ngModel" ngModel
+              required
+                [options]="treeUnidades"  [filter]="true" [showClear]="true"
+                placeholder="Seleccione la unidad" styleClass="w-full">
+              </p-treeselect>
+        </label>
+ 
         <label for="">Fecha
           <br>
           <input type="month" name="fecha" #fecha="ngModel" ngModel required class="form-control">
@@ -298,6 +331,8 @@
   <div>
     <div class="container-fluid py-3">
       <form #formBuscar="ngForm">
+        
+ 
         <label for="">Fecha
           <br>
           <input type="month" name="fecha" #fecha="ngModel" ngModel required class="form-control">
@@ -380,29 +415,20 @@
   @if(VentanaSeleccionada?.id==='r4'){
   <div>
 
-    <div class="d-flex align-items-center gap-4">
-
-      <div *ngFor="let op of opciones" class="d-flex align-items-center gap-2">
-        <p-radioButton name="fechaCorte" [value]="op.value" [(ngModel)]="opcion" inputId="{{ op.value }}">
-        </p-radioButton>
-
-        <label [for]="op.value" class="mb-0">
-          {{ op.label }}
-        </label>
-      </div>
-
-
-    </div>
-    <hr>
-
-
-
-
-    <div *ngIf="opcion === 'unidad'">
+ 
+     
+    <div >
 
       <form #formbuscar="ngForm" class="row">
 
-
+  <label for="" style="margin-left: 5px; margin-right: 3px;" class="col-md-2">
+          Unidad
+             <p-treeselect appendTo="body" style="width: 100%;" required name="seccion" #seccion="ngModel" ngModel
+              required
+                [options]="treeUnidades"  [filter]="true" [showClear]="true"
+                placeholder="Seleccione la unidad" styleClass="w-full">
+              </p-treeselect>
+        </label>
 
 
         <label for="" class="col-md-2">
@@ -535,7 +561,7 @@
   }
   @if(VentanaSeleccionada?.id==='r5'){
   <div>
-
+<!-- 
     <div class="d-flex align-items-center gap-4">
 
       <div *ngFor="let op of opciones" class="d-flex align-items-center gap-2">
@@ -575,8 +601,8 @@
         </label>
       </form>
     </div>
-
-    <div *ngIf="opcion === 'seccion'">
+-->
+    <div  >
 
       <form #formbuscar="ngForm" class="row">
 
@@ -584,11 +610,11 @@
         <label for="" style="margin-left: 5px;" class="col-md-2">
           Seccion
 
-          <select name="seccion" class="form-control" id="seccion" #seccion="ngModel" ngModel required>
-
-            <option *ngFor="let u of direcciones" [ngValue]="u">{{ u.descripcion }}</option>
-
-          </select>
+            <p-treeselect appendTo="body" style="width: 100%;" required name="seccion" #seccion="ngModel" ngModel
+              required
+                [options]="treeUnidades"  [filter]="true" [showClear]="true"
+                placeholder="Seleccione la unidad" styleClass="w-full">
+            </p-treeselect>
         </label>
 
         <label for="" style="margin-left: 5px;" class="col-md-2">

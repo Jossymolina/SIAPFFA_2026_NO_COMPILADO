@@ -17,9 +17,9 @@ import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { VisualizarPerfilComponent } from '../../../../Componentes/visualizar-perfil/visualizar-perfil.component';
 import { from } from 'rxjs';
- 
+  import { TreeSelectModule } from 'primeng/treeselect';
 
-
+import { MultiSelectModule } from 'primeng/multiselect';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
@@ -41,13 +41,18 @@ type Reporte = {
     imports: [CommonModule, FormsModule, CardModule, InputTextModule, 
       TooltipModule, RadioButtonModule,MenuToeComponent,
       ButtonModule,DialogModule,VisualizarPerfilComponent,
-    TableModule,TagModule,ProgressSpinnerModule],
+    TableModule,TagModule,ProgressSpinnerModule,
+    MultiSelectModule,
+  TreeSelectModule],
   templateUrl: './menu-repo-emc.component.html',
   styleUrl: './menu-repo-emc.component.css',
 })
 export class MenuRepoEmcComponent implements OnInit,OnDestroy {
  usuarioLoguiado
  /**El nivel id es la categoria */
+ unidadesTree: any[] = [];
+ unidadSeleccionada: any = null;
+categoriasSeleccionadas: any[] = [];
  arregloCategorias =[
   {nombre:"Oficiales",nivel:[11,12,13,14,15,16,17,18,19],id:1},
   {nombre:"Sub Oficiales",nivel:[6,8,10],id:2},
@@ -86,8 +91,9 @@ export class MenuRepoEmcComponent implements OnInit,OnDestroy {
  
   ngOnInit(): void {
     this.usuarioLoguiado = JSON.parse(localStorage.getItem('user_login')!).user;
-    this.sacarFuerza()
+  this.sacarTodalasUnidades()
     this.sacarPrmoionesAgrupadas()
+     
   }
   q = signal('');
 
@@ -96,7 +102,7 @@ export class MenuRepoEmcComponent implements OnInit,OnDestroy {
   opciones = [
     { label: 'Por fuerza', value: 'fuerza' as const },
     { label: 'Por unidad', value: 'unidad' as const },
-    { label: 'Por Direccion/Seccion', value: 'seccion' as const },
+    { label: 'Por Direccion/Seccion', value: 'seccion' as const }, 
  
   ];
   categoria = signal<'Todos' | string>('Partes');
@@ -253,6 +259,7 @@ export class MenuRepoEmcComponent implements OnInit,OnDestroy {
     this.arregloListaAscenso = []
      this.listaPersonal = []
      this.personaSeleccionada = null
+     this.ngOnDestroy()
   }
   abrir(r: Reporte) {
     // Aquí luego lo cambias por Router navigate.
@@ -280,7 +287,9 @@ export class MenuRepoEmcComponent implements OnInit,OnDestroy {
      this.arregloListaParteUnidad = []
      this.arregloResumenParteUnidad =[]
     let param = {
-     cadena:` and unidad.idunidad= ${form.value.unidad.idunidad} `  
+     cadena:`  ` ,
+     cadena2: " ",
+     idunidad:form.value.seccion.idunidad 
     }
     this._ServiciosMensajeService.show("Cargando parte de la unidad......");
     this._ServicioBackendService.sacarParteMenuInicio(param).subscribe({
@@ -300,21 +309,25 @@ export class MenuRepoEmcComponent implements OnInit,OnDestroy {
     })
   }
     sacarParteFuerza(form:NgForm) {
-      let cade=""
+      let cade={
+        cadena1:"",
+        cadena2:""
+      }
      
       if(form.value.categoria.id===1 || form.value.categoria.id===2 ){
-           cade= ` and ingreso_ascenso.idfuerza= ${form.value.fuerza.idfuerza} and  categoria.idcategoria in (${form.value.categoria.nivel.join(',')}) `
-      }else{
-          cade= ` and unidad.idfuerza= ${form.value.fuerza.idfuerza} and  categoria.idcategoria in (${form.value.categoria.nivel.join(',')}) `
-      }
+           cade.cadena1= `   and  categoria.idcategoria in (${form.value.categoria.nivel.join(',')}) `
+           cade.cadena2 =  `  and   c.idcategoria in (${form.value.categoria.nivel.join(',')}) `
+      } 
 
-      cade += ` and  personal.combatiente  in (${form.value.combatiente.join(',')})   `
-   
+      cade.cadena1 += ` and  personal.combatiente  in (${form.value.combatiente.join(',')})   `
+       
       
      this.arregloListaParteUnidad = []
      this.arregloResumenParteUnidad =[]
     let param = {
-     cadena:cade 
+     cadena:cade.cadena1 ,
+     cadena2: cade.cadena2 ,
+     idunidad:form.value.seccion.idunidad
     }
     this._ServiciosMensajeService.show("Cargando parte de la unidad......");
     this._ServicioBackendService.sacarParteMenuInicio(param).subscribe({
@@ -336,21 +349,24 @@ export class MenuRepoEmcComponent implements OnInit,OnDestroy {
 
   arregloToe=[]
     sacarParteFuerzaYUnidad(form:NgForm) {
-      let cade=""
-     
-      if(form.value.categoria.id===1 || form.value.categoria.id===2 ){
-           cade= ` and ingreso_ascenso.idfuerza= ${form.value.fuerza.idfuerza} and unidad.idunidad=${form.value.unidad.idunidad} and  categoria.idcategoria in (${form.value.categoria.nivel.join(',')}) `
-      }else{
-          cade= ` and unidad.idfuerza= ${form.value.fuerza.idfuerza}  and unidad.idunidad=${form.value.unidad.idunidad} and  categoria.idcategoria in (${form.value.categoria.nivel.join(',')}) `
+      let cade = {
+          cadena1 :"",
+          cadena2:""
       }
+console.log(form.value)
+      
+         cade.cadena1= `  and   categoria.idcategoria in (${form.value.categoria.flatMap((c: any) => c.nivel).join(',')}) `
+         cade.cadena2= `  and   c.idcategoria in (${form.value.categoria.flatMap((c: any) => c.nivel).join(',')}) `
+    
    
      this.arregloListaParteUnidad = []
      this.arregloResumenParteUnidad =[]
   this.arregloToe=[]
-
+console.log(this.formbuscar.value.seccion)
     let param = {
-     cadena:cade,
-     form:form.value
+     cadena:cade.cadena1,
+     cadena2:cade.cadena2,
+     idunidad:this.formbuscar.value.seccion.idunidad
     }
     this._ServiciosMensajeService.show("Cargando parte de la unidad......");
     this._ServicioBackendService.sacarParteMenuInicio(param).subscribe({
@@ -361,7 +377,7 @@ export class MenuRepoEmcComponent implements OnInit,OnDestroy {
         if (response.mensaje) return this._ServiciosMensajeService.mensajeMalo(response.mensaje);
         this.arregloResumenParteUnidad = response.resultado_resumen
         this.arregloListaParteUnidad = response.resultado_lista
-  this.arregloToe = response.toe_resultado
+        this.arregloToe = response.toe_resultado
 
 
       }, error: (error) => {
@@ -390,19 +406,14 @@ export class MenuRepoEmcComponent implements OnInit,OnDestroy {
 
   sacarBajas(form) {
         let cade=""
-      if(form.value.categoria.id===1 || form.value.categoria.id===2){
-          cade= ` and ingreso_ascenso.idfuerza=${form.value.fuerza.idfuerza} and  year(bajaspersonal.fecha_de_baja)=year('${form.value.fecha}-1') 
+          cade= ` and   year(bajaspersonal.fecha_de_baja)=year('${form.value.fecha}-1') 
                 and month(bajaspersonal.fecha_de_baja)=month('${form.value.fecha}-1')  and  categoria.idcategoria in (${form.value.categoria.nivel.join(',')}) `
-      }  else{
-         cade= ` and unidad.idfuerza=${form.value.fuerza.idfuerza} and  year(bajaspersonal.fecha_de_baja)=year('${form.value.fecha}-1') 
-                and month(bajaspersonal.fecha_de_baja)=month('${form.value.fecha}-1')   and  categoria.idcategoria in (${form.value.categoria.nivel.join(',')}) `
-      }
+      
  
     let param = {
-   
-      cadena:cade
+      cadena:cade,
+      idunidad: form.value.seccion.idunidad
     }
-
     this.arregloBajas = []
     this._ServiciosMensajeService.show();
     this._ServicioBackendService.sacarBajasUnidad(param).subscribe({
@@ -421,13 +432,13 @@ export class MenuRepoEmcComponent implements OnInit,OnDestroy {
   sacarBajasPorUnidad(form) {
         let cade=""
     
-          cade= ` and unidad.idunidad=${form.value.unidad.idunidad} and  year(bajaspersonal.fecha_de_baja)=year('${form.value.fecha}-1') 
+          cade= ` and year(bajaspersonal.fecha_de_baja)=year('${form.value.fecha}-1') 
                 and month(bajaspersonal.fecha_de_baja)=month('${form.value.fecha}-1')  `
     
  
     let param = {
-   
-      cadena:cade
+       cadena:cade,
+       idunidad:form.value.seccion.idunidad
     }
 
     this.arregloBajas = []
@@ -473,7 +484,7 @@ export class MenuRepoEmcComponent implements OnInit,OnDestroy {
   sacarunidades(form:NgForm) {
 
     let parametro = {
-      cadena: ` and  idfuerza = ${form.value.fuerza.idfuerza} `,
+      cadena: ` and  idfuerza = ${form.value.fuerza.idfuerza} and unidad_tipo in (1,5,6)  `,
     };
     this.ArregloUnidades = [];
     this._ServiciosMensajeService.show();
@@ -493,16 +504,8 @@ export class MenuRepoEmcComponent implements OnInit,OnDestroy {
 
 
   }
-arregloFuerzas =[]
+ 
 
-  sacarFuerza() {
-    this.arregloFuerzas = [];
-
-    this._ServicioBackendService.sacarFuerza().subscribe((Response) => {
-      this.arregloFuerzas = Response.resultado;
-    
-    });
-  }
   objetoAScensos=[
     {nombre:"Sub Tenientes/Alferes de Fragata",idgrado:1,ano:4},
     {nombre:"Tenientes/Teniente de Fragata",idgrado:3,ano:5},
@@ -656,14 +659,15 @@ arregloFuerzas =[]
 
   arregloListaVacacioens =[]
   puscarPersonalVacacioensFuerza(form){
-     let p ={
-    cadena:``
+    let p ={
+    cadena:``,
+    idunidad:this.formbuscar.value.seccion.idunidad
    }
    if(form.value.categoria.id ===1 || form.value.categoria.id ===2){
-           p.cadena =` and ia.idfuerza=${form.value.fuerza.idfuerza}     
+           p.cadena =`     
                 and month(ia.fecha_planilla)=month('${form.value.fecha}-1')  and  c.idcategoria in (${form.value.categoria.nivel.join(',')}) `
    }else{
-       p.cadena =` and u.idfuerza=${form.value.fuerza.idfuerza}     
+       p.cadena =`     
                 and month(ia.fecha_planilla)=month('${form.value.fecha}-1')  and  c.idcategoria in (${form.value.categoria.nivel.join(',')}) `
    }
  
@@ -671,7 +675,7 @@ arregloFuerzas =[]
  this.arregloListaVacacioens=[]
 
    this._ServiciosMensajeService.show("Buscando personal.....");
- 
+   
    this._ServicioBackendService.sacaPersonalVacaciones(p).subscribe({
     next: (response) => {
       this._ServiciosMensajeService.hide()
@@ -710,13 +714,17 @@ arregloFuerzas =[]
   }
   arregloOrganizacionCompleta =[]
 sacarOrganizacion(form:NgForm,objeto){
+ 
 this.arregloOrganizacionCompleta =[]
-let q={cadena:``}
-   if(objeto === "fuerza") q.cadena=` and unidad.idfuerza=${form.value.fuerza.idfuerza}  and nivel in (${form.value.categoria.nivel }) `
-   if(objeto === "unidad") q.cadena=` and unidad.idunidad=${form.value.unidad.idunidad}`
-   if(objeto === "seccion") q.cadena= ` and Nombramiento.idunidad=${form.value.unidad.idunidad}  and Nombramiento.idNombramiento=${form.value.seccion.idNombramiento} `
-
-
+let q={cadena:``,data:{} as any}
+   if(objeto === "fuerza"){
+     q.cadena=` and ua.idfuerza=${form.value.fuerza.idfuerza}  and nivel in (${form.value.categoria.nivel }) `
+   }else if(objeto === "unidad"){
+     q.cadena=` and ua.idunidad=${form.value.unidad.idunidad}`
+      q.data.cadena = ` and idunidad  =${form.value.unidad.idunidad} ` 
+   } else  if(objeto === "seccion"){
+      q.data.idunidad = Number(form.value.seccion.key);
+   }
 
    this.ejecucatarConsultaOrganizacion(q)
 }
@@ -725,6 +733,7 @@ ejecucatarConsultaOrganizacion(p){
  
 
    this._ServiciosMensajeService.show("Buscando personal.....");
+    
    this._ServicioBackendService.sacarOrganizacionCompleta(p).subscribe({
     next: (response) => {
       this._ServiciosMensajeService.hide()
@@ -745,14 +754,17 @@ this.arregloResultado = []
 }
 buscar65Anos(data,objeto){
 let cadena = ""
- if(objeto==="fuerza") cadena=` and unidad.idfuerza=${data.value.fuerza.idfuerza} and month(fecha_nacimiento)=month('${data.value.fecha}-1')  `
+ if(objeto==="fuerza") cadena=` and month(fecha_nacimiento)=month('${data.value.fecha}-1')  `
  
  this.buscarPersonal_65_anos(cadena)
  
 }
 arregloResultado = []
 buscarPersonal_65_anos(cadenita){
-  let p={cadena:cadenita}
+  let p={
+    cadena:cadenita,
+    idunidad: this.formbuscar.value.seccion.idunidad
+  }
   this._ServiciosMensajeService.show("Buscando personal de 65 años o mas.....");
   this.arregloResultado = []
     this._ServicioBackendService.sacarPersonal65Anos(p).subscribe({
@@ -772,12 +784,15 @@ buscarPersonal_65_anos(cadenita){
  
 listaPrimerIngreso(form,objeto){
   let cadena = ""
-  if(objeto==="fuerza") cadena=` and unidad.idfuerza=${form.value.fuerza.idfuerza} and month(fecha)=month('${form.value.fecha}-1') and year(fecha)=year('${form.value.fecha}-1') `
-  if(objeto==="unidad") cadena=` and unidad.idunidad=${form.value.unidad.idunidad} and month(fecha)=month('${form.value.fecha}-1') and year(fecha)=year('${form.value.fecha}-1') `
- this.personalPrimerIngreso(cadena)
+  cadena=`  and month(fecha)=month('${form.value.fecha}-1') and year(fecha)=year('${form.value.fecha}-1') `
+   this.personalPrimerIngreso(cadena)
 }
 personalPrimerIngreso(cadenita){
-  let p={cadena:cadenita}
+  let p={
+    cadena:cadenita,
+    idunidad:this.formbuscar.value.seccion.idunidad
+  }
+ 
   this._ServiciosMensajeService.show("Buscando personal de primer ingreso.....");
   this.arregloResultado = []
     this._ServicioBackendService.personalPrimerIngreso(p).subscribe({
@@ -879,6 +894,7 @@ this._ServiciosMensajeService.show("Cargando Direcciones y Secciones.....");
       if (response.error) return this._ServiciosMensajeService.mensajeMalo(response.error);
       if (response.mensaje) return this._ServiciosMensajeService.mensajeMalo(response.mensaje);
        this.direcciones = response.resultado;
+            this.unidadesTree = this._ServicioBackendService.construirTree(response.resultado);
     }, error: (error) => {
       this._ServiciosMensajeService.hide()
 
@@ -1165,6 +1181,7 @@ this.arregloBusquedaPromociones =  response.resultado
 
  ngOnDestroy(): void {
    this.arregloBusquedaPromociones  = []
+   this.arregloOrganizacionCompleta  = []
  }
       
 
@@ -1779,5 +1796,104 @@ listarPersonal=false
  }
 Limpiar(){
   this.listaPersonal = []
+}
+
+
+
+
+
+
+
+
+
+    treeUnidades: any[] = [];
+ 
+
+  sacarTodalasUnidades() {
+    this._ServiciosMensajeService.show();
+
+    this._ServicioBackendService.sacarTodalasUnidades().subscribe({
+      next: (response) => {
+        this._ServiciosMensajeService.hide();
+        const unidades = response.resultado || [];
+     
+        let nodo = unidades.filter((x: any) => x.id_unidad_padre == null)
+          .map((x: any) =>
+            this.construirJerarquiaUnidades(
+              x,
+              unidades
+            )
+          );
+           this.treeUnidades = nodo.map((x: any) => this.convertirTreeNodeUnidad(x));
+    
+      },
+      error: () => {
+
+        this._ServiciosMensajeService.hide();
+        this._ServiciosMensajeService.mensajeerrorServer();
+
+      }
+    });
+}
+
+
+ private construirJerarquiaUnidades(
+    item: any,
+    unidad: any[],
+    rutaPadre: string = ''
+  ): any {
+
+    const rutaActual = rutaPadre
+      ? `${rutaPadre} > ${item.unidad_nombre}`
+      : item.unidad_nombre;
+
+    const hijos = unidad
+      .filter(x => x.id_unidad_padre == item.idunidad)
+      .map(x =>
+        this.construirJerarquiaUnidades(
+          x,
+          unidad,
+          rutaActual
+        )
+      );
+
+    return {
+      ...item,
+      ruta: rutaActual,
+      hijos
+    };
+
+  }
+
+
+      private convertirTreeNodeUnidad(
+  nodo: any
+): any {
+
+  const esHoja =  true
+
+  return {
+
+    key: String(nodo.idunidad),
+
+    label: nodo.unidad_nombre,
+
+    data: nodo,
+    unidad_tipo:nodo.unidad_tipo,
+    idunidad:nodo.idunidad,
+
+
+    selectable: esHoja,
+
+    icon: esHoja
+      ? 'pi pi-lock-open'
+      : 'pi pi-lock',
+
+    children: nodo.hijos.map((h: any) =>
+      this.convertirTreeNodeUnidad(h)
+    )
+
+  };
+
 }
 }

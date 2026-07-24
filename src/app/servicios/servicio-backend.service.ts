@@ -11,9 +11,9 @@ import { ServiciosMensajeService } from './serviMensaje/servicios-mensaje.servic
 @Injectable({
   providedIn: 'root',
 })
-//ng build --aot --output-hashing=all
+//ng build --aot --output-hashing=all   ng build --configuration production
 export class ServicioBackendService {
-  public url2 ="https://siapfa.ffaa.mil.hn:4443/" //"http://localhost:3979/" //"https://siapfa.ffaa.mil.hn:4443/"
+  public url2 ="http://localhost:3979/" //"http://localhost:3979/" //"https://siapfa.ffaa.mil.hn:4443/"
   refrescar = 0
   public url ="http://localhost:3979/" //"http://localhost:3979/" //"https://siapfa.ffaa.mil.hn:4443/"     
   usuarioLogin: any;
@@ -25,6 +25,57 @@ export class ServicioBackendService {
       serie: "FAHOA-0513", titulo_doc: "El suscrito Jefe de Recursos Humanos de la SEDENA", cargo: "", idunidad: 107
     }
   ]
+
+  construirTree(datos: any[]): any[] {
+    const mapa = new Map<number, any>();
+    // Crear todos los nodos
+    datos.forEach(item => {
+        mapa.set(item.idunidad, {
+            key: item.idunidad.toString(),
+            label: item.descripcion,
+            data: item,
+            children: []
+        });
+    });
+
+
+   const raiz: any[] = [];
+    // Relacionar padres e hijos
+    datos.forEach(item => {
+        const nodo = mapa.get(item.idunidad);
+        if (item.id_unidad_padre && mapa.has(item.id_unidad_padre)) {
+            mapa.get(item.id_unidad_padre).children.push(nodo);
+        } else {
+            raiz.push(nodo);
+        }
+
+    });
+
+    return raiz;
+
+}
+  subirDocumentoPredeterminados(data: FormData): Observable<any> {
+   var headers = new HttpHeaders({
+      "Authorization": this.getToken()
+    });
+    return this.http.post(this.url + "subirDocumentoPredeterminados", data, { headers: headers });
+  }
+ 
+crearCarpetaEstructura(data){
+  return this.metodopost("crearCarpetaEstructura",data)
+}
+  sacarHijosDeArchivosCompartidos(data){
+    return this.metodopost("sacarHijosDeArchivosCompartidos",data)
+  }
+  sacarDocumentosCompartidos(data){
+    return this.metodopost("sacarDocumentosCompartidos",data)
+  }
+  modificarNombreArchivo(data){
+    return this.metodopost("modificarNombreArchivo",data)
+  }
+  eliminacionLogicaArchivo(data){
+return this.metodopost("eliminacionLogicaArchivo",data)
+  }
   obtenerResultadosEvaluacion(data){
     return this.metodopost("obtenerResultadosEvaluacion",data)
   }
@@ -41,9 +92,16 @@ obtenerTernas(data){
     return this.metodopost("registrarEvalTerna",data)
   }
 
-  obtenerArchivo(id: number) {
-    console.log(`${this.url}/obtenerArchivo/${id}`)
-  return this.http.get( `${this.url}obtenerArchivo/${id}`, { responseType: 'blob'  } );
+  obtenerArchivo(data) {
+    //return this.http.get( `${this.url}obtenerArchivo/${id}`, { responseType: 'blob'  } );
+  return   this.http.post(
+    `${this.url}obtenerArchivo`,
+    data,
+    {
+      responseType: 'blob'
+    }
+  );
+    return this.metodopost("obtenerArchivo",data)
 }
 
   buscarDocumento_en_archivos(data){
@@ -108,7 +166,6 @@ sacarPersonalDEtallesituacion(data){
         responseType: 'arraybuffer',
       }).toPromise()) as ArrayBuffer;
     } catch (e) {
-      console.error('Error descargando imagen', e);
       return null;
     }
   }
@@ -201,7 +258,7 @@ obtenerAscensosPorPersona(data){
     var json = JSON.stringify(data)
     let headers = new HttpHeaders({
       "Content-Type": "application/json",
-      "Authorization": token + ";V10"
+      "Authorization": token + ";V11"
     });
     return this.http.post(this.url + link, json, { headers: headers });
   }
@@ -670,10 +727,10 @@ obtenerAscensosPorPersona(data){
     return this.metodopost('sacarasignacionActual', data);
   }
   getToken() {
-    return this.islogin().token ? this.islogin().token + ";V10" : ""
+    return this.islogin().token ? this.islogin().token + ";V11" : ""
   }
   getControlVersion() {
-    return ";V10"
+    return ";V11"
   }
   setToken(data: any) {
     //console.log("SET TOKEN: 11",data+this.getControlVersion())
@@ -912,7 +969,6 @@ obtenerAscensosPorPersona(data){
      var headers = new HttpHeaders({
       "Authorization": this.getToken()
     });
-    console.log(this.url + "agregarBajaEMC")
     return this.http.post(this.url + "agregarBajaEMC", data, { 
       headers: headers
      });
@@ -1218,7 +1274,6 @@ obtenerAscensosPorPersona(data){
 
   }
   actualizacionContrasenas(data: any, token): Observable<any> {
-    console.log(token)
     var headers = new HttpHeaders({
         "Authorization":token || ""
       });  

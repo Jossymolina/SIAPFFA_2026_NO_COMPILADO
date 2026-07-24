@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ServicioBackendService } from '../../../servicios/servicio-backend.service';
 import { ServiciosMensajeService } from '../../../servicios/serviMensaje/servicios-mensaje.service';
 import { TreeSelectModule } from 'primeng/treeselect';
@@ -10,7 +10,7 @@ import { ContextMenuModule } from 'primeng/contextmenu';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-
+type Ventana = "Principal" | "Compartidos";
 @Component({
   selector: 'app-ventanas-archivos',
   standalone: true,
@@ -27,25 +27,18 @@ import { InputTextModule } from 'primeng/inputtext';
   templateUrl: './ventanas-archivos.component.html',
   styleUrl: './ventanas-archivos.component.css',
 })
-export class VentanasArchivosComponent implements OnInit,AfterViewInit  {
-mostrarModalCarpeta = false
-
-permisosVisualizacion = [
-  {nombre:"C1",id:1}
-]
-
-
-  @ViewChild('cm')
-  cm!: ContextMenu;
+export class VentanasArchivosComponent implements OnInit, AfterViewInit {
+  mostrarModalCarpeta = false
+  mostrarModalRenombrar = false
+  permisosVisualizacion = [
+    { nombre: "C1", id: 1 }
+  ]
+    itemsClickDerecho: MenuItem[] = [];
 
   archivoSeleccionado: any;
 
   menuOpciones: MenuItem[] = [];
 
-  constructor(
-    private _ServicioBackendService: ServicioBackendService,
-    private _ServiciosMensajeService: ServiciosMensajeService
-  ) { }
 
   nodosCategoria: any[] = [];
 
@@ -56,39 +49,53 @@ permisosVisualizacion = [
   categoriaSeleccionada = null;
 
   categoriaSeleccionadaDetalle: any = null;
-unidadesSeleccionadas: any[] = [];
-usuarioLoguiado = null
-  ngOnInit(): void {
-  this.usuarioLoguiado = JSON.parse(localStorage.getItem('user_login')!).user;
-    this.sacarCategorias();
-  
-   this.sacarTodalasUnidades()
-  }
-  ngAfterViewInit(): void {
-    console.log(this.usuarioLoguiado )
-    this.cargarContenido()
+  unidadesSeleccionadas: any[] = [];
+  usuarioLoguiado = null
+
+ ventanaAVisualizar:Ventana  = "Principal";
+  @ViewChild('cm') cm!: ContextMenu;
+  @ViewChild('cmDerecho') cmDerecho!: ContextMenu;
+  constructor(
+    private _ServicioBackendService: ServicioBackendService,
+    private _ServiciosMensajeService: ServiciosMensajeService
+  ) { }
+
+
+  abrirMenuClickDerecho(event: MouseEvent) {
+    event.preventDefault(); // Evita el menú del navegador
+    this.cmDerecho.show(event);
   }
 
-sacarTodalasUnidades(){
-  
-    this._ServiciosMensajeService.show();
+  cambiarVentana (data){
+      this.archivos = []
 
-    this._ServicioBackendService.sacarTodalasUnidades().subscribe({
+    if(data ==="Compartidos"){
+       this.ventanaAVisualizar = data
+           this.sacarDocumentosCompartidos()
+    }else{
+      this.breadcrumb = []
+      this.ventanaAVisualizar = data
+      this.archivoPadreActual =null
+      this.cargarContenido()
+      
+    } 
+   
+  }
+  
+sacarDocumentosCompartidos(){
+  this._ServiciosMensajeService.show();
+  let p = {
+    idunidad :this.usuarioLoguiado.idunidad_direccion,
+ }
+ this.historial = []
+ this.breadcrumb = []
+  this.archivos  = []
+  this.archivoPadreActual = null
+    this._ServicioBackendService.sacarDocumentosCompartidos(p).subscribe({
       next: (response) => {
-
-        this._ServiciosMensajeService.hide();
-       
-       const unidades = response.resultado || [];
-        let nodo = unidades.filter((x: any) => x.id_unidad_padre == null)
-          .map((x: any) =>
-            this.construirJerarquiaUnidades(
-              x,
-              unidades
-            )
-          );
-       
-           this.treeUnidades = nodo.map((x: any) =>  this.convertirTreeNodeUnidad(x)   );
-           console.log(this.treeUnidades)
+      this._ServiciosMensajeService.hide();
+    
+          if(response.ok) this.archivos = response.resultado
       },
       error: () => {
 
@@ -98,6 +105,97 @@ sacarTodalasUnidades(){
       }
     });
 }
+
+sacarDocumentosCompartidosCarpetas_hijos(mesj=""){
+  this._ServiciosMensajeService.show();
+
+  let p = {
+    idunidad :this.usuarioLoguiado.idunidad_direccion,
+    id_archivo_padre:   this.archivoPadreActual ? this.archivoPadreActual.id_archivo : null
+
+  }
+  if(mesj.length>=1){
+  console.log("",mesj)
+ console.log(p)
+  }
+
+  this.archivos  = []
+    this._ServicioBackendService.sacarHijosDeArchivosCompartidos(p).subscribe({
+      next: (response) => {
+      this._ServiciosMensajeService.hide();
+           
+          if(response.ok) this.archivos = response.resultado
+        
+      },
+      error: () => {
+
+        this._ServiciosMensajeService.hide();
+        this._ServiciosMensajeService.mensajeerrorServer();
+
+      }
+    });
+}
+ 
+
+  ngOnInit(): void {
+    this.usuarioLoguiado = JSON.parse(localStorage.getItem('user_login')!).user;
+     this.sacarCategorias();
+
+  this.sacarTodalasUnidades()
+    this.itemsClickDerecho = [
+      {
+        label: 'Nueva Carpeta',
+        icon: 'pi pi-folder-plus',
+        command: () => { this.crearCarpeta() }
+
+      },
+      {
+        label: 'Nuevo Archivo',
+        icon: 'pi pi-file',
+        command: () => {
+          this.limpiarFomsubir();
+          this.modalSubirArchivo = true
+        }
+
+      },
+      {
+        separator: true
+      },
+
+    ];
+  }
+  ngAfterViewInit(): void {
+    this.cargarContenido()
+  }
+
+  sacarTodalasUnidades() {
+
+    this._ServiciosMensajeService.show();
+
+    this._ServicioBackendService.sacarTodalasUnidades().subscribe({
+      next: (response) => {
+
+        this._ServiciosMensajeService.hide();
+
+        const unidades = response.resultado || [];
+        let nodo = unidades.filter((x: any) => x.id_unidad_padre == null)
+          .map((x: any) =>
+            this.construirJerarquiaUnidades(
+              x,
+              unidades
+            )
+          );
+
+        this.treeUnidades = nodo.map((x: any) => this.convertirTreeNodeUnidad(x));
+      },
+      error: () => {
+
+        this._ServiciosMensajeService.hide();
+        this._ServiciosMensajeService.mensajeerrorServer();
+
+      }
+    });
+  }
   sacarCategorias() {
 
     this._ServiciosMensajeService.show();
@@ -191,32 +289,32 @@ sacarTodalasUnidades(){
   }
 
   private convertirTreeNodeUnidad(
-  nodo: any
-): any {
+    nodo: any
+  ): any {
 
-  const esHoja = nodo.seleccionable ? true : false // nodo.hijos.length === 0;
+    const esHoja = nodo.seleccionable ? true : false // nodo.hijos.length === 0;
 
-  return {
+    return {
 
-    key: String(nodo.idunidad),
+      key: String(nodo.idunidad),
 
-    label:  nodo.unidad_nombre,
+      label: nodo.unidad_nombre,
 
-    data: nodo,
+      data: nodo,
 
-    selectable: esHoja,
+      selectable: esHoja,
 
-    icon: esHoja
-      ? 'pi pi-building'
-      : 'pi pi-sitemap',
+      icon: esHoja
+        ? 'pi pi-building'
+        : 'pi pi-sitemap',
 
-    children: nodo.hijos.map((h: any) =>
-      this.convertirTreeNodeUnidad(h)
-    )
+      children: nodo.hijos.map((h: any) =>
+        this.convertirTreeNodeUnidad(h)
+      )
 
-  };
+    };
 
-}
+  }
 
 
   private convertirTreeNode(
@@ -275,10 +373,11 @@ sacarTodalasUnidades(){
 
   }
   crear_archivo_documento(form) {
-
-    let p = {
+ if(!this.usuarioLoguiado.idunidad_direccion) return this._ServiciosMensajeService.mensajeMalo("Para usar este servicio debe de estar en una Direccin/Depto o Sección")
+   
+  let p = {
       id_categoria: null,
-      id_archivo_padre: this.archivoPadreActual?.id_archivo?this.archivoPadreActual?.id_archivo:null,
+      id_archivo_padre: this.archivoPadreActual?.id_archivo ? this.archivoPadreActual?.id_archivo : null,
       tipo: "carpeta",
       nombre: form.value.nombre,
       descripcion: "Carpeta",
@@ -288,20 +387,20 @@ sacarTodalasUnidades(){
       extension: null,
       tamano_bytes: 0,
       texto_extraido: null,
-      usuario_creacion: 2,
+      usuario_creacion: this.usuarioLoguiado.identidad,
       estado: "activo",
-      idunidad_direccion:this.usuarioLoguiado.idunidad_direccion
-      
-    }
- 
+      idunidad_direccion: this.usuarioLoguiado.idunidad_direccion
 
+    }
+
+console.log(p)
     this._ServiciosMensajeService.show();
 
     this._ServicioBackendService.crearCarpeta(p).subscribe({
       next: (response) => {
 
         this._ServiciosMensajeService.hide();
-          this.cargarContenido()
+        this.cargarContenido()
 
       },
       error: () => {
@@ -310,7 +409,7 @@ sacarTodalasUnidades(){
         this._ServiciosMensajeService.mensajeerrorServer();
 
       }
-    }); 
+    });
   }
 
 
@@ -320,11 +419,10 @@ sacarTodalasUnidades(){
 
     if (this.archivoPadreActual) {
       params.id_archivo_padre = this.archivoPadreActual.id_archivo;
-    
-     
+
+
     }
-      params.idunidad_dir = this.usuarioLoguiado.idunidad_direccion;
-    console.log(params)
+    params.idunidad_dir = this.usuarioLoguiado.idunidad_direccion;
     this._ServiciosMensajeService.show()
     this._ServicioBackendService.obtenerArchivos_(params).subscribe({
       next: (response) => {
@@ -339,58 +437,87 @@ sacarTodalasUnidades(){
   }
   archivoPadreActual
   historial = []
- async abrir(item: any) {
+  async abrir(item: any) {
 
-  if (item.tipo !== 'CARPETA') {
-    return;
+    if (item.tipo !== 'CARPETA') {
+      return;
+    }
+
+    if (this.archivoPadreActual) {
+
+      this.historial.push(
+        this.archivoPadreActual
+      );
+
+    }
+
+    this.archivoPadreActual = item;
+
+    this.breadcrumb.push({
+      id_archivo: item.id_archivo,
+      nombre: item.nombre
+    });
+
+    this.cargarContenido();
   }
 
-  if (this.archivoPadreActual) {
 
-    this.historial.push(
-      this.archivoPadreActual
-    );
+
+    async abrir_carpeta_compartida(item: any) {
+  
+      
+    if (item.tipo !== 'CARPETA') {
+      return;
+    }
+
+    if (this.archivoPadreActual) {
+      this.historial.push(
+        this.archivoPadreActual
+      );
+
+    }
+
+    this.archivoPadreActual = item;
+
+    this.breadcrumb.push({
+      id_archivo: item.id_archivo,
+      nombre: item.nombre
+    });
+    console.log("historial :",this.historial)
+    console.log(this.archivoPadreActual)
+    console.log(this.breadcrumb)
+    this.sacarDocumentosCompartidosCarpetas_hijos()
 
   }
-
-  this.archivoPadreActual = item;
-
-  this.breadcrumb.push({
-    id_archivo: item.id_archivo,
-    nombre: item.nombre
-  });
-
-  this.cargarContenido();
-}
 
   async cargarRuta() {
 
     if (!this.archivoPadreActual) {
 
       this.breadcrumb = [];
- 
+
       return;
     }
 
 
   }
-abrirDesdeRuta(item: any) {
+  abrirDesdeRuta(item: any) {
 
-  const index =
-    this.breadcrumb.findIndex(
-      x => x.id_archivo === item.id_archivo
-    );
+    const index =
+      this.breadcrumb.findIndex(
+        x => x.id_archivo === item.id_archivo
+      );
 
-  this.breadcrumb =
-    this.breadcrumb.slice(
-      0,
-      index + 1
-    );
+    this.breadcrumb =
+      this.breadcrumb.slice(
+        0,
+        index + 1
+      );
 
-  this.archivoPadreActual = item;
+    this.archivoPadreActual = item;
 
-  this.cargarContenido();
-}
+    this.cargarContenido();
+  }
 
 
 
@@ -404,6 +531,7 @@ abrirDesdeRuta(item: any) {
 
     this.cm.show(event);
   }
+
 
 
   mostrarMenuBoton(event: any, item: any) {
@@ -437,31 +565,37 @@ abrirDesdeRuta(item: any) {
           command: () =>
             this.crearCarpetaHija()
         },
-/*
-        {
-          label: 'Subir archivo',
-          icon: 'pi pi-upload',
-          command: () =>
-            this.subirArchivo()
-        },
-
-        {
-          separator: true
-        },
-
         {
           label: 'Renombrar',
           icon: 'pi pi-pencil',
-          command: () =>
-            this.editar()
-        },
+          command: () => { this.editar() }
 
+        },
+        /*
+                {
+                  label: 'Subir archivo',
+                  icon: 'pi pi-upload',
+                  command: () =>
+                    this.subirArchivo()
+                },
+        
+                {
+                  separator: true
+                },
+        
+                {
+                  label: 'Renombrar',
+                  icon: 'pi pi-pencil',
+                  command: () =>
+                    this.editar()
+                },
+        */
         {
           label: 'Eliminar',
           icon: 'pi pi-trash',
           command: () =>
             this.eliminar()
-        }*/
+        }
       ];
 
       return;
@@ -470,15 +604,12 @@ abrirDesdeRuta(item: any) {
     // ARCHIVOS
 
     this.menuOpciones = [
-
-      {
-        label: 'Abrir',
-        icon: 'pi pi-eye'
-      },
-
       {
         label: 'Descargar',
-        icon: 'pi pi-download'
+        icon: 'pi pi-download',
+        command: () => {
+          this.descargarArchivo(this.archivoSeleccionado)
+        }
       },
 
       {
@@ -487,28 +618,173 @@ abrirDesdeRuta(item: any) {
 
       {
         label: 'Renombrar',
-        icon: 'pi pi-pencil'
+        icon: 'pi pi-pencil',
+        command: () => { this.editar() }
+
       },
 
       {
         label: 'Eliminar',
-        icon: 'pi pi-trash'
+        icon: 'pi pi-trash',
+        command: () => {
+          this.eliminar();
+        }
       }
     ];
   }
+  @ViewChild("formCambiarNombre") formCambiarNombre: NgForm
   editar() {
-
+    if(this.archivoSeleccionado.usuario_creacion !==this.usuarioLoguiado.identidad) return this._ServiciosMensajeService.mensajeMalo("Solo el usuario que subio el archivo puede eliminarlo")
+    this.mostrarModalRenombrar = true
+    setTimeout(() => {
+      this.formCambiarNombre.controls["nombre"].setValue(this.archivoSeleccionado.nombre)
+    }, 400);
   }
-  eliminar() {
+  async guardarCambioNombre(): Promise<void> {
+    // Validar formulario
+    if (this.formCambiarNombre.invalid) {
+      this._ServiciosMensajeService.mensajeMalo(
+        'Ingrese un nombre válido para el archivo.'
+      );
+      return;
+    }
 
+    // Validar archivo seleccionado
+    if (!this.archivoSeleccionado) {
+      this._ServiciosMensajeService.mensajeMalo(
+        'No hay ningún archivo seleccionado.'
+      );
+      return;
+    }
+
+    // Confirmación
+    const confirmar = await this._ServiciosMensajeService.mensajePregunta(
+      '¿Está seguro de cambiar el nombre de este archivo?'
+    );
+
+    if (!confirmar) {
+      return;
+    }
+
+    const payload = {
+      id_archivo: this.archivoSeleccionado.id_archivo,
+      nombre: this.formCambiarNombre.value.nombre.trim(),
+      usuario: this.usuarioLoguiado
+    };
+
+
+    this._ServiciosMensajeService.show();
+
+    this._ServicioBackendService.modificarNombreArchivo(payload).subscribe({
+      next: (response: any) => {
+
+        this._ServiciosMensajeService.hide();
+
+        if (response.error) {
+          this._ServiciosMensajeService.mensajeMalo(response.error);
+          return;
+        }
+
+        if (response.mensaje) {
+          this._ServiciosMensajeService.mensajeMalo(response.mensaje);
+          return;
+        }
+
+        // Actualizar el nombre localmente
+        this.archivoSeleccionado.nombre = payload.nombre;
+
+        // Cerrar modal
+        this.mostrarModalRenombrar = false;
+
+        // Recargar listado
+        this.cargarContenido();
+
+        this._ServiciosMensajeService.mensajeBueno(
+          'El nombre del archivo se actualizó correctamente.'
+        );
+      },
+
+      error: (err) => {
+
+
+        this._ServiciosMensajeService.hide();
+        this._ServiciosMensajeService.mensajeerrorServer();
+      }
+    });
+  }
+  async eliminar(): Promise<void> {
+    // Validar que exista un archivo seleccionado
+ 
+  if(this.archivoSeleccionado.usuario_creacion !==this.usuarioLoguiado.identidad) return this._ServiciosMensajeService.mensajeMalo("Solo el usuario que subio el archivo puede eliminarlo")
+
+    if (!this.archivoSeleccionado) {
+      this._ServiciosMensajeService.mensajeMalo(
+        'Debe seleccionar un archivo para eliminar.'
+      );
+      return;
+    }
+
+    // Confirmación del usuario
+    const confirmar = await this._ServiciosMensajeService.mensajePregunta(
+      '¿Está seguro de eliminar este archivo?\n\n' +
+      'El archivo será enviado a la papelera y podrá recuperarse durante los próximos 90 días.'
+    );
+
+    if (!confirmar) {
+      return;
+    }
+
+    // Objeto a enviar al backend
+    const payload = {
+      estado: 'ELIMINADO',
+      id_archivo: this.archivoSeleccionado.id_archivo,
+      usuario: this.usuarioLoguiado
+    };
+
+
+
+
+    this._ServicioBackendService.eliminacionLogicaArchivo(payload).subscribe({
+      next: (response: any) => {
+
+        // Error devuelto por el backend
+        if (response.error) {
+          this._ServiciosMensajeService.mensajeMalo(response.error);
+          return;
+        }
+
+        // Mensaje de validación
+        if (response.mensaje) {
+          this._ServiciosMensajeService.mensajeMalo(response.mensaje);
+          return;
+        }
+
+        // Éxito
+        this._ServiciosMensajeService.mensajeBueno(
+          'El archivo fue enviado a la papelera correctamente.'
+        );
+
+        // Limpiar selección
+        this.archivoSeleccionado = null;
+
+        // Recargar contenido
+        this.cargarContenido();
+      },
+
+      error: (err) => {
+
+
+        this._ServiciosMensajeService.mensajeerrorServer();
+      }
+    });
   }
 
   crearCarpetaHija() {
-this.mostrarModalCarpeta=true
+    this.mostrarModalCarpeta = true
   }
- 
+
   crearCarpeta() {
-this.mostrarModalCarpeta = true;
+    this.mostrarModalCarpeta = true;
   }
 
   menuRaiz(event: any) {
@@ -575,196 +851,347 @@ this.mostrarModalCarpeta = true;
     await this.cargarContenido();
   }
 
+ 
 
-async volver() {
+  async volverCompartido(){
+    console.log(this.historial.length)
+  console.log(this.historial)
+   
+    if (this.historial.length === 0) {
 
-  if (this.historial.length === 0) {
+      this.archivoPadreActual = null;
 
-    this.archivoPadreActual = null;
+      this.breadcrumb = [];
 
-    this.breadcrumb = [];
+      this.sacarDocumentosCompartidos();
+
+      return;
+    }
+
+    this.archivoPadreActual = this.historial.pop();
+
+    this.breadcrumb.pop();
+
+    this.sacarDocumentosCompartidosCarpetas_hijos();
+ }
+
+  async volver() {
+
+    if (this.historial.length === 0) {
+
+      this.archivoPadreActual = null;
+
+      this.breadcrumb = [];
+
+      this.cargarContenido();
+
+      return;
+    }
+
+    this.archivoPadreActual =
+      this.historial.pop();
+
+    this.breadcrumb.pop();
 
     this.cargarContenido();
-
-    return;
   }
 
-  this.archivoPadreActual =
-    this.historial.pop();
-
-  this.breadcrumb.pop();
-
-  this.cargarContenido();
-}
-
- 
 
 
- 
-onCategoriaChange(idCategoria: string) {
- /*
-  this.categoriaSeleccionadaDetalle =
-    this.buscarNodo(
-      this.treeCategorias,
-      idCategoria
-    );
 
+
+  onCategoriaChange(idCategoria: string) {
+    /*
+     this.categoriaSeleccionadaDetalle =
+       this.buscarNodo(
+         this.treeCategorias,
+         idCategoria
+       );
    
-  this.archivoPadreActual = null;
+      
+     this.archivoPadreActual = null;
+   
+     this.historial = [];
+   
+     this.breadcrumb = [];
+   
+     this.cargarContenido();*/
+  }
 
-  this.historial = [];
-
-  this.breadcrumb = [];
-
-  this.cargarContenido();*/
-}
-
-modalSubirArchivo = false
+  modalSubirArchivo = false
 
 
-archivo_documento: File | null = null;
+  archivo_documento: File[] = [];
 
-seleccionarArchivo(event: any) {
+  seleccionarArchivo(event: any) {
 
-  if (event.target.files && event.target.files.length > 0) {
+    if (event.target.files && event.target.files.length > 0) {
 
-    this.archivo_documento = event.target.files[0];
+      this.archivo_documento = Array.from(event.target.files);//event.target.files[0];
 
+
+    }
 
   }
 
-}
 
-
-@ViewChild("formArchivo")formArchivo:NgForm
-subirArchivo() {
- 
- const unidadesLimpias = this.unidadesSeleccionadas.map((unidad: any) => ({
-            key: unidad.key,
-            label: unidad.label,
-            data: unidad.data
-          }));
- 
-          console.log(unidadesLimpias)
-
-  if(this.formArchivo.value.descripcion.length >400) return this._ServiciosMensajeService.mensajeMalo("Descripcion en menos de 400 caracteres")
-
-    
-  if (!this.archivo_documento) {
-
-    this._ServiciosMensajeService.mensajeAdvertencia(
-      'Seleccione un archivo'
+  @ViewChild("formArchivo") formArchivo: NgForm
+  /*
+  subirArchivo() {
+   
+   const unidadesLimpias = this.unidadesSeleccionadas.map((unidad: any) => ({
+              key: unidad.key,
+              label: unidad.label,
+              data: unidad.data
+            }));
+   
+  
+    if(this.formArchivo.value.descripcion.length >400) return this._ServiciosMensajeService.mensajeMalo("Descripcion en menos de 400 caracteres")
+  
+      
+    if (!this.archivo_documento) {
+  
+      this._ServiciosMensajeService.mensajeAdvertencia(
+        'Seleccione un archivo'
+      );
+  
+      return;
+    }
+  
+    const formData = new FormData();
+  
+    formData.append(
+      'id_archivo_padre',
+      this.archivoPadreActual?.id_archivo?.toString() ?? ''
     );
-
-    return;
+  
+    formData.append('id_categoria', this.categoriaSeleccionada.data.id_categoria);
+    formData.append('tipo', 'ARCHIVO');
+  
+    formData.append(
+      'nombre',
+      this.archivo_documento.name
+    );
+  
+    formData.append(
+      'descripcion',
+      this.formArchivo.value.descripcion
+    );
+  
+    formData.append(
+      'usuario_creacion',
+      this.usuarioLoguiado.identidadusuario
+    );
+  
+    formData.append(
+      'estado',
+      'ACTIVO'
+    );
+  
+    formData.append(
+      'archivo',
+      this.archivo_documento
+    );
+  
+      formData.append(
+      'unidades',
+      JSON.stringify( unidadesLimpias)
+    );
+     formData.append(
+      'idunidad_direccion',
+      this.usuarioLoguiado.idunidad_direccion
+    );
+  
+    
+    this._ServiciosMensajeService.show();
+   
+    this._ServicioBackendService
+      .crear_archivo_documentos(formData)
+      .subscribe({
+        next: () => {
+  
+          this._ServiciosMensajeService.hide();
+  
+          this.archivo_documento = null;
+  
+          this.cargarContenido();
+          this.modalSubirArchivo = false
+          this.formArchivo.reset()
+  
+        },
+        error: () => {
+  
+          this._ServiciosMensajeService.hide();
+          this._ServiciosMensajeService.mensajeerrorServer();
+  
+        }
+      });
+   
   }
+  */
+  @ViewChild('archivo') archivo!: ElementRef;
+  async subirArchivo() {
+ if(!this.usuarioLoguiado.idunidad_direccion) return this._ServiciosMensajeService.mensajeMalo("Para usar este servicio debe de estar en una Direccin/Depto o Sección")
+    if (this.unidadesSeleccionadas) {
+      let mismaUnidad = this.unidadesSeleccionadas.find(element => { return Number(element.key) === Number(this.usuarioLoguiado.idunidad_direccion) })
+      if (mismaUnidad) return this._ServiciosMensajeService.mensajeMalo("No puede compartise el archivo con la misma unidad que sube el documento")
+    }
 
-  const formData = new FormData();
+    let r = await this._ServiciosMensajeService.mensajePregunta("Esta seguro")
+    if (!r) return
+    let unidadesLimpias = []
+    if (this.unidadesSeleccionadas) {
+      unidadesLimpias = this.unidadesSeleccionadas.map((unidad: any) => ({
+        key: unidad.key,
+        label: unidad.label,
+        data: unidad.data
+      }));
+    }
 
-  formData.append(
-    'id_archivo_padre',
-    this.archivoPadreActual?.id_archivo?.toString() ?? ''
-  );
 
-  formData.append('id_categoria', this.categoriaSeleccionada.data.id_categoria);
-  formData.append('tipo', 'ARCHIVO');
 
-  formData.append(
-    'nombre',
-    this.archivo_documento.name
-  );
+    if (this.formArchivo.value.descripcion.length > 400) {
+      return this._ServiciosMensajeService.mensajeMalo(
+        "Descripción de máximo 400 caracteres"
+      );
+    }
+    if (this.archivo_documento.length >= 5) return this._ServiciosMensajeService.mensajeMalo("Maximo 5 Archivos a  la ves")
 
-  formData.append(
-    'descripcion',
-    this.formArchivo.value.descripcion
-  );
+    if (!this.archivo_documento || this.archivo_documento.length === 0) {
 
-  formData.append(
-    'usuario_creacion',
-    this.usuarioLoguiado.identidadusuario
-  );
+      this._ServiciosMensajeService.mensajeAdvertencia(
+        'Seleccione al menos un archivo'
+      );
 
-  formData.append(
-    'estado',
-    'ACTIVO'
-  );
+      return;
+    }
 
-  formData.append(
-    'archivo',
-    this.archivo_documento
-  );
+    const formData = new FormData();
 
     formData.append(
-    'unidades',
-    JSON.stringify( unidadesLimpias)
-  );
-   formData.append(
-    'idunidad_direccion',
-    this.usuarioLoguiado.idunidad_direccion
-  );
+      'id_archivo_padre',
+      this.archivoPadreActual?.id_archivo?.toString() ?? ''
+    );
 
-  
-  this._ServiciosMensajeService.show();
- 
-  this._ServicioBackendService
-    .crear_archivo_documentos(formData)
-    .subscribe({
-      next: () => {
+    formData.append(
+      'id_categoria',
+      this.categoriaSeleccionada ? this.categoriaSeleccionada.data.id_categoria : null
+    );
 
-        this._ServiciosMensajeService.hide();
+    formData.append('tipo', 'ARCHIVO');
 
-        this.archivo_documento = null;
+    // Nombre general (opcional)
+    formData.append(
+      'nombre',
+      this.archivo_documento.length === 1
+        ? this.archivo_documento[0].name
+        : 'Carga múltiple'
+    );
 
-        this.cargarContenido();
+    formData.append(
+      'descripcion',
+      this.formArchivo.value.descripcion
+    );
 
-      },
-      error: () => {
+    formData.append(
+      'usuario_creacion',
+      this.usuarioLoguiado.identidadusuario
+    );
 
-        this._ServiciosMensajeService.hide();
-        this._ServiciosMensajeService.mensajeerrorServer();
+    formData.append(
+      'estado',
+      'ACTIVO'
+    );
 
+    // Agregar todos los archivos
+    this.archivo_documento.forEach((archivo) => {
+      formData.append('archivos', archivo);
+    });
+
+    formData.append(
+      'unidades',
+      JSON.stringify(unidadesLimpias)
+    );
+
+    formData.append(
+      'idunidad_direccion',
+      this.usuarioLoguiado.idunidad_direccion
+    );
+
+    this._ServiciosMensajeService.show();
+
+    this._ServicioBackendService
+      .crear_archivo_documentos(formData)
+      .subscribe({
+        next: () => {
+
+          this._ServiciosMensajeService.hide();
+
+
+
+          this.cargarContenido();
+
+          this.modalSubirArchivo = false;
+
+          this.formArchivo.reset();
+          this.archivo_documento = [];
+          this.archivo.nativeElement.value = '';
+        },
+        error: () => {
+
+          this._ServiciosMensajeService.hide();
+
+          this._ServiciosMensajeService.mensajeerrorServer();
+
+        }
+      });
+
+  }
+  limpiarFomsubir() {
+    setTimeout(() => {
+      this.formArchivo.reset();
+      this.archivo_documento = [];
+      this.archivo.nativeElement.value = '';
+    }, 300)
+
+  }
+  buscarDocumento_en_archivos(form) {
+    let p = {
+      texto: form.value.texto,
+      id_direccion: this.usuarioLoguiado.idunidad_direccion
+    }
+    if (form.value.texto.trim() === "") return this.cargarContenido()
+    this._ServiciosMensajeService.show()
+    this._ServicioBackendService.buscarDocumento_en_archivos(p).subscribe({
+      next: (response) => {
+        this._ServiciosMensajeService.hide()
+
+        this.archivos = response.resultado
+      }, error: () => {
+        this._ServiciosMensajeService.hide()
+        this._ServiciosMensajeService.mensajeerrorServer()
+      }
+    })
+  }
+
+
+  descargarArchivo(item) {
+    this._ServiciosMensajeService.show()
+    let p = {
+      id_archivo_documentos: item.id_archivo,
+      usuario: this.usuarioLoguiado
+    }
+    this._ServicioBackendService.obtenerArchivo(p).subscribe({
+      next: (blob: Blob) => {
+        this._ServiciosMensajeService.hide()
+        const url = window.URL.createObjectURL(blob);
+
+        window.open(url, '_blank');
+      }, error: () => {
+        this._ServiciosMensajeService.hide()
+        this._ServiciosMensajeService.mensajeerrorServer()
       }
     });
- 
-}
-
-buscarDocumento_en_archivos(form){
-  console.log(this.usuarioLoguiado)
-  let  p  = {
-    texto : form.value.texto,
-    id_direccion:this.usuarioLoguiado.idunidad_direccion
   }
-  console.log(p)
-  if( form.value.texto.trim()==="") return this.cargarContenido()
-  this._ServiciosMensajeService.show()
-console.log("22222222222222222")
-this._ServicioBackendService.buscarDocumento_en_archivos(p).subscribe({
-  next:(response)=>{
-    console.log(response)
-      this._ServiciosMensajeService.hide()
-      
-      this.archivos = response.resultado
-  },error:()=>{
-    this._ServiciosMensajeService.hide()
-    this._ServiciosMensajeService.mensajeerrorServer()
-  }
-})
-}
-
-
-descargarArchivo(item){
- this._ServiciosMensajeService.show()
-  this._ServicioBackendService.obtenerArchivo(item.id_archivo).subscribe({
-  next: (blob: Blob) => {
-this._ServiciosMensajeService.hide()
-    const url = window.URL.createObjectURL(blob);
-
-    window.open(url, '_blank');
-  },error:()=>{
-this._ServiciosMensajeService.hide()
-this._ServiciosMensajeService.mensajeerrorServer()
-  }
-});
-}
 
 }

@@ -1,17 +1,24 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ServicioBackendService } from '../../../servicios/servicio-backend.service';
 import { ServiciosMensajeService } from '../../../servicios/serviMensaje/servicios-mensaje.service';
 import { SafePipe } from '../../../Pipes/pipe-imagen/safe.pipe';
-
+ import { FileUploadModule } from 'primeng/fileupload';
+import { DialogModule } from 'primeng/dialog';
+import { ButtonModule } from 'primeng/button';
 @Component({
   selector: 'app-tarjeta-archivos',
   standalone:true,
   imports: [
     CommonModule,
 FormsModule,
-SafePipe
+SafePipe,
+FileUploadModule,
+ DialogModule,
+ButtonModule
+
+
   ],
   templateUrl: './tarjeta-archivos.component.html',
   styleUrl: './tarjeta-archivos.component.css',
@@ -20,7 +27,8 @@ export class TarjetaArchivosComponent {
  @Input() arreglodeDocumentos:Array<any>;
   @Input("identidad") identidad_;
   @Input() idcarpetaSegundaria;
-  
+  @Output("repsonderPadre") repsonderPadre= new EventEmitter()
+  actualizarDocumento = false
   verCarpeta = 0
   banderaEspiner = 0;
   usuariologuiado;
@@ -33,9 +41,11 @@ export class TarjetaArchivosComponent {
    }
 
   ngOnInit(): void {
+    
   }
 
   async eliminar(iddocumento: any, dir: any, i?) {
+      if(i.documeto_obligatorio===1) return this._ServiciosMensajesService.mensajeMalo("Documento de caracter Obligatorio, No se puede Eliminar")
 let respuesta = await this._ServiciosMensajesService.mensajePregunta("Esta seguro de eliminar el documento.")
 if (respuesta) {
   var params = {
@@ -93,16 +103,12 @@ if (respuesta) {
       }
     )
   }
-  urls="https://siapfa.ffaa.mil.hn:4443/sacarfoto/";
+  urls= this._DatospersonalesService.url+"sacarfoto/"//  "https://siapfa.ffaa.mil.hn:4443/sacarfoto/";
  probarimagenes(dir):any{
 
    
  }
- refrescar(){
-  
-  console.log(document.getElementById('myhtml'));
-
- }
+ 
  versiesimagen(data){
    if (data==='jpg' || data==='png'|| data==='jpeg' || data==='jfif' || data==='tif' || data==='JPE' || data==='gif' || data==='PNG') {
      return true;
@@ -126,6 +132,7 @@ if (respuesta) {
   }
  }
  async cambiarnombreDocumento(data){
+  if(data.documeto_obligatorio===1) return this._ServiciosMensajesService.mensajeMalo("Documento de caracter Obligatorio, No se puede modificar el nombre")
 let nuevo_nombre = await this._ServiciosMensajesService.mensajeConimput("Modificacion","Ingrese el nuevo nombre")
 if (nuevo_nombre!=="error") {
 
@@ -173,4 +180,48 @@ toggleDropdownDoc(id: number, event: MouseEvent) {
 cerrarDropdownDocs() {
   this.dropdownDocId = null;
 }
+
+
+ 
+ 
+archivoSeleccionado: File | null = null;
+
+seleccionarArchivo(event: any) {
+    this.archivoSeleccionado = event.files[0];
+}
+
+documentoSeleccionado
+ seleccionarDocumetoDeterminado(data){
+this.documentoSeleccionado = data
+ }
+
+guardarDocumento() {
+
+  if (!this.archivoSeleccionado) {
+    return;
+  }
+
+  const formData = new FormData();
+  // Debe coincidir con upload.array("myfile")
+  formData.append("myfile", this.archivoSeleccionado);
+  formData.append(
+    "iddocumento",
+    this.documentoSeleccionado.iddocumento.toString()
+  );
+
+  this._DatospersonalesService.subirDocumentoPredeterminados(formData)
+    .subscribe({
+      next: (resp: any) => {
+        console.log(resp);
+        this._ServiciosMensajesService.mensajeMalo("Documento cargado correctamente.")
+        this.repsonderPadre.emit()
+      },
+      error: (err) => {
+        console.error(err);
+      }
+
+    });
+
+}
+ 
 }

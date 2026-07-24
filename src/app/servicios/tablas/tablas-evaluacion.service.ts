@@ -3475,7 +3475,6 @@ arreglo_peso_normal = [
     );
 
     if (!fila) {
-      console.log("No se encuentra:::::::::::::")
       return 0
       //throw new Error(`No existe una fila para la diferencia ${entero}.`);
     }
@@ -3704,7 +3703,6 @@ obtenerPuntajeAbdominales(
   );
 
 
-  console.log(grupo)
   if (!grupo) {
     return null;
   }

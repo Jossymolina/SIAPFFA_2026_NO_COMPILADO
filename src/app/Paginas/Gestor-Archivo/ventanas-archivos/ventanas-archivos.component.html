@@ -1,11 +1,12 @@
 <p-contextMenu #cm [model]="menuOpciones">
 </p-contextMenu>
-
+<p-contextMenu #cmDerecho [model]="itemsClickDerecho"></p-contextMenu>
+<!--
 <p-treeselect appendTo="body" style="width: 100%;" required name="unidad" #unidad="ngModel" ngModel
     selectionMode="multiple" [options]="treeUnidades" [(ngModel)]="unidadesSeleccionadas" [filter]="true"
     [showClear]="true" placeholder="Seleccione las unidades" styleClass="w-full">
 </p-treeselect>
-
+-->
 
 
 <div *ngIf="categoriaSeleccionadaDetalle" class="mt-3">
@@ -20,8 +21,8 @@
 
 </div>
 
-
-<div class="explorer-toolbar">
+<!--Directorio princilap-->
+<div *ngIf="ventanaAVisualizar==='Principal'" class="explorer-toolbar">
 
     <div class="toolbar-left">
 
@@ -54,22 +55,34 @@
     </div>
 
     <div class="toolbar-right">
-
-        <button pButton class="btn-action" (click)="crearCarpeta();">
+     <button pButton 
+        title="Ver mis compartidos"
+       
+        style="background-color: rgb(29, 3, 88);  border-color: black;"
+        (click)="cambiarVentana('Compartidos');">
+           <i class="pi pi-share-alt"></i>
+           
+        </button>
+        <button pButton 
+        title="Nueva Carpeta"
+        style="background-color: brown; border-color: black; "
+        class="btn-action" (click)="crearCarpeta();">
             <i class="pi pi-folder-plus"></i>
-            Nueva Carpeta 1
+           
         </button>
 
-        <button pButton class="btn-action" (click)=" modalSubirArchivo=true">
+        <button pButton class="btn-action"
+        title="Subir Archivo"
+        sty
+        (click)=" limpiarFomsubir(); modalSubirArchivo=true">
             <i class="pi pi-upload"></i>
-            Subir Archivo
+      
         </button>
         <form #formbuscarArchivos="ngForm">
 
 
             <span class="p-input-icon-left">
-
-                <i class="pi pi-search"></i>
+          
 
                 <input type="text" pInputText name="texto" #texto="ngModel" ngModel required
                     (keydown.enter)="buscarDocumento_en_archivos(formbuscarArchivos)" placeholder="Buscar..." />
@@ -80,54 +93,207 @@
 
 </div>
 
-<div class="explorer-content">
+<div *ngIf="ventanaAVisualizar==='Principal'" style="height: 800px; overflow-y: auto; background-color: rgb(255, 255, 255);"
+  (contextmenu)="abrirMenuClickDerecho($event)" >
+    <div class="explorer-content" style="background-color: rgb(255, 255, 255); ">
 
-    <div *ngFor="let item of archivos" class="archivo-card" (dblclick)="abrir(item)">
+        <div *ngFor="let item of archivos" class="archivo-card" (dblclick)="abrir(item)">
 
-        <button class="btn-opciones" (click)="mostrarMenuBoton($event,item)">
-            <i class="pi pi-ellipsis-v"> </i>
+            <button class="btn-opciones" (click)="mostrarMenuBoton($event,item)">
+                <i class="pi pi-ellipsis-v"> </i>
 
-        </button>
+            </button>
 
-        <ng-container *ngIf="item.tipo === 'CARPETA'">
+            <ng-container *ngIf="item.tipo === 'CARPETA'">
 
-            <div class="folder">
+                <div class="folder"  >
 
-                <div class="folder-tab"></div>
+                    <div class="folder-tab"></div>
 
-                <div class="folder-body">
+                    <div class="folder-body">
 
-                    <i class="pi pi-folder-open"></i>
+                        <i class="pi pi-folder-open"></i>
+
+                    </div>
 
                 </div>
 
+            </ng-container>
+
+            <ng-container *ngIf="item.tipo === 'ARCHIVO'">
+
+                <div class="file" [title]="item.nombre" (click)="descargarArchivo(item)">
+
+                    <i class="pi pi-file-pdf"></i>
+
+                </div>
+
+            </ng-container>
+
+            <div class="archivo-nombre">
+
+                {{ item.nombre }}
+
             </div>
 
-        </ng-container>
+        </div>
 
-        <ng-container *ngIf="item.tipo === 'ARCHIVO'">
+    </div>
+        <div *ngIf="archivos?.length===0"  class="directorio-vacio">
+    <i class="pi pi-folder-open"></i>
 
-            <div class="file" (click)="descargarArchivo(item)">
+    <h3>Este directorio está vacío</h3>
 
-                <i class="pi pi-file-pdf"></i>
+    <p>
+        No se encontraron carpetas ni archivos en esta ubicación.
+    </p>
 
-            </div>
+    <small>
+        Utilice el botón <strong>Nuevo</strong> para crear una carpeta o cargar un archivo.
+    </small>
+</div>    
 
-        </ng-container>
+</div>
 
-        <div class="archivo-nombre">
+<!--Directorio de compartidos-->
 
-            {{ item.nombre }}
+<div *ngIf="ventanaAVisualizar==='Compartidos'" class="explorer-toolbar">
+
+    <div class="toolbar-left">
+
+        <button class="toolbar-btn" (click)="volverCompartido()">
+            <i class="pi pi-arrow-left"></i>  
+        </button>
+
+        <button class="toolbar-btn" (click)="sacarDocumentosCompartidos()">
+            <i class="pi pi-home"></i>
+        </button>
+
+        <div class="breadcrumb-container">
+
+            <span class="breadcrumb-item" (click)="irRaiz()">
+                {{ categoriaSeleccionada?.nombre }}
+            </span>
+
+            <ng-container *ngFor="let item of breadcrumb">
+
+                <i class="pi pi-angle-right"></i>
+
+                <span class="breadcrumb-item" (click)="abrirDesdeRuta(item)">
+                    {{ item.nombre }}
+                </span>
+
+            </ng-container>
 
         </div>
 
     </div>
 
+    <div class="toolbar-right">
+     <button pButton 
+        title="Ver mis compartidos"
+       
+        style="background-color: rgb(5, 196, 53);  border-color: black;"
+        (click)="cambiarVentana('Principal');">
+            <i class="pi pi-inbox"></i>
+           
+        </button>
+     
+        <form #formbuscarArchivos="ngForm">
+
+
+            <span class="p-input-icon-left">
+          
+
+                <input type="text" pInputText name="texto" #texto="ngModel" ngModel required
+                    (keydown.enter)="buscarDocumento_en_archivos(formbuscarArchivos)" placeholder="Buscar..." />
+
+            </span>
+        </form>
+    </div>
+
+</div>
+
+<div *ngIf="ventanaAVisualizar==='Compartidos'" style="height: 800px; overflow-y: auto; background-color: rgb(255, 255, 255);"  
+
+>
+<div class="alert alert-light border rounded py-2 px-3 mb-3" role="alert" style="margin-top: 5px;">
+    <i class="pi pi-info-circle text-primary me-2"></i>
+    En esta sección se muestran los documentos y carpetas que han sido compartidos con su dirección o unidad.
+</div>
+    <div class="explorer-content" style="background-color: rgb(255, 255, 255); ">
+
+        <div *ngFor="let item of archivos" class="archivo-card" 
+        (dblclick)="abrir_carpeta_compartida(item)">
+
+            <button class="btn-opciones" (click)="mostrarMenuBoton($event,item)">
+                <i class="pi pi-ellipsis-v"> </i>
+
+            </button>
+
+            <ng-container *ngIf="item.tipo === 'CARPETA'">
+
+                <div class="folder"   >
+
+                    <div class="folder-tab"></div>
+
+                    <div class="folder-body">
+
+                        <i class="pi pi-folder-open"></i>
+
+                    </div>
+
+                </div>
+
+            </ng-container>
+
+            <ng-container *ngIf="item.tipo === 'ARCHIVO'">
+
+                <div class="file" [title]="item.nombre" (click)="descargarArchivo(item)">
+
+                    <i class="pi pi-file-pdf"></i>
+
+                </div>
+
+            </ng-container>
+
+            <div class="archivo-nombre">
+
+                {{ item.nombre }}
+
+            </div>
+
+        </div>
+
+    </div>
+        <div *ngIf="archivos?.length===0"  class="directorio-vacio">
+    <i class="pi pi-folder-open"></i>
+
+    <h3>Este directorio está vacío</h3>
+
+    <p>
+        No se encontraron carpetas ni archivos en esta ubicación.
+    </p>
+
+    <small>
+        Utilice el botón <strong>Nuevo</strong> para crear una carpeta o cargar un archivo.
+    </small>
+</div>    
+
 </div>
 
 
-<p-dialog header="Nueva Carpeta" [(visible)]="mostrarModalCarpeta" [modal]="true" [style]="{width:'450px'}"
-    [closable]="false">
+
+
+<p-dialog [(visible)]="mostrarModalCarpeta"
+    header="Nueva Carpeta"
+    [modal]="true"
+    [dismissableMask]="true"
+    [closable]="true"
+    [closeOnEscape]="true"
+    
+    
+    >
 
     <form #FormNombre="ngForm" class="p-fluid">
         <div class="field">
@@ -145,35 +311,58 @@
             (click)="mostrarModalCarpeta=false">
         </button>
 
-        <button pButton type="button" label="Guardar"
-         icon="pi pi-check" (click)="crear_archivo_documento(FormNombre)">
+        <button pButton type="button" label="Guardar" icon="pi pi-check" (click)="crear_archivo_documento(FormNombre)">
         </button>
     </ng-template>
 </p-dialog>
 
 
 
-<p-dialog header="📁 Nuevo Archivo" [(visible)]="modalSubirArchivo" [modal]="true" [style]="{width:'650px'}"
-    [closable]="false" styleClass="dlg-archivo-personalizado">
+<p-dialog header="📁 Nuevo Archivo"
+ [(visible)]="modalSubirArchivo"
+  [modal]="true"
+   [style]="{width:'650px'}"
+   
+    styleClass="dlg-archivo-personalizado"
+    
+     [dismissableMask]="true"
+    [closable]="true"
+    [closeOnEscape]="true"
+    
+    >
 
     <form #formArchivo="ngForm" class="p-fluid">
 
         <div class="campo-formulario">
-            <label>
-                <i class="pi pi-sitemap"></i>
-                Unidades que pueden buscar este archivo
-            </label>
+    <label>
+        <i class="pi pi-sitemap"></i>
+        Unidades con acceso al archivo <strong style="color: rgb(138, 30, 12);" >(No es obligatorio)</strong>
+    </label>
 
-            <p-treeselect appendTo="body" style="width:100%" required name="unidades" selectionMode="multiple"
-                [options]="treeUnidades" [(ngModel)]="unidadesSeleccionadas" [filter]="true" [showClear]="true"
-                placeholder="Seleccione las unidades" styleClass="w-full">
-            </p-treeselect>
-        </div>
+    <small class="text-muted d-block mb-2">
+        Seleccione las unidades que podrán buscar y acceder a este archivo.
+        <strong>Su unidad ya tiene acceso automáticamente</strong>, por lo que no es necesario seleccionarla.
+    </small>
 
-        <div class="campo-formulario">
+    <p-treeselect
+        appendTo="body"
+        style="width:100%"
+        name="unidades"
+        selectionMode="multiple"
+        [options]="treeUnidades"
+        [(ngModel)]="unidadesSeleccionadas"
+        [filter]="true"
+        [showClear]="true"
+        placeholder="Seleccione una o más unidades"
+        styleClass="w-full">
+    </p-treeselect>
+</div>
+
+
+        <div class="campo-formulario" *ngIf=" this.usuarioLoguiado.idunidad_direccion=== 1993" >
             <label>
                 <i class="pi pi-folder"></i>
-                Categoría a la que pertenece este archivo
+                Categoría a la que pertenece este archivo <strong style="color: rgb(138, 30, 12);" >(Obligatorio)</strong>
             </label>
 
             <p-treeselect appendTo="body" style="width:100%" required name="categoria" #categoria="ngModel"
@@ -186,7 +375,7 @@
         <div class="campo-formulario">
             <label>
                 <i class="pi pi-file-edit"></i>
-                Descripción del archivo
+                Descripción del archivo <strong style="color: rgb(138, 30, 12);" >(Obligatorio)</strong>
             </label>
 
             <textarea class="form-control" maxlength="500" rows="4" #descripcion="ngModel" ngModel name="descripcion"
@@ -201,10 +390,10 @@
         <div class="campo-formulario">
             <label>
                 <i class="pi pi-upload"></i>
-                Archivo a cargar
+                Archivo a cargar <strong style="color: rgb(138, 30, 12);" >(Obligatorio)</strong>
             </label>
 
-            <input type="file" name="archivo" required (change)="seleccionarArchivo($event)">
+            <input type="file" multiple name="archivo" #archivo required (change)="seleccionarArchivo($event)">
         </div>
 
     </form>
@@ -216,7 +405,8 @@
         </button>
 
         <button pButton type="button" label="Guardar" icon="pi pi-check"
-            [disabled]="!formArchivo.valid || !archivo_documento" (click)="subirArchivo()">
+            [disabled]="!formArchivo.valid || !archivo_documento || archivo_documento.length === 0"
+            (click)="subirArchivo()"> sfdsd
         </button>
 
     </ng-template>
@@ -266,3 +456,33 @@
 
 </div>
 -->
+
+
+<p-dialog header="Renombrar archivo" [(visible)]="mostrarModalRenombrar" [modal]="true" [draggable]="false"
+    [resizable]="false" [closable]="true" [style]="{ width: '28rem' }">
+
+    <form #formCambiarNombre="ngForm" class="mb-3">
+        <label for="nombreArchivo" class="form-label fw-semibold">
+            Nuevo nombre
+        </label>
+
+        <input id="nombreArchivo" pInputText required name="nombre" , #nombre="ngModel" ngModel class="w-100"
+            maxlength="150" placeholder="Ingrese el nuevo nombre del archivo">
+    </form>
+
+    <small class="text-secondary">
+        Solo se modificará el nombre del archivo. La extensión permanecerá igual.
+    </small>
+
+    <ng-template pTemplate="footer">
+        <button pButton label="Cancelar" icon="pi pi-times" severity="secondary" text
+            (click)="mostrarModalRenombrar = false">
+        </button>
+
+        <button pButton label="Renombrar" icon="pi pi-check"
+            [disabled]="!formCambiarNombre.value.nombre?.trim() || formCambiarNombre.invalid"
+            (click)="guardarCambioNombre()">
+        </button>
+    </ng-template>
+
+</p-dialog>

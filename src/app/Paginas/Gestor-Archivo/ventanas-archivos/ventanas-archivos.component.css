@@ -479,3 +479,46 @@ Fin de diseño de la barra de navegacion
 ::ng-deep .dlg-archivo-personalizado ::-webkit-scrollbar-thumb:hover {
     background: #94a3b8;
 }
+
+
+
+
+
+
+
+
+
+
+
+.directorio-vacio{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    min-height:350px;
+    text-align:center;
+    color:#6c757d;
+    padding:40px;
+}
+
+.directorio-vacio i{
+    font-size:80px;
+    color:#c8cfd8;
+    margin-bottom:20px;
+}
+
+.directorio-vacio h3{
+    margin:0;
+    color:#495057;
+    font-weight:600;
+}
+
+.directorio-vacio p{
+    margin:15px 0 8px;
+    font-size:16px;
+}
+
+.directorio-vacio small{
+    color:#8b949e;
+    font-size:14px;
+}

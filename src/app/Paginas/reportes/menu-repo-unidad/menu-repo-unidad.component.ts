@@ -19,7 +19,7 @@ import { VisualizarPerfilComponent } from '../../../Componentes/visualizar-perfi
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-
+  import { TreeSelectModule } from 'primeng/treeselect';
 type Opcion = 'unidad' | 'seccion';
 type Reporte = {
   id: string;
@@ -34,13 +34,15 @@ type Reporte = {
   selector: 'app-menu-repo-unidad',
   standalone: true,
   imports: [CommonModule, FormsModule, CardModule, InputTextModule, TooltipModule, RadioButtonModule, MenuToeComponent, VisualizarPerfilComponent, DialogModule, ButtonModule,
-    TableModule,TagModule,ProgressSpinnerModule
+    TableModule,TagModule,ProgressSpinnerModule,TreeSelectModule
   ],
   templateUrl: './menu-repo-unidad.component.html',
   styleUrl: './menu-repo-unidad.component.css',
 })
 export class MenuRepoUnidadComponent implements OnInit {
   usuarioLoguiado
+    treeUnidades: any[] = [];
+
   constructor(
     public _ServicioBackendService: ServicioBackendService,
     private _ServiciosMensajeService: ServiciosMensajeService
@@ -68,7 +70,8 @@ export class MenuRepoUnidadComponent implements OnInit {
   ];
   ngOnInit(): void {
     this.usuarioLoguiado = JSON.parse(localStorage.getItem('user_login')!).user;
-    this.mostrarNombramiento()
+    //this.mostrarNombramiento()
+    this.sacarTodalasUnidades()
   }
   q = signal('');
 
@@ -146,7 +149,7 @@ export class MenuRepoUnidadComponent implements OnInit {
     // Aquí luego lo cambias por Router navigate.
     this.destruir()
     this.VentanaSeleccionada = r
-    if (r.id === "r1") this.sacarParteUnidad()
+   
 
 
   }
@@ -163,9 +166,11 @@ export class MenuRepoUnidadComponent implements OnInit {
   }
   arregloResumenParteUnidad: any[] = []
   arregloListaParteUnidad: any[] = []
-  sacarParteUnidad() {
+  sacarParteUnidad(form) {
     let param = {
-      cadena: ` and unidad.idunidad= ${this.usuarioLoguiado.idunidad} `
+      cadena: ``,
+      cadena2:``,
+      idunidad:  form.value.seccion.idunidad
     }
     this._ServiciosMensajeService.show("Cargando parte de la unidad......");
     this._ServicioBackendService.sacarParteMenuInicio(param).subscribe({
@@ -203,8 +208,10 @@ export class MenuRepoUnidadComponent implements OnInit {
 
   sacarBajas(form) {
     let param = {
-      cadena: ` and unidad.idunidad=${this.usuarioLoguiado.idunidad} and  year(bajaspersonal.fecha_de_baja)=year('${form.value.fecha}-1') 
-                and month(bajaspersonal.fecha_de_baja)=month('${form.value.fecha}-1')  `
+      cadena: `  and year(bajaspersonal.fecha_de_baja)=year('${form.value.fecha}-1') 
+                and month(bajaspersonal.fecha_de_baja)=month('${form.value.fecha}-1')  `,
+      
+      idunidad:form.value.seccion.idunidad
     }
 
 
@@ -212,6 +219,7 @@ export class MenuRepoUnidadComponent implements OnInit {
     this._ServiciosMensajeService.show();
     this._ServicioBackendService.sacarBajasUnidad(param).subscribe({
       next: (response) => {
+        console.log(response)
         this._ServiciosMensajeService.hide()
         if (response.error) return this._ServiciosMensajeService.mensajeMalo(response.error);
         this.arregloBajas = response.resultado
@@ -276,8 +284,8 @@ export class MenuRepoUnidadComponent implements OnInit {
 
   puscarPersonalVacacioensUnidad(form) {
     let p = {
-      cadena: ` and u.idunidad=${this.usuarioLoguiado.idunidad}     
-                and month(ia.fecha_planilla)=month('${form.value.fecha}-1')  and  c.idcategoria in (${form.value.categoria.nivel.join(',')}) `
+      cadena: ` and month(ia.fecha_planilla)=month('${form.value.fecha}-1')  and  c.idcategoria in (${form.value.categoria.nivel.join(',')}) `,
+      idunidad:form.value.seccion.idunidad
     }
     this.arregloListaVacacioens = []
 
@@ -300,12 +308,15 @@ export class MenuRepoUnidadComponent implements OnInit {
   arregloOrganizacionCompleta = []
   sacarOrganizacion(form: NgForm, objeto) {
     this.arregloOrganizacionCompleta = []
-    let q = { cadena: `` }
-
-    if (objeto === "unidad") q.cadena = ` and unidad.idunidad=${this.usuarioLoguiado.idunidad}`
-    if (objeto === "seccion") q.cadena = ` and Nombramiento.idunidad=${this.usuarioLoguiado.idunidad}  and Nombramiento.idNombramiento=${form.value.seccion.idNombramiento} `
-
-
+let q={cadena:``,data:{} as any}
+   if(objeto === "fuerza"){
+     q.cadena=` and ua.idfuerza=${form.value.fuerza.idfuerza}  and nivel in (${form.value.categoria.nivel }) `
+   }else if(objeto === "unidad"){
+     q.cadena=` and ua.idunidad=${form.value.unidad.idunidad}`
+      q.data.cadena = ` and idunidad  =${form.value.unidad.idunidad} ` 
+   } else  if(objeto === "seccion"){
+      q.data.idunidad = Number(form.value.seccion.key);
+   }
     this.ejecucatarConsultaOrganizacion(q)
   }
 
@@ -991,4 +1002,106 @@ verDEtalleCombatiente(detalle,combatiente,genero){
 
 
 listarPersonal=false
+
+
+
+
+
+
+
+
+ 
+
+  sacarTodalasUnidades() {
+    console.log(this.usuarioLoguiado)
+    this._ServiciosMensajeService.show();
+    
+  //esto es pabar que unidad padre desbloquear
+   let idunidadDesbloquear = this.usuarioLoguiado.idunidad
+
+
+
+
+
+
+
+    this._ServicioBackendService.sacarTodalasUnidades().subscribe({
+      next: (response) => {
+        this._ServiciosMensajeService.hide();
+        const unidades = response.resultado || [];
+         let  nodo = unidades.filter((x: any) => x.id_unidad_padre == null)
+            .map((x: any) =>
+            this.construirJerarquiaUnidades(
+              x,
+              unidades
+             )
+            );
+           this.treeUnidades = nodo.map((x: any) => this.convertirTreeNodeUnidad(x,idunidadDesbloquear));
+       },error: () => {
+        this._ServiciosMensajeService.hide();
+        this._ServiciosMensajeService.mensajeerrorServer();
+      }
+    });
+}
+
+
+ private construirJerarquiaUnidades(
+    item: any,
+    unidad: any[],
+    rutaPadre: string = ''
+  ): any {
+
+    const rutaActual = rutaPadre
+      ? `${rutaPadre} > ${item.unidad_nombre}`
+      : item.unidad_nombre;
+
+    const hijos = unidad
+      .filter(x => x.id_unidad_padre == item.idunidad)
+      .map(x =>
+        this.construirJerarquiaUnidades(
+          x,
+          unidad,
+          rutaActual
+        )
+      );
+
+    return {
+      ...item,
+      ruta: rutaActual,
+      hijos
+    };
+
+  }
+
+private convertirTreeNodeUnidad(
+  nodo: any,
+  idunidadDesbloquear: number,
+  desbloquear: boolean = false
+): any {
+
+  // Si este es el nodo buscado, a partir de aquí todo queda desbloqueado
+  const desbloqueado = desbloquear || nodo.idunidad === idunidadDesbloquear;
+
+  return {
+    key: String(nodo.idunidad),
+    label: nodo.unidad_nombre,
+    data: nodo,
+    unidad_tipo: nodo.unidad_tipo,
+    idunidad: nodo.idunidad,
+
+    selectable: desbloqueado,
+
+    icon: desbloqueado
+      ? 'pi pi-lock-open'
+      : 'pi pi-lock',
+
+    children: nodo.hijos.map((h: any) =>
+      this.convertirTreeNodeUnidad(
+        h,
+        idunidadDesbloquear,
+        desbloqueado
+      )
+    )
+  };
+}
 }

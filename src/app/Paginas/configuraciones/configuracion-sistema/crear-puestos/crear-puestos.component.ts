@@ -5,17 +5,18 @@ import { ServicioBackendService } from '../../../../servicios/servicio-backend.s
 import { ServiciosMensajeService } from '../../../../servicios/serviMensaje/servicios-mensaje.service';
 import Swal from 'sweetalert2';
 import { Select } from 'primeng/select';
-import { Button } from 'primeng/button';
+import { Button, ButtonModule } from 'primeng/button';
 import { Dialog } from 'primeng/dialog';
  
+import { TreeSelectModule } from 'primeng/treeselect';
 
- 
+ import { CommonModule } from '@angular/common'
 
 @Component({
   selector: 'app-crear-puestos',
   standalone:true,
   imports: [ FormsModule,
- ReactiveFormsModule,Select,Button,Dialog],
+ ReactiveFormsModule,Select,Button,Dialog,TreeSelectModule,CommonModule,ButtonModule],
   templateUrl: './crear-puestos.component.html',
   styleUrl: './crear-puestos.component.css',
 })
@@ -65,8 +66,8 @@ esperar= false;
   arreglosRam = new Array()
   arregloFuerzas = new Array();
   ArregloUnidades = new Array()
-  ArregloNombramiento = new Array()
-  ArregloPuestos = new Array()
+ 
+  ArregloPuestos = []
   public FilesToUploads: Array<File> = new Array();
   arregloEducacionCivil = new Array();
   arregloarmas = new Array();
@@ -221,24 +222,18 @@ arreglounidadEjecutora = []
 
   ngOnInit(): void {
     this.sacarFuerza();
-    this.sacarcontrolGrados();
-    this.sacarIdiomas();
+    
+ 
     this.usuarioLoguiado = JSON.parse(localStorage.getItem('user_login')!).user
     this._DatospersonalesService.sacardepartamentoTodos().subscribe(
       Response => {
         this.arregloDepartamento = Response.resultado;;
       })
-      this.sacarUnidadEjecutora()
-  }
-  sacarUnidadEjecutora(){
-    this._DatospersonalesService.sacarUnidadEjecutora().subscribe({
-      next:(response)=>{
-          this.arreglounidadEjecutora = response.resultado
-      },error:()=>{
 
-      }
-    })
+      this.sacarTodalasUnidades()
+   
   }
+ 
   limpiarArreglos(){
     this.agregarNuevoCupo = {
       cantidadAutorizada: 0,
@@ -246,34 +241,10 @@ arreglounidadEjecutora = []
       idcategoria: "",
       fechaIngreso: ""
     }
-    this.sacarcontrolGrados();
+   
   
   }
-  sacarcontrolGrados() {
-    var param;
-    this.arregloControlGrados = new Array();
-    this.arreglosRam = new Array();
-    this._DatospersonalesService.sacarControlGrados(param).subscribe(
-      Response => {
-        if (Response.error) {
-          this._DatospersonalesService.mensajeError(Response.error)
-        } else {
-          if (Response.mensaje) {
-            this._DatospersonalesService.mensajeError(Response.mensaje)
-          } else {
-
-            this.arregloControlGrados = Response.resultado;
-
-
-
-          }
-
-        }
-      }, error => {
-        this._DatospersonalesService.mensajeError("ERROR DE CONEXION")
-      }
-    )
-  }
+ 
   actualizarCuenta() {
    
     if (!this.cambionumeroCuenta.valid) {
@@ -490,109 +461,37 @@ this._ServiciosMensajeService.mensajeMalo("ERROR DE CONECCION AL SACAR UNIDADES"
     )
   }
 
-  sacarNombranmiento() {
-    this.ArregloNombramiento = [];
+ 
+
+ 
+
+
+  sacarPuestos_delNombramiento() {
+
+    this.ArregloPuestos = [];
     var parametros = {
       idunidad: this.unidadSelected.idunidad
     }
-this._ServiciosMensajeService.show()
-    this._DatospersonalesService.mostrarNombramiento(parametros).subscribe(
-      {
-        next:(Response) => {
-          this._ServiciosMensajeService.hide()  
-
-           this.ArregloNombramiento = Response.resultado
-        },error:() => {
-          this._ServiciosMensajeService.hide()  
-        this._DatospersonalesService.mensajeError("Ocurrio un error en la peticion")
-
-        }
-      }
-     
-    )
-  }
-
-  Sacar_Direcciones(data) {
-    this.ArregloNombramiento = new Array();
-    this.unidadSelected = data.unidad;
-    var parametros = {
-      idunidad: data.idunidad
-    }
-
-    this._DatospersonalesService.mostrarNombramiento(parametros).subscribe(
-      Response => {
-
-        this.ArregloNombramiento = Response.resultado
-        this.sacarDireccionDeAsignado();
-      }, error => {
-        this._DatospersonalesService.mensajeError("Ocurrio un error en la peticion")
-      }
-    )
-  }
-
-
-  sacarPuestos_delNombramiento(data) {
-
-    this.ArregloPuestos = new Array();
-    var parametros = {
-      idnombramiento: data
-    }
-    this.nombramientoSelected = data;
+   this._ServiciosMensajeService.show()
     this._DatospersonalesService.MostrarPuesto(parametros).subscribe(
-      Response => {
+      {
+        next:(Response)=>{
+            this._ServiciosMensajeService.hide()
+          this.ArregloPuestos = Response.resultado
 
-        this.ArregloPuestos = Response.resultado
-
-      },
-      error => {
+        },error:()=>{
+         this._ServiciosMensajeService.hide()
         this._DatospersonalesService.mensajeError("Error de Coneccion llame a Soporte Tecnico")
+        }
       }
+  
     )
   }
-  guardar_Nombramiento() {
-    if (this.data.orden === "" || this.data.nombramiento === "") {
-      this._DatospersonalesService.mensajeError("RELLENE LOS CAMPOS")
-    } else {
-
-      var parametro = {
-        idunidad: this.unidadSelected.idunidad,
-        descripcion: this.data.nombramiento,
-        orden: this.data.orden
-
-
-      }
-      this._DatospersonalesService.agregarNombramiento(parametro).subscribe(
-        Response => {
-          if (Response.error) {
-            this._DatospersonalesService.mensajeError(Response.error)
-          } else {
-            this._DatospersonalesService.mensajeBueno(Response.resultado)
-            this.data = {
-              nombramiento: "",
-              orden: ""
-            }
-            this.sacarNombranmiento()
-          }
-        }, error => {
-          this._DatospersonalesService.mensajeError("ERROR DE CONEXION | GUARDAR NOMBRAMIENTO")
-        }
-      )
-    }
-
-
-
-  }
-guardarPuesto() {
  
-  const nombre = (this.dataPuesto?.Nombre_Puesto || '').trim();
+guardarPuesto() {
+   const nombre = (this.dataPuesto?.Nombre_Puesto || '').trim();
   const ordenRaw = this.dataPuesto?.orden;
-  const idNombramiento = this.nombramientoSelected;
-
-  if (!idNombramiento) {
-    this._DatospersonalesService.mensajeError('Debe seleccionar un nombramiento antes de agregar un puesto.');
-    return;
-  }
-
+ 
   if (!nombre) {
     this._DatospersonalesService.mensajeError('El nombre del puesto es obligatorio.');
     return;
@@ -607,11 +506,11 @@ guardarPuesto() {
   const parametro = {
     Nombre_Puesto: nombre,
     dependenciaArbol: orden,
-    idnombramiento: idNombramiento
+    idunidad: this.unidadSelected.idunidad
   };
 
+ 
   this._ServiciosMensajeService.show();
-
   this._DatospersonalesService.agregarPuesto(parametro).subscribe({
     next: (Response: any) => {
       this._ServiciosMensajeService.hide();
@@ -620,22 +519,21 @@ guardarPuesto() {
         this._DatospersonalesService.mensajeError('Respuesta vacía del servidor al guardar el puesto.');
         return;
       }
-
+      
       if (Response.error) {
         this._DatospersonalesService.mensajeError(Response.error);
         return;
       }
 
       this._DatospersonalesService.mensajeBueno(Response.resultado || 'Puesto guardado correctamente.');
-
+this.sacarPuestos_delNombramiento()
       // limpiar modelo
       this.dataPuesto = {
         Nombre_Puesto: '',
         orden: ''
       };
 
-      // recargar listado
-      this.sacarPuestos_delNombramiento(this.nombramientoSelected);
+ 
     },
     error: (err) => {
       this._ServiciosMensajeService.hide();
@@ -971,7 +869,10 @@ guardarPuesto() {
     })
 
   }
-  eliminarPuesto(data) {
+  async  eliminarPuesto(data) {
+    let r  = await this._ServiciosMensajeService.mensajePregunta("Esta seguro de Eliminarlo")
+if(!r) return
+
     var parametro = {
       idPuesto: data
     }
@@ -985,7 +886,8 @@ guardarPuesto() {
 
           } else {
             this._DatospersonalesService.mensajeBueno(Response.resultado)
-            this.sacarPuestos_delNombramiento(this.nombramientoSelected)
+           this.sacarPuestos_delNombramiento()
+            
           }
         }
       }, error => {
@@ -1092,28 +994,7 @@ guardarPuesto() {
     this.formulariopariente.reset();
     this.formIdentidad.reset();
   }
-  eliminarNombramiento(data) {
-    var parametro = {
-      idNombramiento: data
-    }
-    this._DatospersonalesService.eliminarNombramiento(parametro).subscribe(
-      Response => {
-        if (Response.error) {
-          this._DatospersonalesService.mensajeError(Response.error)
-        } else {
-          if (Response.mensaje) {
-            this._DatospersonalesService.mensajeError(Response.mensaje)
-
-          } else {
-            this._DatospersonalesService.mensajeBueno(Response.resultado)
-            this.sacarNombranmiento()
-          }
-        }
-      }, error => {
-        this._DatospersonalesService.mensajeError("ERROR DE CONECCION | ELIMIAR PUESTO")
-      }
-    )
-  }
+ 
   buscarporIdentidad() {
 
     this._DatospersonalesService.consultaPorIdentidad(this.consulta).subscribe(
@@ -1500,19 +1381,7 @@ guardarPuesto() {
       }
     )
   }
-  sacarIdiomas() {
-    this.arregloIdiomas = new Array();
-    this._DatospersonalesService.sacaridiomas().subscribe(
-      Response => {
-
-        if (Response.error) {
-          this._DatospersonalesService.mensajeError(Response.error);
-        } else {
-          this.arregloIdiomas = Response.resultado;
-        }
-      }
-    )
-  }
+ 
   EliminarPais(data: any) {
 
     var params = {
@@ -3849,8 +3718,13 @@ guardarPuesto() {
    })
   }
   puestoSeleccionado
+  @ViewChild("formModificar")formModificar:NgForm
   puestoseleccionado(data){
-this.puestoSeleccionado = data
+     this.puestoSeleccionado = data
+    setTimeout(() => {
+       this.formModificar.controls['nombre'].setValue(data.Nombre_Puesto)
+
+    }, 400);
   }
   async   cambiarNombrePuesto(data,form:NgForm){
     let respuesta = await this._DatospersonalesService.mensajePregunta("Alto","Esta seguro de cambiar el nombre")
@@ -3869,7 +3743,8 @@ this.puestoSeleccionado = data
           if (Response.mensaje)return  this._DatospersonalesService.mensajeError(Response.mensaje)
             this._DatospersonalesService.mensajeBueno(Response.resultado)
           this.mostrarCambioNombrePuesto=false
-          this.sacarPuestos_delNombramiento(this.nombramientoSelected)
+                this.sacarPuestos_delNombramiento()
+
              this.formIdentidad.reset()
           
      
@@ -3914,12 +3789,112 @@ this.puestoSeleccionado = data
           this._DatospersonalesService.mensajeBueno(Response.resultado)
           this.modificarNombramiento = false
      
-          this.sacarNombranmiento()
+        
         }
       },error=>{
         this._DatospersonalesService.mensajeError("Error de Conexion")
       }
     )
   }
+
+
+
+
+
+
+
+   treeUnidades: any[] = [];
+unidadesSeleccionadas: any[] = [];
+
+
+
+    sacarTodalasUnidades() {
+    this._ServiciosMensajeService.show();
+
+    this._DatospersonalesService.sacarTodalasUnidades().subscribe({
+      next: (response) => {
+        this._ServiciosMensajeService.hide();
+        const unidades = response.resultado || [];
+    
+        let nodo = unidades.filter((x: any) => x.id_unidad_padre == null)
+          .map((x: any) =>
+            this.construirJerarquiaUnidades(
+              x,
+              unidades
+            )
+          );
+              this.treeUnidades = nodo.map((x: any) => this.convertirTreeNodeUnidad(x));
+     },
+      error: () => {
+
+        this._ServiciosMensajeService.hide();
+        this._ServiciosMensajeService.mensajeerrorServer();
+
+      }
+    });
+}
+
+
+ 
+
+  private construirJerarquiaUnidades(
+    item: any,
+    unidad: any[],
+    rutaPadre: string = ''
+  ): any {
+
+    const rutaActual = rutaPadre
+      ? `${rutaPadre} > ${item.unidad_nombre}`
+      : item.unidad_nombre;
+
+    const hijos = unidad
+      .filter(x => x.id_unidad_padre == item.idunidad)
+      .map(x =>
+        this.construirJerarquiaUnidades(
+          x,
+          unidad,
+          rutaActual
+        )
+      );
+
+    return {
+      ...item,
+      ruta: rutaActual,
+      hijos
+    };
+
+  }
+
+    private convertirTreeNodeUnidad(
+  nodo: any
+): any {
+
+  const esHoja = (nodo.unidad_tipo===8 || nodo.unidad_tipo===12 ||nodo.unidad_tipo===3 
+    || nodo.unidad_tipo===14 || nodo.unidad_tipo===9 || nodo.unidad_tipo===1 || nodo.unidad_tipo===3 ) ? true : false // nodo.hijos.length === 0;
+
+  return {
+
+    key: String(nodo.idunidad),
+
+    label: nodo.unidad_nombre,
+
+    data: nodo,
+    unidad_tipo:nodo.unidad_tipo,
+    idunidad:nodo.idunidad,
+
+
+    selectable: esHoja,
+
+    icon: esHoja
+      ? 'pi pi-lock-open'
+      : 'pi pi-lock',
+
+    children: nodo.hijos.map((h: any) =>
+      this.convertirTreeNodeUnidad(h)
+    )
+
+  };
+
+}
 }
 

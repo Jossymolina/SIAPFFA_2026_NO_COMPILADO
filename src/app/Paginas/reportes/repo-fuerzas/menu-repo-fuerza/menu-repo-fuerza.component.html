@@ -82,16 +82,17 @@
      <div class="container-fluid py-3">
 
         <form #formbuscar="ngForm">
-            <label for="">
-             Unidad/Base 
-         
-             <select name="unidad" class="form-control" id="unidad" 
-             #unidad="ngModel" ngModel  required>
- 
-            <option *ngFor="let u of ArregloUnidades" [ngValue]="u">{{ u.unidad }}</option>
+             <label for="" style="margin-left: 5px;" class="col-md-2">
+          Unidad
 
-             </select>
-            </label>
+         <p-treeselect appendTo="body" style="width: 100%;" required name="seccion" #seccion="ngModel" ngModel
+              required
+                [options]="treeUnidades"  [filter]="true" [showClear]="true"
+                placeholder="Seleccione la unidad" styleClass="w-full">
+              </p-treeselect>
+        </label>
+
+   
             <label for="">
                        
              <button 
@@ -249,16 +250,16 @@
           required
             class="form-control"  >
         </label>
-        <label for="" style="margin-left: 5px;">
-             Unidad/Base 
-         
-             <select name="unidad" class="form-control" id="unidad" 
-             #unidad="ngModel" ngModel  required>
- 
-            <option *ngFor="let u of ArregloUnidades" [ngValue]="u">{{ u.unidad }}</option>
+             <label for="" style="margin-left: 5px;" class="col-md-2">
+          Unidad
 
-             </select>
-            </label>
+         <p-treeselect appendTo="body" style="width: 100%;" required name="seccion" #seccion="ngModel" ngModel
+              required
+                [options]="treeUnidades"  [filter]="true" [showClear]="true"
+                placeholder="Seleccione la unidad" styleClass="w-full">
+              </p-treeselect>
+        </label>
+
          <label for="" style="margin-left: 10px;">
             <button 
                [disabled]="!formBuscar.valid"
@@ -439,32 +440,28 @@
 @if(VentanaSeleccionada?.id==='r4'){
   <div>
      <div class="container-fluid py-3">
-  <form
-  #formBuscar="ngForm"
-  >
-    <label for="" class="col-md-2" style="margin-right: 3px;">
-          Categoría
-
-          <select name="categoria" class="form-control" id="categoria" #categoria="ngModel" ngModel>
-
-            <option *ngFor="let u of arregloCategorias" [ngValue]="u">{{ u.nombre }}</option>
-
-          </select>
-        </label>
-            <label for="">Fecha
-            <br>
-            <input type="month"  
-            name="fecha" #fecha="ngModel" ngModel
-          required
-            class="form-control"  >
-        </label>
-      
-         <label for="" style="margin-left: 10px;">
-            <button 
-               [disabled]="!formBuscar.valid"
-            class="btn  btn-primary" (click)="sacarBajasXFuerza(formBuscar)">Buscar</button>
-        </label>
-
+  <form #formBuscar="ngForm">
+    <label for="" style="margin-left: 5px;" class="col-md-2">
+      Unidad
+        <p-treeselect appendTo="body" style="width: 100%;" required name="seccion" #seccion="ngModel" ngModel required
+        [options]="treeUnidades" [filter]="true" [showClear]="true" placeholder="Seleccione la unidad"
+        styleClass="w-full">
+      </p-treeselect>
+    </label>
+    <label for="" class="col-md-2" style="margin-right: 3px; margin-left: 3px;">
+      Categoría
+        <select name="categoria" class="form-control" id="categoria" #categoria="ngModel" ngModel>
+          <option *ngFor="let u of arregloCategorias" [ngValue]="u">{{ u.nombre }}</option>
+      </select>
+    </label>
+    <label for="">Fecha
+      <br>
+      <input type="month" name="fecha" #fecha="ngModel" ngModel required class="form-control">
+    </label>
+    <label for="" style="margin-left: 10px;">
+      <button [disabled]="!formBuscar.valid" class="btn  btn-primary"
+        (click)="sacarBajasXFuerza(formBuscar)">Buscar</button>
+    </label>
   </form>
    
   <div class="row align-items-center mb-3">
@@ -548,33 +545,23 @@
 @if(VentanaSeleccionada?.id==='r5'){
   <div>
 
-    <div class="d-flex align-items-center gap-4">
-
-  <div *ngFor="let op of opciones" class="d-flex align-items-center gap-2">
-    <p-radioButton
-      name="fechaCorte"
-      [value]="op.value"
-      [(ngModel)]="opcion"
-      inputId="{{ op.value }}">
-    </p-radioButton>
-
-    <label [for]="op.value" class="mb-0">
-      {{ op.label }}
-    </label>
-  </div>
-
  
-</div>
 <hr>
 
 
-<div *ngIf="opcion === 'fuerza'">
+<div  >
 
  <form #formbuscar="ngForm" class="row">
           
  
-
-              <label for="" class="col-md-2">
+<label for="" style="margin-left: 5px;" class="col-md-2">
+      Unidad
+        <p-treeselect appendTo="body" style="width: 100%;" required name="seccion" #seccion="ngModel" ngModel required
+        [options]="treeUnidades" [filter]="true" [showClear]="true" placeholder="Seleccione la unidad"
+        styleClass="w-full">
+      </p-treeselect>
+    </label>
+            <label for="" class="col-md-2">
              Categoría 
          
              <select name="categoria" class="form-control" id="categoria" 
@@ -609,58 +596,7 @@
         </form>
 </div>
 
-<div *ngIf="opcion === 'unidad'">
-
- <form #formbuscar="ngForm" class="row">
-           
-
-             <label for="" style="margin-left: 5px;" class="col-md-2">
-             Unidad/Base 
-         
-             <select name="unidad" class="form-control" id="unidad" 
-
-             #unidad="ngModel" ngModel  required>
  
-            <option *ngFor="let u of ArregloUnidades" [ngValue]="u">{{ u.unidad }}</option>
-
-             </select>
-            </label>
-
-              <label for="" class="col-md-2">
-             Categoría 
-         
-             <select name="categoria" class="form-control" id="categoria" 
-             required
-             #categoria="ngModel" ngModel   >
- 
-            <option *ngFor="let u of arregloCategorias" [ngValue]="u">{{ u.nombre }}</option>
-
-             </select>
-            </label>
-              <label for="" class="col-md-2">
-             Fecha 
-         
-            <input type="month"  class="form-control"
-             name="fecha" #fecha="ngModel" required ngModel>
-            </label>
-
-
-           
-            
-            <label for="" class="col-md-1">
-                  <br>     
-             <button 
-              class="form-control btn btn-danger"
-              [disabled]="!formbuscar.valid"
-              (click)="  puscarPersonalVacacioensUnidad(formbuscar)"
-              style="margin-left: 10px;" >
-                Buscar
-             </button>
-            </label>
-              
-        </form>
-</div>
-
 
 
 
@@ -762,7 +698,7 @@
 
   @if(VentanaSeleccionada?.id==='r6'){
   <div>
-
+<!-- 
     <div class="d-flex align-items-center gap-4">
 
       <div *ngFor="let op of opciones" class="d-flex align-items-center gap-2">
@@ -775,10 +711,10 @@
       </div>
 
 
-    </div>
+    </div>-->
     <hr>
 
-
+<!-- 
     <div *ngIf="opcion === 'fuerza'">
 
       <form #formbuscar="ngForm" class="row">
@@ -835,31 +771,21 @@
         </label>
       </form>
     </div>
-
-    <div *ngIf="opcion === 'seccion'">
+-->
+    <div  >
 
       <form #formbuscar="ngForm" class="row">
      
-        <label for="" style="margin-left: 5px;" class="col-md-2">
-          Unidad/Base
-
-          <select name="unidad"
-          (ngModelChange)="mostrarNombramiento(formbuscar.value.unidad)"
-          class="form-control" id="unidad" #unidad="ngModel" ngModel required>
-
-            <option *ngFor="let u of ArregloUnidades" [ngValue]="u">{{ u.unidad }}</option>
-
-          </select>
-        </label>
+    
 
           <label for="" style="margin-left: 5px;" class="col-md-2">
-          Seccion
+          Unidad
 
-          <select name="seccion" class="form-control" id="seccion" #seccion="ngModel" ngModel required>
-
-            <option *ngFor="let u of direcciones" [ngValue]="u">{{ u.descripcion }}</option>
-
-          </select>
+         <p-treeselect appendTo="body" style="width: 100%;" required name="seccion" #seccion="ngModel" ngModel
+              required
+                [options]="treeUnidades"  [filter]="true" [showClear]="true"
+                placeholder="Seleccione la unidad" styleClass="w-full">
+              </p-treeselect>
         </label>
 
      
@@ -994,7 +920,15 @@
     <div class="container-fluid py-3">
 
       <form #formbuscar="ngForm" class="row">
-     
+          <label for="" style="margin-left: 5px;" class="col-md-2">
+          Seccion
+
+         <p-treeselect appendTo="body" style="width: 100%;" required name="seccion" #seccion="ngModel" ngModel
+              required
+                [options]="treeUnidades"  [filter]="true" [showClear]="true"
+                placeholder="Seleccione la unidad" styleClass="w-full">
+              </p-treeselect>
+        </label>
 
         <label for="" class="col-md-2">
           Categoría
@@ -1117,6 +1051,8 @@
               <th>Grado</th>
               <th>Nombres</th>
               <th>Cuenta Banco</th>
+              <th>Combatiente</th>
+
               <th>Sexo</th>
               <th>Fecha Ingreso</th>
               <th>Fecha Ascenso</th>
@@ -1137,6 +1073,8 @@
               <td>{{ r.grado }}</td>
               <td>{{ r.nombres }}</td>
               <td>{{ r.cuenta_banco }}</td>
+              <td>{{ r.combatiente===1? "Combatiente":"No Combatiente" }}</td>
+
 
               <td>{{ r.sexo }}</td>
               <td>{{ r.fecha_ingreso | date: 'dd/MM/yyyy' }}</td>
