@@ -100,7 +100,7 @@ export class TbCargoComponent {
      {
        next:(Response) => {
         this._ServiciosMensajesService.hide()
-
+ 
         if (Response.error) {
           this._DatospersonalesService.mensajeError(Response.error)
         } else {

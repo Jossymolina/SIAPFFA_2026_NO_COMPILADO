@@ -30,18 +30,24 @@
           <a class="dropdown-item" (click)="cambiarnombreDocumento(i); cerrarDropdownDocs()">
             Cambiar nombre
           </a>
+           <a class="dropdown-item  " *ngIf="banderaEspiner === 0"
+            (click)="seleccionarDocumetoDeterminado(i); actualizarDocumento=true">
+            Actualizar
+          </a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item text-danger" *ngIf="banderaEspiner === 0"
             (click)="eliminar(i.iddocumento, i.dir, i); cerrarDropdownDocs()">
             Eliminar
           </a>
+          
         </div>
       </div>
 
       <!-- PREVIEW DOCUMENTO -->
-
       @if(i.dir!==null){
-      <div class="circulo-verde"></div>
+         @if(i.documeto_obligatorio===1){
+           <div  class="circulo-verde"></div>
+        }
       <div class="doc-preview-wrapper">
         <embed class="doc-preview" *ngIf="i?.extension === 'pdf'; else bloqueImagen" [src]="urls + i?.dir | safe"
           type="">

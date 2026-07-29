@@ -194,12 +194,15 @@ documentoSeleccionado
  seleccionarDocumetoDeterminado(data){
 this.documentoSeleccionado = data
  }
-
-guardarDocumento() {
+ 
+  async guardarDocumento() {
 
   if (!this.archivoSeleccionado) {
-    return;
+    return this._ServiciosMensajesService.mensajeMalo("Seleccione un Archivo") ;
   }
+
+  let r = await this._ServiciosMensajesService.mensajePregunta("Esta seguro de remplazar el archivo")
+  if(!r) return;
 
   const formData = new FormData();
   // Debe coincidir con upload.array("myfile")
@@ -208,16 +211,28 @@ guardarDocumento() {
     "iddocumento",
     this.documentoSeleccionado.iddocumento.toString()
   );
-
+    formData.append(
+    "usuario",
+    JSON.stringify(this.usuariologuiado)
+  );
+ formData.append(
+    "persona_afectada",
+    this.identidad_.toString()
+  );
+  this._ServiciosMensajesService.show()
+  
   this._DatospersonalesService.subirDocumentoPredeterminados(formData)
     .subscribe({
       next: (resp: any) => {
-        console.log(resp);
+  this._ServiciosMensajesService.hide()
+       if(!resp.ok) return this._ServiciosMensajesService.mensajeMalo(resp.mensaje)
         this._ServiciosMensajesService.mensajeMalo("Documento cargado correctamente.")
         this.repsonderPadre.emit()
       },
       error: (err) => {
-        console.error(err);
+  this._ServiciosMensajesService.hide()
+
+         this._ServiciosMensajesService.mensajeerrorServer()
       }
 
     });

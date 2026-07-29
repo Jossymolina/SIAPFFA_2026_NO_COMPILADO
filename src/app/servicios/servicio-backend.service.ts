@@ -13,9 +13,9 @@ import { ServiciosMensajeService } from './serviMensaje/servicios-mensaje.servic
 })
 //ng build --aot --output-hashing=all   ng build --configuration production
 export class ServicioBackendService {
-  public url2 ="http://localhost:3979/" //"http://localhost:3979/" //"https://siapfa.ffaa.mil.hn:4443/"
+  public url2 ="https://siapfa.ffaa.mil.hn:4443/" //"https://siapfa.ffaa.mil.hn:4443/"//"https://siapfa.ffaa.mil.hn:4443/"
   refrescar = 0
-  public url ="http://localhost:3979/" //"http://localhost:3979/" //"https://siapfa.ffaa.mil.hn:4443/"     
+  public url ="https://siapfa.ffaa.mil.hn:4443/"  //"https://siapfa.ffaa.mil.hn:4443/" //"https://siapfa.ffaa.mil.hn:4443/"      0801200018636
   usuarioLogin: any;
   token = "";
   arregloPermisos = new Array();
@@ -258,7 +258,7 @@ obtenerAscensosPorPersona(data){
     var json = JSON.stringify(data)
     let headers = new HttpHeaders({
       "Content-Type": "application/json",
-      "Authorization": token + ";V11"
+      "Authorization": token + ";V12"
     });
     return this.http.post(this.url + link, json, { headers: headers });
   }
@@ -727,10 +727,10 @@ obtenerAscensosPorPersona(data){
     return this.metodopost('sacarasignacionActual', data);
   }
   getToken() {
-    return this.islogin().token ? this.islogin().token + ";V11" : ""
+    return this.islogin().token ? this.islogin().token + ";V12" : ""
   }
   getControlVersion() {
-    return ";V11"
+    return ";V12"
   }
   setToken(data: any) {
     //console.log("SET TOKEN: 11",data+this.getControlVersion())

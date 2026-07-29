@@ -454,12 +454,9 @@ export class BusquedaNormalComponent {
   }
   arregloResultado_ = []
   busquedaSimple(data) {
+    let cadena = this.crearCadenaestado() +   this.crearCadenaLike(data.value.nombre_id, 'nombre_id')
 
-    let cadena =
-      this.crearCadenaestado() +
-      this.crearCadenaLike(data.value.nombre_id, 'nombre_id')
     if (this.sacarPermisoPersonalVista(['User_admin03'])) {
-
       cadena += ` and (iddireccion_asignacion = ${this.usuariologuiado.idNombramiento}   )`
     } else if (this.sacarPermisoPersonalVista(['User_admin01'])) {
       //permiso unidad 
@@ -474,9 +471,11 @@ export class BusquedaNormalComponent {
 
 
     let parametro = {
-      cadena: cadena
+      cadena: cadena,
+      identidad_nombre:data.value.nombre_id
     }
 
+   
     this._ServiciosMensajesService.show()
 
     this._ServiciosSiapffaaService.buscarPersonasporNombreID(parametro).subscribe(

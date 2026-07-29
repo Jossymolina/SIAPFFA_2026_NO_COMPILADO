@@ -231,8 +231,8 @@
         <table class="table table-bordered table-striped table-sm mb-0 text-center">
           <thead class="bg-header-soft">
             <tr>
-              <th>Unidad</th>
-              <th>Dir.</th>
+              <th>Dirección/Depto./Sección</th>
+             
               <th>Fecha Asig.</th>
               <th>Fecha Salida</th>
               <th>Act.</th>
@@ -244,7 +244,7 @@
             <ng-container *ngFor="let item of arreglosDeMisAsignacionesDirecciones">
               <tr *ngIf="item.activo === 1" class="fila-actual-direccion">
                 <td>{{ item.unidad }}</td>
-                <td>{{ item.descripcion }}</td>
+         
                 <td>{{ item.fechaInicio }}</td>
                 <td>{{ item.fechaFin }}</td>
                 <td><span class="badge badge-actual">Actual</span></td>

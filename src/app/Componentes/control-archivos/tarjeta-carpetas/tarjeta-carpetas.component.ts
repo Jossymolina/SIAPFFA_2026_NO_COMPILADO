@@ -56,7 +56,7 @@ dropdownSecundariaId: number | null = null;
     this.usuariologuiado = JSON.parse(localStorage.getItem('user_login')!).user;
   }
   ngOnInit(): void {
-    console.log(this.persona_seleccionada)
+    
     this.archivoPrincipal()
   }
 toggleDropdownPrincipal(id: number, event: MouseEvent) {
@@ -136,6 +136,9 @@ this._ServiciosMensajesService.mensajeerrorServer();
     )
   }
   async cambiarnombreCarpetaPrincipal(data) {
+return this._ServiciosMensajesService.mensajeAdvertencia(
+    "No es posible cambiar el nombre de la carpeta porque está definido por la institución."
+);
 let nuevo_nombre = await this._ServiciosMensajesService.mensajeConimput("Modificar","Ingrese el nuevo nombre")
 if(nuevo_nombre!=="error"){
   var parametro = {
@@ -291,6 +294,9 @@ if(nuevo_nombre!=="error"){
 
   }
   async cambiarnombreCarpetaSegundaria(data) {
+    return this._ServiciosMensajesService.mensajeAdvertencia(
+    "No es posible cambiar el nombre de la carpeta porque está definido por la institución."
+);
     let nuevo_nombre = await this._ServiciosMensajesService.mensajeConimput("Modificar", "Ingrese el nuevo nombre")
     if (nuevo_nombre !== "error") {
       var parametro = {
@@ -644,10 +650,13 @@ let p = {
          {nombre:'Currículum'},
          {nombre:'Biografía'},
       ]
-     },
+    },
     { sub: "2. Documentos Personales",
        codigo: "carp_2",
        archivo_obligatorio: [
+        {nombre:'Partida de Nacimiento'},
+        {nombre:'Formulario Beneficiario SEDENA '},
+        {nombre:'Libreta de Cuenta de Banco '},
         {nombre:'DNI Frontal'},
         {nombre:'DNI Reverso'},
         {nombre:'licencia de Conducir Frontal'},
@@ -669,7 +678,7 @@ let p = {
         {nombre:'Acta Matrimonio o Divorcio'},
         {nombre:'Permiso de Portacion de Armas'},
       ]
-      },
+    },
     { sub: "3. Acuerdos", codigo: "",archivo_obligatorio:[] },
     { sub: "4. Reportes de Eficiencia", codigo: "",archivo_obligatorio:[] },
     { sub: "5. Exámenes Médicos", codigo: "" ,archivo_obligatorio:[]},
@@ -700,7 +709,7 @@ this._DatospersonalesService.crearCarpetaEstructura(p).subscribe({
     this._ServiciosMensajesService.mensajeerrorServer()
   }
 })
-    console.log(p)
+   
 
   }
 }
