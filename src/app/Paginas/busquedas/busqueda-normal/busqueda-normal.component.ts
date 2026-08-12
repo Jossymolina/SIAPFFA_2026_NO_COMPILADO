@@ -455,9 +455,9 @@ export class BusquedaNormalComponent {
   arregloResultado_ = []
   busquedaSimple(data) {
     let cadena = this.crearCadenaestado() +   this.crearCadenaLike(data.value.nombre_id, 'nombre_id')
-
+console.log(this.usuariologuiado)
     if (this.sacarPermisoPersonalVista(['User_admin03'])) {
-      cadena += ` and (iddireccion_asignacion = ${this.usuariologuiado.idNombramiento}   )`
+      cadena += ` and (iddireccion_asignacion = ${this.usuariologuiado.idunidad}   )`
     } else if (this.sacarPermisoPersonalVista(['User_admin01'])) {
       //permiso unidad 
       cadena += ` and (idunidad_asignado = ${this.usuariologuiado.idunidad}   )`

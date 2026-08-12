@@ -899,7 +899,7 @@
   <ng-template pTemplate="content">
     <form>
       <label class="col-md-12">
-        Fecha Ascenso:
+        Fecha Ultimo Ascenso:
         <input
           [(ngModel)]="lineaAsecenso.FechaPrimerIngreso"
           name="FechaPrimerIngreso"
@@ -909,10 +909,19 @@
       </label>
 
       <label class="col-md-12 mt-3">
-        Fecha Ingreso (Anterior):
+        Fecha Ingreso:
         <input
           [(ngModel)]="lineaAsecenso.fecha"
           name="fecha"
+          class="form-control mt-2"
+          type="date"
+        />
+      </label>
+        <label class="col-md-12 mt-3">
+        Fecah Ref. planilla:
+        <input
+          [(ngModel)]="lineaAsecenso.fecha_planilla"
+          name="fecha_planilla"
           class="form-control mt-2"
           type="date"
         />

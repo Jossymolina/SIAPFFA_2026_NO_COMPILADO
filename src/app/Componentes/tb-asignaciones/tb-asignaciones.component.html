@@ -18,7 +18,7 @@
       <button class="btn btn-main-action btn-dashboard-action" (click)="this.limpiar(); mostrarModalAsignaciones = true"
         title="Reasignar personal">
         <i class="fa fa-exchange" aria-hidden="true"></i>
-        <span>Reasignar personal</span>
+        <span>Movimiento de personal</span>
       </button>
     </div>
   </div>
@@ -331,7 +331,7 @@
 
 
 <!-- MODAL CARGO -->
-<p-dialog header="Cargo" [(visible)]="mostrarModalCargo" [modal]="true" [style]="{ width: '85vw', maxWidth: '1000px' }"
+<p-dialog header="Cargo" [(visible)]="mostrarModalCargo" [modal]="true" [style]="{ width: '100vw', maxWidth: '1500px' }"
   appendTo="body" class="dialog-dashboard">
 
   <app-tb-cargo *ngIf="buscarCargos" [persona]="objetoConsultado" [direccion]="_direccionSeleccionada">
@@ -381,7 +381,7 @@
             <div class="col-md-6">
 
               <label class="form-label fw-semibold">
-                Seleccione el destino
+                Seleccione el destino 1
               </label>
               <p-treeselect appendTo="body" style="width: 100%;" required name="unidad" #unidad="ngModel" ngModel
               required
@@ -390,30 +390,9 @@
               </p-treeselect>
 
 
-<!-- 
-              <label class="form-label fw-semibold">
-                Seleccione la Fuerza:
-              </label>
-              <select class="form-control" (change)="sacarUnidadBajoControl(formAsignar)" #fuerzaSelected="ngModel"
-                ngModel required name="fuerzaSelected">
-                <ng-container *ngFor="let y of arregloFuerzas">
-                  <option [ngValue]="y">{{ y.nombre }}</option>
-                </ng-container>
-              </select>
-            -->
+ 
             </div>
-<!--
-            <div class="col-md-12">
-              <label class="form-label fw-semibold">
-                Seleccione la unidad:
-              </label>
-              <select #unidadSelected="ngModel" ngModel required name="unidadSelected" class="form-control">
-                <option *ngFor="let y of ArregloUnidades" [ngValue]="y">
-                  {{ y.unidad }}
-                </option>
-              </select>
-            </div>
--->
+ 
             <div class="col-md-6">
               <label class="form-label fw-semibold">
                 Seleccione la Fecha de asignación:
@@ -590,7 +569,7 @@
               </label>
               <p-treeselect appendTo="body" style="width: 100%;" required name="unidad" #unidad="ngModel" ngModel
               required
-                [options]="treeUnidades" [(ngModel)]="unidadesSeleccionadas" [filter]="true" [showClear]="true"
+                [options]="treeunidadsYDireccion" [(ngModel)]="unidadesSeleccionadas" [filter]="true" [showClear]="true"
                 placeholder="Seleccione las unidades" styleClass="w-full">
               </p-treeselect>
  

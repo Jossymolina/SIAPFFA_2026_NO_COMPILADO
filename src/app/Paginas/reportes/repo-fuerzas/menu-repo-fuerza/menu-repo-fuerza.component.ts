@@ -43,6 +43,11 @@ type Reporte = {
 })
 export class MenuRepoFuerzaComponent {
   usuarioLoguiado
+  textoFiltro: string = '';
+
+arregloOrganizacionCompleta: any[] = [];
+arregloOrganizacionCompletaFiltrado: any[] = [];
+
   constructor(
     public _ServicioBackendService: ServicioBackendService,
     private _ServiciosMensajeService: ServiciosMensajeService
@@ -50,6 +55,7 @@ export class MenuRepoFuerzaComponent {
 
   ngOnInit(): void {
     this.usuarioLoguiado = JSON.parse(localStorage.getItem('user_login')!).user;
+ 
     this.sacarTodalasUnidades()
     this.sacarunidades()
   }
@@ -366,7 +372,7 @@ export class MenuRepoFuerzaComponent {
   }
   );
   }
-  arregloOrganizacionCompleta =[]
+ 
 sacarOrganizacion(form:NgForm,objeto){
 this.arregloOrganizacionCompleta =[]
 let q={cadena:``,data:{} as any}
@@ -388,10 +394,12 @@ ejecucatarConsultaOrganizacion(p){
    this._ServiciosMensajeService.show("Buscando personal.....");
    this._ServicioBackendService.sacarOrganizacionCompleta(p).subscribe({
     next: (response) => {
+       
       this._ServiciosMensajeService.hide()
       if (response.error) return this._ServiciosMensajeService.mensajeMalo(response.error);
       if (response.mensaje) return this._ServiciosMensajeService.mensajeMalo(response.mensaje);
       this.arregloOrganizacionCompleta = response.resultado;
+      this.arregloOrganizacionCompletaFiltrado = [...this.arregloOrganizacionCompleta];
     }, error: (error) => {
       this._ServiciosMensajeService.hide()
       this._ServiciosMensajeService.mensajeerrorServer();
@@ -543,6 +551,7 @@ this._ServiciosMensajeService.show("Cargando Direcciones y Secciones.....");
 }
 
 
+ 
 
 
 async exportexcelOrganizacion() {
@@ -1171,13 +1180,7 @@ sacarPermisoBuscar(id){
     this._ServiciosMensajeService.show();
     
   //esto es pabar que unidad padre desbloquear
-   let idunidadDesbloquear = this.sacarPermisoBuscar(this.usuarioLoguiado.idfuerza) 
-
-
-
-
-
-
+   let idunidadDesbloquear = this.usuarioLoguiado.idfuerza
 
     this._ServicioBackendService.sacarTodalasUnidades().subscribe({
       next: (response) => {
@@ -1190,7 +1193,9 @@ sacarPermisoBuscar(id){
               unidades
              )
             );
+             
            this.treeUnidades = nodo.map((x: any) => this.convertirTreeNodeUnidad(x,idunidadDesbloquear));
+          
        },error: () => {
         this._ServiciosMensajeService.hide();
         this._ServiciosMensajeService.mensajeerrorServer();
@@ -1234,7 +1239,7 @@ private convertirTreeNodeUnidad(
 ): any {
 
   // Si este es el nodo buscado, a partir de aquí todo queda desbloqueado
-  const desbloqueado = desbloquear || nodo.idunidad === idunidadDesbloquear;
+  const desbloqueado = desbloquear || nodo.idfuerza === idunidadDesbloquear;
 
   return {
     key: String(nodo.idunidad),
@@ -1242,7 +1247,7 @@ private convertirTreeNodeUnidad(
     data: nodo,
     unidad_tipo: nodo.unidad_tipo,
     idunidad: nodo.idunidad,
-
+    idfuerza: nodo.idfuerza,
     selectable: desbloqueado,
 
     icon: desbloqueado
@@ -1257,5 +1262,27 @@ private convertirTreeNodeUnidad(
       )
     )
   };
+}
+
+
+filtrarTabla() {
+
+    const filtro = this.textoFiltro.trim().toLowerCase();
+
+    if (!filtro) {
+        this.arregloOrganizacionCompletaFiltrado = [...this.arregloOrganizacionCompleta];
+        return;
+    }
+
+    this.arregloOrganizacionCompletaFiltrado = this.arregloOrganizacionCompleta.filter(r =>
+        (r.identidad ?? '').toLowerCase().includes(filtro) ||
+        (r.nombres ?? '').toLowerCase().includes(filtro) ||
+        (r.grado ?? '').toLowerCase().includes(filtro) ||
+        (r.categoria ?? '').toLowerCase().includes(filtro) ||
+        (r.unidad ?? '').toLowerCase().includes(filtro) ||
+        (r.seccion ?? '').toLowerCase().includes(filtro) ||
+        (r.Nombre_Puesto ?? '').toLowerCase().includes(filtro)
+    );
+
 }
 }

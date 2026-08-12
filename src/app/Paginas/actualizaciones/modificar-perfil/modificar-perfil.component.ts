@@ -113,6 +113,7 @@ export class ModificarPerfilComponent {
     categoria_idcategoria: "",
     ejecutado_por: "",
     fecha: "",
+    fecha_planilla: "",
     FechaPrimerIngreso: "",
     grado: "",
     numeroAcuerdo: "",
@@ -1246,8 +1247,10 @@ this._ServiciosMensajeService.show()
     }
     this._DatospersonalesService.sacarAscensosporPersona(params).subscribe(
       Response => {
+         
         this.arregloAscensos = Response.resultado
         this.arregloAscensos.forEach(element => {
+
           if (element.activo == 1) {
             this.gradoActualdelConsultado = element;
 
@@ -2280,8 +2283,12 @@ this._ServiciosMensajeService.show()
               var params = {
                 nombres: inputValue.value,
                 apellidos: this.objetoConsultado.apellidos,
-                identidad: this.objetoConsultado.identidad
+                identidad: this.objetoConsultado.identidad,
+                usuario: this.usuarioLoguiado,
+                persona_select:this.objetoConsultado
               }
+              console.log("parametros para actualizar nombres y apellidos",params)
+               
               this._DatospersonalesService.actualizarNombresYapellidos(params).subscribe(
                 Response => {
                   if (Response.error) {
@@ -2437,6 +2444,7 @@ this._ServiciosMensajeService.show()
 
 
   }
+  copialineaAscenso ={}
   ascesoseleccionado(data) {
 
     this.lineaAsecenso = {
@@ -2447,30 +2455,44 @@ this._ServiciosMensajeService.show()
       fecha: data.fecha.split("T")[0],
       FechaPrimerIngreso: data.fechaPrimerIngreso.split("T")[0],
       grado: data.grado,
+      fecha_planilla: data.fecha_planilla.split("T")[0],
       numeroAcuerdo: data.numeroAcuerdo,
       activo: data.activo,
       idunidad: data.idunidad,
       idfuerza: data.idfuerza
     }
+  this.copialineaAscenso = structuredClone(this.lineaAsecenso);
+
+
 
   }
-  actualizarTabladeAscenso() {
-    this._DatospersonalesService.actualizarTablaascenso(this.lineaAsecenso).subscribe(
+ async  actualizarTabladeAscenso() {
+  let r = await  this._DatospersonalesService.mensajePregunta("¿Esta seguro de actualizar la tabla de ascenso?","Actualizar Tabla de Ascenso")  
+  if(!r) return;
+
+  let  p  = {
+      copialineaAscenso: this.copialineaAscenso,
+      datos_nuevos: this.lineaAsecenso,
+      usuario: this.usuarioLoguiado,
+      persona_select:this.objetoConsultado      
+
+    }
+    
+     this._ServiciosMensajeService.show("Actualizando Tabla de Ascenso")
+    this._DatospersonalesService.actualizarTablaascenso(p).subscribe(
       Response => {
-
-        if (Response.error) {
-          this._DatospersonalesService.mensajeError(Response.error)
-        } else {
-          if (Response.mensaje) {
-            this._DatospersonalesService.mensajeError(Response.mensaje)
-
-          } else {
-            this._DatospersonalesService.mensajeBueno(Response.resultado)
+this._ServiciosMensajeService.hide();
+        if (!Response.ok) return this._DatospersonalesService.mensajeError(Response.mensaje)
+        
+            this._DatospersonalesService.mensajeBueno(Response.mensaje)
             this.buscarporIdentidad();
             this.sacarAscensosdelPersonal();
-          }
-        }
+        
+          
+         
       }, error => {
+this._ServiciosMensajeService.hide();
+
         this._DatospersonalesService.mensajeError("ERROR DE CONECCION | ACTUALIZAR TABLA DE ASCENSO")
       }
     )

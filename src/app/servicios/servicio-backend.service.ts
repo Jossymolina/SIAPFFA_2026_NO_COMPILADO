@@ -13,9 +13,9 @@ import { ServiciosMensajeService } from './serviMensaje/servicios-mensaje.servic
 })
 //ng build --aot --output-hashing=all   ng build --configuration production
 export class ServicioBackendService {
-  public url2 ="https://siapfa.ffaa.mil.hn:4443/" //"https://siapfa.ffaa.mil.hn:4443/"//"https://siapfa.ffaa.mil.hn:4443/"
+  public url2 ="http://localhost:3979/" //"https://siapfa.ffaa.mil.hn:4443/"//"https://siapfa.ffaa.mil.hn:4443/"
   refrescar = 0
-  public url ="https://siapfa.ffaa.mil.hn:4443/"  //"https://siapfa.ffaa.mil.hn:4443/" //"https://siapfa.ffaa.mil.hn:4443/"      0801200018636
+  public url ="http://localhost:3979/"  //"https://siapfa.ffaa.mil.hn:4443/" //"https://siapfa.ffaa.mil.hn:4443/"      0801200018636
   usuarioLogin: any;
   token = "";
   arregloPermisos = new Array();
@@ -38,8 +38,7 @@ export class ServicioBackendService {
         });
     });
 
-
-   const raiz: any[] = [];
+ const raiz: any[] = [];
     // Relacionar padres e hijos
     datos.forEach(item => {
         const nodo = mapa.get(item.idunidad);

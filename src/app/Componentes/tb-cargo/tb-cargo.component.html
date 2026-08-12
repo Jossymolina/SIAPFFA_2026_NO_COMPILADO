@@ -48,7 +48,20 @@
   
 
       <!-- Selector de puesto – con pagos (incluye todos) -->
-   
+   <div class="incentivo-info">
+  <div class="incentivo-icon">
+    <i class="pi pi-info-circle"></i>
+  </div>
+
+  <div class="incentivo-content">
+    <div class="incentivo-title">Información importante</div>
+    <div class="incentivo-text">
+      Los cargos identificados con <strong>color verde</strong> son aquellos
+      que <strong>devengan un incentivo económico por cargo</strong>, es decir,
+      generan un pago adicional asociado al cargo desempeñado.
+    </div>
+  </div>
+</div>
       <ng-container *ngIf="permisoPagoCargo; else soloSinPagos">
         <div class="col-md-4 col-lg-3">
           <label class="form-label fw-semibold">
@@ -59,18 +72,29 @@
                   class="form-control">
             <ng-container *ngFor="let y of arregloPuestos">
               <!-- Ocupado -->
-              <option *ngIf="y.activo === 1; else opcionLibreConPago"
-                      [ngValue]="y"
-                      [ngStyle]="{ color: 'red' }">
+              @if(y.activo === 1){
+                @if(y.Bloqueado===1){
+<option [ngValue]="y" [ngStyle]="{ color: 'green' }">
                 {{ y.Nombre_Puesto }} - (Ocupado)
               </option>
-              <!-- Libre -->
-              <ng-template #opcionLibreConPago>
-                <option [ngValue]="y"
-                        [ngStyle]="{ color: 'blue' }">
-                  {{ y.Nombre_Puesto }} - (Libre)
-                </option>
-              </ng-template>
+                }@else {
+                  <option [ngValue]="y" [ngStyle]="{ color: 'red' }">
+                {{ y.Nombre_Puesto }} - (Ocupado)
+              </option>
+                }
+              
+              }@else {
+                  @if(y.Bloqueado===1){
+                  <option [ngValue]="y" [ngStyle]="{ color: 'green' }">
+                    {{ y.Nombre_Puesto }} - (Libre)
+                  </option>
+                  }@else {
+                  <option [ngValue]="y" [ngStyle]="{ color: 'blue' }">
+                    {{ y.Nombre_Puesto }} - (Libre)
+                  </option>
+                  }
+              }
+              
             </ng-container>
           </select>
         </div>

@@ -848,7 +848,16 @@
       <!-- TABLA -->
       <div class="table-responsive">
 
-
+<div class="row mb-2">
+    <div class="col-md-4">
+        <input
+            type="text"
+            class="form-control"
+            placeholder="Buscar por identidad, nombre, grado, unidad..."
+            [(ngModel)]="textoFiltro"
+            (input)="filtrarTabla()">
+    </div>
+</div>
 
         <table id="tablaList" class="table table-bordered table-hover table-sm align-middle">
           <thead class="table-light">
@@ -869,7 +878,9 @@
           </thead>
 
           <tbody>
-           <tr    *ngFor="let r of arregloOrganizacionCompleta; let i = index"
+           <tr      *ngFor="let r of arregloOrganizacionCompletaFiltrado; let i = index"
+    style="cursor: pointer;"
+    (click)="seleccionarPersonal(r)"
             style="cursor: pointer;"
             (click)="seleccionarPersonal(r)">
               <td>{{ i + 1 }}</td>
@@ -888,13 +899,13 @@
               <td>{{r.unidad}}</td>
 
 
-              <td [style]=" r.seccion ? '' : 'background-color: red;color:white'">{{ r.seccion?r.seccion:"Sin Cargo" }}
+              <td [style]=" r.seccion ? '' : 'background-color: red;color:black'">{{ r.seccion?r.seccion:"Sin Cargo" }}
               </td>
               <td>{{ r.Nombre_Puesto }}</td>
 
             </tr>
 
-            <tr *ngIf="arregloOrganizacionCompleta?.length === 0">
+            <tr *ngIf="arregloOrganizacionCompletaFiltrado?.length === 0">
               <td colspan="10" class="text-center text-muted py-3">
                 No hay datos para mostrar
               </td>
