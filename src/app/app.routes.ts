@@ -265,14 +265,14 @@ export const routes: Routes = [
       }, {
         path: 'crear-ternas',
         canActivate: [permisosGuard],
-        data: { permisos: ['PRG_0001'] },
+        data: { permisos: ['PF_0001'] },
         loadComponent: () =>
           import('./Paginas/Evalucion-fisica/crear-ternas/crear-ternas.component')
             .then(m => m.CrearTernasComponent)
       }, {
         path: 'acuerdos-archivos',
         canActivate: [permisosGuard],
-        data: { permisos: ['PRG_0001'] },
+        data: { permisos: ['Arch_0001'] },
         loadComponent: () =>
           import('./Paginas/Gestor-Archivo/ventanas-archivos/ventanas-archivos.component')
             .then(m => m.VentanasArchivosComponent)

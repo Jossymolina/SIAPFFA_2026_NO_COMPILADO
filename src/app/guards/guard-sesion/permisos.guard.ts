@@ -23,7 +23,7 @@ export const permisosGuard: CanActivateFn = (route, state) => {
   }
 
   //  No tiene permiso → mensaje + redirección
-  msg.mensajeMalo('No tiene permiso para acceder a esta opción.');
+  msg.mensajeMalo('No tiene permiso para acceder a esta ruta.');
  // router.navigate(['/menu', 'autenticarse']);
   return false;
 };

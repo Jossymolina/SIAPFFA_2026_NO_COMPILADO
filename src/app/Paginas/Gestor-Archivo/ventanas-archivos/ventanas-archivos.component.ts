@@ -142,7 +142,7 @@ export class VentanasArchivosComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.usuarioLoguiado = JSON.parse(localStorage.getItem('user_login')!).user;
-    console.log(this.usuarioLoguiado)
+    
     this.sacarCategorias();
 
     this.sacarTodalasUnidades()
