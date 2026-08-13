@@ -53,6 +53,16 @@ export class ServicioBackendService {
     return raiz;
 
 }
+eliminarCompartido(data){
+  return this.metodopost("eliminarCompartido",data)
+}
+compartir_recompartir_Archivo(data){
+  return this.metodopost("compartir_recompartir_Archivo",data)
+}
+
+sacarCompartidoArchivos(data){
+  return this.metodopost("sacarCompartidoArchivos",data)
+}
   subirDocumentoPredeterminados(data: FormData): Observable<any> {
    var headers = new HttpHeaders({
       "Authorization": this.getToken()

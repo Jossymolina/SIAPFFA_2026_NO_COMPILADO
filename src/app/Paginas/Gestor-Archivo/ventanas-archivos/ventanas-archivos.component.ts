@@ -10,6 +10,7 @@ import { ContextMenuModule } from 'primeng/contextmenu';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
+import { TableModule } from 'primeng/table';
 type Ventana = "Principal" | "Compartidos";
 @Component({
   selector: 'app-ventanas-archivos',
@@ -21,7 +22,9 @@ type Ventana = "Principal" | "Compartidos";
     ContextMenuModule,
     DialogModule,
     ButtonModule,
-    InputTextModule
+    InputTextModule,
+    TableModule
+
 
   ],
   templateUrl: './ventanas-archivos.component.html',
@@ -33,7 +36,7 @@ export class VentanasArchivosComponent implements OnInit, AfterViewInit {
   permisosVisualizacion = [
     { nombre: "C1", id: 1 }
   ]
-    itemsClickDerecho: MenuItem[] = [];
+  itemsClickDerecho: MenuItem[] = [];
 
   archivoSeleccionado: any;
 
@@ -52,7 +55,7 @@ export class VentanasArchivosComponent implements OnInit, AfterViewInit {
   unidadesSeleccionadas: any[] = [];
   usuarioLoguiado = null
 
- ventanaAVisualizar:Ventana  = "Principal";
+  ventanaAVisualizar: Ventana = "Principal";
   @ViewChild('cm') cm!: ContextMenu;
   @ViewChild('cmDerecho') cmDerecho!: ContextMenu;
   constructor(
@@ -66,36 +69,36 @@ export class VentanasArchivosComponent implements OnInit, AfterViewInit {
     this.cmDerecho.show(event);
   }
 
-  cambiarVentana (data){
-      this.archivos = []
+  cambiarVentana(data) {
+    this.archivos = []
 
-    if(data ==="Compartidos"){
-       this.ventanaAVisualizar = data
-           this.sacarDocumentosCompartidos()
-    }else{
+    if (data === "Compartidos") {
+      this.ventanaAVisualizar = data
+      this.sacarDocumentosCompartidos()
+    } else {
       this.breadcrumb = []
       this.ventanaAVisualizar = data
-      this.archivoPadreActual =null
+      this.archivoPadreActual = null
       this.cargarContenido()
-      
-    } 
-   
+
+    }
+
   }
-  
-sacarDocumentosCompartidos(){
-  this._ServiciosMensajeService.show();
-  let p = {
-    idunidad :this.usuarioLoguiado.idunidad_direccion,
- }
- this.historial = []
- this.breadcrumb = []
-  this.archivos  = []
-  this.archivoPadreActual = null
+
+  sacarDocumentosCompartidos() {
+    this._ServiciosMensajeService.show();
+    let p = {
+      idunidad: this.usuarioLoguiado.idunidad_direccion,
+    }
+    this.historial = []
+    this.breadcrumb = []
+    this.archivos = []
+    this.archivoPadreActual = null
     this._ServicioBackendService.sacarDocumentosCompartidos(p).subscribe({
       next: (response) => {
-      this._ServiciosMensajeService.hide();
-    
-          if(response.ok) this.archivos = response.resultado
+        this._ServiciosMensajeService.hide();
+
+        if (response.ok) this.archivos = response.resultado
       },
       error: () => {
 
@@ -104,28 +107,28 @@ sacarDocumentosCompartidos(){
 
       }
     });
-}
-
-sacarDocumentosCompartidosCarpetas_hijos(mesj=""){
-  this._ServiciosMensajeService.show();
-
-  let p = {
-    idunidad :this.usuarioLoguiado.idunidad_direccion,
-    id_archivo_padre:   this.archivoPadreActual ? this.archivoPadreActual.id_archivo : null
-
-  }
-  if(mesj.length>=1){
-  console.log("",mesj)
- console.log(p)
   }
 
-  this.archivos  = []
+  sacarDocumentosCompartidosCarpetas_hijos(mesj = "") {
+    this._ServiciosMensajeService.show();
+
+    let p = {
+      idunidad: this.usuarioLoguiado.idunidad_direccion,
+      id_archivo_padre: this.archivoPadreActual ? this.archivoPadreActual.id_archivo : null
+
+    }
+    if (mesj.length >= 1) {
+      console.log("", mesj)
+      console.log(p)
+    }
+
+    this.archivos = []
     this._ServicioBackendService.sacarHijosDeArchivosCompartidos(p).subscribe({
       next: (response) => {
-      this._ServiciosMensajeService.hide();
-           
-          if(response.ok) this.archivos = response.resultado
-        
+        this._ServiciosMensajeService.hide();
+
+        if (response.ok) this.archivos = response.resultado
+
       },
       error: () => {
 
@@ -134,14 +137,15 @@ sacarDocumentosCompartidosCarpetas_hijos(mesj=""){
 
       }
     });
-}
- 
+  }
+
 
   ngOnInit(): void {
     this.usuarioLoguiado = JSON.parse(localStorage.getItem('user_login')!).user;
-     this.sacarCategorias();
+    console.log(this.usuarioLoguiado)
+    this.sacarCategorias();
 
-  this.sacarTodalasUnidades()
+    this.sacarTodalasUnidades()
     this.itemsClickDerecho = [
       {
         label: 'Nueva Carpeta',
@@ -373,9 +377,9 @@ sacarDocumentosCompartidosCarpetas_hijos(mesj=""){
 
   }
   crear_archivo_documento(form) {
- if(!this.usuarioLoguiado.idunidad_direccion) return this._ServiciosMensajeService.mensajeMalo("Para usar este servicio debe de estar en una Direccin/Depto o Sección")
-   
-  let p = {
+    if (!this.usuarioLoguiado.idunidad_direccion) return this._ServiciosMensajeService.mensajeMalo("Para usar este servicio debe de estar en una Direccin/Depto o Sección")
+
+    let p = {
       id_categoria: null,
       id_archivo_padre: this.archivoPadreActual?.id_archivo ? this.archivoPadreActual?.id_archivo : null,
       tipo: "carpeta",
@@ -393,7 +397,6 @@ sacarDocumentosCompartidosCarpetas_hijos(mesj=""){
 
     }
 
-console.log(p)
     this._ServiciosMensajeService.show();
 
     this._ServicioBackendService.crearCarpeta(p).subscribe({
@@ -463,9 +466,9 @@ console.log(p)
 
 
 
-    async abrir_carpeta_compartida(item: any) {
-  
-      
+  async abrir_carpeta_compartida(item: any) {
+
+
     if (item.tipo !== 'CARPETA') {
       return;
     }
@@ -483,9 +486,7 @@ console.log(p)
       id_archivo: item.id_archivo,
       nombre: item.nombre
     });
-    console.log("historial :",this.historial)
-    console.log(this.archivoPadreActual)
-    console.log(this.breadcrumb)
+ 
     this.sacarDocumentosCompartidosCarpetas_hijos()
 
   }
@@ -629,12 +630,20 @@ console.log(p)
         command: () => {
           this.eliminar();
         }
+      },
+      {
+        label: 'Compartir',
+        icon: 'pi pi-share-alt',
+        command: () => {
+          this.verCompartidos();
+        }
       }
     ];
   }
+
   @ViewChild("formCambiarNombre") formCambiarNombre: NgForm
   editar() {
-    if(this.archivoSeleccionado.usuario_creacion !==this.usuarioLoguiado.identidad) return this._ServiciosMensajeService.mensajeMalo("Solo el usuario que subio el archivo puede eliminarlo")
+    if (this.archivoSeleccionado.usuario_creacion !== this.usuarioLoguiado.identidad) return this._ServiciosMensajeService.mensajeMalo("Solo el usuario que subio el archivo puede eliminarlo")
     this.mostrarModalRenombrar = true
     setTimeout(() => {
       this.formCambiarNombre.controls["nombre"].setValue(this.archivoSeleccionado.nombre)
@@ -714,8 +723,8 @@ console.log(p)
   }
   async eliminar(): Promise<void> {
     // Validar que exista un archivo seleccionado
- 
-  if(this.archivoSeleccionado.usuario_creacion !==this.usuarioLoguiado.identidad) return this._ServiciosMensajeService.mensajeMalo("Solo el usuario que subio el archivo puede eliminarlo")
+
+    if (this.archivoSeleccionado.usuario_creacion !== this.usuarioLoguiado.identidad) return this._ServiciosMensajeService.mensajeMalo("Solo el usuario que subio el archivo puede eliminarlo")
 
     if (!this.archivoSeleccionado) {
       this._ServiciosMensajeService.mensajeMalo(
@@ -851,12 +860,11 @@ console.log(p)
     await this.cargarContenido();
   }
 
+
+
+  async volverCompartido() {
  
 
-  async volverCompartido(){
-    console.log(this.historial.length)
-  console.log(this.historial)
-   
     if (this.historial.length === 0) {
 
       this.archivoPadreActual = null;
@@ -873,7 +881,7 @@ console.log(p)
     this.breadcrumb.pop();
 
     this.sacarDocumentosCompartidosCarpetas_hijos();
- }
+  }
 
   async volver() {
 
@@ -1031,7 +1039,7 @@ console.log(p)
   */
   @ViewChild('archivo') archivo!: ElementRef;
   async subirArchivo() {
- if(!this.usuarioLoguiado.idunidad_direccion) return this._ServiciosMensajeService.mensajeMalo("Para usar este servicio debe de estar en una Direccin/Depto o Sección")
+    if (!this.usuarioLoguiado.idunidad_direccion) return this._ServiciosMensajeService.mensajeMalo("Para usar este servicio debe de estar en una Direccin/Depto o Sección")
     if (this.unidadesSeleccionadas) {
       let mismaUnidad = this.unidadesSeleccionadas.find(element => { return Number(element.key) === Number(this.usuarioLoguiado.idunidad_direccion) })
       if (mismaUnidad) return this._ServiciosMensajeService.mensajeMalo("No puede compartise el archivo con la misma unidad que sube el documento")
@@ -1181,6 +1189,7 @@ console.log(p)
       id_archivo_documentos: item.id_archivo,
       usuario: this.usuarioLoguiado
     }
+    this._ServiciosMensajeService.show()
     this._ServicioBackendService.obtenerArchivo(p).subscribe({
       next: (blob: Blob) => {
         this._ServiciosMensajeService.hide()
@@ -1194,4 +1203,130 @@ console.log(p)
     });
   }
 
+  mostrarDialogCompartir = false
+  aregloUnidadCompartidas = []
+  verCompartidos() {
+    this.mostrarDialogCompartir = true
+    let p = {
+      idarchivo: this.archivoSeleccionado.id_archivo
+    }
+    this.aregloUnidadCompartidas = []
+
+    this._ServiciosMensajeService.show()
+    this._ServicioBackendService.sacarCompartidoArchivos(p).subscribe({
+      next: (resultado) => {
+        this._ServiciosMensajeService.hide()
+
+        if (!resultado.ok) return this._ServiciosMensajeService.mensajeMalo(resultado.mensaje)
+        this.aregloUnidadCompartidas = resultado.resultado
+
+      }, error: () => {
+        this._ServiciosMensajeService.hide()
+        this._ServiciosMensajeService.mensajeerrorServer()
+      }
+    });
+
+  }
+
+  
+  compartirArchivo() {
+ const idUnidadUsuario = Number(this.usuarioLoguiado.idunidad_direccion);
+
+const unidadesYaCompartidas = this.unidadesSeleccionadas.filter(
+  (seleccionada: any) =>
+    this.aregloUnidadCompartidas.some(
+      (compartida: any) =>
+        Number(seleccionada.key) === Number(compartida.idunidad)
+    )
+);
+
+const unidadPropiaSeleccionada = this.unidadesSeleccionadas.find(
+  (seleccionada: any) =>
+    Number(seleccionada.key) === idUnidadUsuario
+);
+
+
+if (unidadPropiaSeleccionada) {
+    this._ServiciosMensajeService.mensajeMalo('Su unidad ya tiene acceso automáticamente al archivo.')
+ 
+
+  return;
+}
+
+if (unidadesYaCompartidas.length > 0) {
+
+  const nombres = unidadesYaCompartidas
+    .map((item: any) => item.label)
+    .join(', ');
+  this._ServiciosMensajeService.mensajeMalo(`Unidades ya compartidas \nLas siguientes unidades ya tienen acceso: ${nombres}.`)
+ 
+
+  return;
+}
+
+ 
+    
+
+    if (!this.unidadesSeleccionadas?.length) {
+      return;
+    }
+
+    const unidades = this.unidadesSeleccionadas.map(
+      (item: any) => Number(item.key)
+    );
+ const unidades_completas = this.unidadesSeleccionadas.map(
+  (item: any) => item.data
+);
+
+    const data = {
+      idarchivo: this.archivoSeleccionado.id_archivo,
+      unidades: unidades,
+      usuario:this.usuarioLoguiado,
+      unidades_detalle: unidades_completas,
+      archivo_seleccionado:this.archivoSeleccionado
+    };
+
+    this._ServicioBackendService.compartir_recompartir_Archivo(data).subscribe({
+      next: (resp: any) => {
+        if(!resp.ok) return this._ServicioBackendService.mensajeError(resp.mensaje)
+
+          this._ServiciosMensajeService.mensajeBueno(resp.mensaje)
+          this.unidadesSeleccionadas = [];
+        // Opcional: recargar unidades compartidas
+        this.verCompartidos()
+      },
+      error: (error) => {
+this._ServiciosMensajeService.mensajeMalo(error)
+
+      }
+    });
+  }
+
+
+  eliminarCompartido(item){
+
+if (!item?.idarchivo_documentos_unidad) {
+    return;
+  }
+
+  const data = {
+    idarchivo_documentos_unidad: item.idarchivo_documentos_unidad,
+    usuario:this.usuarioLoguiado,
+    unidades_detalle: item,
+      archivo_seleccionado:this.archivoSeleccionado
+  };
+  this._ServiciosMensajeService.show()
+
+  this._ServicioBackendService.eliminarCompartido(data).subscribe({
+    next: (resp: any) => {
+      this._ServiciosMensajeService.hide()
+      this.verCompartidos()
+    },
+    error: (error) => {
+      this._ServiciosMensajeService.hide()
+this._ServiciosMensajeService.mensajeMalo(error)
+
+    }
+  });
+  }
 }

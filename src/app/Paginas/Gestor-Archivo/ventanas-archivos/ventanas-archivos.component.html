@@ -486,3 +486,161 @@
     </ng-template>
 
 </p-dialog>
+
+
+
+
+
+
+
+
+
+
+
+<p-dialog
+  header="Compartir documento"
+  [(visible)]="mostrarDialogCompartir"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '1000px' }">
+
+ 
+
+ 
+  <div>
+
+   <form #formCompartir="ngForm" (ngSubmit)="compartirArchivo()">
+
+  <div class="campo-formulario">
+
+    <label>
+      <i class="pi pi-sitemap"></i>
+      Unidades con acceso al archivo
+      <strong style="color: rgb(138, 30, 12);">
+        (No es obligatorio)
+      </strong>
+    </label>
+
+    <small class="text-muted d-block mb-2">
+      Seleccione las unidades que podrán buscar y acceder a este archivo.
+      <strong>Su unidad ya tiene acceso automáticamente</strong>,
+      por lo que no es necesario seleccionarla.
+    </small>
+
+    <p-treeselect
+      appendTo="body"
+      style="width: 100%"
+      name="unidades"
+      selectionMode="multiple"
+      [options]="treeUnidades"
+      [(ngModel)]="unidadesSeleccionadas"
+      [filter]="true"
+      [showClear]="true"
+      placeholder="Seleccione una o más unidades"
+      styleClass="w-full">
+    </p-treeselect>
+
+  </div>
+
+  <!-- Botones -->
+  <div class="d-flex justify-content-end gap-2 mt-4">
+
+    <button
+      type="button"
+      pButton
+      label="Cancelar"
+      icon="pi pi-times"
+      class="p-button-text"
+      (click)="mostrarDialogCompartir = false">
+    </button>
+
+    <button
+      type="submit"
+      pButton
+      label="Compartir archivo"
+      icon="pi pi-share-alt"
+      class="p-button-success"
+      [disabled]="!unidadesSeleccionadas || unidadesSeleccionadas.length === 0">
+    </button>
+
+  </div>
+
+</form>
+
+<p-table
+  [value]="aregloUnidadCompartidas"
+  [responsiveLayout]="'scroll'"
+  styleClass="p-datatable-sm p-datatable-striped">
+
+  <ng-template pTemplate="header">
+    <tr>
+      <th style="width: 80px;">#</th>
+      <th>Unidad</th>
+      <th>Corto</th>
+      <th>Tipo</th>
+      <th style="width: 100px; text-align: center;">Acciones</th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-item let-i="rowIndex">
+    <tr>
+      <td>{{ i + 1 }}</td>
+
+      <td>
+        <div class="d-flex align-items-center gap-2">
+          <i class="pi pi-building text-success"></i>
+
+          <span class="fw-semibold">
+            {{ item.unidad }}
+          </span>
+        </div>
+      </td>
+
+      <td>
+        <span class="badge bg-light text-dark border">
+          {{ item.corto }}
+        </span>
+      </td>
+
+      <td>
+        <span class="badge bg-success">
+          Compartido
+        </span>
+      </td>
+
+      <td class="text-center">
+        <button
+          pButton
+          type="button"
+          icon="pi pi-trash"
+          class="p-button-rounded p-button-danger p-button-text"
+          pTooltip="Dejar de compartir"
+          tooltipPosition="top"
+          (click)="eliminarCompartido(item)"
+        >
+        </button>
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="5" class="text-center py-4">
+        <i class="pi pi-share-alt fs-3 text-muted d-block mb-2"></i>
+        <span class="text-muted">
+          Este documento no está compartido con ninguna unidad.
+        </span>
+      </td>
+    </tr>
+  </ng-template>
+
+</p-table>
+
+  </div>
+
+  <div class="d-flex justify-content-end gap-2 mt-4">
+ 
+  </div>
+
+</p-dialog>
