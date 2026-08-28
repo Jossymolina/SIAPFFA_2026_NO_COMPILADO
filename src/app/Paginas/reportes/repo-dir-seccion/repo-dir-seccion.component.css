@@ -1,0 +1,405 @@
+:host { display:block; }
+
+.shell{
+  min-height: 100vh;
+  padding: 16px;
+  background: rgb(252, 252, 252);
+   /* radial-gradient(1200px 700px at 10% 0%, rgba(120, 80, 255, .18), transparent 55%),
+    radial-gradient(900px 500px at 90% 10%, rgba(0, 200, 255, .14), transparent 50%),
+    linear-gradient(180deg, #0b1220, #070b12);*/
+    color: #000103  ;
+  
+}
+
+.topbar{
+  display:flex;
+  gap: 14px;
+  align-items:center;
+  justify-content:space-between;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow: 0 18px 50px rgba(0,0,0,.35);
+  margin-bottom: 12px;
+}
+
+.title-wrap{ display:flex; gap:12px; align-items:center; }
+.dot{
+  width: 14px; height: 14px; border-radius: 50%;
+  background: linear-gradient(135deg, rgba(124,92,255,1), rgba(0,210,255,1));
+  box-shadow: 0 0 0 6px rgba(124,92,255,.15);
+}
+.title{ font-size: 18px; font-weight: 900; }
+.subtitle{ font-size: 12px; opacity: .8; }
+
+.search{ width: min(520px, 65vw); }
+:host ::ng-deep .p-inputtext{
+  border-radius: 14px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.10);
+  color: #eaf0ff;
+}
+:host ::ng-deep .p-inputtext::placeholder{ color: rgba(234,240,255,.65); }
+
+.filters{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 10px;
+  margin: 10px 2px 16px;
+}
+
+.filters-scroll{
+  display:flex;
+  gap: 10px;
+  overflow:auto;
+  padding-bottom: 4px;
+}
+
+.chip{
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.05);
+  color: #030303;
+  border-radius: 999px;
+  padding: 8px 12px;
+  display:flex;
+  gap: 8px;
+  align-items:center;
+  white-space: nowrap;
+  transition: transform .15s ease, background .15s ease, border-color .15s ease;
+}
+.chip:hover{ transform: translateY(-1px); background: rgba(255,255,255,0.08); }
+.chip.active{
+  background: linear-gradient(135deg, rgba(124,92,255,.30), rgba(0,210,255,.20));
+  border-color: rgba(124,92,255,.55);
+}
+
+.btn-clear{
+  width: 38px; height: 38px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.06);
+  color: #eaf0ff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.btn-clear:hover{ background: rgba(255,255,255,0.10); }
+
+:host ::ng-deep .app-card{
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow: 0 18px 50px rgba(0,0,0,.35);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+:host ::ng-deep .app-card .p-card-body{ padding: 14px; }
+:host ::ng-deep .app-card:hover{
+  transform: translateY(-4px);
+  border-color: rgba(124,92,255,.40);
+  box-shadow: 0 26px 70px rgba(0,0,0,.45);
+}
+
+.app{ min-height: 145px; }
+.icon-box{
+  width: 56px; height: 56px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(124,92,255,.30), rgba(0,210,255,.18));
+  border: 1px solid rgba(255,255,255,0.12);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow: 0 14px 40px rgba(0,0,0,.25);
+}
+.app-icon{ font-size: 26px; }
+
+.app-title{
+  margin-top: 12px;
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1.1;
+}
+.app-desc{
+  margin-top: 6px;
+  font-size: 12px;
+  opacity: .78;
+  min-height: 28px;
+}
+
+.app-footer{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-top: 12px;
+}
+.cat{
+  display:inline-flex;
+  gap: 8px;
+  align-items:center;
+  font-size: 11px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.10);
+}
+.go{ opacity: .65; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*css tabla situwacuion*/
+ /* ========================================= */
+/* CONTENEDOR TABLA */
+/* ========================================= */
+
+.tabla-container {
+  max-height: 800px;
+  overflow: auto;
+  position: relative;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  background: #fff;
+}
+
+
+/* ========================================= */
+/* TABLA GENERAL */
+/* ========================================= */
+
+.table-elegante {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: max-content;
+  min-width: 100%;
+  font-size: 12px;
+}
+
+
+/* ========================================= */
+/* CELDAS */
+/* ========================================= */
+
+.table-elegante th,
+.table-elegante td {
+
+  white-space: nowrap;
+  padding: 6px 10px;
+  border: 1px solid #e5e7eb;
+
+  position: relative;
+  z-index: 1;
+
+  transition: background 0.15s ease;
+
+}
+
+
+/* ========================================= */
+/* HEADER FIJO */
+/* ========================================= */
+
+.table-elegante thead th {
+
+  position: sticky;
+  top: 0;
+
+  z-index: 20;
+
+  background: linear-gradient(
+    135deg,
+    #1e293b,
+    #334155
+  );
+
+  color: #fff;
+  font-weight: 600;
+
+}
+
+
+/* SEGUNDA FILA HEADER */
+
+.table-elegante thead tr:nth-child(2) th {
+
+  top: 40px;
+  background: #475569;
+
+}
+
+
+/* ========================================= */
+/* PRIMERA COLUMNA FIJA */
+/* ========================================= */
+
+.table-elegante .sticky-col {
+
+  position: sticky;
+  left: 0;
+
+  z-index: 25;
+
+  background: #f8fafc;
+
+  min-width: 140px;
+
+  font-weight: 600;
+
+  box-shadow:
+    4px 0 8px rgba(201, 8, 8, 0.08);
+
+}
+
+
+/* HEADER + COLUMNA */
+
+.table-elegante thead .sticky-col {
+
+  z-index: 30;
+
+  background: linear-gradient(
+    135deg,
+    #1e293b,
+    #0a60da
+  );
+
+  color: #fff;
+
+}
+
+
+/* ========================================= */
+/* FILAS */
+/* ========================================= */
+
+.table-elegante tbody tr:nth-child(even) {
+
+  background: #f9fafb;
+
+}
+
+
+/* ========================================= */
+/* EFECTO CRUZ PERFECTO */
+/* ========================================= */
+
+/* FILA */
+
+.table-elegante tbody tr:hover td {
+
+  background: #e0f2fe;
+
+}
+
+
+/* COLUMNA (AHORA FUNCIONA) */
+
+.table-elegante td:hover,
+.table-elegante th:hover {
+
+  box-shadow:
+
+    inset 0 -9999px 0 rgba(186,230,253,0.25),
+    inset 0  9999px 0 rgba(186,230,253,0.25);
+
+}
+
+
+/* ========================================= */
+/* COLORES DINÁMICOS */
+/* ========================================= */
+
+.celda-cero {
+  background: #f1f5f9;
+  color: #94a3b8;
+}
+
+.celda-baja {
+  background: #fee2e2;
+  color: #991b1b;
+  font-weight: 600;
+}
+
+.celda-media {
+  background: #fef9c3;
+  color: #854d0e;
+  font-weight: 600;
+}
+
+.celda-alta {
+  background: #dcfce7;
+  color: #166534;
+  font-weight: bold;
+}
+
+
+/* ========================================= */
+/* FILA TOTAL */
+/* ========================================= */
+
+.fila-total {
+
+  background: #0f172a !important;
+  color: #fff;
+  font-weight: bold;
+
+}
+
+
+
+
+.hover-row {
+
+  background: #e0f2fe !important;
+
+}
+
+
+/* COLUMNA */
+
+.hover-col {
+
+  background: rgba(186,230,253,0.35) !important;
+
+}
+
+
+.table-elegante thead tr:nth-child(2) th {
+  top: 40px;
+}
+
+.fila-totales td {
+  font-weight: bold;
+  background-color: #f1f3f5;
+  border-top: 2px solid #000;
+}

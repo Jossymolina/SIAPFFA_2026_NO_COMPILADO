@@ -229,8 +229,8 @@ export class BusquedaPersonalizadaComponent implements OnInit {
 
 
     if (this.sacarPermisoPersonalVista(['User_admin03'])) {
-
-      parametro.cadena += ` and (d.idNombramiento = ${this.usuariologuiado.idNombramiento}   )`
+   //parametro.cadena += ` and (iddireccion_asignacion = ${this.usuariologuiado.idunidad_direccion}   )` aqui corregir busqueda personalizada
+      parametro.cadena += ` and (iddireccion = ${this.usuariologuiado.idunidad_direccion}   )`
     } else if (this.sacarPermisoPersonalVista(['User_admin01'])) {
       //permiso unidad
       parametro.cadena += ` and (idunidad_asignado = ${this.usuariologuiado.idunidad}   )`

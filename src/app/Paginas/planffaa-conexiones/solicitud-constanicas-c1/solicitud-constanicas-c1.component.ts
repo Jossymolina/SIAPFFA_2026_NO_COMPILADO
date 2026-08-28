@@ -198,7 +198,7 @@ export class SolicitudConstanicasC1Component {
 
     const logoIzquierda = await this.getBase64ImageFromURL('fuerzasArmadas2.jpg');
     const LogoDerecho = await this.getBase64ImageFromURL('Presentación1.jpg');
-    const firmaDirector = await this.getBase64ImageFromURL('Captura de pantalla 2026-06-04 094429.png');
+    const firmaDirector = await this.getBase64ImageFromURL('firm.png');
 
     const fechaImpresion = new Date().toLocaleString('es-HN', {
       year: 'numeric',
@@ -476,7 +476,7 @@ export class SolicitudConstanicasC1Component {
           margin: [30, 0, 0, 20]
         },
 
-        {
+         {
           stack: [
             {
               stack: [
@@ -498,8 +498,8 @@ export class SolicitudConstanicasC1Component {
 
           ],
 
-          margin: [0, 40, 0, 0]
-        },
+          margin: [20, 60, 0, 0]
+        }, 
         {
           text: `Fecha de impresión: ${fechaImpresion} | Usuario: ${usuarioImprime}`,
           fontSize: 7,

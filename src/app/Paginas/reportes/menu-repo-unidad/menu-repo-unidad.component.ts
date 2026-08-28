@@ -108,6 +108,10 @@ export class MenuRepoUnidadComponent implements OnInit {
     },{
       id: 'r8', titulo: 'Parte por situacion', descripcion: 'Parte segun la situacion del personal',
       icon: 'pi pi-crown', categoria: 'Partes', ruta: '/reportes/promociones'
+    },
+    {
+      id: 'r9', titulo: 'Parte Bajo control', descripcion: 'Aquí se muestra el personal asignado a su unidad que se encuentra bajo el control de la misma.',
+      icon: 'pi pi-sitemap', categoria: 'Partes', ruta: '/reportes/promociones'
     }
 
   ]);
@@ -173,6 +177,7 @@ export class MenuRepoUnidadComponent implements OnInit {
       idunidad:  form.value.seccion.idunidad
     }
     this._ServiciosMensajeService.show("Cargando parte de la unidad......");
+    
     this._ServicioBackendService.sacarParteMenuInicio(param).subscribe({
       next: (response) => {
         this._ServiciosMensajeService.hide()
@@ -219,7 +224,6 @@ export class MenuRepoUnidadComponent implements OnInit {
     this._ServiciosMensajeService.show();
     this._ServicioBackendService.sacarBajasUnidad(param).subscribe({
       next: (response) => {
-        console.log(response)
         this._ServiciosMensajeService.hide()
         if (response.error) return this._ServiciosMensajeService.mensajeMalo(response.error);
         this.arregloBajas = response.resultado
@@ -307,16 +311,23 @@ export class MenuRepoUnidadComponent implements OnInit {
 
   arregloOrganizacionCompleta = []
   sacarOrganizacion(form: NgForm, objeto) {
+
     this.arregloOrganizacionCompleta = []
-let q={cadena:``,data:{} as any}
-   if(objeto === "fuerza"){
-     q.cadena=` and ua.idfuerza=${form.value.fuerza.idfuerza}  and nivel in (${form.value.categoria.nivel }) `
-   }else if(objeto === "unidad"){
-     q.cadena=` and ua.idunidad=${form.value.unidad.idunidad}`
-      q.data.cadena = ` and idunidad  =${form.value.unidad.idunidad} ` 
-   } else  if(objeto === "seccion"){
+    let q = { cadena: ``, data: {} as any }
+    console.log("Objeto ", objeto)
+    if (objeto === "fuerza") {
+      console.log("Fuerzaqury", q)
+
+      q.cadena = ` and ua.idfuerza=${form.value.fuerza.idfuerza}  and nivel in (${form.value.categoria.nivel}) `
+    } else if (objeto === "unidad") {
+//      q.cadena = ` and ua.idunidad=${Number(form.value.seccion.key)}`
+      q.data.idunidad =  Number(form.value.seccion.key)
+      console.log("Unidad qury", q)
+
+    } else if (objeto === "seccion") {
+      console.log("Seccion qury", q)
       q.data.idunidad = Number(form.value.seccion.key);
-   }
+    }
     this.ejecucatarConsultaOrganizacion(q)
   }
 
@@ -1013,7 +1024,6 @@ listarPersonal=false
  
 
   sacarTodalasUnidades() {
-    console.log(this.usuarioLoguiado)
     this._ServiciosMensajeService.show();
     
   //esto es pabar que unidad padre desbloquear
@@ -1103,5 +1113,26 @@ private convertirTreeNodeUnidad(
       )
     )
   };
+}
+arregloListaPartepersonalPrestado = []
+sacarPersonalBajoControlDEunidad(data){
+  this.arregloListaParteUnidad =  []
+  this.arregloListaPartepersonalPrestado =  []
+
+  this._ServiciosMensajeService.show()
+   this._ServicioBackendService.sacarPersonalBajoControlDEunidad(data.form.value.seccion.data).subscribe({
+      next: (response) => {
+        this._ServiciosMensajeService.hide();
+
+        this.arregloListaParteUnidad =  response.resultado_resumen
+        this.arregloListaPartepersonalPrestado =  response.resultado_personal_prestado
+
+       
+      
+       },error: () => {
+        this._ServiciosMensajeService.hide();
+        this._ServiciosMensajeService.mensajeerrorServer();
+      }
+    });
 }
 }

@@ -46,7 +46,7 @@ export class CuerpoPrincipalComponent {
       description: 'Reportes diarios.',
       icon: 'pi pi-flag-fill',
       route: '/menu/menu-reportes',
-      code:['Re_0002','Re_0003','Re_0001']
+      code:['Re_0002','Re_0003','Re_0001','Re_0006']
 
     },
     {

@@ -899,11 +899,35 @@
               <td>{{r.unidad}}</td>
 
 
-              <td [style]=" r.seccion ? '' : 'background-color: red;color:black'">{{ r.seccion?r.seccion:"Sin Cargo" }}
+              <td [ngStyle]="r.seccion
+                                  ? {}
+                                  : {
+                                      'background-color': 'red',
+                                      'color': 'black'
+                                    }">
+              
+                {{ r.seccion || 'Sin Direccion/Depto' }}
+              
               </td>
-              <td>{{ r.Nombre_Puesto }}</td>
-
-            </tr>
+              <td [ngStyle]="r.Nombre_Puesto
+                      ? {}
+                      : {
+                          'background-color': '#fecaca',
+                          'color': 'black'
+                        }">
+              
+                <span *ngIf="r.Nombre_Puesto" class="text-blue-600 font-semibold"
+                  style="background-color: #dcfce7; padding: 4px 8px; border-radius: 6px; display: inline-block;">
+                  {{ r.Nombre_Puesto }}
+                </span>
+              
+                <span *ngIf="!r.Nombre_Puesto">
+                  sin puesto
+                </span>
+              
+              </td>
+              
+              </tr>
 
             <tr *ngIf="arregloOrganizacionCompletaFiltrado?.length === 0">
               <td colspan="10" class="text-center text-muted py-3">

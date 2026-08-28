@@ -49,6 +49,14 @@ export class ReportesMenuComponent {
 
     },
     {
+      title: 'Reporte de Dirección/Depto/Sección',
+      description: 'Reposte personalizado por dirección/Depto/Sección.',
+      icon: 'pi pi-search-plus',
+      route: '/menu/menu-repo-dir',
+      code:['Re_0006']
+
+    },
+    {
       title: 'Reporte de Historial',
       description: 'Reposte personalizado por unidad.',
       icon: 'pi pi-face-smile',

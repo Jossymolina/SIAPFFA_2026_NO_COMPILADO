@@ -13,9 +13,9 @@ import { ServiciosMensajeService } from './serviMensaje/servicios-mensaje.servic
 })
 //ng build --aot --output-hashing=all   ng build --configuration production
 export class ServicioBackendService {
-  public url2 ="http://localhost:3979/" //"https://siapfa.ffaa.mil.hn:4443/"//"https://siapfa.ffaa.mil.hn:4443/"
+  public url2 ="https://siapfa.ffaa.mil.hn:4443/" //"https://siapfa.ffaa.mil.hn:4443/"//"https://siapfa.ffaa.mil.hn:4443/" "http://localhost:3979/"
   refrescar = 0
-  public url ="http://localhost:3979/"  //"https://siapfa.ffaa.mil.hn:4443/" //"https://siapfa.ffaa.mil.hn:4443/"      0801200018636
+  public url ="https://siapfa.ffaa.mil.hn:4443/" //"https://siapfa.ffaa.mil.hn:4443/" //"https://siapfa.ffaa.mil.hn:4443/"      0801200018636
   usuarioLogin: any;
   token = "";
   arregloPermisos = new Array();
@@ -25,6 +25,37 @@ export class ServicioBackendService {
       serie: "FAHOA-0513", titulo_doc: "El suscrito Jefe de Recursos Humanos de la SEDENA", cargo: "", idunidad: 107
     }
   ]
+
+
+escanearDocumento(
+  scannerId: string,
+  source: string = 'auto',
+  duplex: boolean = false
+): Observable<Blob> {
+
+  return this.http.post(
+    'http://127.0.0.1:5005/api/scan',
+    {
+      scannerId: scannerId,
+      dpi: 300,
+      colorMode: 'color',
+      source: source,
+      duplex: duplex
+    },
+    {
+      responseType: 'blob'
+    }
+  );
+
+}
+
+sacarPersonalBajoControlDEunidad(data){
+  return this.metodopost("sacarPersonalBajoControlDEunidad",data)
+}
+obtenerEscaneres(): Observable<any> {
+  return this.http.get('http://127.0.0.1:5005/api/scanners');
+}
+
 
   construirTree(datos: any[]): any[] {
     const mapa = new Map<number, any>();
@@ -53,6 +84,16 @@ export class ServicioBackendService {
     return raiz;
 
 }
+
+  parte_por_grados_direccion(data){
+    return this.metodopost('parte_por_grados_direccion',data);
+  }
+
+
+moverArchivo(data){
+  return this.metodopost("moverArchivo",data)
+}
+
 eliminarCompartido(data){
   return this.metodopost("eliminarCompartido",data)
 }
@@ -760,6 +801,8 @@ obtenerAscensosPorPersona(data){
   sacarParteMenuInicio(data){
     return this.metodopost('parte_por_grados_general',data);
   }
+
+  
 
   sacarFuerza() {
     return this.metodoget('sacarFuerza');

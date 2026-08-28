@@ -215,7 +215,7 @@ export const routes: Routes = [
       {
         path: 'menu-reportes',
         canActivate: [permisosGuard],
-        data: { permisos: ['Re_0002','Re_0003','Re_0001','Re_0004','Re_0005'] },
+        data: { permisos: ['Re_0002','Re_0003','Re_0001','Re_0004','Re_0005','Re_0006'] },
         loadComponent: () =>
           import('./Paginas/reportes/reportes-menu/reportes-menu.component')
             .then(m => m.ReportesMenuComponent)
@@ -254,6 +254,14 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./Paginas/reportes/repo-emc/menu-repo-emc/menu-repo-emc.component')
             .then(m => m.MenuRepoEmcComponent)
+      },
+      {
+        path: 'menu-repo-dir',
+        canActivate: [permisosGuard],
+        data: { permisos: ['Re_0006'] },
+        loadComponent: () =>
+          import('./Paginas/reportes/repo-dir-seccion/repo-dir-seccion.component')
+            .then(m => m.RepoDirSeccionComponent)
       },
       {
         path: 'menu-planillas-planffaa',

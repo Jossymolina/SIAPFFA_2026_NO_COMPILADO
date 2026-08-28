@@ -1407,9 +1407,33 @@
               <td>{{r.unidad}}</td>
 
 
-              <td [style]=" r.seccion ? '' : 'background-color: red;color:white'">{{ r.seccion?r.seccion:"Sin asignacion de Direccion/Seccion" }}
+                 <td [ngStyle]="r.seccion
+                                  ? {}
+                                  : {
+                                      'background-color': 'red',
+                                      'color': 'black'
+                                    }">
+              
+                {{ r.seccion || 'Sin Direccion/Depto' }}
+              
               </td>
-              <td [style]=" r.Nombre_Puesto ? '' : 'background-color: blue;color:white'">{{ r.Nombre_Puesto?r.Nombre_Puesto:"Sin cargo"  }}</td>
+              <td [ngStyle]="r.Nombre_Puesto
+                      ? {}
+                      : {
+                          'background-color': '#fecaca',
+                          'color': 'black'
+                        }">
+              
+                <span *ngIf="r.Nombre_Puesto" class="text-blue-600 font-semibold"
+                  style="background-color: #dcfce7; padding: 4px 8px; border-radius: 6px; display: inline-block;">
+                  {{ r.Nombre_Puesto }}
+                </span>
+              
+                <span *ngIf="!r.Nombre_Puesto">
+                  sin puesto
+                </span>
+              
+              </td>
 
             </tr>
 

@@ -105,26 +105,19 @@ export class CrearTernasComponent implements OnInit {
 
   ) { }
 
-tiposPrueba_terna_arreglo = [
-  { id: 'DIAGNOSTICA', nombre: 'Diagnóstica' },
-  { id: 'ASCENSO', nombre: 'Ascenso' },
-  { id: 'ANUAL', nombre: 'Anual' }
-];
- 
-
+  tiposPrueba_terna_arreglo = [
+    { id: 'DIAGNOSTICA', nombre: 'Diagnóstica' },
+    { id: 'ASCENSO', nombre: 'Ascenso' },
+    { id: 'ANUAL', nombre: 'Anual' }
+  ];
   treeUnidades: any[] = [];
-unidadesSeleccionadas: any[] = [];
-
-  sacarTodalasUnidades(){
-  
+  unidadesSeleccionadas: any[] = [];
+  sacarTodalasUnidades() {
     this._ServiciosMensajeService.show();
-
     this._ServicioBackendService.sacarTodalasUnidades().subscribe({
       next: (response) => {
-
         this._ServiciosMensajeService.hide();
-       
-       const unidades = response.resultado || [];
+        const unidades = response.resultado || [];
         let nodo = unidades.filter((x: any) => x.id_unidad_padre == null)
           .map((x: any) =>
             this.construirJerarquiaUnidades(
@@ -132,19 +125,17 @@ unidadesSeleccionadas: any[] = [];
               unidades
             )
           );
-       
-           this.treeUnidades = nodo.map((x: any) =>  this.convertirTreeNodeUnidad(x)   );
+        this.treeUnidades = nodo.map((x: any) => this.convertirTreeNodeUnidad(x));
       },
       error: () => {
-
-        this._ServiciosMensajeService.hide();
+       this._ServiciosMensajeService.hide();
         this._ServiciosMensajeService.mensajeerrorServer();
 
       }
     });
-}
+  }
 
- private construirJerarquiaUnidades(
+  private construirJerarquiaUnidades(
     item: any,
     unidad: any[],
     rutaPadre: string = ''
@@ -171,33 +162,33 @@ unidadesSeleccionadas: any[] = [];
     };
 
   }
-    private convertirTreeNodeUnidad(
-  nodo: any
-): any {
+  private convertirTreeNodeUnidad(
+    nodo: any
+  ): any {
 
-  const esHoja = nodo.seleccionable ? true : false // nodo.hijos.length === 0;
+    const esHoja = nodo.seleccionable ? true : false // nodo.hijos.length === 0;
 
-  return {
+    return {
 
-    key: String(nodo.idunidad),
+      key: String(nodo.idunidad),
 
-    label: nodo.unidad_nombre,
+      label: nodo.unidad_nombre,
 
-    data: nodo,
+      data: nodo,
 
-    selectable: esHoja,
+      selectable: esHoja,
 
-    icon: esHoja
-      ? 'pi pi-lock-open'
-      : 'pi pi-lock',
+      icon: esHoja
+        ? 'pi pi-lock-open'
+        : 'pi pi-lock',
 
-    children: nodo.hijos.map((h: any) =>
-      this.convertirTreeNodeUnidad(h)
-    )
+      children: nodo.hijos.map((h: any) =>
+        this.convertirTreeNodeUnidad(h)
+      )
 
-  };
+    };
 
-}
+  }
 
 
   atras_criterios() {
@@ -221,7 +212,7 @@ unidadesSeleccionadas: any[] = [];
   tipoPrueba = null
   ngOnInit(): void {
     this.obtenerTiposEvaluador()
-this.sacarTodalasUnidades()
+    this.sacarTodalasUnidades()
     this.funciones = {
       factor_ab_cu: this.factor_ab_cuello.bind(this),
       factor_altura: this.factor_altura.bind(this),
@@ -237,10 +228,10 @@ this.sacarTodalasUnidades()
 
 
   }
-  factor_apto(exceso_grasa,presion,sobre_peso) {
-      if(Number(exceso_grasa)>0) return false
-      if(Number(sobre_peso)>=30) return false
-      if(presion==='130\/80') return false
+  factor_apto(exceso_grasa, presion, sobre_peso) {
+    if (Number(exceso_grasa) > 0) return false
+    if (Number(sobre_peso) >= 30) return false
+    if (presion === '130\/80') return false
     return true
   }
   sacarRespuestaArreglo(codigo, arreglo) {
@@ -280,7 +271,7 @@ this.sacarTodalasUnidades()
   }
   factor_ab_cuello(diferencia_ab_cu) {
     if (!diferencia_ab_cu) return 0
-    
+
     return this._TablasEvaluacionService.sacar_factor_abdomen_cuello(diferencia_ab_cu)
   }
 
@@ -288,6 +279,7 @@ this.sacarTodalasUnidades()
     if (!altura) return 0
 
     let altura_pulgada = this.convertirMetrosAPulgadas(Number(altura))
+    console.log("la altura en pulgadas es ", altura_pulgada)
     return this._TablasEvaluacionService.sacar_factor_altura(altura_pulgada)
   }
 
@@ -341,101 +333,101 @@ this.sacarTodalasUnidades()
     this.personaBuscada = null
   }
   arregloEvaluadores = []
-agregarEvaluador(persona, tipo_evaluador) {
+  agregarEvaluador(persona, tipo_evaluador) {
 
-  persona.tipo_evaluador = tipo_evaluador;
+    persona.tipo_evaluador = tipo_evaluador;
 
-  const tipo = tipo_evaluador.ideval_tipos_evaluador;
+    const tipo = tipo_evaluador.ideval_tipos_evaluador;
 
-  const tipos = {
-    7: "Comandante",
-    1: "Oficial Supervisor",
-    2: "Jefe de Equipo",
-    3: "Evaluador 1",
-    4: "Evaluador 2",
-    5: "Evaluador 3",
-    6: "Oficial a ser Evaluado"
-  };
+    const tipos = {
+      7: "Comandante",
+      1: "Oficial Supervisor",
+      2: "Jefe de Equipo",
+      3: "Evaluador 1",
+      4: "Evaluador 2",
+      5: "Evaluador 3",
+      6: "Oficial a ser Evaluado"
+    };
 
-  // Orden obligatorio de conformación de la terna
-  const orden = [7, 1, 2, 3, 4, 5];
+    // Orden obligatorio de conformación de la terna
+    const orden = [7, 1, 2, 3, 4, 5];
 
-  // No permitir repetir personas
-  if (this.arregloEvaluadores.some(e => e.identidad === persona.identidad)) {
-    return this._ServiciosMensajeService.mensajeMalo(
-      "La persona seleccionada ya forma parte de esta terna. No es posible agregar dos veces al mismo integrante."
-    );
-  }
-
-  // ===========================
-  // OFICIAL A SER EVALUADO (6)
-  // ===========================
-  if (tipo === 6) {
-
-    const faltantes = orden.filter(id =>
-      !this.arregloEvaluadores.some(
-        e => e.tipo_evaluador.ideval_tipos_evaluador === id
-      )
-    );
-
-    if (faltantes.length > 0) {
+    // No permitir repetir personas
+    if (this.arregloEvaluadores.some(e => e.identidad === persona.identidad)) {
       return this._ServiciosMensajeService.mensajeMalo(
-        `No es posible agregar Oficiales a ser Evaluados mientras la terna no esté completa. Aún debe agregar: ${faltantes
-          .map(id => tipos[id])
-          .join(", ")}.`
+        "La persona seleccionada ya forma parte de esta terna. No es posible agregar dos veces al mismo integrante."
       );
     }
 
-  } else {
-
     // ===========================
-    // VALIDAR ORDEN OBLIGATORIO
+    // OFICIAL A SER EVALUADO (6)
     // ===========================
+    if (tipo === 6) {
 
-    const indice = orden.indexOf(tipo);
-
-    if (indice > 0) {
-
-      const tipoAnterior = orden[indice - 1];
-
-      const existeAnterior = this.arregloEvaluadores.some(
-        e => e.tipo_evaluador.ideval_tipos_evaluador === tipoAnterior
+      const faltantes = orden.filter(id =>
+        !this.arregloEvaluadores.some(
+          e => e.tipo_evaluador.ideval_tipos_evaluador === id
+        )
       );
 
-      if (!existeAnterior) {
+      if (faltantes.length > 0) {
         return this._ServiciosMensajeService.mensajeMalo(
-          `No puede agregar "${tipos[tipo]}" todavía. Primero debe agregar al "${tipos[tipoAnterior]}".`
+          `No es posible agregar Oficiales a ser Evaluados mientras la terna no esté completa. Aún debe agregar: ${faltantes
+            .map(id => tipos[id])
+            .join(", ")}.`
         );
       }
+
+    } else {
+
+      // ===========================
+      // VALIDAR ORDEN OBLIGATORIO
+      // ===========================
+
+      const indice = orden.indexOf(tipo);
+
+      if (indice > 0) {
+
+        const tipoAnterior = orden[indice - 1];
+
+        const existeAnterior = this.arregloEvaluadores.some(
+          e => e.tipo_evaluador.ideval_tipos_evaluador === tipoAnterior
+        );
+
+        if (!existeAnterior) {
+          return this._ServiciosMensajeService.mensajeMalo(
+            `No puede agregar "${tipos[tipo]}" todavía. Primero debe agregar al "${tipos[tipoAnterior]}".`
+          );
+        }
+      }
+
+      // ===========================
+      // SOLO UNO POR CARGO
+      // ===========================
+
+      const existe = this.arregloEvaluadores.some(
+        e => e.tipo_evaluador.ideval_tipos_evaluador === tipo
+      );
+
+      if (existe) {
+        return this._ServiciosMensajeService.mensajeMalo(
+          `Ya existe un integrante con el cargo de "${tipos[tipo]}". Solo se permite una persona para este cargo dentro de la terna.`
+        );
+      }
+
     }
 
-    // ===========================
-    // SOLO UNO POR CARGO
-    // ===========================
+    persona.arma = this.armapersonaseleccionada;
+    persona.unidad_Asignacion = this.unidad_asignacion;
 
-    const existe = this.arregloEvaluadores.some(
-      e => e.tipo_evaluador.ideval_tipos_evaluador === tipo
+    this.arregloEvaluadores.push(persona);
+    this.personaBuscada = null;
+
+    this._ServiciosMensajeService.mensajeBueno(
+      `"${persona.nombres} ${persona.apellidos}" fue agregado correctamente como "${tipos[tipo]}".`
     );
 
-    if (existe) {
-      return this._ServiciosMensajeService.mensajeMalo(
-        `Ya existe un integrante con el cargo de "${tipos[tipo]}". Solo se permite una persona para este cargo dentro de la terna.`
-      );
-    }
-
   }
-
-  persona.arma = this.armapersonaseleccionada;
-  persona.unidad_Asignacion = this.unidad_asignacion;
- 
-  this.arregloEvaluadores.push(persona);
-  this.personaBuscada = null;
-
-  this._ServiciosMensajeService.mensajeBueno(
-    `"${persona.nombres} ${persona.apellidos}" fue agregado correctamente como "${tipos[tipo]}".`
-  );
-
-}
 
 
 
@@ -449,7 +441,7 @@ agregarEvaluador(persona, tipo_evaluador) {
     this.formTerna.value.evaluadores = this.arregloEvaluadores;
     this.formTerna.value.unidad = this.unidadesSeleccionadas['data'];
 
- 
+
     this._ServiciosMensajeService.show()
     this._ServicioBackendService.registrarEvalTerna(this.formTerna.value).subscribe({
       next: (Response) => {
@@ -466,8 +458,8 @@ agregarEvaluador(persona, tipo_evaluador) {
       }
     }
     )
- 
- 
+
+
 
   }
 
@@ -597,7 +589,7 @@ agregarEvaluador(persona, tipo_evaluador) {
         c.respuesta = resultado.respuesta;
         c.readonly = true;
         c.modificado = true;      // Nueva propiedad
-        c.visible= false
+        c.visible = false
       } else {
         c.modificado = false;     // Opcional
       }
@@ -611,17 +603,17 @@ agregarEvaluador(persona, tipo_evaluador) {
   criteriosPorCodigo = {}
   async obtenerCriteriosTipoEvaluacion(item?: any, orden_llenado_: any = 1) {
     //      let r = await this.obtenerResultadosEvaluacion_(tipo)
- 
+
     if (item === 2 && orden_llenado_ === 3) {
       //Sacar Exacmen medico para calcular sobre peso
-       let arreglo_respuestas_3 = await this.obtenerResultadosEvaluacion_(2, 3)
-       if(arreglo_respuestas_3.length!==0) {
+      let arreglo_respuestas_3 = await this.obtenerResultadosEvaluacion_(2, 3)
+      if (arreglo_respuestas_3.length !== 0) {
         this.limpiarCriterios()
         return this._ServiciosMensajeService.mensajeMalo("La corrida ya fue evaluada")
-       }
+      }
       this._ServiciosMensajeService.show()
-      await this.obtenerExamenMedico(1,1)
-     //sACO TODO LOS CRITERIO DE EVALUACION FISICO
+      await this.obtenerExamenMedico(1, 1)
+      //sACO TODO LOS CRITERIO DE EVALUACION FISICO
       let arreglos_pechasdas = await this.obtenerXCriterios(2, 1)
       let arreglos_abdominales = await this.obtenerXCriterios(2, 2)
       let arreglos_carrera = await this.obtenerXCriterios(2, 3)
@@ -629,7 +621,7 @@ agregarEvaluador(persona, tipo_evaluador) {
       /**VERIFICAR SI HIZO LAS PECHADAS Y  LAS ABDOMINALES */
       let arreglo_respuestas_1 = await this.obtenerResultadosEvaluacion_(2, 1)
       let arreglo_respuestas_2 = await this.obtenerResultadosEvaluacion_(2, 2)
-     
+
 
 
       this._ServiciosMensajeService.hide()
@@ -656,22 +648,22 @@ agregarEvaluador(persona, tipo_evaluador) {
 
       this.actualizarCriterios(arreglo_respuestas, arreglo_final)
 
-    
 
-   
+
+
       this.criterios = arreglo_final;
       this.criteriosPorCodigo = {};
       this.criterios.forEach((c: any) => {
         this.criteriosPorCodigo[c.codigo] = c;
       });
 
-     
+
     } else {
 
       if (item === 2) {
-       this._ServiciosMensajeService.show("Verificandos requisitos")
-        let r = await this.obtenerExamenMedico(1,1)
-  
+        this._ServiciosMensajeService.show("Verificandos requisitos")
+        let r = await this.obtenerExamenMedico(1, 1)
+
         if (r.length === 0) {
           this._ServicioBackendService.mensajeError("Evalue el examen Medico primero")
           this.limpiarCriterios()
@@ -680,9 +672,9 @@ agregarEvaluador(persona, tipo_evaluador) {
 
 
         if (orden_llenado_ === 1) {
-          
+
           let arreglo_respuestas_1 = await this.obtenerResultadosEvaluacion_(2, 1)
- 
+
           if (arreglo_respuestas_1.length !== 0) {
             this.limpiarCriterios()
 
@@ -690,9 +682,9 @@ agregarEvaluador(persona, tipo_evaluador) {
             return
           }
         } else if (orden_llenado_ === 2) {
- 
+
           let arreglo_respuestas_2 = await this.obtenerResultadosEvaluacion_(2, 2)
-      
+
 
           if (arreglo_respuestas_2.length !== 0) {
             this.limpiarCriterios()
@@ -703,8 +695,8 @@ agregarEvaluador(persona, tipo_evaluador) {
         this._ServiciosMensajeService.hide()
       }
 
-    if (item === 1) {
-       this._ServiciosMensajeService.show("Verificando los examenes medicos....")
+      if (item === 1) {
+        this._ServiciosMensajeService.show("Verificando los examenes medicos....")
         let r = await this.obtenerResultadosEvaluacion_(1, 1)
         this._ServiciosMensajeService.hide()
         if (r.length !== 0) {
@@ -716,23 +708,23 @@ agregarEvaluador(persona, tipo_evaluador) {
       }
 
 
-       if (item === 3) {
+      if (item === 3) {
         this._ServiciosMensajeService.show()
-         let arreglo_respuestas_1 = await this.obtenerResultadosEvaluacion_(3, 1)
-         this._ServiciosMensajeService.hide()
-           if (arreglo_respuestas_1.length !== 0) {
-            this.limpiarCriterios()
+        let arreglo_respuestas_1 = await this.obtenerResultadosEvaluacion_(3, 1)
+        this._ServiciosMensajeService.hide()
+        if (arreglo_respuestas_1.length !== 0) {
+          this.limpiarCriterios()
 
-            this._ServiciosMensajeService.mensajeMalo("El examen de disparo ya fue evaluado")
-            return
-          }
+          this._ServiciosMensajeService.mensajeMalo("El examen de disparo ya fue evaluado")
+          return
+        }
 
       }
 
-     this._ServiciosMensajeService.show("Cargando los criterios de evaluación")
+      this._ServiciosMensajeService.show("Cargando los criterios de evaluación")
       let arreglo = await this.obtenerXCriterios(item, orden_llenado_)
-        this._ServiciosMensajeService.hide()
- 
+      this._ServiciosMensajeService.hide()
+
       this.criterios = arreglo;
       this.criteriosPorCodigo = {};
       this.criterios.forEach((c: any) => {
@@ -782,7 +774,7 @@ agregarEvaluador(persona, tipo_evaluador) {
       c.respuesta === '' ||
       c.respuesta === undefined
     );
-    
+
     if (sinResponder.length > 0) {
       alert("Formulario incompleto");
       return null;
@@ -814,18 +806,18 @@ agregarEvaluador(persona, tipo_evaluador) {
   }
 
   async guardarEvaluacion() {
-   
-    if(!this.frmEvaluacion.valid) return  this._ServiciosMensajeService.mensajeMalo("Formulario Invalido")
 
- 
+    if (!this.frmEvaluacion.valid) return this._ServiciosMensajeService.mensajeMalo("Formulario Invalido")
+
+
     let responder = await this._ServiciosMensajeService.mensajePregunta("Esta seguro de registrar los datos")
     if (!responder) return
     if (this.tipoPrueba === 'CORRIDA') {
-       
+
       const criterios_faltantes = this.criterios.filter(x => x['modificado'] === false);
       const json = this.construirJsonEvaluacion(criterios_faltantes, 1, this.personaSeleccionada.idevaluador);
       if (!json) return this._ServiciosMensajeService.mensajeMalo("El JSON no se construyo correctamente")
-    
+
       const ok = await this.guardarResultados(json);
       if (ok) {
         this.limpiarCriterios()
@@ -844,7 +836,7 @@ agregarEvaluador(persona, tipo_evaluador) {
       this._ServiciosMensajeService.mensajeMalo("Error al guardar")
 
     }
- 
+
 
     /*
         const sinResponder = this.criterios.filter(c =>
@@ -1031,52 +1023,52 @@ agregarEvaluador(persona, tipo_evaluador) {
     }
 
   }*/
-evaluarFormula(formula: string): number {
+  evaluarFormula(formula: string): number {
 
-  if (!formula?.trim()) {
-    return 0;
-  }
+    if (!formula?.trim()) {
+      return 0;
+    }
 
-  let expresion = formula;
+    let expresion = formula;
 
-  // Reemplazar criterios por sus valores
-  for (const c of this.criterios) {
+    // Reemplazar criterios por sus valores
+    for (const c of this.criterios) {
 
-    const valor = Number(c.respuesta);
+      const valor = Number(c.respuesta);
 
+      expresion = expresion.replace(
+        new RegExp(`\\b${c.codigo}\\b`, 'g'),
+        isNaN(valor) ? '0' : valor.toString()
+      );
+
+    }
+
+    // Reemplazar funciones permitidas
+    expresion = expresion
+      .replace(/\bABS\s*\(/gi, "Math.abs(")
+      .replace(/\bMAX\s*\(/gi, "Math.max(")
+      .replace(/\bMIN\s*\(/gi, "Math.min(");
+
+    // Reemplazar cualquier variable que no exista por 0
     expresion = expresion.replace(
-      new RegExp(`\\b${c.codigo}\\b`, 'g'),
-      isNaN(valor) ? '0' : valor.toString()
+      /(?<!\.)\b(?!Math\b)[A-Za-z_][A-Za-z0-9_]*\b/g,
+      "0"
     );
 
-  }
+    try {
 
-  // Reemplazar funciones permitidas
-  expresion = expresion
-    .replace(/\bABS\s*\(/gi, "Math.abs(")
-    .replace(/\bMAX\s*\(/gi, "Math.max(")
-    .replace(/\bMIN\s*\(/gi, "Math.min(");
+      const resultado = Function(`"use strict"; return (${expresion})`)();
 
-  // Reemplazar cualquier variable que no exista por 0
-  expresion = expresion.replace(
-  /(?<!\.)\b(?!Math\b)[A-Za-z_][A-Za-z0-9_]*\b/g,
-  "0"
-);
+      return Number(resultado) || 0;
 
-  try {
+    } catch (e) {
 
-    const resultado = Function(`"use strict"; return (${expresion})`)();
 
-    return Number(resultado) || 0;
+      return 0;
 
-  } catch (e) {
-
-     
-    return 0;
+    }
 
   }
-
-}
   convertirMetrosAPulgadas(alturaMetros: number): number {
 
     if (!alturaMetros || alturaMetros <= 0) {
@@ -1115,7 +1107,7 @@ evaluarFormula(formula: string): number {
       switch (criterio.tipo_calculo) {
 
         case 'FORMULA':
-         
+
           criterio.respuesta = this.evaluarFormula(
             criterio.formula
           );
@@ -1143,18 +1135,18 @@ evaluarFormula(formula: string): number {
 
   private timerRecalculo: any;
 
-programarRecalculo() {
+  programarRecalculo() {
 
-  clearTimeout(this.timerRecalculo);
+    clearTimeout(this.timerRecalculo);
 
-  this.timerRecalculo = setTimeout(() => {
-    this.recalcularCriterios();
-  }, 200);
+    this.timerRecalculo = setTimeout(() => {
+      this.recalcularCriterios();
+    }, 200);
 
-}
+  }
 
   seleccionarPersona(persona) {
-    if(persona.ideval_tipos_evaluador!==6) return this._ServiciosMensajeService.mensajeMalo("Esta persona pertenece al equipo evaluador de esta terna, por lo que no puede ser evaluada dentro de la misma.")
+    if (persona.ideval_tipos_evaluador !== 6) return this._ServiciosMensajeService.mensajeMalo("Esta persona pertenece al equipo evaluador de esta terna, por lo que no puede ser evaluada dentro de la misma.")
     this.personaSeleccionada = persona
     this.verExpedienteTernaIndividual = true
 
@@ -1272,31 +1264,31 @@ programarRecalculo() {
 
   async obtenerResultadosEvaluacion(tipo) {
     let r = []
-    if(tipo===2) {
+    if (tipo === 2) {
       this._ServiciosMensajeService.show("Cargando datos de examen fisico")
-      let pecha1_ =  await this.obtenerResultadosEvaluacion_(tipo, 1)
-  
-      let abdominales =  await this.obtenerResultadosEvaluacion_(tipo, 2)
- 
+      let pecha1_ = await this.obtenerResultadosEvaluacion_(tipo, 1)
 
-      let corridas =  await this.obtenerResultadosEvaluacion_(tipo, 3)
-      
-   
-          r.push(...pecha1_)
-          r.push(...abdominales)
-          r.push(...corridas)
-          this._ServiciosMensajeService.hide()
-    }else{
-      this._ServiciosMensajeService.show( )
+      let abdominales = await this.obtenerResultadosEvaluacion_(tipo, 2)
 
-       r = await this.obtenerResultadosEvaluacion_(tipo, 1)
-                  this._ServiciosMensajeService.hide()
+
+      let corridas = await this.obtenerResultadosEvaluacion_(tipo, 3)
+
+
+      r.push(...pecha1_)
+      r.push(...abdominales)
+      r.push(...corridas)
+      this._ServiciosMensajeService.hide()
+    } else {
+      this._ServiciosMensajeService.show()
+
+      r = await this.obtenerResultadosEvaluacion_(tipo, 1)
+      this._ServiciosMensajeService.hide()
 
 
     }
-       this.arregloResultados  =  r
-    
-  
+    this.arregloResultados = r
+
+
     /*
     this._ServiciosMensajeService.show()
     let p = {
@@ -1322,11 +1314,11 @@ programarRecalculo() {
 
   examenMedicoHecho = []
 
-  async obtenerExamenMedico(tipo,orden_lelnado=1): Promise<any[]> {
+  async obtenerExamenMedico(tipo, orden_lelnado = 1): Promise<any[]> {
     const p = {
       idevaluador: this.personaSeleccionada.idevaluador,
       id_tipo_evaluacion: tipo,
-      orden_llenado:orden_lelnado
+      orden_llenado: orden_lelnado
     };
     this.examenMedicoHecho = [];
     try {
@@ -2163,7 +2155,7 @@ programarRecalculo() {
 
   }
   async generarPDF() {
- this.cargarDataExamenFisico()
+    this.cargarDataExamenFisico()
 
     this.logoBase64 = await this.convertirImagenBase64('fuerzasArmadas2.jpg');
     const docDefinition: any = {
@@ -2206,7 +2198,7 @@ programarRecalculo() {
 
 
   crearPFMedico() {
-   this.cargarDataExamenMedico()
+    this.cargarDataExamenMedico()
 
     const fechaHoraHN = new Intl.DateTimeFormat('sv-SE', {
       timeZone: 'America/Tegucigalpa',
@@ -3765,7 +3757,4 @@ programarRecalculo() {
     }; // FIN DOCUMENT DEFINITION
     pdfMake.createPdf(documentDefinition).open();
   }
-
-
-
 }

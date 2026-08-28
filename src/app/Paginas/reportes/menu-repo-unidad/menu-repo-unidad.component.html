@@ -561,47 +561,7 @@
   }
   @if(VentanaSeleccionada?.id==='r5'){
   <div>
-<!-- 
-    <div class="d-flex align-items-center gap-4">
-
-      <div *ngFor="let op of opciones" class="d-flex align-items-center gap-2">
-        <p-radioButton name="fechaCorte" [value]="op.value" [(ngModel)]="opcion" inputId="{{ op.value }}">
-        </p-radioButton>
-
-        <label [for]="op.value" class="mb-0">
-          {{ op.label }}
-        </label>
-      </div>
-
-
-    </div>
-    <hr>
-
-
-    <div *ngIf="opcion === 'unidad'">
-
-      <form #formbuscar="ngForm" class="row">
-
-
-
-
-        <label for="" class="col-md-1">
-          <br>
-          <button class="form-control btn btn-danger" [disabled]="!formbuscar.valid"
-            (click)="sacarOrganizacion(formbuscar,'unidad')" style="margin-left: 10px;">
-            Buscar
-          </button>
-        </label>
-        <label for="" class="col-md-1">
-          <br>
-          <button class="form-control btn btn-danger" [disabled]="!formbuscar.valid" (click)="limpiar_organizacion()"
-            style="margin-left: 10px;">
-            Limpiar
-          </button>
-        </label>
-      </form>
-    </div>
--->
+ 
     <div  >
 
       <form #formbuscar="ngForm" class="row">
@@ -620,7 +580,7 @@
         <label for="" style="margin-left: 5px;" class="col-md-2">
           <br>
 
-          <button class="btn btn-success" (click)="sacarOrganizacion(formbuscar,'seccion')">Buscar</button>
+          <button class="btn btn-success" (click)="sacarOrganizacion(formbuscar,'unidad')">Buscar</button>
         </label>
 
 
@@ -714,9 +674,33 @@
               <td>{{r.unidad}}</td>
 
 
-              <td [style]=" r.seccion ? '' : 'background-color: red;color:white'">{{ r.seccion?r.seccion:"Sin Cargo" }}
+               <td [ngStyle]="r.seccion
+                                  ? {}
+                                  : {
+                                      'background-color': 'red',
+                                      'color': 'black'
+                                    }">
+              
+                {{ r.seccion || 'Sin Direccion/Depto' }}
+              
               </td>
-              <td>{{ r.Nombre_Puesto }}</td>
+              <td [ngStyle]="r.Nombre_Puesto
+                      ? {}
+                      : {
+                          'background-color': '#fecaca',
+                          'color': 'black'
+                        }">
+              
+                <span *ngIf="r.Nombre_Puesto" class="text-blue-600 font-semibold"
+                  style="background-color: #dcfce7; padding: 4px 8px; border-radius: 6px; display: inline-block;">
+                  {{ r.Nombre_Puesto }}
+                </span>
+              
+                <span *ngIf="!r.Nombre_Puesto">
+                  sin puesto
+                </span>
+              
+              </td>
 
             </tr>
 
@@ -1046,6 +1030,235 @@
   </div>
 
 
+  }
+
+
+    @if(VentanaSeleccionada?.id==='r9'){
+  <div>
+    <div class="container-fluid py-3">
+
+      <!-- HEADER -->
+      <form  #formBuscar="ngForm" class="row align-items-center mb-3"   >
+        <label for="" style="margin-left: 5px;" class="col-md-2">
+          Unidad
+             <p-treeselect appendTo="body" style="width: 100%;" required name="seccion" #seccion="ngModel" ngModel
+              required
+                [options]="treeUnidades"  [filter]="true" [showClear]="true"
+                placeholder="Seleccione la unidad" styleClass="w-full">
+              </p-treeselect>
+        </label>
+ 
+            <label for="" style="margin-left: 5px;" class="col-md-2"> 
+              <br>
+             <button 
+               [disabled]="!formBuscar.valid"
+               (click)="sacarPersonalBajoControlDEunidad(formBuscar)"
+               class="btn btn-danger"
+             >
+                Buscar
+             </button>
+            </label>
+           
+         
+           
+        
+ 
+
+        
+      </form>
+
+
+ 
+
+    </div>
+
+    <div class="container-fluid py-3">
+ 
+<div class="surface-100 border-round p-3 mb-3 flex align-items-center gap-3">
+
+    <i class="pi pi-info-circle text-primary text-xl"></i>
+
+    <div>
+        <div class="font-semibold text-900 mb-1">
+            Personal bajo control
+        </div>
+
+        <div class="text-600 text-sm">
+            Aquí se muestra el personal de otras unidades que se encuentra
+            temporalmente prestando servicio en su unidad.
+        </div>
+    </div>
+
+</div>
+      <!-- HEADER -->
+      <div class="row align-items-center mb-3">
+
+
+        <div class="col-auto">
+          <button class="btn btn-sm btn-success" (click)="exportarExcelResumen('tablaList')">
+            <i class="bi bi-file-earmark-excel me-1"></i>
+            Exportar
+          </button>
+        </div>
+      </div>
+
+
+
+      <!-- TABLA -->
+      <div class="table-responsive">
+
+
+
+        <table id="tablaList" class="table table-bordered table-hover table-sm align-middle">
+          <thead class="table-light">
+            <tr>
+              <th style="width:60px">#</th>
+              <th>Identidad</th>
+              <th>Grado</th>
+              <th>Nombres</th>
+              <th>Cuenta Banco</th>
+              <th>Sexo</th>
+              <th>Fecha Ingreso</th>
+              <th>Fecha Ascenso</th>
+              <th>Fecha Asignación</th>
+              <th>Unidad Origen</th>
+
+
+
+
+
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr
+             (click)="seleccionarPersonal(r)"
+              style="cursor: pointer;"
+            *ngFor="let r of arregloListaParteUnidad; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ r.identidad }}</td>
+              <td>{{ r.grado }}</td>
+              <td>{{ r.nombres }}</td>
+              <td>{{ r.cuenta_banco }}</td>
+
+              <td>{{ r.sexo }}</td>
+              <td>{{ r.fecha_ingreso | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ r.fecha_ascenso | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ r.fecha_asignacion | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ r.uniad_arigen }}</td>
+
+
+
+            </tr>
+
+            <tr *ngIf="arregloListaParteUnidad?.length === 0">
+              <td colspan="10" class="text-center text-muted py-3">
+                No hay datos para mostrar
+              </td>
+            </tr>
+          </tbody>
+
+
+        </table>
+      </div>
+
+    </div>
+
+
+     <div class="container-fluid py-3">
+<div class="surface-100 border-round p-3 mb-3 flex align-items-center gap-3">
+
+    <i class="pi pi-info-circle text-primary text-xl"></i>
+
+    <div>
+        <div class="font-semibold text-900 mb-1">
+            Personal Bajo Control de Otras Unidades
+        </div>
+
+        <div class="text-600 text-sm">
+            Aquí aparece el personal perteneciente a su unidad que actualmente
+            se encuentra prestando servicio en otras unidades.
+        </div>
+    </div>
+
+</div>
+      <!-- HEADER -->
+      <div class="row align-items-center mb-3">
+
+
+        <div class="col-auto">
+          <button class="btn btn-sm btn-success" (click)="exportarExcelResumen('tablaList_prestamos')">
+            <i class="bi bi-file-earmark-excel me-1"></i>
+            Exportar
+          </button>
+        </div>
+      </div>
+
+
+
+      <!-- TABLA -->
+      <div class="table-responsive">
+
+
+
+        <table id="tablaList_prestamos" class="table table-bordered table-hover table-sm align-middle">
+          <thead class="table-light">
+            <tr>
+              <th style="width:60px">#</th>
+              <th>Identidad</th>
+              <th>Grado</th>
+              <th>Nombres</th>
+              <th>Cuenta Banco</th>
+              <th>Sexo</th>
+              <th>Fecha Ingreso</th>
+              <th>Fecha Ascenso</th>
+              <th>Fecha Asignación</th>
+              <th>Unidad Destino</th>
+
+
+
+
+
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr
+             (click)="seleccionarPersonal(r)"
+              style="cursor: pointer;"
+            *ngFor="let r of arregloListaPartepersonalPrestado; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ r.identidad }}</td>
+              <td>{{ r.grado }}</td>
+              <td>{{ r.nombres }}</td>
+              <td>{{ r.cuenta_banco }}</td>
+
+              <td>{{ r.sexo }}</td>
+              <td>{{ r.fecha_ingreso | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ r.fecha_ascenso | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ r.fecha_asignacion | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ r.unidad_prestado }}</td>
+
+
+
+            </tr>
+
+            <tr *ngIf="arregloListaPartepersonalPrestado?.length === 0">
+              <td colspan="10" class="text-center text-muted py-3">
+                No hay datos para mostrar
+              </td>
+            </tr>
+          </tbody>
+
+
+        </table>
+      </div>
+
+    </div>
+
+
+
+  </div>
   }
 
 </div>

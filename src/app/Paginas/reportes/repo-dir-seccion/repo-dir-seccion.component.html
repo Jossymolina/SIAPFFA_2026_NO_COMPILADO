@@ -1,0 +1,349 @@
+<div class="shell">
+
+  <!-- HEADER -->
+  <div class="topbar">
+    <div class="title-wrap">
+      <div class="dot"></div>
+      <div>
+        <div class="title">Reportes</div>
+        <div class="subtitle">Menú para las unidades/bases</div>
+      </div>
+    </div>
+
+    <!-- ✅ CORREGIDO: NO usar [(ngModel)]="q()" -->
+    <div class="search">
+      <span class="p-input-icon-left w-100">
+
+        <input pInputText class="w-100" [ngModel]="q()" (ngModelChange)="q.set($event)" placeholder="Buscar reporte..."
+          style="background-color: black;" />
+      </span>
+    </div>
+  </div>
+
+  <!-- FILTROS -->
+  <div class="filters">
+    <div class="filters-scroll">
+      <button type="button" class="chip" *ngFor="let c of categorias()" [class.active]="categoria() === c"
+        (click)="seleccionarCategoria(c)">
+        <i class="pi pi-tag"></i>
+        <span>{{ c }}</span>
+      </button>
+    </div>
+
+    <button type="button" class="btn-clear" (click)="limpiar()" pTooltip="Limpiar filtros">
+      <i class="pi pi-times"></i>
+    </button>
+  </div>
+
+  <!-- GRID (Bootstrap SOLO GRID) -->
+  <div class="container-fluid" *ngIf="!VentanaSeleccionada">
+    <div class="row g-3">
+      <div class="col-6 col-md-4 col-lg-3 col-xl-2" *ngFor="let r of filtrados()">
+        <p-card styleClass="app-card" (click)="abrir(r)">
+          <ng-template pTemplate="content">
+            <div class="app">
+              <div class="icon-box">
+                <i class="pi app-icon" [ngClass]="r.icon"></i>
+              </div>
+
+              <div class="app-title" [title]="r.titulo">{{ r.titulo }}</div>
+              <div class="app-desc" *ngIf="r.descripcion">{{ r.descripcion }}</div>
+
+              <div class="app-footer">
+                <span class="cat">
+                  <i class="pi pi-folder"></i> {{ r.categoria }}
+                </span>
+                <i class="pi pi-angle-right go"></i>
+              </div>
+            </div>
+          </ng-template>
+        </p-card>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  
+    @if(VentanaSeleccionada?.id==='r1'){
+  <div>
+
+    <div class="container-fluid py-3">
+
+      <!-- HEADER -->
+      <form  #formBuscar="ngForm" class="row align-items-center mb-3"   >
+              <div class="col-md-12" style="margin-top: 10px;">
+          <h5 class="mb-0">Parte de su unidad</h5>
+       
+        </div>
+
+        <div class="col-auto">
+          <button class="btn btn-sm btn-success" (click)="exportarExcelResumen('tablaResumen')">
+            <i class="bi bi-file-earmark-excel me-1"></i>
+            Exportar
+          </button>
+        </div>
+      </form>
+
+    @if (bajo_control.length > 0) {
+    <div class="surface-100 border-round-lg p-3 mb-3 flex align-items-center gap-3">
+
+        <div
+            class="flex align-items-center justify-content-center border-circle surface-200"
+            style="width: 38px; height: 38px;"
+        >
+            <i class="pi pi-info-circle text-primary text-xl"></i>
+        </div>
+
+        <div class="flex-1">
+            <div class="font-semibold text-900 mb-1">
+                Personal bajo control
+            </div>
+
+            <div class="text-600 text-sm">
+                Tiene <strong>{{ bajo_control.length }}</strong>
+                {{ bajo_control.length === 1 ? 'persona' : 'personas' }}
+                bajo control.
+                {{ bajo_control.length === 1 ? 'Esta persona aparece' : 'Estas personas aparecen' }}
+                al final de la tabla de <strong>Personal bajo control</strong>.
+            </div>
+        </div>
+
+        <i class="pi pi-angle-down text-500"></i>
+
+    </div>
+}
+
+
+
+      <!-- TABLA -->
+      <div class="table-responsive">
+        <label for="">Total {{ sumarPropiedad(arregloResumenParteUnidad,'cantidad') }}</label>
+        <table id="tablaResumen" class="table table-bordered table-hover table-sm align-middle">
+          <thead class="table-light">
+            <tr>
+              <th style="width:60px">#</th>
+              <th>Categoria</th>
+
+              <th>Grado</th>
+              <th class="text-end" style="width:120px">Cantidad</th>
+            </tr>
+          </thead>
+
+          <tbody>
+           <ng-container  *ngFor="let r of arregloResumenParteUnidad; let i = index">
+            <tr
+             
+            >
+              <td>{{ i + 1 }}</td>
+              <td>{{r.categoria}}</td>
+              <td>{{ r.nombre_grado }}</td>
+              <td class="text-end fw-bold">
+                {{ r.cantidad }}
+              </td>
+            </tr>
+
+            <tr *ngIf="arregloResumenParteUnidad?.length === 0">
+              <td colspan="3" class="text-center text-muted py-3">
+                No hay datos para mostrar
+              </td>
+            </tr>
+            </ng-container>
+          </tbody>
+
+
+        </table>
+      </div>
+
+    </div>
+
+    <div class="container-fluid py-3">
+
+      <!-- HEADER -->
+      <div class="row align-items-center mb-3">
+
+
+        <div class="col-auto">
+          <button class="btn btn-sm btn-success" (click)="exportarExcelResumen('tablaList')">
+            <i class="bi bi-file-earmark-excel me-1"></i>
+            Exportar
+          </button>
+        </div>
+      </div>
+
+
+
+      <!-- TABLA -->
+      <div class="table-responsive">
+
+
+
+        <table id="tablaBajoControl" class="table table-bordered table-hover table-sm align-middle">
+          <thead class="table-light">
+            <tr>
+              <th style="width:60px">#</th>
+              <th></th>
+
+              <th>Identidad</th>
+              <th>Grado</th>
+              <th>Nombres</th>
+              <th>Cuenta Banco</th>
+              <th>Sexo</th>
+              <th>Fecha Ingreso</th>
+              <th>Fecha Ascenso</th>
+              <th>Fecha Asignación</th>
+              <th>Fecha Nacimiento</th>
+
+
+
+
+
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr
+             (click)="seleccionarPersonal(r)"
+              style="cursor: pointer;"
+            *ngFor="let r of arregloListaParteUnidad; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>
+                    <img 
+                      width="50px" height="50px" style="object-fit: cover; border-radius: 50%;"
+                      src="{{_ServicioBackendService.url2 + 'sacarfoto/' + r.foto}}" 
+                      alt="">
+              </td>
+               
+              <td>{{ r.identidad }}</td>
+              <td>{{ r.grado }}</td>
+              <td>{{ r.nombres }}</td>
+              <td>{{ r.cuenta_banco }}</td>
+
+              <td>{{ r.sexo }}</td>
+              <td>{{ r.fecha_ingreso | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ r.fecha_ascenso | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ r.fecha_asignacion | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ r.fecha_nacimiento | date: 'dd/MM/yyyy' }}</td> 
+
+
+
+            </tr>
+
+            <tr *ngIf="arregloListaParteUnidad?.length === 0">
+              <td colspan="3" class="text-center text-muted py-3">
+                No hay datos para mostrar
+              </td>
+            </tr>
+          </tbody>
+
+
+        </table>
+      </div>
+
+    </div>
+
+
+
+
+
+
+      <div class="container-fluid py-3">
+
+      <!-- HEADER -->
+      <div class="row align-items-center mb-3">
+
+
+        <div class="col-auto">
+          <button class="btn btn-sm btn-success" (click)="exportarExcelResumen('tablaList')">
+            <i class="bi bi-file-earmark-excel me-1"></i>
+            Exportar
+          </button>
+        </div>
+      </div>
+
+
+
+      <!-- TABLA -->
+      <div class="table-responsive">
+
+
+
+        <table id="tablaList" class="table table-bordered table-hover table-sm align-middle">
+          <thead class="table-light">
+            <tr>
+              <th style="width:60px">#</th>
+              <th></th>
+              <th>Identidad</th>
+              <th>Grado</th>
+              <th>Nombres</th>
+              <th>Cuenta Banco</th>
+              <th>Sexo</th>
+              <th>Fecha Ingreso</th>
+              <th>Fecha Ascenso</th>
+              <th>Fecha Asignación</th>
+              <th>Fecha Nacimiento</th>
+
+
+
+
+
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr
+             (click)="seleccionarPersonal(r)"
+              style="cursor: pointer;"
+            *ngFor="let r of bajo_control; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>
+                    <img 
+                      width="50px" height="50px" style="object-fit: cover; border-radius: 50%;"
+                      src="{{_ServicioBackendService.url2 + 'sacarfoto/' + r.foto}}" 
+                      alt="">
+              </td>
+               
+              <td>{{ r.identidad }}</td>
+              <td>{{ r.grado }}</td>
+              <td>{{ r.nombres }}</td>
+              <td>{{ r.cuenta_banco }}</td>
+
+              <td>{{ r.sexo }}</td>
+              <td>{{ r.fecha_ingreso | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ r.fecha_ascenso | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ r.fecha_asignacion | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ r.fecha_nacimiento | date: 'dd/MM/yyyy' }}</td> 
+
+
+
+            </tr>
+
+            <tr *ngIf="arregloListaParteUnidad?.length === 0">
+              <td colspan="3" class="text-center text-muted py-3">
+                No hay datos para mostrar
+              </td>
+            </tr>
+          </tbody>
+
+
+        </table>
+      </div>
+
+    </div>
+
+
+  </div>
+  }
+ 
+
+</div>
+
+
+
+
+<p-dialog header="Visualizar perfil" [(visible)]="verperfil" [modal]="true" [draggable]="false" [resizable]="false"
+  [style]="{ width: '2000px', height: '1500px' }" [contentStyle]="{ overflow: 'auto' }" (onHide)="limpiarVariable()">
+  <app-visualizar-perfil *ngIf="personaSeleccionada" [identidad]="personaSeleccionada?.identidad">
+  </app-visualizar-perfil>
+</p-dialog>
