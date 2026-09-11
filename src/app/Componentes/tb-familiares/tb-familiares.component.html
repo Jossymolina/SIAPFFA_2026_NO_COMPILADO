@@ -23,42 +23,159 @@
  
 
 @if(arregloPadres){
-<label *ngIf="arregloPadres.length === 0" style="color: red; font-size: 0.8rem;">
-        * No tiene padres registrados *
-      </label>
+ <!-- =====================================================
+     PADRES REGISTRADOS
+     ===================================================== -->
 
-      <div class="table-responsive">
-        <table class="table table-sm table-hover table-bordered align-middle">
-          <thead class="table-light">
-            <tr>
-              <th style="width: 40px;">#</th>
-              <th>Identidad</th>
-              <th>Nombres</th>
-              <th>Apellidos</th>
-              <th>Tipo de sangre</th>
-              <th style="width: 80px;">Opción</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let i of arregloPadres; let index = index">
-              <td>{{ index + 1 }}</td>
-              <td>{{ i.identidad }}</td>
-              <td>{{ i.nombres }}</td>
-              <td>{{ i.apellidos }}</td>
-              <td>{{ i.tipo_sangre }}</td>
-              <td>
-                <button
-                 class="btn btn-sm btn-success"
-                  (click)="eliminarPadre(i)"
-                  title="Eliminar padre"
-                >
-                  <i class="pi pi-trash" aria-hidden="true"></i>
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+<div class="tabla-familia-wrapper">
+
+  <!-- SIN REGISTROS -->
+  <div
+    *ngIf="arregloPadres.length === 0"
+    class="familia-vacia"
+  >
+
+    <div class="familia-vacia-icono">
+      <i class="pi pi-users"></i>
+    </div>
+
+    <div class="familia-vacia-texto">
+
+      <strong>
+        No tiene padres registrados
+      </strong>
+
+      <span>
+        Los padres registrados aparecerán en esta sección.
+      </span>
+
+    </div>
+
+  </div>
+
+
+  <!-- TABLA -->
+  <div
+    class="table-responsive"
+    *ngIf="arregloPadres.length > 0"
+  >
+
+    <table class="table tabla-familia align-middle">
+
+      <thead>
+        <tr>
+
+          <th class="col-numero">
+            #
+          </th>
+
+          <th>
+            Identidad
+          </th>
+
+          <th>
+            Nombres
+          </th>
+
+          <th>
+            Apellidos
+          </th>
+
+          <th>
+            Tipo de sangre
+          </th>
+
+          <th class="col-opcion">
+            Opción
+          </th>
+
+        </tr>
+      </thead>
+
+
+      <tbody>
+
+        <tr
+          *ngFor="let i of arregloPadres; let index = index"
+        >
+
+          <!-- NÚMERO -->
+          <td class="numero-fila">
+            {{ index + 1 }}
+          </td>
+
+
+          <!-- IDENTIDAD -->
+          <td>
+
+            <div class="dato-familia">
+
+              <div class="dato-familia-icono">
+                <i class="pi pi-id-card"></i>
+              </div>
+
+              <span class="dato-identidad">
+                {{ i.identidad }}
+              </span>
+
+            </div>
+
+          </td>
+
+
+          <!-- NOMBRES -->
+          <td>
+            <span class="dato-texto">
+              {{ i.nombres }}
+            </span>
+          </td>
+
+
+          <!-- APELLIDOS -->
+          <td>
+            <span class="dato-texto">
+              {{ i.apellidos }}
+            </span>
+          </td>
+
+
+          <!-- TIPO DE SANGRE -->
+          <td>
+
+            <span class="tipo-sangre">
+              {{ i.tipo_sangre }}
+            </span>
+
+          </td>
+
+
+          <!-- OPCIÓN -->
+          <td class="opcion-cell">
+
+            <button
+              type="button"
+              class="btn btn-sm btn-outline-danger boton-eliminar-familia"
+              (click)="eliminarPadre(i)"
+              title="Eliminar padre"
+              aria-label="Eliminar padre"
+            >
+              <i
+                class="pi pi-trash"
+                aria-hidden="true"
+              ></i>
+            </button>
+
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
 }
       
     </div>
@@ -83,43 +200,159 @@
       </div>
      
       @if(arregloConyugue){
-<label *ngIf="!arregloConyugue || arregloConyugue.length === 0"
-             style="color: red; font-size: 0.8rem;">
-        * No tiene cónyuge registrado *
-      </label>
- 
-      <div class="table-responsive"  >
-        <table class="table table-sm table-hover table-bordered align-middle">
-          <thead class="table-light">
-            <tr>
-              <th style="width: 40px;">#</th>
-              <th>Identidad</th>
-              <th>Nombres</th>
-              <th>Apellidos</th>
-              <th>Tipo de sangre</th>
-              <th style="width: 80px;">Opción</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let i of arregloConyugue; let index = index">
-              <td>{{ index + 1 }}</td>
-              <td>{{ i.identidad }}</td>
-              <td>{{ i.nombres }}</td>
-              <td>{{ i.apellidos }}</td>
-              <td>{{ i.tipo_sangre }}</td>
-              <td>
-                <button
-                  class="btn btn-sm btn-success"
-                  (click)="eliminaconyugue(i)"
-                  title="Eliminar cónyuge"
-                >
-                  <i class="pi pi-trash" aria-hidden="true"></i>
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+<!-- =====================================================
+     CÓNYUGE REGISTRADO
+     ===================================================== -->
+
+<div class="tabla-conyugue-wrapper">
+
+  <!-- SIN REGISTRO -->
+  <div
+    *ngIf="!arregloConyugue || arregloConyugue.length === 0"
+    class="conyugue-vacio"
+  >
+
+    <div class="conyugue-vacio-icono">
+      <i class="pi pi-user"></i>
+    </div>
+
+    <div class="conyugue-vacio-texto">
+
+      <strong>
+        No tiene cónyuge registrado
+      </strong>
+
+      <span>
+        El cónyuge registrado aparecerá en esta sección.
+      </span>
+
+    </div>
+
+  </div>
+
+
+  <!-- TABLA -->
+  <div
+    class="table-responsive"
+    *ngIf="arregloConyugue && arregloConyugue.length > 0"
+  >
+
+    <table class="table tabla-conyugue align-middle">
+
+      <thead>
+        <tr>
+
+          <th class="col-numero">
+            #
+          </th>
+
+          <th>
+            Identidad
+          </th>
+
+          <th>
+            Nombres
+          </th>
+
+          <th>
+            Apellidos
+          </th>
+
+          <th>
+            Tipo de sangre
+          </th>
+
+          <th class="col-opcion">
+            Opción
+          </th>
+
+        </tr>
+      </thead>
+
+
+      <tbody>
+
+        <tr
+          *ngFor="let i of arregloConyugue; let index = index"
+        >
+
+          <!-- NÚMERO -->
+          <td class="numero-fila">
+            {{ index + 1 }}
+          </td>
+
+
+          <!-- IDENTIDAD -->
+          <td>
+
+            <div class="dato-conyugue">
+
+              <div class="dato-conyugue-icono">
+                <i class="pi pi-id-card"></i>
+              </div>
+
+              <span class="dato-identidad">
+                {{ i.identidad }}
+              </span>
+
+            </div>
+
+          </td>
+
+
+          <!-- NOMBRES -->
+          <td>
+            <span class="dato-texto-conyugue">
+              {{ i.nombres }}
+            </span>
+          </td>
+
+
+          <!-- APELLIDOS -->
+          <td>
+            <span class="dato-texto-conyugue">
+              {{ i.apellidos }}
+            </span>
+          </td>
+
+
+          <!-- TIPO DE SANGRE -->
+          <td>
+
+            <span class="tipo-sangre-conyugue">
+              {{ i.tipo_sangre }}
+            </span>
+
+          </td>
+
+
+          <!-- OPCIÓN -->
+          <td class="opcion-cell">
+
+            <button
+              type="button"
+              class="btn btn-sm btn-outline-danger boton-eliminar-conyugue"
+              (click)="eliminaconyugue(i)"
+              title="Eliminar cónyuge"
+              aria-label="Eliminar cónyuge"
+            >
+              <i
+                class="pi pi-trash"
+                aria-hidden="true"
+              ></i>
+            </button>
+
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
 }
       
     </div>
@@ -143,42 +376,159 @@
         </button>
       </div>
 @if (arregloHijos) {
- <label *ngIf="!arregloHijos || arregloHijos.length === 0" style="color: red; font-size: 0.8rem;">
-        * No tiene hijos registrados *
-      </label>
+<!-- =====================================================
+     HIJOS REGISTRADOS
+     ===================================================== -->
 
-      <div class="table-responsive">
-        <table class="table table-sm table-hover table-bordered align-middle">
-          <thead class="table-light">
-            <tr>
-              <th style="width: 40px;">#</th>
-              <th>Identidad</th>
-              <th>Nombres</th>
-              <th>Apellidos</th>
-              <th>Tipo de sangre</th>
-              <th style="width: 80px;">Opción</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let i of arregloHijos; let index = index">
-              <td>{{ index + 1 }}</td>
-              <td>{{ i.identidad }}</td>
-              <td>{{ i.nombres }}</td>
-              <td>{{ i.apellidos }}</td>
-              <td>{{ i.tipo_sangre }}</td>
-              <td>
-                <button
-                  class="btn btn-sm btn-success"
-                  (click)="eliminarHijos(i)"
-                  title="Eliminar hijo"
-                >
-                  <i class="pi pi-trash" aria-hidden="true"></i>
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+<div class="tabla-hijos-wrapper">
+
+  <!-- SIN REGISTROS -->
+  <div
+    *ngIf="!arregloHijos || arregloHijos.length === 0"
+    class="hijos-vacio"
+  >
+
+    <div class="hijos-vacio-icono">
+      <i class="pi pi-users"></i>
+    </div>
+
+    <div class="hijos-vacio-texto">
+
+      <strong>
+        No tiene hijos registrados
+      </strong>
+
+      <span>
+        Los hijos registrados aparecerán en esta sección.
+      </span>
+
+    </div>
+
+  </div>
+
+
+  <!-- TABLA -->
+  <div
+    class="table-responsive"
+    *ngIf="arregloHijos && arregloHijos.length > 0"
+  >
+
+    <table class="table tabla-hijos align-middle">
+
+      <thead>
+        <tr>
+
+          <th class="col-numero">
+            #
+          </th>
+
+          <th>
+            Identidad
+          </th>
+
+          <th>
+            Nombres
+          </th>
+
+          <th>
+            Apellidos
+          </th>
+
+          <th>
+            Tipo de sangre
+          </th>
+
+          <th class="col-opcion">
+            Opción
+          </th>
+
+        </tr>
+      </thead>
+
+
+      <tbody>
+
+        <tr
+          *ngFor="let i of arregloHijos; let index = index"
+        >
+
+          <!-- NÚMERO -->
+          <td class="numero-fila">
+            {{ index + 1 }}
+          </td>
+
+
+          <!-- IDENTIDAD -->
+          <td>
+
+            <div class="dato-hijo">
+
+              <div class="dato-hijo-icono">
+                <i class="pi pi-id-card"></i>
+              </div>
+
+              <span class="dato-identidad-hijo">
+                {{ i.identidad }}
+              </span>
+
+            </div>
+
+          </td>
+
+
+          <!-- NOMBRES -->
+          <td>
+            <span class="dato-texto-hijo">
+              {{ i.nombres }}
+            </span>
+          </td>
+
+
+          <!-- APELLIDOS -->
+          <td>
+            <span class="dato-texto-hijo">
+              {{ i.apellidos }}
+            </span>
+          </td>
+
+
+          <!-- TIPO DE SANGRE -->
+          <td>
+
+            <span class="tipo-sangre-hijo">
+              {{ i.tipo_sangre }}
+            </span>
+
+          </td>
+
+
+          <!-- OPCIÓN -->
+          <td class="opcion-cell">
+
+            <button
+              type="button"
+              class="btn btn-sm btn-outline-danger boton-eliminar-hijo"
+              (click)="eliminarHijos(i)"
+              title="Eliminar hijo"
+              aria-label="Eliminar hijo"
+            >
+              <i
+                class="pi pi-trash"
+                aria-hidden="true"
+              ></i>
+            </button>
+
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
 }
      
     </div>

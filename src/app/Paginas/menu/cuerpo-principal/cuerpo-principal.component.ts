@@ -126,6 +126,17 @@ export class CuerpoPrincipalComponent {
       route: '/menu/acuerdos-archivos',
       code:['Arch_0001']
     }
+,
+     {
+      title: 'Encuestas',
+      description: 'Módulo encargado de realizar encuestas de satisfacción y recopilar opiniones de los usuarios para mejorar los servicios.',
+      icon: 'pi pi-list-check',
+      stilos:"",
+      route: '/menu/motor-encuestas',
+      code:['Enc_0001']
+    } 
+,
+    
   ];
     constructor(private router: Router,private _ServicioBackendService:ServicioBackendService) {
 

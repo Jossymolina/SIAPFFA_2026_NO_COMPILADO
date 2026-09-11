@@ -1,0 +1,1307 @@
+/* =========================================
+   TARJETA TELÉFONOS
+   ========================================= */
+
+.telefono-card {
+  border: 1px solid #e5e7eb;
+
+  border-radius: 14px;
+
+  background: #ffffff;
+
+  overflow: hidden;
+}
+
+
+/* =========================================
+   HEADER
+   ========================================= */
+
+.telefono-header {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding: 16px 18px;
+
+  border-bottom: 1px solid #e5e7eb;
+
+  background: #fafafa;
+}
+
+
+/* =========================================
+   TÍTULO
+   ========================================= */
+
+.titulo-con-icono {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+}
+
+.titulo-icono {
+  width: 42px;
+  height: 42px;
+
+  min-width: 42px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background: #eff6ff;
+
+  color: #2563eb;
+
+  font-size: 17px;
+}
+
+.titulo-principal {
+  font-size: 15px;
+
+  font-weight: 700;
+
+  color: #1f2937;
+
+  line-height: 1.2;
+}
+
+.telefono-header .form-subtitle {
+  margin-top: 4px;
+
+  font-size: 11px;
+
+  color: #6b7280;
+
+  line-height: 1.4;
+}
+
+
+/* =========================================
+   BOTÓN AGREGAR
+   ========================================= */
+
+.btn-agregar-telefono {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  min-height: 36px;
+
+  padding: 7px 13px;
+
+  border: 0;
+
+  border-radius: 8px;
+
+  background: #111827;
+
+  color: #ffffff;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  white-space: nowrap;
+
+  transition:
+    background-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.btn-agregar-telefono:hover {
+  background: #1f2937;
+
+  color: #ffffff;
+}
+
+.btn-agregar-telefono:active {
+  transform: translateY(1px);
+}
+
+.btn-agregar-telefono i {
+  font-size: 12px;
+}
+
+
+/* =========================================
+   BODY
+   ========================================= */
+
+.telefono-body {
+  padding: 0 !important;
+}
+
+
+/* =========================================
+   TABLA
+   ========================================= */
+
+.tabla-telefono-wrapper {
+  width: 100%;
+}
+
+.tabla-telefono {
+  margin: 0;
+
+  min-width: 500px;
+}
+
+.tabla-telefono thead th {
+  padding: 12px 14px;
+
+  border-bottom: 1px solid #e5e7eb;
+
+  background: #f8fafc;
+
+  color: #6b7280;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.03em;
+
+  white-space: nowrap;
+}
+
+.tabla-telefono tbody td {
+  padding: 13px 14px;
+
+  border-bottom: 1px solid #f1f5f9;
+
+  font-size: 13px;
+
+  color: #374151;
+}
+
+.tabla-telefono tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.tabla-telefono tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.tabla-telefono tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+
+/* =========================================
+   COLUMNAS
+   ========================================= */
+
+.tabla-telefono .col-numero {
+  width: 50px;
+}
+
+.tabla-telefono .col-opcion {
+  width: 80px;
+}
+
+
+/* =========================================
+   NÚMERO DE FILA
+   ========================================= */
+
+.tabla-telefono .numero-fila {
+  color: #9ca3af;
+
+  font-size: 12px;
+
+  font-weight: 600;
+}
+
+
+/* =========================================
+   TELÉFONO
+   ========================================= */
+
+.telefono-dato {
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+}
+
+.telefono-icono {
+  width: 32px;
+  height: 32px;
+
+  min-width: 32px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  background: #eff6ff;
+
+  color: #2563eb;
+
+  font-size: 13px;
+}
+
+.telefono-dato span {
+  font-weight: 600;
+
+  color: #374151;
+}
+
+
+/* =========================================
+   OPCIÓN
+   ========================================= */
+
+.telefono-opcion {
+  text-align: center;
+}
+
+.boton-eliminar-telefono {
+  width: 34px;
+  height: 34px;
+
+  padding: 0;
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+}
+
+.boton-eliminar-telefono i {
+  font-size: 13px;
+}
+
+
+/* =========================================
+   SIN REGISTROS
+   ========================================= */
+
+.telefono-vacio {
+  display: flex;
+
+  align-items: center;
+
+  gap: 13px;
+
+  margin: 18px;
+
+  padding: 15px 16px;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 10px;
+
+  background: #fafafa;
+}
+
+.telefono-vacio-icono {
+  width: 38px;
+  height: 38px;
+
+  min-width: 38px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 9px;
+
+  background: #f3f4f6;
+
+  color: #9ca3af;
+
+  font-size: 15px;
+}
+
+.telefono-vacio-texto {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.telefono-vacio-texto strong {
+  font-size: 13px;
+
+  font-weight: 600;
+
+  color: #374151;
+}
+
+.telefono-vacio-texto span {
+  font-size: 11px;
+
+  color: #6b7280;
+}
+
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+
+@media (max-width: 576px) {
+
+  .telefono-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 13px;
+  }
+
+  .btn-agregar-telefono {
+    width: 100%;
+  }
+
+  .telefono-vacio {
+    align-items: flex-start;
+  }
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =========================================
+   TARJETA CORREOS
+   ========================================= */
+
+.correo-card {
+  border: 1px solid #e5e7eb;
+
+  border-radius: 14px;
+
+  background: #ffffff;
+
+  overflow: hidden;
+}
+
+
+/* =========================================
+   HEADER
+   ========================================= */
+
+.correo-header {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding: 16px 18px;
+
+  border-bottom: 1px solid #e5e7eb;
+
+  background: #fafafa;
+}
+
+
+/* =========================================
+   TÍTULO
+   ========================================= */
+
+.correo-header .titulo-con-icono {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+}
+
+.correo-header .titulo-icono {
+  width: 42px;
+  height: 42px;
+
+  min-width: 42px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background: #eff6ff;
+
+  color: #2563eb;
+
+  font-size: 17px;
+}
+
+.correo-header .titulo-principal {
+  font-size: 15px;
+
+  font-weight: 700;
+
+  color: #1f2937;
+
+  line-height: 1.2;
+}
+
+.correo-header .form-subtitle {
+  margin-top: 4px;
+
+  font-size: 11px;
+
+  color: #6b7280;
+
+  line-height: 1.4;
+}
+
+
+/* =========================================
+   BOTÓN AGREGAR
+   ========================================= */
+
+.btn-agregar-correo {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  min-height: 36px;
+
+  padding: 7px 13px;
+
+  border: 0;
+
+  border-radius: 8px;
+
+  background: #111827;
+
+  color: #ffffff;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  white-space: nowrap;
+
+  transition:
+    background-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.btn-agregar-correo:hover {
+  background: #1f2937;
+
+  color: #ffffff;
+}
+
+.btn-agregar-correo:active {
+  transform: translateY(1px);
+}
+
+.btn-agregar-correo i {
+  font-size: 12px;
+}
+
+
+/* =========================================
+   BODY
+   ========================================= */
+
+.correo-body {
+  padding: 0 !important;
+}
+
+
+/* =========================================
+   TABLA
+   ========================================= */
+
+.tabla-correo-wrapper {
+  width: 100%;
+}
+
+.tabla-correo {
+  margin: 0;
+
+  min-width: 500px;
+}
+
+.tabla-correo thead th {
+  padding: 12px 14px;
+
+  border-bottom: 1px solid #e5e7eb;
+
+  background: #f8fafc;
+
+  color: #6b7280;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.03em;
+
+  white-space: nowrap;
+}
+
+.tabla-correo tbody td {
+  padding: 13px 14px;
+
+  border-bottom: 1px solid #f1f5f9;
+
+  font-size: 13px;
+
+  color: #374151;
+}
+
+.tabla-correo tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.tabla-correo tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.tabla-correo tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+
+/* =========================================
+   COLUMNAS
+   ========================================= */
+
+.tabla-correo .col-numero {
+  width: 50px;
+}
+
+.tabla-correo .col-opcion {
+  width: 80px;
+}
+
+
+/* =========================================
+   NÚMERO
+   ========================================= */
+
+.tabla-correo .numero-fila {
+  color: #9ca3af;
+
+  font-size: 12px;
+
+  font-weight: 600;
+}
+
+
+/* =========================================
+   CORREO
+   ========================================= */
+
+.correo-dato {
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+}
+
+.correo-dato-icono {
+  width: 32px;
+  height: 32px;
+
+  min-width: 32px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  background: #eff6ff;
+
+  color: #2563eb;
+
+  font-size: 13px;
+}
+
+.correo-dato span {
+  font-weight: 600;
+
+  color: #374151;
+
+  word-break: break-word;
+}
+
+
+/* =========================================
+   OPCIÓN
+   ========================================= */
+
+.correo-opcion {
+  text-align: center;
+}
+
+.boton-eliminar-correo {
+  width: 34px;
+  height: 34px;
+
+  padding: 0;
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+}
+
+.boton-eliminar-correo i {
+  font-size: 13px;
+}
+
+
+/* =========================================
+   SIN REGISTROS
+   ========================================= */
+
+.correo-vacio {
+  display: flex;
+
+  align-items: center;
+
+  gap: 13px;
+
+  margin: 18px;
+
+  padding: 15px 16px;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 10px;
+
+  background: #fafafa;
+}
+
+.correo-vacio-icono {
+  width: 38px;
+  height: 38px;
+
+  min-width: 38px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 9px;
+
+  background: #f3f4f6;
+
+  color: #9ca3af;
+
+  font-size: 15px;
+}
+
+.correo-vacio-texto {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.correo-vacio-texto strong {
+  font-size: 13px;
+
+  font-weight: 600;
+
+  color: #374151;
+}
+
+.correo-vacio-texto span {
+  font-size: 11px;
+
+  color: #6b7280;
+}
+
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+
+@media (max-width: 576px) {
+
+  .correo-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 13px;
+  }
+
+  .btn-agregar-correo {
+    width: 100%;
+  }
+
+  .correo-vacio {
+    align-items: flex-start;
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =========================================================
+   CONTENEDOR PRINCIPAL
+   ========================================================= */
+
+.informacion-adicional-wrapper {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.informacion-adicional-card {
+  padding: 0 !important;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+
+  background: #ffffff;
+
+  overflow: hidden;
+}
+
+
+/* =========================================================
+   SECCIONES
+   ========================================================= */
+
+.seccion-informacion {
+  padding: 18px;
+}
+
+
+/* =========================================================
+   HEADER DE SECCIÓN
+   ========================================================= */
+
+.seccion-header {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+  margin-bottom: 16px;
+}
+
+.seccion-titulo-area {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  min-width: 0;
+}
+
+.seccion-icono {
+  width: 42px;
+  height: 42px;
+
+  min-width: 42px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background: #eff6ff;
+
+  color: #2563eb;
+
+  font-size: 17px;
+}
+
+.seccion-titulo {
+  font-size: 15px;
+
+  font-weight: 700;
+
+  line-height: 1.2;
+
+  color: #1f2937;
+}
+
+.seccion-subtitulo {
+  margin-top: 4px;
+
+  font-size: 11px;
+
+  line-height: 1.4;
+
+  color: #6b7280;
+}
+
+
+/* =========================================================
+   BOTÓN AGREGAR
+   ========================================================= */
+
+.btn-agregar-informacion {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  min-height: 36px;
+
+  padding: 7px 13px;
+
+  border: 0;
+
+  border-radius: 8px;
+
+  background: #111827;
+
+  color: #ffffff;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  white-space: nowrap;
+
+  transition:
+    background-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.btn-agregar-informacion:hover {
+  background: #1f2937;
+
+  color: #ffffff;
+}
+
+.btn-agregar-informacion:active {
+  transform: translateY(1px);
+}
+
+.btn-agregar-informacion i {
+  font-size: 12px;
+}
+
+
+/* =========================================================
+   TABLA
+   ========================================================= */
+
+.tabla-informacion-wrapper {
+  width: 100%;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 10px;
+
+  overflow: hidden;
+}
+
+.tabla-informacion {
+  margin: 0;
+
+  min-width: 500px;
+}
+
+.tabla-informacion thead th {
+  padding: 11px 13px;
+
+  border-bottom: 1px solid #e5e7eb;
+
+  background: #f8fafc;
+
+  color: #6b7280;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.03em;
+
+  white-space: nowrap;
+}
+
+.tabla-informacion tbody td {
+  padding: 12px 13px;
+
+  border-bottom: 1px solid #f1f5f9;
+
+  font-size: 13px;
+
+  color: #374151;
+}
+
+.tabla-informacion tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.tabla-informacion tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.tabla-informacion tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+
+/* =========================================================
+   COLUMNAS
+   ========================================================= */
+
+.tabla-informacion .col-numero {
+  width: 50px;
+}
+
+.tabla-informacion .col-nivel {
+  width: 180px;
+}
+
+.tabla-informacion .col-opcion {
+  width: 80px;
+}
+
+
+/* =========================================================
+   NÚMERO
+   ========================================================= */
+
+.tabla-informacion .numero-fila {
+  color: #9ca3af;
+
+  font-size: 12px;
+
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   DATOS
+   ========================================================= */
+
+.dato-informacion {
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+}
+
+.dato-informacion-icono {
+  width: 32px;
+  height: 32px;
+
+  min-width: 32px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  background: #eff6ff;
+
+  color: #2563eb;
+
+  font-size: 13px;
+}
+
+.dato-informacion span {
+  font-weight: 600;
+
+  color: #374151;
+}
+
+
+/* =========================================================
+   NIVEL
+   ========================================================= */
+
+.nivel-container {
+  width: 100%;
+
+  max-width: 160px;
+}
+
+.nivel-superior {
+  display: flex;
+
+  justify-content: flex-end;
+
+  margin-bottom: 5px;
+}
+
+.nivel-valor {
+  font-size: 12px;
+
+  font-weight: 700;
+
+  color: #374151;
+}
+
+.nivel-barra {
+  width: 100%;
+
+  height: 6px;
+
+  overflow: hidden;
+
+  border-radius: 999px;
+
+  background: #e5e7eb;
+}
+
+.nivel-barra-fill {
+  height: 100%;
+
+  border-radius: inherit;
+
+  background: #2563eb;
+
+  transition: width 0.3s ease;
+}
+
+
+/* =========================================================
+   OPCIONES
+   ========================================================= */
+
+.opcion-cell {
+  text-align: center;
+}
+
+.boton-eliminar-informacion {
+  width: 34px;
+  height: 34px;
+
+  padding: 0;
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+}
+
+.boton-eliminar-informacion i {
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   SIN REGISTROS
+   ========================================================= */
+
+.informacion-vacia {
+  display: flex;
+
+  align-items: center;
+
+  gap: 13px;
+
+  padding: 14px 15px;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 10px;
+
+  background: #fafafa;
+}
+
+.informacion-vacia-icono {
+  width: 38px;
+  height: 38px;
+
+  min-width: 38px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 9px;
+
+  background: #f3f4f6;
+
+  color: #9ca3af;
+
+  font-size: 15px;
+}
+
+.informacion-vacia-texto {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.informacion-vacia-texto strong {
+  font-size: 13px;
+
+  font-weight: 600;
+
+  color: #374151;
+}
+
+.informacion-vacia-texto span {
+  font-size: 11px;
+
+  color: #6b7280;
+}
+
+
+/* =========================================================
+   SEPARADOR
+   ========================================================= */
+
+.seccion-separador {
+  padding: 0 18px;
+}
+
+.seccion-separador span {
+  display: block;
+
+  height: 1px;
+
+  background: #e5e7eb;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 576px) {
+
+  .seccion-informacion {
+    padding: 15px;
+  }
+
+  .seccion-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 13px;
+  }
+
+  .btn-agregar-informacion {
+    width: 100%;
+  }
+
+  .informacion-vacia {
+    align-items: flex-start;
+  }
+
+  .seccion-separador {
+    padding: 0 15px;
+  }
+
+}

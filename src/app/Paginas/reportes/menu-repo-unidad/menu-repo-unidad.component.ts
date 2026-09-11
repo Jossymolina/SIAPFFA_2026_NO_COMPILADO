@@ -311,7 +311,18 @@ export class MenuRepoUnidadComponent implements OnInit {
 
   arregloOrganizacionCompleta = []
   sacarOrganizacion(form: NgForm, objeto) {
+ this.arregloOrganizacionCompleta =[]
+let q={cadena:``,data:{} as any}
+if(objeto === "unidad"){
+       q.data.unidad_tipo = form.value.seccion.data.unidad_tipo
+       q.data.idunidad =  form.value.seccion.idunidad
+       console.log("fuerza",q)
 
+} 
+ 
+   this.ejecucatarConsultaOrganizacion(q)
+/*
+ 
     this.arregloOrganizacionCompleta = []
     let q = { cadena: ``, data: {} as any }
     console.log("Objeto ", objeto)
@@ -328,7 +339,7 @@ export class MenuRepoUnidadComponent implements OnInit {
       console.log("Seccion qury", q)
       q.data.idunidad = Number(form.value.seccion.key);
     }
-    this.ejecucatarConsultaOrganizacion(q)
+    this.ejecucatarConsultaOrganizacion(q)*/
   }
 
   ejecucatarConsultaOrganizacion(p) {

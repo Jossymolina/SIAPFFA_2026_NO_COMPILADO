@@ -34,6 +34,7 @@ import { PopoverModule } from 'primeng/popover';
 
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
+import { InputGroup } from 'primeng/inputgroup';
 
 (pdfMake as any).vfs = (pdfFonts as any).vfs;
 
@@ -89,13 +90,20 @@ export interface OpcionCriterio {
     TabsModule,
     AvatarModule,
     PopoverModule,
-    TreeSelectModule
+    TreeSelectModule,
+    InputGroup
 
   ],
   templateUrl: './crear-ternas.component.html',
   styleUrl: './crear-ternas.component.css',
 })
 export class CrearTernasComponent implements OnInit {
+
+
+ 
+
+
+
   mostrarModal = false
   funciones: any = {};
   constructor(
@@ -223,7 +231,6 @@ export class CrearTernasComponent implements OnInit {
       factor_nota_carrera: this.factor_nota_carrera.bind(this),
       factor_sobre_peso: this.factor_sobre_peso.bind(this),
       factor_apto: this.factor_apto.bind(this)
-
     };
 
 
@@ -1155,7 +1162,7 @@ export class CrearTernasComponent implements OnInit {
   personaSeleccionada = null;
   armapersonaseleccionada = null;
   unidad_asignacion = null
-
+ 
   buscarPersonaIdentidad(identidad) {
     this._ServiciosMensajeService.show()
     this.armapersonaseleccionada = null;
@@ -1173,8 +1180,8 @@ export class CrearTernasComponent implements OnInit {
             if (Response.mensaje) {
               this._ServiciosMensajeService.mensajeMalo(Response.mensaje)
             } else {
-
-
+ 
+ 
               this.personaBuscada = Response.resultado[0]
               this.armapersonaseleccionada = Response.arma[0]
               this.buscarunidadAsignacion(identidad)

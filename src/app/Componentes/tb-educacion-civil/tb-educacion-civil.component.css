@@ -1,0 +1,616 @@
+/* =========================================
+   DIALOG EDUCACIÓN CIVIL
+   ========================================= */
+
+.dialog-educacion {
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+
+/* =========================================
+   INTRODUCCIÓN
+   ========================================= */
+
+.educacion-intro {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  padding: 16px;
+  margin-bottom: 22px;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+
+  background: #f8fafc;
+}
+
+.educacion-intro-icon {
+  width: 44px;
+  height: 44px;
+
+  min-width: 44px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 11px;
+
+  background: #e8f0fe;
+  color: #2563eb;
+
+  font-size: 20px;
+}
+
+.educacion-intro h5 {
+  margin: 0 0 3px 0;
+
+  font-size: 16px;
+  font-weight: 700;
+
+  color: #1f2937;
+}
+
+.educacion-intro p {
+  margin: 0;
+
+  font-size: 13px;
+  color: #6b7280;
+}
+
+
+/* =========================================
+   CAMPOS
+   ========================================= */
+
+.campo {
+  margin-bottom: 4px;
+}
+
+.form-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  margin-bottom: 7px;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  color: #374151;
+}
+
+.form-label i {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.campo-obligatorio {
+  color: #dc2626;
+  font-weight: 700;
+}
+
+
+/* =========================================
+   INPUTS
+   ========================================= */
+
+.formulario-educacion .form-control {
+  height: 42px;
+
+  border: 1px solid #d1d5db;
+  border-radius: 9px;
+
+  font-size: 14px;
+
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.formulario-educacion .form-control:hover {
+  border-color: #9ca3af;
+}
+
+.formulario-educacion .form-control:focus {
+  border-color: #3b82f6;
+
+  box-shadow:
+    0 0 0 3px rgba(59, 130, 246, 0.12);
+}
+
+
+/* =========================================
+   AYUDA
+   ========================================= */
+
+.campo-ayuda {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  margin-top: 6px;
+
+  font-size: 11px;
+
+  line-height: 1.4;
+
+  color: #6b7280;
+}
+
+.campo-ayuda i {
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+
+/* =========================================
+   PORCENTAJE
+   ========================================= */
+
+.input-porcentaje {
+  position: relative;
+}
+
+.input-porcentaje .form-control {
+  padding-right: 40px;
+}
+
+.input-porcentaje span {
+  position: absolute;
+
+  right: 13px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  font-size: 13px;
+  font-weight: 600;
+
+  color: #6b7280;
+
+  pointer-events: none;
+}
+
+
+/* =========================================
+   FOOTER
+   ========================================= */
+
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+  gap: 10px;
+
+  width: 100%;
+}
+
+.boton-cerrar {
+  color: #6b7280 !important;
+}
+
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+
+@media (max-width: 576px) {
+
+  .educacion-intro {
+    padding: 13px;
+  }
+
+  .educacion-intro-icon {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+  }
+
+  .dialog-footer {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .dialog-footer button {
+    width: 100%;
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =========================================
+   CONTENEDOR
+   ========================================= */
+
+.tabla-educacion-wrapper {
+  width: 100%;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+
+  background: #ffffff;
+
+  overflow: hidden;
+}
+
+
+/* =========================================
+   HEADER
+   ========================================= */
+
+.tabla-header {
+  display: flex;
+  align-items: center;
+
+  padding: 16px 18px;
+
+  border-bottom: 1px solid #e5e7eb;
+
+  background: #fafafa;
+}
+
+.tabla-titulo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  margin: 0;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  color: #1f2937;
+}
+
+.tabla-titulo i {
+  font-size: 15px;
+  color: #2563eb;
+}
+
+.tabla-subtitulo {
+  display: block;
+
+  margin-top: 3px;
+
+  font-size: 11px;
+
+  color: #6b7280;
+}
+
+
+/* =========================================
+   TABLA
+   ========================================= */
+
+.tabla-educacion {
+  margin: 0;
+
+  min-width: 850px;
+}
+
+.tabla-educacion thead th {
+  padding: 12px 14px;
+
+  border-bottom: 1px solid #e5e7eb;
+
+  background: #f8fafc;
+
+  color: #6b7280;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+
+  white-space: nowrap;
+}
+
+.tabla-educacion tbody td {
+  padding: 13px 14px;
+
+  border-bottom: 1px solid #f1f5f9;
+
+  font-size: 13px;
+
+  color: #374151;
+}
+
+.tabla-educacion tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.tabla-educacion tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.tabla-educacion tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+
+/* =========================================
+   COLUMNAS
+   ========================================= */
+
+.col-numero {
+  width: 50px;
+}
+
+.col-progreso {
+  width: 150px;
+}
+
+.col-opciones {
+  width: 80px;
+}
+
+
+/* =========================================
+   NÚMERO
+   ========================================= */
+
+.numero-fila {
+  color: #9ca3af !important;
+
+  font-size: 12px !important;
+
+  font-weight: 600;
+}
+
+
+/* =========================================
+   UNIVERSIDAD
+   ========================================= */
+
+.dato-principal {
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  min-width: 220px;
+}
+
+.dato-icono {
+  width: 32px;
+  height: 32px;
+
+  min-width: 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  background: #eff6ff;
+
+  color: #2563eb;
+
+  font-size: 13px;
+}
+
+.dato-principal span {
+  font-weight: 600;
+
+  color: #374151;
+}
+
+
+/* =========================================
+   PROFESIÓN
+   ========================================= */
+
+.profesion {
+  font-weight: 500;
+
+  color: #374151;
+}
+
+
+/* =========================================
+   DATOS SECUNDARIOS
+   ========================================= */
+
+.dato-secundario {
+  display: flex;
+  align-items: center;
+
+  gap: 6px;
+
+  white-space: nowrap;
+
+  color: #6b7280;
+}
+
+.dato-secundario i {
+  font-size: 12px;
+
+  color: #9ca3af;
+}
+
+
+/* =========================================
+   PROGRESO
+   ========================================= */
+
+.progreso-cell {
+  min-width: 140px;
+}
+
+.progreso-info {
+  display: flex;
+  justify-content: flex-end;
+
+  margin-bottom: 5px;
+}
+
+.progreso-valor {
+  font-size: 12px;
+
+  font-weight: 700;
+
+  color: #374151;
+}
+
+.progreso-barra {
+  width: 100%;
+  height: 6px;
+
+  overflow: hidden;
+
+  border-radius: 999px;
+
+  background: #e5e7eb;
+}
+
+.progreso-barra-fill {
+  height: 100%;
+
+  border-radius: inherit;
+
+  background: #2563eb;
+
+  transition: width 0.3s ease;
+}
+
+
+/* =========================================
+   OPCIONES
+   ========================================= */
+
+.opciones-cell {
+  text-align: center;
+}
+
+.boton-eliminar {
+  width: 34px;
+  height: 34px;
+
+  padding: 0;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+}
+
+.boton-eliminar i {
+  font-size: 13px;
+}
+
+
+/* =========================================
+   TABLA VACÍA
+   ========================================= */
+
+.tabla-vacia {
+  padding: 40px 20px !important;
+
+  text-align: center;
+}
+
+.tabla-vacia-contenido {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 5px;
+}
+
+.tabla-vacia-icono {
+  width: 44px;
+  height: 44px;
+
+  margin-bottom: 5px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #f3f4f6;
+
+  color: #9ca3af;
+
+  font-size: 18px;
+}
+
+.tabla-vacia-contenido strong {
+  font-size: 13px;
+
+  color: #374151;
+}
+
+.tabla-vacia-contenido span {
+  font-size: 11px;
+
+  color: #9ca3af;
+}
+
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+
+@media (max-width: 768px) {
+
+  .tabla-header {
+    padding: 14px;
+  }
+
+  .tabla-educacion tbody td {
+    padding: 11px 12px;
+  }
+
+}
+
+
+
+.select-formulario {
+  width: 100% !important;
+  display: flex !important;
+}

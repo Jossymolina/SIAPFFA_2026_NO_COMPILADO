@@ -314,12 +314,14 @@ categoriasSeleccionadas: any[] = [];
         cadena2:""
       }
      
-      if(form.value.categoria.id===1 || form.value.categoria.id===2 ){
+      
            cade.cadena1= `   and  categoria.idcategoria in (${form.value.categoria.nivel.join(',')}) `
-           cade.cadena2 =  `  and   c.idcategoria in (${form.value.categoria.nivel.join(',')}) `
-      } 
+           cade.cadena2 =  `  and   c.idcategoria in (${form.value.categoria.nivel.join(',')})  and  p.combatiente  in (${form.value.combatiente.join(',')})  `
+     
+           cade.cadena1 += ` and  personal.combatiente  in (${form.value.combatiente.join(',')})   `
+           
+       
 
-      cade.cadena1 += ` and  personal.combatiente  in (${form.value.combatiente.join(',')})   `
        
       
      this.arregloListaParteUnidad = []
@@ -353,7 +355,6 @@ categoriasSeleccionadas: any[] = [];
           cadena1 :"",
           cadena2:""
       }
-console.log(form.value)
       
          cade.cadena1= `  and   categoria.idcategoria in (${form.value.categoria.flatMap((c: any) => c.nivel).join(',')}) `
          cade.cadena2= `  and   c.idcategoria in (${form.value.categoria.flatMap((c: any) => c.nivel).join(',')}) `
@@ -362,7 +363,6 @@ console.log(form.value)
      this.arregloListaParteUnidad = []
      this.arregloResumenParteUnidad =[]
   this.arregloToe=[]
-console.log(this.formbuscar.value.seccion)
     let param = {
      cadena:cade.cadena1,
      cadena2:cade.cadena2,
@@ -371,7 +371,6 @@ console.log(this.formbuscar.value.seccion)
     this._ServiciosMensajeService.show("Cargando parte de la unidad......");
     this._ServicioBackendService.sacarParteMenuInicio(param).subscribe({
       next: (response) => {
-        console.log(response)
         this._ServiciosMensajeService.hide()
         if (response.error) return this._ServiciosMensajeService.mensajeMalo(response.error);
         if (response.mensaje) return this._ServiciosMensajeService.mensajeMalo(response.mensaje);
@@ -717,21 +716,25 @@ sacarOrganizacion(form:NgForm,objeto){
  
 this.arregloOrganizacionCompleta =[]
 let q={cadena:``,data:{} as any}
-   if(objeto === "fuerza"){
+if(objeto === "EMC-Reporte"){
+       q.data.unidad_tipo = form.value.seccion.data.unidad_tipo
+       q.data.idunidad =  form.value.seccion.idunidad
+
+}/*else if(objeto === "fuerza"){
      q.cadena=` and ua.idfuerza=${form.value.fuerza.idfuerza}  and nivel in (${form.value.categoria.nivel }) `
    }else if(objeto === "unidad"){
      q.cadena=` and ua.idunidad=${form.value.unidad.idunidad}`
       q.data.cadena = ` and idunidad  =${form.value.unidad.idunidad} ` 
    } else  if(objeto === "seccion"){
       q.data.idunidad = Number(form.value.seccion.key);
-   }
+   }*/
 
    this.ejecucatarConsultaOrganizacion(q)
 }
 
 ejecucatarConsultaOrganizacion(p){
  
-
+    
    this._ServiciosMensajeService.show("Buscando personal.....");
     
    this._ServicioBackendService.sacarOrganizacionCompleta(p).subscribe({
@@ -756,14 +759,15 @@ buscar65Anos(data,objeto){
 let cadena = ""
  if(objeto==="fuerza") cadena=` and month(fecha_nacimiento)=month('${data.value.fecha}-1')  `
  
- this.buscarPersonal_65_anos(cadena)
+ this.buscarPersonal_65_anos(cadena,`'${data.value.fecha}-1'`)
  
 }
 arregloResultado = []
-buscarPersonal_65_anos(cadenita){
+buscarPersonal_65_anos(cadenita,fecha?:string){
   let p={
     cadena:cadenita,
-    idunidad: this.formbuscar.value.seccion.idunidad
+    idunidad: this.formbuscar.value.seccion.idunidad,
+    fecha :fecha
   }
   this._ServiciosMensajeService.show("Buscando personal de 65 años o mas.....");
   this.arregloResultado = []

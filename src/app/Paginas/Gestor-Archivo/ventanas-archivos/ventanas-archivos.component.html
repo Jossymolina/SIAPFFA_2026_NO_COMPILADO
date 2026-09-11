@@ -55,11 +55,14 @@
     </div>
 
     <div class="toolbar-right">
+        <!-- 
+Con tiempo eliminar lo que este boton activa
+
         <button pButton title="Ver mis compartidos" style="background-color: rgb(29, 3, 88);  border-color: black;"
             (click)="cambiarVentana('Compartidos');">
             <i class="pi pi-share-alt"></i>
 
-        </button>
+        </button>-->
         <button pButton title="Nueva Carpeta" style="background-color: brown; border-color: black; " class="btn-action"
             (click)="crearCarpeta();">
             <i class="pi pi-folder-plus"></i>
@@ -68,7 +71,7 @@
 
         <button pButton class="btn-action" title="Subir Archivo" sty
             (click)=" limpiarFomsubir(); modalSubirArchivo=true; ">
-            <i class="pi pi-upload"></i>  
+            <i class="pi pi-upload"></i>
 
         </button>
         <form #formbuscarArchivos="ngForm">
@@ -86,17 +89,58 @@
 
 </div>
 
+
+
+
 <div *ngIf="ventanaAVisualizar==='Principal'"
     style="height: 800px; overflow-y: auto; background-color: rgb(255, 255, 255);"
     (contextmenu)="abrirMenuClickDerecho($event)">
-    <div class="explorer-content" style="background-color: rgb(255, 255, 255); ">
 
-        <div *ngFor="let item of archivos" class="archivo-card" (dblclick)="abrir(item)">
+    <div class="info-acceso">
+    <span>
+        <span class="indicador propio"></span>
+        Propio
+    </span>
 
+    <span>
+        <span class="indicador compartido"></span>
+        Compartido
+    </span>
+
+    <span>
+        <span class="indicador ruta"></span>
+        Ruta
+    </span>
+</div>
+
+    <div class="explorer-content" style="background-color: rgb(255, 255, 255);">
+
+        <div *ngFor="let item of archivos" class="archivo-card" [ngClass]="{
+        'acceso-propio': item.origen_acceso === 'PROPIO',
+        'acceso-compartido': item.origen_acceso === 'COMPARTIDO',
+        'acceso-ruta': item.origen_acceso === 'RUTA'
+    }" (dblclick)="abrir(item)">
+            <div *ngIf="item.origen_acceso === 'COMPARTIDO'" class="indicador-compartido" title="Compartido">
+                <i class="pi pi-share-alt"></i>
+            </div>
+
+            <div *ngIf="item.origen_acceso === 'PROPIO'" class="indicador-propio" title="Propio">
+                <i class="pi pi-user"></i>
+            </div>
             <button class="btn-opciones" (click)="mostrarMenuBoton($event,item)">
-                <i class="pi pi-ellipsis-v"> </i>
-
+                <i class="pi pi-ellipsis-v"></i>
             </button>
+
+            <!-- CHECKBOX DE SELECCIÓN -->
+            <ng-container *ngIf="modoSeleccionMultipleExplorer  ">
+                <div class="checkbox-seleccion">
+
+                    <input style="padding: 2px;" type="checkbox"
+                        [checked]="archivosSeleccionadosExplorer.includes(item)" (click)="$event.stopPropagation()"
+                        (change)="seleccionarItemExplorer(item)">
+
+                </div>
+            </ng-container>
 
             <ng-container *ngIf="item.tipo === 'CARPETA'">
 
@@ -105,9 +149,7 @@
                     <div class="folder-tab"></div>
 
                     <div class="folder-body">
-
                         <i class="pi pi-folder-open"></i>
-
                     </div>
 
                 </div>
@@ -116,7 +158,7 @@
 
             <ng-container *ngIf="item.tipo === 'ARCHIVO'">
 
-                <div class="file" [title]="item.nombre" (click)="descargarArchivo(item)">
+                <div class="file" [title]="item.nombre">
 
                     <i class="pi pi-file-pdf"></i>
 
@@ -125,9 +167,7 @@
             </ng-container>
 
             <div class="archivo-nombre">
-
                 {{ item.nombre }}
-
             </div>
 
         </div>
@@ -477,7 +517,7 @@
             </label>
 
         </div>
- 
+
         @if(tipoCargaArchivo==='PC'){
         <div class="campo-formulario">
             <label>
@@ -490,81 +530,56 @@
 
 
         }@else if(tipoCargaArchivo==='ESCANER') {
-            <div class="campo-formulario">
+        <div class="campo-formulario">
 
-    <label>
-        <i class="pi pi-camera"></i>
-        Escanear documentos
-        <strong style="color: rgb(138, 30, 12);">(Obligatorio)</strong>
-    </label>
+            <label>
+                <i class="pi pi-camera"></i>
+                Escanear documentos
+                <strong style="color: rgb(138, 30, 12);">(Obligatorio)</strong>
+            </label>
 
-    <!-- Aviso del servicio -->
-    <!-- Aviso del servicio -->
-<div class="flex align-items-center gap-2 mb-2"
-    style="font-size: 11px; color: #6c757d;">
+            <!-- Aviso del servicio -->
+            <!-- Aviso del servicio -->
+            <div class="flex align-items-center gap-2 mb-2" style="font-size: 11px; color: #6c757d;">
 
-    <i class="pi pi-info-circle" style="font-size: 12px;"></i>
+                <i class="pi pi-info-circle" style="font-size: 12px;"></i>
 
-    <span>
-        Para escanear necesitas
-        <strong>SIAPFFAA Scanner Service</strong>.
-    </span>
+                <span>
+                    Para escanear necesitas
+                    <strong>SIAPFFAA Scanner Service</strong>.
+                </span>
 
-    <a href="SIAPFFAA-Scanner-Service-Setup.exe"
-        download
-        style="font-size: 11px; text-decoration: none;">
-        <i class="pi pi-download"></i>
-        Descargar
-    </a>
+                <a href="SIAPFFAA-Scanner-Service-Setup.exe" download style="font-size: 11px; text-decoration: none;">
+                    <i class="pi pi-download"></i>
+                    Descargar
+                </a>
 
-</div>
+            </div>
 
-    <p-select
-        [options]="modosEscaneo"
-        [(ngModel)]="modoEscaneo"
-        name="modoEscaneo"
-        optionLabel="label"
-        appendTo="body"
-        optionValue="value"
-        placeholder="Seleccione modo de escaneo"
-        styleClass="w-full mb-2">
-    </p-select>
+            <p-select [options]="modosEscaneo" [(ngModel)]="modoEscaneo" name="modoEscaneo" optionLabel="label"
+                appendTo="body" optionValue="value" placeholder="Seleccione modo de escaneo" styleClass="w-full mb-2">
+            </p-select>
 
-    <div class="flex align-items-center gap-2">
+            <div class="flex align-items-center gap-2">
 
-        <p-button
-            label="Buscar scanner"
-            icon="pi pi-search"
-            severity="info"
-            (onClick)="sacarScanner()">
-        </p-button>
+                <p-button label="Buscar scanner" icon="pi pi-search" severity="info" (onClick)="sacarScanner()">
+                </p-button>
 
-        <p-select
-            *ngIf="escaneres.length > 0"
-            [options]="escaneres"
-            appendTo="body"
-            [(ngModel)]="escanerSeleccionado"
-            name="escaner"
-            (onChange)="verEscanerSelect()"
-            optionLabel="name"
-            placeholder="Seleccione un escáner"
-            styleClass="flex-1">
-        </p-select>
+                <p-select *ngIf="escaneres.length > 0" [options]="escaneres" appendTo="body"
+                    [(ngModel)]="escanerSeleccionado" name="escaner" (onChange)="verEscanerSelect()" optionLabel="name"
+                    placeholder="Seleccione un escáner" styleClass="flex-1">
+                </p-select>
 
-        <p-button
-            *ngIf="escanerSeleccionado"
-            [label]="escaneando ? 'Escaneando...' : 'Escanear'"
-            [icon]="escaneando ? 'pi pi-spin pi-spinner' : 'pi pi-camera'"
-            severity="success"
-            [loading]="escaneando"
-            [disabled]="escaneando || archivo_documento.length >= 5"
-            (onClick)="escanearDocumento()">
-        </p-button>
+                <p-button *ngIf="escanerSeleccionado" [label]="escaneando ? 'Escaneando...' : 'Escanear'"
+                    [icon]="escaneando ? 'pi pi-spin pi-spinner' : 'pi pi-camera'" severity="success"
+                    [loading]="escaneando" [disabled]="escaneando || archivo_documento.length >= 5"
+                    (onClick)="escanearDocumento()">
+                </p-button>
 
-    </div>
+            </div>
 
-</div>
-            <!--
+        </div>
+        <!--
         <div class="campo-formulario">
 
             <label>
@@ -888,6 +903,82 @@
             </ng-template>
 
         </p-table>
+
+    </div>
+
+    <div class="d-flex justify-content-end gap-2 mt-4">
+
+    </div>
+</p-dialog>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<p-dialog header="Compartir Varios Documentos" [(visible)]="mostrarDialogCompartirVarios" [modal]="true"
+    [draggable]="false" [resizable]="false" [style]="{ width: '1000px' }">
+
+
+
+
+    <div>
+
+        <form #formCompartir="ngForm" (ngSubmit)="iniciarCompartirVarios()">
+
+            <div class="campo-formulario">
+
+                <label>
+                    <i class="pi pi-sitemap"></i>
+                    Unidades con acceso al archivo
+
+                </label>
+
+                <small class="text-muted d-block mb-2">
+                    Seleccione las unidades que podrán buscar y acceder a este archivo.
+                    <strong>Su unidad ya tiene acceso automáticamente</strong>,
+                    por lo que no es necesario seleccionarla.
+                </small>
+
+                <p-treeselect appendTo="body" style="width: 100%" name="unidades" selectionMode="multiple"
+                    [options]="treeUnidades" [(ngModel)]="unidadesSeleccionadas" [filter]="true" [showClear]="true"
+                    placeholder="Seleccione una o más unidades" styleClass="w-full">
+                </p-treeselect>
+
+            </div>
+
+
+            <div style="margin-top: 1rem; margin-bottom: 1rem;">
+                <label>
+                    <i class="pi pi-share-alt"></i>
+                    <strong style="font-size: 25px;"> {{ archivosSeleccionadosExplorer.length }}</strong>
+                    documentos seleccionados y listos para compartir
+                </label>
+            </div>
+
+            <!-- Botones -->
+            <div class="d-flex justify-content-end gap-2 mt-4">
+
+                <button type="button" pButton label="Cancelar" icon="pi pi-times" class="p-button-text"
+                    (click)="mostrarDialogCompartir = false">
+                </button>
+
+                <button type="submit" pButton label="Compartir archivo" icon="pi pi-share-alt" class="p-button-success"
+                    [disabled]="!unidadesSeleccionadas || unidadesSeleccionadas.length === 0">
+                </button>
+
+            </div>
+
+        </form>
+
+
 
     </div>
 

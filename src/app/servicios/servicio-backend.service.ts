@@ -13,9 +13,9 @@ import { ServiciosMensajeService } from './serviMensaje/servicios-mensaje.servic
 })
 //ng build --aot --output-hashing=all   ng build --configuration production
 export class ServicioBackendService {
-  public url2 ="https://siapfa.ffaa.mil.hn:4443/" //"https://siapfa.ffaa.mil.hn:4443/"//"https://siapfa.ffaa.mil.hn:4443/" "http://localhost:3979/"
+  public url2 = "http://localhost:3979/"//"https://siapfa.ffaa.mil.hn:4443/"//"https://siapfa.ffaa.mil.hn:4443/" "http://localhost:3979/"
   refrescar = 0
-  public url ="https://siapfa.ffaa.mil.hn:4443/" //"https://siapfa.ffaa.mil.hn:4443/" //"https://siapfa.ffaa.mil.hn:4443/"      0801200018636
+  public url ="http://localhost:3979/"//"https://siapfa.ffaa.mil.hn:4443/" //"https://siapfa.ffaa.mil.hn:4443/"      0801200018636
   usuarioLogin: any;
   token = "";
   arregloPermisos = new Array();
@@ -25,8 +25,23 @@ export class ServicioBackendService {
       serie: "FAHOA-0513", titulo_doc: "El suscrito Jefe de Recursos Humanos de la SEDENA", cargo: "", idunidad: 107
     }
   ]
+  sacarDetallePago(data){
+     return this.metodopost("sacarDetallePago",data)
+  }
+sacarHistoricoSueldoPersona(data){
+  return this.metodopost("sacarHistoricoSueldoPersona",data)
+}
 
 
+  validarToken(data){
+    return this.metodopost("validarToken",data)
+  }
+generarToken(data){
+  return this.metodopost("generarToken",data)
+}
+registrarDeduccionAutorizacion(data){
+   return this.metodopost("registrarDeduccionAutorizacion",data)
+}
 escanearDocumento(
   scannerId: string,
   source: string = 'auto',
@@ -303,6 +318,9 @@ obtenerAscensosPorPersona(data){
   }
   validarEntradaConToken(data, token) {
     return this.metodopostAlGenerar2FA("verificar2FA", data, token)
+  }
+   calidartoken2fa(data) {
+    return this.metodopost("verificar2FA", data)
   }
   metodopostAlGenerar2FA(link, data, token): Observable<any> {
     var json = JSON.stringify(data)

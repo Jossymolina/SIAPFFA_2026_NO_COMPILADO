@@ -1,199 +1,1590 @@
-/* Fondo general */
-.login-root {
-  min-height: 100vh;
-  background: #f5f7fb;
-  display: flex;
-  align-items: stretch;
-  justify-content: center;
+:host {
+
+  --navy-950: #071522;
+  --navy-900: #0a1d2d;
+  --navy-800: #102a40;
+
+  --gold: #c7a35a;
+  --gold-light: #e1c77d;
+
+  --white: #ffffff;
+  --white-soft: #e8edf1;
+  --text-muted: #9baab5;
+
+  display: block;
 }
 
-/* Contenedor principal */
+
+/* ==========================================================
+   RESET
+========================================================== */
+
+* {
+  box-sizing: border-box;
+}
+
+
+/* ==========================================================
+   CONTENEDOR PRINCIPAL
+========================================================== */
+
+.military-home {
+
+  position: relative;
+
+  min-height: 100vh;
+
+  display: flex;
+
+  flex-direction: column;
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--navy-950),
+      var(--navy-900)
+    );
+
+  color: var(--white);
+
+  font-family:
+    "Segoe UI",
+    "Inter",
+    Arial,
+    sans-serif;
+}
+
+
+/* ==========================================================
+   FONDO
+========================================================== */
+
+.military-background {
+
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 0;
+/*
+  background-image:
+    url('/assets/img/fondo-militar.jpg');
+*/
+  background-size: cover;
+
+  background-position: center;
+}
+
+
+.background-overlay {
+
+  position: absolute;
+
+  inset: 0;
+
+  background:
+
+    linear-gradient(
+      90deg,
+      rgba(4,16,27,.96) 0%,
+      rgba(5,20,32,.86) 35%,
+      rgba(5,20,32,.68) 65%,
+      rgba(5,20,32,.88) 100%
+    );
+}
+
+
+/* textura geométrica */
+
+.background-grid {
+
+  position: absolute;
+
+  inset: 0;
+
+  opacity: .07;
+
+  background-image:
+
+    linear-gradient(
+      rgba(255,255,255,.15) 1px,
+      transparent 1px
+    ),
+
+    linear-gradient(
+      90deg,
+      rgba(255,255,255,.15) 1px,
+      transparent 1px
+    );
+
+  background-size:
+    70px 70px;
+}
+
+
+/* ==========================================================
+   HEADER
+========================================================== */
+
+.military-header {
+
+  position: relative;
+
+  z-index: 5;
+
+  height: 88px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  padding:
+    0 clamp(25px, 5vw, 80px);
+
+  border-bottom:
+    1px solid rgba(199,163,90,.20);
+
+  background:
+    rgba(5,17,27,.72);
+
+  backdrop-filter:
+    blur(14px);
+}
+
+
+/* ==========================================================
+   IDENTIDAD
+========================================================== */
+
+.institution-brand {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 15px;
+}
+
+
+.brand-logo-box {
+
+  width: 55px;
+
+  height: 55px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border:
+    1px solid rgba(199,163,90,.35);
+
+  background:
+    rgba(255,255,255,.035);
+}
+
+
+.ffaa-logo {
+
+  width: 43px;
+
+  height: 43px;
+
+  object-fit: contain;
+}
+
+
+.institution-text {
+
+  display: flex;
+
+  flex-direction: column;
+}
+
+
+.institution-country {
+
+  color:
+    var(--text-muted);
+
+  font-size: 8px;
+
+  letter-spacing: 2px;
+
+  margin-bottom: 4px;
+}
+
+
+.institution-text strong {
+
+  font-size: 14px;
+
+  letter-spacing: 1.7px;
+
+  font-weight: 700;
+}
+
+
+.institution-text small {
+
+  color:
+    var(--gold);
+
+  font-size: 8px;
+
+  letter-spacing: 3px;
+
+  margin-top: 2px;
+}
+
+
+/* ==========================================================
+   HEADER DERECHO
+========================================================== */
+
+.header-section {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+
+  text-align: right;
+}
+
+
+.header-line {
+
+  width: 35px;
+
+  height: 1px;
+
+  background:
+    var(--gold);
+}
+
+
+.header-section small {
+
+  display: block;
+
+  color:
+    var(--text-muted);
+
+  font-size: 7px;
+
+  letter-spacing: 2px;
+}
+
+
+.header-section strong {
+
+  display: block;
+
+  margin-top: 3px;
+
+  color:
+    var(--gold-light);
+
+  font-size: 10px;
+
+  letter-spacing: 1.8px;
+}
+
+
+/* ==========================================================
+   MAIN
+========================================================== */
+
+.military-main {
+
+  position: relative;
+
+  z-index: 2;
+
+  flex: 1;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 70px 20px;
+}
+
+
+/* ==========================================================
+   PANEL
+========================================================== */
+
+.access-panel {
+
+  position: relative;
+
+  width: min(520px, 92vw);
+
+  padding:
+    55px 55px 45px;
+
+  text-align: center;
+
+  background:
+    rgba(7,21,34,.78);
+
+  border:
+    1px solid rgba(255,255,255,.10);
+
+  box-shadow:
+    0 35px 100px rgba(0,0,0,.35);
+
+  backdrop-filter:
+    blur(18px);
+}
+
+
+/* línea superior */
+
+.access-panel::before {
+
+  content: "";
+
+  position: absolute;
+
+  top: -1px;
+
+  left: 50%;
+
+  width: 100px;
+
+  height: 2px;
+
+  transform:
+    translateX(-50%);
+
+  background:
+    var(--gold);
+}
+
+
+/* esquinas */
+
+.access-panel::after {
+
+  content: "";
+
+  position: absolute;
+
+  inset: 12px;
+
+  border:
+    1px solid rgba(199,163,90,.06);
+
+  pointer-events: none;
+}
+
+
+/* ==========================================================
+   ESCUDO
+========================================================== */
+
+.access-emblem {
+
+  display: flex;
+
+  justify-content: center;
+
+  margin-bottom: 24px;
+}
+
+
+.emblem-ring {
+
+  width: 170px;
+
+  height: 170px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border:
+    1px solid rgba(199,163,90,.40);
+
+  border-radius: 50%;
+
+  background:
+    rgba(199,163,90,.035);
+
+  box-shadow:
+    0 0 0 7px rgba(199,163,90,.025);
+}
+
+
+.emblem-ring img {
+
+  width: 150px;
+
+  height: 150px;
+
+  object-fit: contain;
+}
+
+
+/* ==========================================================
+   TITULO
+========================================================== */
+
+.system-kicker {
+
+  color:
+    var(--gold);
+
+  font-size: 8px;
+
+  font-weight: 700;
+
+  letter-spacing: 3px;
+
+  margin-bottom: 10px;
+}
+
+
+.access-panel h1 {
+
+  margin: 0;
+
+  color:
+    var(--white);
+
+  font-size: 46px;
+
+  line-height: 1;
+
+  font-weight: 800;
+
+  letter-spacing: 5px;
+}
+
+
+.system-name {
+
+  margin-top: 12px;
+
+  color:
+    var(--text-muted);
+
+  font-size: 13px;
+
+  line-height: 1.6;
+
+  letter-spacing: .5px;
+}
+
+
+/* ==========================================================
+   DIVISOR
+========================================================== */
+
+.gold-divider {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 9px;
+
+  margin:
+    27px auto 20px;
+}
+
+
+.gold-divider span {
+
+  width: 45px;
+
+  height: 1px;
+
+  background:
+    rgba(199,163,90,.40);
+}
+
+
+.gold-divider i {
+
+  width: 5px;
+
+  height: 5px;
+
+  transform: rotate(45deg);
+
+  background:
+    var(--gold);
+}
+
+
+/* ==========================================================
+   LEMA
+========================================================== */
+
+.motto {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 10px;
+
+  color:
+    var(--gold-light);
+
+  font-size: 9px;
+
+  font-weight: 700;
+
+  letter-spacing: 2px;
+}
+
+
+.motto i {
+
+  width: 3px;
+
+  height: 3px;
+
+  border-radius: 50%;
+
+  background:
+    var(--gold);
+}
+
+
+/* ==========================================================
+   DESCRIPCIÓN
+========================================================== */
+
+.access-description {
+
+  max-width: 380px;
+
+  margin:
+    24px auto 28px;
+
+  color:
+    #b7c1c9;
+
+  font-size: 12px;
+
+  line-height: 1.8;
+}
+
+
+/* ==========================================================
+   BOTÓN
+========================================================== */
+
+.access-button {
+
+  position: relative;
+
+  width: 100%;
+
+  height: 54px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  padding: 0 7px;
+
+  color:
+    var(--white);
+
+  background:
+    linear-gradient(
+      135deg,
+      #173b59,
+      #0d2941
+    );
+
+  border:
+    1px solid rgba(199,163,90,.45);
+
+  cursor: pointer;
+
+  overflow: hidden;
+
+  transition:
+    .3s ease;
+}
+
+
+.access-button::before {
+
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(255,255,255,.08),
+      transparent
+    );
+
+  transform:
+    translateX(-100%);
+
+  transition:
+    .6s ease;
+}
+
+
+.access-button:hover {
+
+  border-color:
+    var(--gold);
+
+  transform:
+    translateY(-2px);
+
+  box-shadow:
+    0 12px 30px rgba(0,0,0,.25);
+}
+
+
+.access-button:hover::before {
+
+  transform:
+    translateX(100%);
+}
+
+
+/* icono */
+
+.button-icon {
+
+  width: 40px;
+
+  height: 40px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color:
+    var(--gold);
+
+  background:
+    rgba(199,163,90,.10);
+}
+
+
+/* texto */
+
+.button-text {
+
+  flex: 1;
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  letter-spacing: 1.8px;
+}
+
+
+/* flecha */
+
+.button-arrow {
+
+  width: 40px;
+
+  display: flex;
+
+  justify-content: center;
+
+  color:
+    var(--gold);
+
+  transition:
+    transform .25s ease;
+}
+
+
+.access-button:hover .button-arrow {
+
+  transform:
+    translateX(5px);
+}
+
+
+/* ==========================================================
+   SEGURIDAD
+========================================================== */
+
+.security-note {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 7px;
+
+  margin-top: 18px;
+
+  color:
+    #71808c;
+
+  font-size: 8px;
+
+  letter-spacing: .7px;
+}
+
+
+.security-note i {
+
+  color:
+    var(--gold);
+
+  font-size: 9px;
+}
+
+
+/* ==========================================================
+   FOOTER
+========================================================== */
+
+.military-footer {
+
+  position: relative;
+
+  z-index: 5;
+
+  min-height: 50px;
+
+  display: grid;
+
+  grid-template-columns:
+    1fr auto 1fr;
+
+  align-items: center;
+
+  padding:
+    0 clamp(25px, 5vw, 80px);
+
+  background:
+    rgba(4,14,23,.82);
+
+  border-top:
+    1px solid rgba(255,255,255,.07);
+
+  color:
+    #6f7d87;
+
+  font-size: 7px;
+
+  letter-spacing: 1.2px;
+}
+
+
+.footer-left {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+}
+
+
+.footer-status {
+
+  width: 5px;
+
+  height: 5px;
+
+  border-radius: 50%;
+
+  background:
+    #72a887;
+
+  box-shadow:
+    0 0 8px rgba(114,168,135,.7);
+}
+
+
+.footer-center {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  color:
+    rgba(199,163,90,.65);
+
+  font-size: 7px;
+
+  font-weight: 700;
+
+  letter-spacing: 1.5px;
+}
+
+
+.footer-center i {
+
+  width: 3px;
+
+  height: 3px;
+
+  border-radius: 50%;
+
+  background:
+    var(--gold);
+}
+
+
+.footer-right {
+
+  text-align: right;
+}
+
+
+/* ==========================================================
+   RESPONSIVE
+========================================================== */
+
+@media(max-width: 768px) {
+
+  .military-header {
+
+    height: 72px;
+
+    padding: 0 18px;
+  }
+
+
+  .brand-logo-box {
+
+    width: 45px;
+
+    height: 45px;
+  }
+
+
+  .ffaa-logo {
+
+    width: 34px;
+
+    height: 34px;
+  }
+
+
+  .institution-country {
+
+    display: none;
+  }
+
+
+  .institution-text strong {
+
+    font-size: 11px;
+  }
+
+
+  .institution-text small {
+
+    font-size: 7px;
+
+    letter-spacing: 2px;
+  }
+
+
+  .header-section {
+
+    display: none;
+  }
+
+
+  .military-main {
+
+    padding: 40px 15px;
+  }
+
+
+  .access-panel {
+
+    padding:
+      42px 25px 35px;
+  }
+
+
+  .access-panel h1 {
+
+    font-size: 38px;
+
+    letter-spacing: 4px;
+  }
+
+
+  .system-name {
+
+    font-size: 12px;
+  }
+
+
+  .motto {
+
+    font-size: 8px;
+
+    gap: 7px;
+
+    letter-spacing: 1.5px;
+  }
+
+
+  .access-description {
+
+    font-size: 11px;
+  }
+
+
+  .military-footer {
+
+    grid-template-columns: 1fr;
+
+    justify-items: center;
+
+    gap: 7px;
+
+    padding: 15px;
+
+    text-align: center;
+  }
+
+
+  .footer-right {
+
+    text-align: center;
+  }
+
+}
+
+
+@media(max-width: 420px) {
+
+  .access-panel {
+
+    padding:
+      35px 20px 30px;
+  }
+
+
+  .access-panel h1 {
+
+    font-size: 32px;
+  }
+
+
+  .emblem-ring {
+
+    width: 78px;
+
+    height: 78px;
+  }
+
+
+  .emblem-ring img {
+
+    width: 55px;
+
+    height: 55px;
+  }
+
+
+  .motto {
+
+    flex-wrap: wrap;
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =========================================================
+   LOGIN SIAPFFAA — ESTILO INSTITUCIONAL
+   ========================================================= */
+
+.login-root {
+  width: 100%;
+  min-height: 620px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 25px;
+  background:
+    radial-gradient(circle at top right, rgba(185, 155, 75, 0.10), transparent 35%),
+    radial-gradient(circle at bottom left, rgba(255, 255, 255, 0.04), transparent 35%),
+    #101315;
+  box-sizing: border-box;
+}
+
 .login-wrapper {
   width: 100%;
-  max-width: 480px;
-  padding: 1.5rem 1rem 2rem;
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  max-width: 820px;
+  overflow: hidden;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow:
+    0 25px 60px rgba(0, 0, 0, 0.35),
+    0 5px 20px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-/* Top bar tipo tarjeta */
+/* =========================================================
+   BARRA SUPERIOR
+   ========================================================= */
+
 .login-top-bar {
+  min-height: 82px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #ffffff;
-  border-radius: 1rem;
-  padding: 0.6rem 0.9rem;
-  border: 1px solid #e3e6ec;
-  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+  padding: 14px 28px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #17201d 0%,
+      #101512 60%,
+      #0b0e0d 100%
+    );
+
+  border-bottom: 3px solid #b89a52;
 }
 
 .login-top-left {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 15px;
 }
+
+/* =========================================================
+   LOGO
+   ========================================================= */
 
 .app-logo {
+  width: 54px;
+  height: 54px;
   display: flex;
   align-items: center;
   justify-content: center;
+
+  border-radius: 12px;
+  overflow: hidden;
+
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(216, 190, 119, 0.45);
+
+  box-shadow:
+    0 4px 15px rgba(0, 0, 0, 0.25);
 }
 
-.logo-circle {
-  width: 34px;
-  height: 34px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, #2563eb, #0ea5e9);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #ffffff;
-  font-weight: 700;
-  font-size: 1.1rem;
+.logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
+
+/* =========================================================
+   INFORMACIÓN DE LA APLICACIÓN
+   ========================================================= */
 
 .app-info {
   display: flex;
   flex-direction: column;
+  line-height: 1.1;
 }
 
 .app-title {
-  font-weight: 600;
-  font-size: 0.95rem;
-  color: #111827;
+  color: #f1dfaa;
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: 2px;
 }
 
 .app-subtitle {
-  font-size: 0.78rem;
-  color: #6b7280;
+  margin-top: 5px;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
 }
 
-/* Tarjeta de login */
+/* =========================================================
+   TARJETA DE LOGIN
+   ========================================================= */
+
 .login-card {
+  padding: 42px 55px 38px;
   background: #ffffff;
-  border-radius: 1.2rem;
-  padding: 1.5rem 1.4rem 1.3rem;
-  border: 1px solid #e3e6ec;
-  box-shadow: 0 16px 30px rgba(15, 23, 42, 0.06);
 }
+
+/* =========================================================
+   ENCABEZADO
+   ========================================================= */
 
 .login-card-header {
-  margin-bottom: 1rem;
-
-  h1 {
-    font-size: 1.35rem;
-    margin: 0;
-    font-weight: 700;
-    color: #111827;
-  }
-
-  p {
-    margin: 0.2rem 0 0;
-    font-size: 0.86rem;
-    color: #6b7280;
-  }
+  margin-bottom: 32px;
+  position: relative;
 }
 
-/* Inputs */
-.form-label {
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: #374151;
+.login-card-header::after {
+  content: "";
+  display: block;
+  width: 55px;
+  height: 3px;
+  margin-top: 16px;
+
+  background: #b89a52;
+  border-radius: 20px;
 }
 
-.input-group-text {
-  background: #f3f4f6;
-  border-color: #d1d5db;
-  color: #6b7280;
+.login-card-header h1 {
+  margin: 0;
+  color: #17201d;
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
 }
 
-.form-control {
-  border-radius: 0.7rem;
-  border-color: #d1d5db;
-  font-size: 0.9rem;
-  padding: 0.45rem 0.7rem;
-
-  &:focus {
-    border-color: #2563eb;
-    box-shadow: 0 0 0 0.15rem rgba(37, 99, 235, 0.15);
-  }
+.login-card-header p {
+  margin: 8px 0 0;
+  color: #737b78;
+  font-size: 14px;
 }
 
-/* Botón de ojo */
+/* =========================================================
+   LABELS
+   ========================================================= */
+
+.login-card .form-label {
+  display: block;
+  margin-bottom: 8px;
+
+  color: #343a38;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+/* =========================================================
+   INPUTS
+   ========================================================= */
+
+.login-card .input-group {
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.login-card .input-group-text {
+  min-width: 48px;
+  justify-content: center;
+
+  color: #9a7d38;
+  background: #f5f4ef;
+
+  border: 1px solid #deddd7;
+  border-right: none;
+
+  border-radius: 10px 0 0 10px;
+}
+
+.login-card .form-control {
+  height: 48px;
+
+  color: #252927;
+  background: #ffffff;
+
+  border: 1px solid #deddd7;
+  border-left: none;
+
+  border-radius: 0 10px 10px 0;
+
+  font-size: 14px;
+  box-shadow: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.login-card .form-control::placeholder {
+  color: #a2a6a4;
+}
+
+.login-card .input-group:focus-within .input-group-text,
+.login-card .input-group:focus-within .form-control {
+  border-color: #b89a52;
+}
+
+.login-card .input-group:focus-within {
+  box-shadow: 0 0 0 3px rgba(184, 154, 82, 0.12);
+}
+
+/* =========================================================
+   BOTÓN MOSTRAR CONTRASEÑA
+   ========================================================= */
+
 .btn-eye {
-  border-radius: 0 0.7rem 0.7rem 0;
+  height: 48px;
+
+  color: #777d79;
+  background: #ffffff;
+
+  border: 1px solid #deddd7;
+  border-left: none;
+
+  border-radius: 0 10px 10px 0;
+
+  transition: all 0.2s ease;
 }
 
-/* Mensajes de error */
-.invalid-feedback {
-  font-size: 0.78rem;
+.btn-eye:hover {
+  color: #9a7d38;
+  background: #f8f6ef;
 }
 
-/* Opciones extra */
-.login-options {
-  font-size: 0.8rem;
+/* =========================================================
+   BOTÓN PRINCIPAL
+   ========================================================= */
 
-  .form-check-label {
-    cursor: pointer;
-  }
-}
+.login-card .btn-primary {
+  height: 50px;
 
-.link-olvide {
-  font-size: 0.8rem;
-  text-decoration: none;
-  color: #2563eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  &:hover {
-    text-decoration: underline;
-  }
-}
-
-/* Botones */
-.btn {
-  border-radius: 0.8rem;
-  font-size: 0.9rem;
-  font-weight: 500;
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, #2563eb, #0ea5e9);
   border: none;
+  border-radius: 10px;
 
-  &:hover {
-    background: linear-gradient(135deg, #1d4ed8, #0284c7);
-  }
+  background:
+    linear-gradient(
+      135deg,
+      #26342e,
+      #17201d
+    );
 
-  &:disabled {
-    opacity: 0.8;
-  }
+  color: #ffffff;
+
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+
+  box-shadow:
+    0 8px 18px rgba(23, 32, 29, 0.18);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
 }
 
-/* Footer */
+.login-card .btn-primary:hover {
+  transform: translateY(-1px);
+
+  background:
+    linear-gradient(
+      135deg,
+      #31443b,
+      #1c2822
+    );
+
+  box-shadow:
+    0 12px 25px rgba(23, 32, 29, 0.25);
+}
+
+.login-card .btn-primary:active {
+  transform: translateY(0);
+}
+
+.login-card .btn-primary i {
+  margin-right: 8px;
+  color: #d5b968;
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
 .login-footer {
-  text-align: center;
-  font-size: 0.75rem;
-  color: #9ca3af;
-  margin-top: 0.3rem;
+  min-height: 50px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: rgba(255, 255, 255, 0.55);
+
+  background: #101512;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+
+  font-size: 11px;
+  letter-spacing: 1px;
 }
 
-/* Responsivo */
-@media (max-width: 576px) {
+/* =========================================================
+   DIALOG PRINCIPAL PRIME
+   ========================================================= */
+
+:host ::ng-deep .p-dialog {
+  border: none !important;
+  border-radius: 18px !important;
+  overflow: hidden;
+
+  box-shadow:
+    0 30px 80px rgba(20, 110, 245, 0.4) !important;
+}
+
+:host ::ng-deep .p-dialog .p-dialog-header {
+  padding: 18px 25px;
+
+  color: #ffffff;
+
+  background:
+    linear-gradient(
+      135deg,
+      #17201d,
+      #101512
+    );
+
+  border-bottom: 2px solid #b89a52;
+}
+
+:host ::ng-deep .p-dialog .p-dialog-title {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+}
+
+:host ::ng-deep .p-dialog .p-dialog-header-icon {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+:host ::ng-deep .p-dialog .p-dialog-header-icon:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+:host ::ng-deep .p-dialog .p-dialog-content {
+  padding: 0;
+}
+
+/* =========================================================
+   SEGUNDO MODAL — 2FA
+   ========================================================= */
+
+:host ::ng-deep .p-dialog .p-fluid {
+  padding: 25px;
+}
+
+:host ::ng-deep .p-dialog .text-secondary {
+  color: #737b78 !important;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* QR */
+
+:host ::ng-deep .p-dialog img[alt="Código QR 2FA"] {
+  padding: 10px;
+
+  background: #ffffff;
+
+  border: 1px solid #e1dfd7 !important;
+  border-radius: 14px !important;
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.10);
+}
+
+/* Campo código */
+
+:host ::ng-deep #codigo {
+  height: 50px;
+
+  border-radius: 10px;
+
+  border: 1px solid #d8d6cf;
+
+  font-size: 20px !important;
+  font-weight: 600;
+  letter-spacing: 5px;
+
+  box-shadow: none;
+}
+
+:host ::ng-deep #codigo:focus {
+  border-color: #b89a52;
+
+  box-shadow:
+    0 0 0 3px rgba(184, 154, 82, 0.12);
+}
+
+/* Botón 2FA */
+
+:host ::ng-deep .p-button-success {
+  width: 100%;
+  min-height: 48px;
+
+  border: none !important;
+  border-radius: 10px !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      #26342e,
+      #17201d
+    ) !important;
+
+  color: #ffffff !important;
+
+  font-weight: 600;
+
+  box-shadow:
+    0 8px 18px rgba(23, 32, 29, 0.18);
+
+  transition: all 0.2s ease;
+}
+
+:host ::ng-deep .p-button-success:hover {
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 12px 25px rgba(23, 32, 29, 0.25);
+}
+
+:host ::ng-deep .p-button-success .pi {
+  color: #d5b968;
+}
+
+/* =========================================================
+   FOOTER DEL DIALOG
+   ========================================================= */
+
+:host ::ng-deep .p-dialog .p-dialog-footer {
+  padding: 12px 20px;
+
+  background: #f7f7f4;
+
+  border-top: 1px solid #e5e3dc;
+}
+
+:host ::ng-deep .p-dialog .p-button-text {
+  color: #5d625f !important;
+}
+
+:host ::ng-deep .p-dialog .p-button-text:hover {
+  color: #9a7d38 !important;
+  background: rgba(184, 154, 82, 0.08) !important;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+  .login-root {
+    padding: 10px;
+  }
+
   .login-wrapper {
-    max-width: 100%;
+    border-radius: 14px;
+  }
+
+  .login-top-bar {
+    padding: 14px 18px;
   }
 
   .login-card {
-    padding: 1.25rem 1rem 1.1rem;
+    padding: 30px 22px;
+  }
+
+  .login-card-header h1 {
+    font-size: 25px;
+  }
+
+  .app-title {
+    font-size: 18px;
+  }
+
+  .app-logo {
+    width: 46px;
+    height: 46px;
   }
 }
-.logo-img {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  object-fit: cover;
+
+@media (max-width: 480px) {
+
+  .login-root {
+    min-height: 520px;
+  }
+
+  .login-card {
+    padding: 25px 18px;
+  }
+
+  .login-top-bar {
+    min-height: 70px;
+  }
+
+  .app-subtitle {
+    font-size: 8px;
+    letter-spacing: 1.5px;
+  }
 }
 
 
@@ -208,149 +1599,61 @@
 
 
 
-
+ /* =========================================================
+   LEMA — DIOS, PATRIA Y FAMILIA
+   ========================================================= */
 
  
+.login-motto {
+  color: #ffffff !important;
 
+  opacity: 1 !important;
 
+  font-family: "Georgia", "Times New Roman", serif;
 
+  font-size: 22px;
+  font-weight: 700;
 
+  letter-spacing: 5px;
+  text-transform: uppercase;
 
+  text-align: center;
 
+  /* Hace que resalte sobre el fondo oscuro */
+  text-shadow:
+    0 0 2px #ffffff,
+    0 2px 8px rgba(0, 0, 0, 0.95),
+    0 0 15px rgba(255, 255, 255, 0.25);
 
-.home-root{
-  min-height:100vh;
-  background:#0b1220;
-  color:#e7eefc;
-  display:flex;
-  flex-direction:column;
+  filter: none !important;
 }
 
-.home-header{
-  position:sticky; top:0; z-index:10;
-  display:flex; align-items:center; justify-content:space-between;
-  padding:14px 22px;
-  border-bottom:1px solid rgba(255,255,255,0.08);
-  background:rgba(10,16,28,0.65);
-  backdrop-filter:blur(10px);
+.login-motto-line {
+  width: 70px;
+  height: 2px;
+
+  margin: 11px auto 0;
+
+  background: #b89a52;
+
+  border-radius: 20px;
+
+  box-shadow:
+    0 0 10px rgba(184, 154, 82, 0.5);
 }
 
-.brand{display:flex; gap:12px; align-items:center;}
-.brand-logo{
-  width:42px;height:42px;border-radius:12px;object-fit:cover;
-  box-shadow:0 0 0 2px rgba(255,255,255,0.12);
-}
-.brand-title{font-weight:800; letter-spacing:1px;}
-.brand-subtitle{font-size:12px; opacity:.8;}
+.login-branding {
+  width: 100%;
 
-.home-nav-links{display:flex; gap:16px; align-items:center;}
-.home-nav-links a{
-  color:#d9e6ff; text-decoration:none; font-size:13px; opacity:.85;
-  padding:8px 10px; border-radius:10px;
-}
-.home-nav-links a:hover{
-  background:rgba(255,255,255,0.07);
-  opacity:1;
-}
+  text-align: center;
 
-.btn-login-home{display:inline-flex; gap:8px; align-items:center;}
+  opacity: 1 !important;
 
-.home-content{padding:22px; max-width:1200px; width:100%; margin:0 auto;}
-.section{margin:22px 0 34px;}
-.section-title-row{display:flex; gap:12px; align-items:baseline; justify-content:space-between;}
-.section-title{font-size:22px; margin:0 0 12px; font-weight:800;}
-.section-subtitle{font-size:12px; opacity:.8}
+  filter: none !important;
 
-/* Carousel */
-.home-carousel .p-carousel-content{
-  border-radius:18px;
-  
-}
+  position: relative;
+  z-index: 10;
 
-.carousel-card{
-  border-radius:18px;
-  overflow:hidden;
-  border:1px solid rgba(255,255,255,0.10);
-  box-shadow:0 14px 40px rgba(0,0,0,.35);
-  background:rgba(255,255,255,0.05);
+  margin-bottom: 22px;
 }
-.carousel-media{position:relative; height:800px;}
-.carousel-media img{
-  width:100%; height:100%; object-fit:cover; display:block;
-}
-.carousel-overlay{
-  position:absolute; inset:0;
- /* background:linear-gradient(90deg, rgba(0,0,0,.70), rgba(0,0,0,.20));*/
-}
-.carousel-content{
-  position:absolute; left:24px; top:24px; right:24px;
-  color:#fff;
-}
-.carousel-kicker{font-size:12px; opacity:.9; letter-spacing:1px;}
-.carousel-title{font-size:28px; font-weight:900; margin:6px 0 8px;}
-.carousel-text{max-width:520px; opacity:.92; line-height:1.5;}
-.home-carousel {
-  width: 70vw;
-  margin-left: calc(50% - 35vw);
-}
-/* Grids */
-.grid-3{display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:12px;}
-.grid-4{display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:12px;}
-
-.cardx{
-  background:rgba(255,255,255,0.05);
-  border:1px solid rgba(255,255,255,0.10);
-  border-radius:16px;
-  padding:16px;
-}
-.cardx-title{font-weight:800; margin-bottom:6px;}
-.cardx-text{font-size:13px; opacity:.85; line-height:1.45;}
-
-.statx{
-  text-align:center;
-  background:rgba(255,255,255,0.05);
-  border:1px solid rgba(255,255,255,0.10);
-  border-radius:16px;
-  padding:16px;
-}
-.statx-num{font-size:26px; font-weight:900;}
-.statx-label{font-size:12px; opacity:.8;}
-
-.chipx{
-  background:rgba(255,255,255,0.05);
-  border:1px solid rgba(255,255,255,0.10);
-  border-radius:999px;
-  padding:12px 14px;
-  text-align:center;
-  font-size:13px;
-  opacity:.9;
-}
-
-.newscard{
-  background:rgba(255,255,255,0.05);
-  border:1px solid rgba(255,255,255,0.10);
-  border-radius:16px;
-  padding:16px;
-}
-.newscard-title{font-weight:900; margin-bottom:8px;}
-.newscard-text{font-size:13px; opacity:.85; line-height:1.45;}
-.newscard-date{margin-top:10px; font-size:12px; opacity:.75;}
-
-.home-footer{
-  margin-top:auto;
-  display:flex; justify-content:space-between; align-items:center;
-  padding:14px 22px;
-  border-top:1px solid rgba(255,255,255,0.08);
-  opacity:.85;
-  background:rgba(10,16,28,0.55);
-  backdrop-filter:blur(10px);
-}
-
-/* Responsive */
-@media (max-width: 992px){
-  .home-nav-links{display:none;}
-  .grid-3{grid-template-columns:1fr;}
-  .grid-4{grid-template-columns:1fr 1fr;}
-  .carousel-media{height:260px;}
-  .carousel-title{font-size:22px;}
-}
+ 

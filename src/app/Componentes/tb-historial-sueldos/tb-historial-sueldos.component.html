@@ -1,0 +1,744 @@
+<!-- BOTÓN DE AYUDA -->
+<div class="token-ayuda">
+
+  <button
+    type="button"
+    class="btn-ayuda-token"
+    (click)="mostrarAyudaToken = true">
+
+    <i class="pi pi-question-circle"></i>
+
+    <span>¿Dónde encuentro mi código?</span>
+
+  </button>
+
+</div>
+
+
+<!-- MODAL DE AYUDA -->
+<p-dialog
+  header="¿Cómo obtener mi código?"
+  [(visible)]="mostrarAyudaToken"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [closable]="true"
+  [dismissableMask]="true"
+  [style]="{ width: '520px' }"
+  styleClass="dialog-ayuda-token">
+
+
+  <div class="ayuda-token-content">
+
+    <!-- PASO 1 -->
+    <div class="paso-token">
+
+      <div class="paso-numero">
+        1
+      </div>
+
+      <div class="paso-contenido">
+
+        <h4>Abra Google Authenticator</h4>
+
+        <p>
+          Busque y abra la aplicación
+          <strong>Google Authenticator</strong>
+          en su teléfono.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <!-- IMAGEN -->
+    <div class="imagen-authenticator">
+
+      <img
+        src="autenticador.png"
+        alt="Ejemplo de Google Authenticator">
+
+    </div>
+
+
+    <!-- PASO 2 -->
+    <div class="paso-token">
+
+      <div class="paso-numero">
+        2
+      </div>
+
+      <div class="paso-contenido">
+
+        <h4>Busque el código de esta cuenta</h4>
+
+        <p>
+          En la aplicación aparecerá una cuenta asociada a su perfil
+          junto con un código de <strong>6 dígitos</strong>.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <!-- EJEMPLO DEL CÓDIGO -->
+    <div class="codigo-ejemplo">
+
+      <span>Código de ejemplo</span>
+
+      <strong>123 456</strong>
+
+      <small>
+        El código cambia automáticamente cada cierto tiempo.
+      </small>
+
+    </div>
+
+
+    <!-- PASO 3 -->
+    <div class="paso-token">
+
+      <div class="paso-numero">
+        3
+      </div>
+
+      <div class="paso-contenido">
+
+        <h4>Ingrese el código</h4>
+
+        <p>
+          Escriba los 6 dígitos que aparecen en Google Authenticator
+          en el campo de verificación y presione
+          <strong>Validar código</strong>.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <!-- ADVERTENCIA -->
+    <div class="ayuda-seguridad">
+
+      <i class="pi pi-shield"></i>
+
+      <span>
+        <strong>Importante:</strong>
+        nunca comparta este código con otras personas.
+      </span>
+
+    </div>
+
+
+  </div>
+
+</p-dialog>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@if(!token_valido){
+<div class="token-container">
+
+  <div class="token-header">
+
+    <div class="token-icon">
+      <i class="pi pi-shield"></i>
+    </div>
+
+    <div>
+      <h3>Verificación de seguridad</h3>
+      <p>Confirme su identidad para continuar</p>
+    </div>
+
+  </div>
+
+
+  <form #ngFormToken="ngForm" class="token-content">
+
+    <label for="token">
+      Código de autenticación
+    </label>
+
+    <span class="token-help">
+      Ingrese el código de 6 dígitos generado por
+      <strong>Google Authenticator</strong>.
+    </span>
+
+
+    <input
+      id="token"
+      type="text"
+      maxlength="6"
+      inputmode="numeric"
+      autocomplete="one-time-code"
+      placeholder="000000"
+      class="token-input"
+      name="token"
+      #token="ngModel"
+      ngModel
+      required=""
+      (keydown.enter)="validarToken(ngFormToken)"
+       
+
+    />
+
+
+    <button
+      type="button"
+      class="btn-validar"
+      (click)="validarToken(ngFormToken)">
+
+      <i class="pi pi-check-circle"></i>
+
+      <span>Validar código</span>
+
+    </button>
+
+  </form>
+
+
+  <div class="token-security">
+
+    <i class="pi pi-lock"></i>
+
+    <span>
+      Su código es privado y se utiliza únicamente
+      para verificar su identidad.
+    </span>
+
+  </div>
+
+</div>
+}@else if(token_valido){
+<div class="card historico-card">
+
+  <!-- ENCABEZADO -->
+  <div class="historico-header">
+
+    <div class="header-info">
+      <div class="header-icon">
+        <i class="pi pi-wallet"></i>
+      </div>
+
+      <div>
+        <h2>Histórico de Sueldo</h2>
+        <span>
+          Historial de pagos y conceptos registrados
+        </span>
+      </div>
+    </div>
+    
+
+    <!-- BUSCADOR GLOBAL -->
+ 
+  </div>
+
+
+  <!-- BARRA DE FILTROS -->
+  <div class="filtros-bar">
+
+    <div class="resultado-info">
+      <i class="pi pi-list"></i>
+
+      <span>
+        Registros:
+        <strong>{{ historicoSueldo?.length || 0 }}</strong>
+      </span>
+    </div>
+
+    <div class="resultado-info">
+          <select
+  class="form-select"
+  (change)="sacarHistoricoSueldo()"
+  [(ngModel)]="anioSeleccionado">
+
+  <option
+    *ngFor="let anio of anios"
+    [value]="anio">
+
+    {{ anio }}
+
+  </option>
+
+</select>
+    </div>
+ 
+<button
+  pButton
+  type="button"
+  icon="pi pi-filter-slash"
+  label="Limpiar filtros"
+  class="p-button-outlined p-button-secondary"
+  (click)="tablaHistorico.clear(); limpiarBusqueda()">
+</button>
+
+  </div>
+
+
+  <!-- TABLA -->
+<p-table
+  #tablaHistorico
+  [value]="historicoSueldo"
+  [globalFilterFields]="[
+    'identidad',
+    'grado',
+    'sueldo_bruto',
+    'fecha',
+    'nombre_objeto'
+  ]"
+  [paginator]="true"
+  [rows]="10"
+  [rowsPerPageOptions]="[10, 25, 50, 100]"
+  [showCurrentPageReport]="true"
+  currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+  sortMode="single"
+  responsiveLayout="scroll"
+  styleClass="p-datatable-sm p-datatable-striped"
+>
+
+    <!-- HEADER -->
+    <ng-template pTemplate="header">
+      <tr>
+
+        <!-- IDENTIDAD -->
+        <th
+          pSortableColumn="identidad"
+          style="min-width: 170px"
+        >
+          <div class="column-header">
+            <span>Identidad</span>
+            <p-sortIcon field="identidad"></p-sortIcon>
+          </div>
+
+          <p-columnFilter
+            type="text"
+            field="identidad"
+            display="menu"
+            placeholder="Buscar identidad"
+          >
+          </p-columnFilter>
+        </th>
+
+
+        <!-- GRADO -->
+        <th
+          pSortableColumn="grado"
+          style="min-width: 190px"
+        >
+          <div class="column-header">
+            <span>Grado</span>
+            <p-sortIcon field="grado"></p-sortIcon>
+          </div>
+
+          <p-columnFilter
+            type="text"
+            field="grado"
+            display="menu"
+            placeholder="Buscar grado"
+          >
+          </p-columnFilter>
+        </th>
+
+
+        <!-- CONCEPTO -->
+        <th
+          pSortableColumn="nombre_objeto"
+          style="min-width: 180px"
+        >
+          <div class="column-header">
+            <span>Concepto</span>
+            <p-sortIcon field="nombre_objeto"></p-sortIcon>
+          </div>
+
+          <p-columnFilter
+            type="text"
+            field="nombre_objeto"
+            display="menu"
+            placeholder="Buscar concepto"
+          >
+          </p-columnFilter>
+        </th>
+
+
+        <!-- SUELDO -->
+        <th
+          pSortableColumn="sueldo_bruto"
+          style="min-width: 160px"
+        >
+          <div class="column-header">
+            <span>Sueldo bruto</span>
+            <p-sortIcon field="sueldo_bruto"></p-sortIcon>
+          </div>
+
+          <p-columnFilter
+            type="numeric"
+            field="sueldo_bruto"
+            display="menu"
+            currency="HNL"
+            locale="es-HN"
+          >
+          </p-columnFilter>
+        </th>
+
+
+        <!-- FECHA -->
+        <th
+          pSortableColumn="fecha"
+          style="min-width: 190px"
+        >
+          <div class="column-header">
+            <span>Fecha creación plannilla</span>
+            <p-sortIcon field="fecha"></p-sortIcon>
+          </div>
+
+          <p-columnFilter
+            type="date"
+            field="fecha"
+            display="menu"
+          >
+          </p-columnFilter>
+        </th>
+
+      </tr>
+    </ng-template>
+
+
+    <!-- BODY -->
+    <ng-template pTemplate="body" let-registro>
+      <tr  style="cursor: pointer;" (click)="sacarDetallePago(registro)" >
+
+        <!-- IDENTIDAD -->
+        <td>
+          <span class="identidad">
+            {{ registro.identidad }}
+          </span>
+        </td>
+
+
+        <!-- GRADO -->
+        <td>
+          <span class="grado">
+            {{ registro.grado }}
+          </span>
+        </td>
+
+
+        <!-- CONCEPTO -->
+        <td>
+          <p-tag
+            [value]="registro.nombre_objeto"
+            severity="info"
+          >
+          </p-tag>
+        </td>
+
+
+        <!-- SUELDO -->
+      <td>
+  <span class="sueldo">
+    L&nbsp;{{
+      registro.sueldo_base
+        | number:'1.2-2':'es-HN'
+    }}
+  </span>
+</td>
+
+
+        <!-- FECHA -->
+        <td>
+          <div class="fecha">
+            <i class="pi pi-calendar"></i>
+
+            <span>
+              {{ registro.fecha | date:'dd/MM/yyyy HH:mm':'America/Tegucigalpa' }}
+            </span>
+          </div>
+        </td>
+
+      </tr>
+    </ng-template>
+
+
+    <!-- EMPTY -->
+    <ng-template pTemplate="emptymessage">
+
+      <tr>
+        <td colspan="5">
+
+          <div class="empty-state">
+
+            <i class="pi pi-inbox"></i>
+
+            <h3>No hay registros</h3>
+
+            <p>
+              No se encontraron movimientos de sueldo
+              con los filtros seleccionados.
+            </p>
+
+          </div>
+
+        </td>
+      </tr>
+
+    </ng-template>
+
+
+    <!-- LOADING -->
+    <ng-template pTemplate="loadingbody">
+
+      <tr>
+        <td colspan="5">
+
+          <div class="loading-state">
+            <i class="pi pi-spin pi-spinner"></i>
+            Cargando histórico...
+          </div>
+
+        </td>
+      </tr>
+
+    </ng-template>
+
+  </p-table>
+
+</div>
+
+
+
+
+
+
+
+<p-dialog
+  [(visible)]="mostrarDetallePago"
+  [modal]="true"
+  [style]="{ width: '760px' }"
+  [draggable]="false"
+  [resizable]="false"
+  [closable]="true"
+  [dismissableMask]="true"
+  styleClass="dialog-detalle-pago">
+  <!-- PIE DEL MODAL -->
+<div class="modal-footer">
+
+  <button
+    pButton
+    type="button"
+    label="Cerrar"
+    icon="pi pi-times"
+    class="p-button-outlined p-button-secondary"
+    (click)="mostrarDetallePago = false">
+  </button>
+
+</div>
+
+  <!-- ENCABEZADO -->
+  <div class="pago-titulo">
+    <div class="pago-icono">
+      <i class="pi pi-wallet"></i>
+    </div>
+
+    <div>
+      <h3>Detalle de mi pago</h3>
+      <span>Resumen y desglose de las deducciones aplicadas</span>
+    </div>
+  </div>
+
+
+  <!-- RESUMEN PRINCIPAL -->
+  <div class="tarjeta-resumen">
+
+    <!-- SUELDO BRUTO -->
+    <div class="dato-pago">
+      <div class="dato-icono bruto">
+        <i class="pi pi-money-bill"></i>
+      </div>
+
+      <div class="dato-contenido">
+        <span>Sueldo bruto</span>
+
+        <strong>
+          {{
+            sueldoBruto
+              | currency:'HNL':'symbol-narrow':'1.2-2':'es-HN'
+          }}
+        </strong>
+      </div>
+    </div>
+
+
+    <!-- DEDUCCIONES -->
+    <div class="dato-pago">
+      <div class="dato-icono descuento">
+        <i class="pi pi-arrow-down"></i>
+      </div>
+
+      <div class="dato-contenido">
+        <span>Total deducciones</span>
+
+        <strong>
+          - {{
+            totalDeducciones
+              | currency:'HNL':'symbol-narrow':'1.2-2':'es-HN'
+          }}
+        </strong>
+      </div>
+    </div>
+
+
+    <!-- NETO -->
+    <div class="dato-pago neto-card">
+      <div class="dato-icono neto-icono">
+        <i class="pi pi-check"></i>
+      </div>
+
+      <div class="dato-contenido">
+        <span>Sueldo neto</span>
+
+        <strong>
+          {{
+            sueldoNeto
+              | currency:'HNL':'symbol-narrow':'1.2-2':'es-HN'
+          }}
+        </strong>
+
+        <small>Valor a recibir</small>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- SEPARADOR -->
+  <div class="seccion-titulo">
+    <div class="linea"></div>
+
+    <div class="seccion-texto">
+      <i class="pi pi-list"></i>
+      <span>Detalle de deducciones</span>
+    </div>
+
+    <div class="linea"></div>
+  </div>
+
+
+  <!-- TABLA -->
+  <div class="tabla-container">
+
+    <p-table
+      [value]="detallePago"
+      styleClass="tabla-deducciones p-datatable-sm">
+
+      <ng-template pTemplate="header">
+        <tr>
+          <th>
+            Concepto de deducción
+          </th>
+
+          <th class="monto-columna">
+            Monto
+          </th>
+        </tr>
+      </ng-template>
+
+
+      <ng-template pTemplate="body" let-registro let-i="rowIndex">
+
+        <tr>
+
+          <td>
+            <div class="concepto">
+
+              <span class="numero">
+                {{ i + 1 }}
+              </span>
+
+              <span>
+                {{ registro.deduccion }}
+              </span>
+
+            </div>
+          </td>
+
+
+          <td class="monto-columna">
+
+            <span class="monto-deduccion">
+              {{
+                registro.monto
+                  | currency:'HNL':'symbol-narrow':'1.2-2':'es-HN'
+              }}
+            </span>
+
+          </td>
+
+        </tr>
+
+      </ng-template>
+
+
+      <!-- TOTAL -->
+      <ng-template pTemplate="footer">
+
+        <tr>
+
+          <td>
+            <span class="total-label">
+              Total de deducciones
+            </span>
+          </td>
+
+          <td class="monto-columna">
+
+            <span class="total-deducciones">
+              {{
+                totalDeducciones
+                  | currency:'HNL':'symbol-narrow':'1.2-2':'es-HN'
+              }}
+            </span>
+
+          </td>
+
+        </tr>
+
+      </ng-template>
+
+    </p-table>
+
+  </div>
+
+
+  <!-- PIE -->
+  <div class="pago-pie">
+
+    <i class="pi pi-info-circle"></i>
+
+    <span>
+      El sueldo neto corresponde al sueldo bruto menos el total
+      de las deducciones detalladas anteriormente.
+    </span>
+
+  </div>
+
+</p-dialog>
+
+
+}
+
+
+ 

@@ -9,6 +9,10 @@ import Aura from '@primeuix/themes/aura';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient } from '@angular/common/http';
 import { PrimeNG } from 'primeng/config';
+import {   LOCALE_ID } from '@angular/core';
+import { registerLocaleData } from '@angular/common';
+import localeEs from '@angular/common/locales/es-HN';
+registerLocaleData(localeEs);
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
@@ -51,6 +55,10 @@ export const appConfig: ApplicationConfig = {
         weekHeader: 'Sm'
       }
     }),
-    provideHttpClient()
+    provideHttpClient(),
+     {
+      provide: LOCALE_ID,
+      useValue: 'es-HN'
+    }
     ]
 };

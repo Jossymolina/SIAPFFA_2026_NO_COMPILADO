@@ -1,0 +1,304 @@
+/* =========================================
+   TABLA DE CURSOS
+   ========================================= */
+
+.tabla-cursos-wrapper {
+  width: 100%;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+
+  background: #ffffff;
+
+  overflow: hidden;
+}
+
+
+/* =========================================
+   HEADER
+   ========================================= */
+
+.tabla-cursos-wrapper .tabla-header {
+  display: flex;
+  align-items: center;
+
+  padding: 16px 18px;
+
+  border-bottom: 1px solid #e5e7eb;
+
+  background: #fafafa;
+}
+
+.tabla-cursos-wrapper .tabla-titulo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  margin: 0;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  color: #1f2937;
+}
+
+.tabla-cursos-wrapper .tabla-titulo i {
+  font-size: 15px;
+  color: #2563eb;
+}
+
+.tabla-cursos-wrapper .tabla-subtitulo {
+  display: block;
+
+  margin-top: 3px;
+
+  font-size: 11px;
+
+  color: #6b7280;
+}
+
+
+/* =========================================
+   TABLA
+   ========================================= */
+
+.tabla-cursos {
+  margin: 0;
+
+  min-width: 850px;
+}
+
+.tabla-cursos thead th {
+  padding: 12px 14px;
+
+  border-bottom: 1px solid #e5e7eb;
+
+  background: #f8fafc;
+
+  color: #6b7280;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+
+  white-space: nowrap;
+}
+
+.tabla-cursos tbody td {
+  padding: 13px 14px;
+
+  border-bottom: 1px solid #f1f5f9;
+
+  font-size: 13px;
+
+  color: #374151;
+}
+
+.tabla-cursos tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.tabla-cursos tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.tabla-cursos tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+
+/* =========================================
+   COLUMNAS
+   ========================================= */
+
+.tabla-cursos .col-numero {
+  width: 50px;
+}
+
+.tabla-cursos .col-opciones {
+  width: 80px;
+}
+
+
+/* =========================================
+   NÚMERO
+   ========================================= */
+
+.tabla-cursos .numero-fila {
+  color: #9ca3af;
+
+  font-size: 12px;
+
+  font-weight: 600;
+}
+
+
+/* =========================================
+   PAÍS / CENTRO MILITAR
+   ========================================= */
+
+.dato-cursos {
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  min-width: 170px;
+}
+
+.dato-icono-cursos {
+  width: 32px;
+  height: 32px;
+
+  min-width: 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  background: #eff6ff;
+
+  color: #2563eb;
+
+  font-size: 13px;
+}
+
+.dato-cursos span {
+  font-weight: 500;
+
+  color: #374151;
+}
+
+
+/* =========================================
+   CURSO
+   ========================================= */
+
+.curso-nombre {
+  display: inline-block;
+
+  max-width: 240px;
+
+  font-weight: 600;
+
+  color: #374151;
+}
+
+
+/* =========================================
+   FECHAS
+   ========================================= */
+
+.fecha-curso {
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+
+  white-space: nowrap;
+
+  color: #6b7280;
+}
+
+.fecha-curso i {
+  font-size: 12px;
+
+  color: #9ca3af;
+}
+
+
+/* =========================================
+   OPCIONES
+   ========================================= */
+
+.tabla-cursos .opciones-cell {
+  text-align: center;
+}
+
+.tabla-cursos .boton-eliminar {
+  width: 34px;
+  height: 34px;
+
+  padding: 0;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+}
+
+.tabla-cursos .boton-eliminar i {
+  font-size: 13px;
+}
+
+
+/* =========================================
+   TABLA VACÍA
+   ========================================= */
+
+.tabla-cursos .tabla-vacia {
+  padding: 40px 20px;
+
+  text-align: center;
+}
+
+.tabla-cursos .tabla-vacia-contenido {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 5px;
+}
+
+.tabla-cursos .tabla-vacia-icono {
+  width: 44px;
+  height: 44px;
+
+  margin-bottom: 5px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #f3f4f6;
+
+  color: #9ca3af;
+
+  font-size: 18px;
+}
+
+.tabla-cursos .tabla-vacia-contenido strong {
+  font-size: 13px;
+
+  color: #374151;
+}
+
+.tabla-cursos .tabla-vacia-contenido span {
+  font-size: 11px;
+
+  color: #9ca3af;
+}
+
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+
+@media (max-width: 768px) {
+
+  .tabla-cursos-wrapper .tabla-header {
+    padding: 14px;
+  }
+
+  .tabla-cursos tbody td {
+    padding: 11px 12px;
+  }
+
+}

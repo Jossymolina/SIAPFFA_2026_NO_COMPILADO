@@ -1,66 +1,156 @@
- 
+<div class="form-wrapper">
 
+  <div class="card form-card telefono-card">
 
-<div    class="form-wrapper">
-  <div class="card form-card p-3">
+    <!-- ENCABEZADO -->
+    <div class="form-header telefono-header">
 
- 
-    <div class="form-header mb-2">
       <div class="form-title">
-        Telefonos
-        <div class="form-subtitle">
-          Gestione los numero de telefono registrados para notificaciones
+
+        <div class="titulo-con-icono">
+          <div class="titulo-icono">
+            <i class="pi pi-phone"></i>
+          </div>
+
+          <div>
+            <div class="titulo-principal">
+              Teléfonos
+            </div>
+
+            <div class="form-subtitle">
+              Gestione los números de teléfono registrados para notificaciones
+            </div>
+          </div>
         </div>
+
       </div>
 
+
+      <!-- AGREGAR -->
       <button
         type="button"
-        class="btn btn-sm btn-back-modern"
-        style="white-space: nowrap; margin-top: 4px; background-color: black;color: white;"
+        class="btn btn-agregar-telefono"
         (click)="mostrarModalTelefono = true"
-        title="Agregar correo"
+        title="Agregar teléfono"
       >
-        <i class="pi pi-plus" aria-hidden="true"></i>
+        <i
+          class="pi pi-plus"
+          aria-hidden="true"
+        ></i>
+
         <span>Agregar</span>
       </button>
+
     </div>
 
-    <!-- LISTA -->
-    <div class="card-body px-0 pt-2 pb-0">
 
-      <label
+    <!-- CONTENIDO -->
+    <div class="card-body telefono-body">
+
+      <!-- SIN TELÉFONOS -->
+      <div
         *ngIf="arregloTelefono.length === 0"
-        style="color: red; font-size: 0.8rem;"
+        class="telefono-vacio"
       >
-        *No tiene telefonos registrados*
-      </label>
 
-      <div class="table-responsive" style="margin-top: 10px;">
-  
+        <div class="telefono-vacio-icono">
+          <i class="pi pi-phone"></i>
+        </div>
 
-         <table class="table table-sm table-hover table-bordered align-middle">
-          <thead class="table-light">
+        <div class="telefono-vacio-texto">
+
+          <strong>
+            No tiene teléfonos registrados
+          </strong>
+
+          <span>
+            Agregue un número de teléfono para recibir notificaciones.
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- LISTA -->
+      <div
+        class="table-responsive tabla-telefono-wrapper"
+        *ngIf="arregloTelefono.length > 0"
+      >
+
+        <table class="table tabla-telefono align-middle">
+
+          <thead>
             <tr>
-              <th style="width: 40px">#</th>
-              <th>Telefono</th>
-              <th style="width: 80px;">Opción</th>
+
+              <th class="col-numero">
+                #
+              </th>
+
+              <th>
+                Teléfono
+              </th>
+
+              <th class="col-opcion">
+                Opción
+              </th>
+
             </tr>
           </thead>
+
+
           <tbody>
-            <tr *ngFor="let i of arregloTelefono; let index = index">
-              <td>{{ index + 1 }}</td>
-              <td>{{ i.numero }}</td>
-              <td>
-                <button
-                  class="btn btn-sm btn-danger"
-                  (click)="eliminarnumero(i.numero)"
-                  title="Eliminar Telefono"
-                >
-                  <i class="pi pi-trash" aria-hidden="true"></i>
-                </button>
+
+            <tr
+              *ngFor="let i of arregloTelefono; let index = index"
+            >
+
+              <!-- NÚMERO -->
+              <td class="numero-fila">
+                {{ index + 1 }}
               </td>
+
+
+              <!-- TELÉFONO -->
+              <td>
+
+                <div class="telefono-dato">
+
+                  <div class="telefono-icono">
+                    <i class="pi pi-phone"></i>
+                  </div>
+
+                  <span>
+                    {{ i.numero }}
+                  </span>
+
+                </div>
+
+              </td>
+
+
+              <!-- OPCIÓN -->
+              <td class="telefono-opcion">
+
+                <button
+                  type="button"
+                  class="btn btn-sm btn-outline-danger boton-eliminar-telefono"
+                  (click)="eliminarnumero(i.numero)"
+                  title="Eliminar teléfono"
+                  aria-label="Eliminar teléfono"
+                >
+                  <i
+                    class="pi pi-trash"
+                    aria-hidden="true"
+                  ></i>
+                </button>
+
+              </td>
+
             </tr>
+
           </tbody>
+
         </table>
 
       </div>
@@ -68,8 +158,8 @@
     </div>
 
   </div>
-</div>
 
+</div>
 
 
 
@@ -123,70 +213,172 @@
 
 
 
-<div class="form-wrapper" style="margin-top: 10px;">
-  <div class="card form-card p-3">
+<div class="form-wrapper correo-wrapper" style="margin-top: 10px;">
 
- 
-    <div class="form-header mb-2">
+  <div class="card form-card correo-card">
+
+    <!-- ENCABEZADO -->
+    <div class="form-header correo-header">
+
       <div class="form-title">
-        Correos personales
-        <div class="form-subtitle">
-          Gestione los correos registrados para notificaciones
+
+        <div class="titulo-con-icono">
+
+          <div class="titulo-icono correo-icono">
+            <i class="pi pi-envelope"></i>
+          </div>
+
+          <div>
+
+            <div class="titulo-principal">
+              Correos personales
+            </div>
+
+            <div class="form-subtitle">
+              Gestione los correos registrados para notificaciones
+            </div>
+
+          </div>
+
         </div>
+
       </div>
 
+
+      <!-- AGREGAR -->
       <button
         type="button"
-        class="btn btn-sm btn-back-modern"
-        style="white-space: nowrap; margin-top: 4px; background-color: black;color: white;"
+        class="btn btn-agregar-correo"
         (click)="mostrarModalCorreo = true"
         title="Agregar correo"
       >
-        <i class="pi pi-plus" aria-hidden="true"></i>
+        <i
+          class="pi pi-plus"
+          aria-hidden="true"
+        ></i>
+
         <span>Agregar</span>
       </button>
+
     </div>
 
-    <!-- LISTA -->
-    <div class="card-body px-0 pt-2 pb-0">
 
-      <label
+    <!-- CONTENIDO -->
+    <div class="card-body correo-body">
+
+
+      <!-- SIN CORREOS -->
+      <div
         *ngIf="arregloCorreos.length === 0"
-        style="color: red; font-size: 0.8rem;"
+        class="correo-vacio"
       >
-        *No tiene correos registrados*
-      </label>
 
-      <div class="table-responsive" style="margin-top: 10px;">
-        <table class="table table-sm table-hover table-bordered align-middle">
-          <thead class="table-light">
+        <div class="correo-vacio-icono">
+          <i class="pi pi-envelope"></i>
+        </div>
+
+        <div class="correo-vacio-texto">
+
+          <strong>
+            No tiene correos registrados
+          </strong>
+
+          <span>
+            Agregue un correo para recibir notificaciones.
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- LISTA -->
+      <div
+        class="table-responsive tabla-correo-wrapper"
+        *ngIf="arregloCorreos.length > 0"
+      >
+
+        <table class="table tabla-correo align-middle">
+
+          <thead>
             <tr>
-              <th style="width: 40px">#</th>
-              <th>Correo</th>
-              <th style="width: 80px;">Opción</th>
+
+              <th class="col-numero">
+                #
+              </th>
+
+              <th>
+                Correo
+              </th>
+
+              <th class="col-opcion">
+                Opción
+              </th>
+
             </tr>
           </thead>
+
+
           <tbody>
-            <tr *ngFor="let i of arregloCorreos; let index = index">
-              <td>{{ index + 1 }}</td>
-              <td>{{ i.correo }}</td>
+
+            <tr
+              *ngFor="let i of arregloCorreos; let index = index"
+            >
+
+              <!-- NÚMERO -->
+              <td class="numero-fila">
+                {{ index + 1 }}
+              </td>
+
+
+              <!-- CORREO -->
               <td>
+
+                <div class="correo-dato">
+
+                  <div class="correo-dato-icono">
+                    <i class="pi pi-envelope"></i>
+                  </div>
+
+                  <span>
+                    {{ i.correo }}
+                  </span>
+
+                </div>
+
+              </td>
+
+
+              <!-- OPCIÓN -->
+              <td class="correo-opcion">
+
                 <button
-                  class="btn btn-sm btn-danger"
+                  type="button"
+                  class="btn btn-sm btn-outline-danger boton-eliminar-correo"
                   (click)="eliminarCorreo(i)"
                   title="Eliminar correo"
+                  aria-label="Eliminar correo"
                 >
-                  <i class="pi pi-trash" aria-hidden="true"></i>
+                  <i
+                    class="pi pi-trash"
+                    aria-hidden="true"
+                  ></i>
                 </button>
+
               </td>
+
             </tr>
+
           </tbody>
+
         </table>
+
       </div>
 
     </div>
 
   </div>
+
 </div>
 
 <!-- DIALOG PRIME NG: AGREGAR CORREO -->
@@ -241,132 +433,348 @@
 
 
 
-<div class="form-wrapper" style="margin-top: 10px;">
-  <div class="card form-card p-3">
+<div class="form-wrapper informacion-adicional-wrapper">
 
-    <!-- ====== PAISES ====== -->
-    <div class="mb-3">
-      <div class="form-header mb-2">
-        <div>
-          <div class="form-title" style="text-align: left;">
-            Países que conoce
+  <div class="card form-card informacion-adicional-card">
+
+    <!-- =====================================================
+         PAÍSES
+         ===================================================== -->
+    <section class="seccion-informacion">
+
+      <div class="seccion-header">
+
+        <div class="seccion-titulo-area">
+
+          <div class="seccion-icono">
+            <i class="pi pi-globe"></i>
           </div>
-          <div class="form-subtitle">
-            Registre los países donde ha estado o que conoce
+
+          <div>
+            <div class="seccion-titulo">
+              Países que conoce
+            </div>
+
+            <div class="seccion-subtitulo">
+              Registre los países donde ha estado o que conoce
+            </div>
           </div>
+
         </div>
+
 
         <button
           type="button"
-          class="btn btn-sm btn-back-modern"
+          class="btn btn-agregar-informacion"
           (click)="sacarpaises(); mostrarModalPaises = true"
           title="Agregar país"
-          style="background-color: black;color: white;"
         >
-          <i class="pi pi-plus" aria-hidden="true"></i>
+          <i
+            class="pi pi-plus"
+            aria-hidden="true"
+          ></i>
+
           <span>Agregar</span>
         </button>
+
       </div>
 
-      <label
-        *ngIf="arregloMisPaises.length === 0"
-        style="color: red; font-size: 0.8rem;"
-      >
-        No contiene países conocidos
-      </label>
 
-      <div class="table-responsive" style="margin-top: 10px;">
-        <table class="table table-sm table-hover table-bordered align-middle">
-          <thead class="table-light">
+      <!-- SIN PAÍSES -->
+      <div
+        *ngIf="arregloMisPaises.length === 0"
+        class="informacion-vacia"
+      >
+
+        <div class="informacion-vacia-icono">
+          <i class="pi pi-globe"></i>
+        </div>
+
+        <div class="informacion-vacia-texto">
+
+          <strong>
+            No contiene países conocidos
+          </strong>
+
+          <span>
+            Los países registrados aparecerán en esta sección.
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- TABLA PAÍSES -->
+      <div
+        class="table-responsive tabla-informacion-wrapper"
+        *ngIf="arregloMisPaises.length > 0"
+      >
+
+        <table class="table tabla-informacion align-middle">
+
+          <thead>
             <tr>
-              <th style="width: 40px;">#</th>
-              <th>Países</th>
-              <th style="width: 80px;">Opción</th>
+
+              <th class="col-numero">
+                #
+              </th>
+
+              <th>
+                País
+              </th>
+
+              <th class="col-opcion">
+                Opción
+              </th>
+
             </tr>
           </thead>
+
           <tbody>
-            <tr *ngFor="let i of arregloMisPaises; let index = index">
-              <td>{{ index + 1 }}</td>
-              <td>{{ i.nombrepaises }}</td>
-              <td>
-                <button
-                  (click)="EliminarPais(i)"
-                  class="btn btn-sm btn-warning"
-                  title="Eliminar país"
-                >
-                  <i class="pi pi-trash" aria-hidden="true"></i>
-                </button>
+
+            <tr
+              *ngFor="let i of arregloMisPaises; let index = index"
+            >
+
+              <td class="numero-fila">
+                {{ index + 1 }}
               </td>
+
+              <td>
+
+                <div class="dato-informacion">
+
+                  <div class="dato-informacion-icono">
+                    <i class="pi pi-globe"></i>
+                  </div>
+
+                  <span>
+                    {{ i.nombrepaises }}
+                  </span>
+
+                </div>
+
+              </td>
+
+              <td class="opcion-cell">
+
+                <button
+                  type="button"
+                  class="btn btn-sm btn-outline-danger boton-eliminar-informacion"
+                  (click)="EliminarPais(i)"
+                  title="Eliminar país"
+                  aria-label="Eliminar país"
+                >
+                  <i
+                    class="pi pi-trash"
+                    aria-hidden="true"
+                  ></i>
+                </button>
+
+              </td>
+
             </tr>
+
           </tbody>
+
         </table>
+
       </div>
+
+    </section>
+
+
+    <!-- SEPARADOR -->
+    <div class="seccion-separador">
+      <span></span>
     </div>
 
-    <hr>
 
-    <!-- ====== IDIOMAS ====== -->
-    <div class="mb-2">
-      <div class="form-header mb-2">
-        <div>
-          <div class="form-title" style="text-align: left;">
-            Idiomas que domina
+    <!-- =====================================================
+         IDIOMAS
+         ===================================================== -->
+    <section class="seccion-informacion">
+
+      <div class="seccion-header">
+
+        <div class="seccion-titulo-area">
+
+          <div class="seccion-icono">
+            <i class="pi pi-comments"></i>
           </div>
-          <div class="form-subtitle">
-            Registre los idiomas y el nivel de dominio
+
+          <div>
+            <div class="seccion-titulo">
+              Idiomas que domina
+            </div>
+
+            <div class="seccion-subtitulo">
+              Registre los idiomas y el nivel de dominio
+            </div>
           </div>
+
         </div>
+
 
         <button
           type="button"
-          class="btn btn-sm btn-back-modern"
+          class="btn btn-agregar-informacion"
           (click)="sacarIdiomas(); mostrarModalIdiomas = true"
           title="Agregar idioma"
-        style="background-color: black;color: white;"
         >
-          <i class="pi pi-plus" aria-hidden="true"></i>
+          <i
+            class="pi pi-plus"
+            aria-hidden="true"
+          ></i>
+
           <span>Agregar</span>
         </button>
+
       </div>
 
-      <label
-        *ngIf="arregloMisIdiomas.length === 0"
-        style="color: red; font-size: 0.8rem;"
-      >
-        No contiene idiomas que domina.
-      </label>
 
-      <div class="table-responsive" style="margin-top: 10px;">
-        <table class="table table-sm table-hover table-bordered align-middle">
-          <thead class="table-light">
+      <!-- SIN IDIOMAS -->
+      <div
+        *ngIf="arregloMisIdiomas.length === 0"
+        class="informacion-vacia"
+      >
+
+        <div class="informacion-vacia-icono">
+          <i class="pi pi-comments"></i>
+        </div>
+
+        <div class="informacion-vacia-texto">
+
+          <strong>
+            No contiene idiomas que domina
+          </strong>
+
+          <span>
+            Los idiomas registrados aparecerán en esta sección.
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- TABLA IDIOMAS -->
+      <div
+        class="table-responsive tabla-informacion-wrapper"
+        *ngIf="arregloMisIdiomas.length > 0"
+      >
+
+        <table class="table tabla-informacion align-middle">
+
+          <thead>
             <tr>
-              <th style="width: 40px;">#</th>
-              <th>Idiomas</th>
-              <th>Nivel</th>
-              <th style="width: 80px;">Opción</th>
+
+              <th class="col-numero">
+                #
+              </th>
+
+              <th>
+                Idioma
+              </th>
+
+              <th class="col-nivel">
+                Nivel
+              </th>
+
+              <th class="col-opcion">
+                Opción
+              </th>
+
             </tr>
           </thead>
+
           <tbody>
-            <tr *ngFor="let i of arregloMisIdiomas; let index = index">
-              <td>{{ index + 1 }}</td>
-              <td>{{ i.descripcion }}</td>
-              <td>{{ i.nivel }}%</td>
+
+            <tr
+              *ngFor="let i of arregloMisIdiomas; let index = index"
+            >
+
+              <td class="numero-fila">
+                {{ index + 1 }}
+              </td>
+
+
+              <!-- IDIOMA -->
               <td>
+
+                <div class="dato-informacion">
+
+                  <div class="dato-informacion-icono">
+                    <i class="pi pi-comments"></i>
+                  </div>
+
+                  <span>
+                    {{ i.descripcion }}
+                  </span>
+
+                </div>
+
+              </td>
+
+
+              <!-- NIVEL -->
+              <td>
+
+                <div class="nivel-container">
+
+                  <div class="nivel-superior">
+
+                    <span class="nivel-valor">
+                      {{ i.nivel }}%
+                    </span>
+
+                  </div>
+
+                  <div class="nivel-barra">
+
+                    <div
+                      class="nivel-barra-fill"
+                      [style.width.%]="i.nivel"
+                    ></div>
+
+                  </div>
+
+                </div>
+
+              </td>
+
+
+              <!-- OPCIÓN -->
+              <td class="opcion-cell">
+
                 <button
-                  class="btn btn-sm btn-success"
+                  type="button"
+                  class="btn btn-sm btn-outline-danger boton-eliminar-informacion"
                   (click)="eliminarIdioma(i)"
                   title="Eliminar idioma"
+                  aria-label="Eliminar idioma"
                 >
-                  <i class="pi pi-trash" aria-hidden="true"></i>
+                  <i
+                    class="pi pi-trash"
+                    aria-hidden="true"
+                  ></i>
                 </button>
+
               </td>
+
             </tr>
+
           </tbody>
+
         </table>
+
       </div>
-    </div>
+
+    </section>
 
   </div>
+
 </div>
 
 <!-- ====== DIALOG PRIME NG: AGREGAR PAISES ====== -->

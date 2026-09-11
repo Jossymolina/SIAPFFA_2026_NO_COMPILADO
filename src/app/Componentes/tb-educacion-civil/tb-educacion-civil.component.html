@@ -36,39 +36,169 @@
       </p>
 
       <!-- TABLA -->
-      <div class="table-responsive">
-        <table class="table table-sm table-hover align-middle">
-          <thead class="table-light">
-            <tr>
-              <th style="width: 50px;">#</th>
-              <th>Universidad / Centro educativo</th>
-              <th>Profesión</th>
-              <th>Fecha</th>
-              <th>País</th>
-              <th style="width: 80px;">Opciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let item of arregloProfesionPersona; let i = index">
-              <td>{{ i + 1 }}</td>
-              <td>{{ item.Universidad }}</td>
-              <td>{{ item.Profesion }}</td>
-              <td>{{ item.fechaformat }}</td>
-              <td>{{ item.Pais }}</td>
-              <td>
-                <button
-                  type="button"
-                  title="Eliminar"
-                  (click)="eliminarprofesion(item)"
-                  class="btn btn-sm btn-outline-danger"
-                >
-                  <i class="pi pi-trash" aria-hidden="true"></i>
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+    <!-- TABLA DE EDUCACIÓN -->
+<div class="tabla-educacion-wrapper">
+
+  <div class="tabla-header">
+    <div>
+      <h6 class="tabla-titulo">
+        <i class="pi pi-graduation-cap"></i>
+        Educación civil registrada
+      </h6>
+
+      <span class="tabla-subtitulo">
+        Información académica registrada
+      </span>
+    </div>
+  </div>
+
+
+  <div class="table-responsive">
+
+    <table class="table tabla-educacion align-middle">
+
+      <thead>
+        <tr>
+          <th class="col-numero">#</th>
+          <th>Universidad / Centro educativo</th>
+          <th>Profesión</th>
+          <th>Fecha</th>
+          <th>País</th>
+          <th class="col-progreso">Progreso</th>
+          <th class="col-opciones">Opciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <tr
+          *ngFor="let item of arregloProfesionPersona; let i = index"
+        >
+
+          <!-- NÚMERO -->
+          <td class="numero-fila">
+            {{ i + 1 }}
+          </td>
+
+
+          <!-- UNIVERSIDAD -->
+          <td>
+            <div class="dato-principal">
+              <div class="dato-icono">
+                <i class="pi pi-building"></i>
+              </div>
+
+              <span>
+                {{ item.Universidad }}
+              </span>
+            </div>
+          </td>
+
+
+          <!-- PROFESIÓN -->
+          <td>
+            <span class="profesion">
+              {{ item.Profesion }}
+            </span>
+          </td>
+
+
+          <!-- FECHA -->
+          <td>
+            <div class="dato-secundario">
+              <i class="pi pi-calendar"></i>
+              {{ item.fechaformat }}
+            </div>
+          </td>
+
+
+          <!-- PAÍS -->
+          <td>
+            <div class="dato-secundario">
+              <i class="pi pi-globe"></i>
+              {{ item.Pais }}
+            </div>
+          </td>
+
+
+          <!-- PROGRESO -->
+          <td class="progreso-cell">
+
+            <div class="progreso-info">
+              <span class="progreso-valor">
+                {{ item.progreso ? item.progreso : 0 }}%
+              </span>
+            </div>
+
+            <div class="progreso-barra">
+
+              <div
+                class="progreso-barra-fill"
+                [style.width.%]="item.progreso ? item.progreso : 0"
+              >
+              </div>
+
+            </div>
+
+          </td>
+
+
+          <!-- OPCIONES -->
+          <td class="opciones-cell">
+
+            <button
+              type="button"
+              title="Eliminar educación"
+              aria-label="Eliminar educación"
+              (click)="eliminarprofesion(item)"
+              class="btn btn-sm btn-outline-danger boton-eliminar"
+            >
+              <i
+                class="pi pi-trash"
+                aria-hidden="true"
+              ></i>
+            </button>
+
+          </td>
+
+        </tr>
+
+        <!-- SIN REGISTROS -->
+        <tr
+          *ngIf="
+            !arregloProfesionPersona ||
+            arregloProfesionPersona.length === 0
+          "
+        >
+          <td
+            colspan="7"
+            class="tabla-vacia"
+          >
+
+            <div class="tabla-vacia-contenido">
+
+              <div class="tabla-vacia-icono">
+                <i class="pi pi-book"></i>
+              </div>
+
+              <strong>No hay educación registrada</strong>
+
+              <span>
+                No se encontraron registros de educación civil.
+              </span>
+
+            </div>
+
+          </td>
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
 
     </div>
 
@@ -79,79 +209,161 @@
   header="Agregar educación civil"
   [(visible)]="mostrarModalEducacion"
   [modal]="true"
-  [style]="{ width: '650px', maxWidth: '95vw' }"
+  [style]="{ width: '700px', maxWidth: '95vw' }"
   [draggable]="false"
   [resizable]="false"
   [closable]="false"
+  styleClass="dialog-educacion"
 >
 
-  <form #formularioEducacion="ngForm" class="row g-3">
-
-    <!-- Nivel Educativo -->
-    <div class="col-md-6 col-12">
-      <label class="form-label">Nivel educativo</label>
-      <select
-        class="form-control"
-        name="Educacion"
-        required
-        [(ngModel)]="nivelSelected"
-        (change)="sacarProfesiones()"
-      >
-        <option [ngValue]="item" *ngFor="let item of arregloNivelEducativo">
-          {{ item.nombreNivel }}
-        </option>
-      </select>
+  <!-- ENCABEZADO INFORMATIVO -->
+  <div class="educacion-intro">
+    <div class="educacion-intro-icon">
+      <i class="pi pi-book"></i>
     </div>
 
-    <!-- Carrera -->
-    <div class="col-md-6 col-12">
-      <label class="form-label">Carrera</label>
-      <select
-        class="form-control"
-        name="Profesion"
-        required
-        ngModel
-        (change)="sacarPais()"
-      >
-        <option [ngValue]="item" *ngFor="let item of arregloProfesiones">
-          {{ item.profesion }}
-        </option>
-      </select>
+    <div>
+      <h5>Información académica</h5>
+      <p>
+        Complete los datos de la educación civil que desea registrar.
+      </p>
     </div>
+  </div>
 
-    <!-- País -->
-    <div class="col-md-6 col-12">
-      <label class="form-label">País</label>
-      <select
-        class="form-control"
-        name="pais"
-        required
-        ngModel
-      >
-        <option [ngValue]="item" *ngFor="let item of arregloPais">
-          {{ item.nombrepaises }}
-        </option>
-      </select>
-    </div>
+  <form
+    #formularioEducacion="ngForm"
+    class="row g-3 formulario-educacion"
+  >
 
-    <!-- Centro educativo -->
-    <div class="col-md-6 col-12">
-      <label class="form-label">Centro educativo</label>
-      <select
-        class="form-control"
-        name="centroEducativo"
-        required
-        ngModel
-      >
-        <option [ngValue]="item" *ngFor="let item of arregloUniversidades">
-          {{ item.nombre }}
-        </option>
-      </select>
-    </div>
+   <!-- NIVEL EDUCATIVO -->
+<div class="col-md-6 col-12 campo">
+  <label class="form-label">
+    <i class="pi pi-sitemap"></i>
+    Nivel educativo
+    <span class="campo-obligatorio">*</span>
+  </label>
 
-    <!-- Fecha graduación -->
-    <div class="col-md-6 col-12">
-      <label class="form-label">Fecha graduación</label>
+  <p-select
+    [options]="arregloNivelEducativo"
+    [(ngModel)]="nivelSelected"
+    name="Educacion"
+    optionLabel="nombreNivel"
+    placeholder="Seleccione un nivel"
+    [filter]="true"
+    filterBy="nombreNivel"
+    [showClear]="true"
+    (onChange)="sacarProfesiones()"
+    class="w-100"
+  >
+  </p-select>
+
+  <small class="campo-ayuda">
+    <i class="pi pi-info-circle"></i>
+    Seleccione el nivel educativo correspondiente.
+  </small>
+</div>
+
+
+   
+<!-- CARRERA -->
+<div class="col-md-6 col-12 campo">
+  <label class="form-label">
+    <i class="pi pi-graduation-cap"></i>
+    Carrera
+    <span class="campo-obligatorio">*</span>
+  </label>
+
+  <p-select
+    [options]="arregloProfesiones"
+    [(ngModel)]="profesionSelected"
+    name="Profesion"
+    optionLabel="profesion"
+    placeholder="Seleccione una carrera"
+    [filter]="true"
+    filterBy="profesion"
+    [showClear]="true"
+    [appendTo]="'body'"
+    (onChange)="sacarPais()"
+    styleClass="select-formulario"
+  >
+  </p-select>
+
+  <small class="campo-ayuda">
+    <i class="pi pi-info-circle"></i>
+    Seleccione la carrera o profesión correspondiente.
+  </small>
+</div>
+
+
+ <!-- PAÍS -->
+<div class="col-md-6 col-12 campo">
+  <label class="form-label">
+    <i class="pi pi-globe"></i>
+    País
+    <span class="campo-obligatorio">*</span>
+  </label>
+
+  <p-select
+    [options]="arregloPais"
+    [(ngModel)]="paisSelected"
+    name="pais"
+    optionLabel="nombrepaises"
+    placeholder="Seleccione un país"
+    [filter]="true"
+    filterBy="nombrepaises"
+    filterPlaceholder="Buscar país..."
+    [showClear]="true"
+    [appendTo]="'body'"
+    styleClass="select-formulario"
+  >
+  </p-select>
+
+  <small class="campo-ayuda">
+    <i class="pi pi-info-circle"></i>
+    Indique el país donde realizó sus estudios.
+  </small>
+</div>
+
+
+    <!-- CENTRO EDUCATIVO -->
+  <!-- CENTRO EDUCATIVO -->
+<div class="col-md-6 col-12 campo">
+  <label class="form-label">
+    <i class="pi pi-building"></i>
+    Centro educativo
+    <span class="campo-obligatorio">*</span>
+  </label>
+
+  <p-select
+    [options]="arregloUniversidades"
+    [(ngModel)]="centroEducativoSelected"
+    name="centroEducativo"
+    optionLabel="nombre"
+    placeholder="Seleccione un centro educativo"
+    [filter]="true"
+    filterBy="nombre"
+    filterPlaceholder="Buscar centro educativo..."
+    [showClear]="true"
+    [appendTo]="'body'"
+    styleClass="select-formulario"
+  >
+  </p-select>
+
+  <small class="campo-ayuda">
+    <i class="pi pi-info-circle"></i>
+    Seleccione la institución donde realizó los estudios.
+  </small>
+</div>
+
+
+    <!-- FECHA DE GRADUACIÓN -->
+    <div class="col-md-6 col-12 campo">
+      <label class="form-label">
+        <i class="pi pi-calendar"></i>
+        Fecha de graduación
+        <span class="campo-obligatorio">*</span>
+      </label>
+
       <input
         type="date"
         class="form-control"
@@ -159,27 +371,72 @@
         required
         ngModel
       />
+
+      <small class="campo-ayuda">
+        <i class="pi pi-info-circle"></i>
+        Indique la fecha en que obtuvo la graduación.
+      </small>
+    </div>
+
+
+    <!-- PORCENTAJE -->
+    <div class="col-md-6 col-12 campo">
+      <label class="form-label">
+        <i class="pi pi-percentage"></i>
+        Porcentaje de progreso académico
+        <span class="campo-obligatorio">*</span>
+      </label>
+
+      <div class="input-porcentaje">
+        <input
+          type="number"
+          class="form-control"
+          name="porcentaje"
+          required
+          min="0.01"
+          max="100"
+          step="0.01"
+          ngModel
+          placeholder="0.01 - 100"
+        />
+
+        <span>%</span>
+      </div>
+
+      <small class="campo-ayuda">
+        <i class="pi pi-info-circle"></i>
+        Ingrese un valor mayor a 0 y hasta 100.
+      </small>
     </div>
 
   </form>
 
-  <!-- FOOTER DEL DIALOG -->
-  <ng-template pTemplate="footer">
-    <button
-      pButton
-      type="button"
-      class="p-button-text"
-      label="Cerrar"
-      (click)="cerrarModalEducacionCivil()"
-    ></button>
 
-    <button
-      pButton
-      type="button"
-      label="Guardar"
-      icon="pi pi-check"
-      [disabled]="!formularioEducacion.valid"
-      (click)="guardarProfesion()"
-    ></button>
+  <!-- FOOTER -->
+  <ng-template pTemplate="footer">
+
+    <div class="dialog-footer">
+
+      <button
+        pButton
+        type="button"
+        class="p-button-text boton-cerrar"
+        label="Cerrar"
+        icon="pi pi-times"
+        (click)="cerrarModalEducacionCivil()"
+      ></button>
+
+      <button
+        pButton
+        type="button"
+        label="Guardar educación"
+        icon="pi pi-check"
+        [disabled]="!formularioEducacion.valid"
+        (click)="guardarProfesion()"
+      ></button>
+
+    </div>
+
   </ng-template>
+
 </p-dialog>

@@ -297,6 +297,15 @@ export const routes: Routes = [
       import('./Paginas/login/autenticarse/autenticarse.component')
         .then(m => m.AutenticarseComponent)
   },
+  ,
+       {
+        path: 'motor-encuestas',
+        canActivate: [],
+        data: { permisos: ['Enc_0001'] },
+        loadComponent: () =>
+          import('./Paginas/encuestas/encuesta-deducciones/encuesta-deducciones.component')
+            .then(m => m.EncuestaDeduccionesComponent)
+      },
 
   // 👇 ESTA SIEMPRE AL FINAL
   {

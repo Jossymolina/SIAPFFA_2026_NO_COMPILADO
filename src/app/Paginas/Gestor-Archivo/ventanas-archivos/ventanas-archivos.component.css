@@ -830,3 +830,129 @@ Fin de diseño de la barra de navegacion
     font-size: 10px;
     color: #6c757d;
 }
+
+
+
+
+
+
+
+
+.archivo-card-seleccionado {
+    background-color: #e3f2fd;
+    border: 1px solid #2196f3;
+}
+
+
+
+.checkbox-seleccion {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 5;
+}
+
+.checkbox-seleccion input {
+    width: 21px;
+    height: 21px;
+    cursor: pointer;
+    accent-color: #09ff00;
+    border: 10px solid #555555;
+}
+
+
+
+
+
+
+
+
+
+
+.archivo-card {
+    position: relative;
+    border-bottom: 4px solid transparent;
+    transition: all 0.2s ease;
+}
+
+/* ARCHIVO/CARPETA PROPIA */
+.archivo-card.acceso-propio {
+    border-bottom-color: #28a745;
+}
+
+/* ARCHIVO/CARPETA COMPARTIDA */
+.archivo-card.acceso-compartido {
+    border-bottom-color: #007bff;
+}
+
+/* CARPETA DE RUTA */
+.archivo-card.acceso-ruta {
+    border-bottom-color: #adb5bd;
+}
+
+
+
+.indicador-compartido,
+.indicador-propio {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    z-index: 5;
+}
+
+.indicador-compartido {
+    background: #007bff;
+    color: white;
+}
+
+.indicador-propio {
+    background: #28a745;
+    color: white;
+}
+
+
+
+.info-acceso {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 8px 12px;
+    margin-bottom: 10px;
+    font-size: 13px;
+    color: #555;
+    background: #f8f9fa;
+    border-radius: 6px;
+}
+
+.info-acceso span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.indicador {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.indicador.propio {
+    background-color: #28a745;
+}
+
+.indicador.compartido {
+    background-color: #007bff;
+}
+
+.indicador.ruta {
+    background-color: #adb5bd;
+}

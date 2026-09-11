@@ -15,6 +15,7 @@ import { DialogModule } from 'primeng/dialog';
 import { jsPDF } from "jspdf";
 import { FormsModule, NgForm } from '@angular/forms';
 import { PromocionesComponent } from '../promociones/promociones.component';
+import { TbHistorialSueldosComponent } from '../tb-historial-sueldos/tb-historial-sueldos.component';
 
 interface Persona {
   nombreCompleto: string;
@@ -33,7 +34,7 @@ interface Persona {
 }
 
 interface FolderTab {
-  id: 'generales' | 'educacion' | 'familiares' | 'telefonoCorreo' | 'ascensos'| 'controlDisciplinario'| 'asignaciones'| 'Promoción'|'archivos'| 'logistica';
+  id: 'generales' | 'educacion' | 'familiares' | 'telefonoCorreo' | 'ascensos'| 'controlDisciplinario'| 'asignaciones'| 'Promoción'|'archivos'| 'logistica' | 'pagos';
   titulo: string;
   icon: string;   // clase de Bootstrap Icons
 }
@@ -52,6 +53,7 @@ TbLogisticaComponent,
 DialogModule,
 TarjetaCarpetasComponent,
 PromocionesComponent,
+TbHistorialSueldosComponent,
 FormsModule],
   templateUrl: './visualizar-perfil.component.html',
   styleUrl: './visualizar-perfil.component.css',
@@ -86,6 +88,7 @@ persona: Persona = {
     { id: 'asignaciones',     titulo: 'Asignaciones',     icon: 'bi-journal-text' },
     { id: 'archivos',     titulo: 'Archivos',            icon: 'bi-journal-text' },
      { id: 'Promoción',     titulo: 'Promoción',            icon: 'bi-journal-text' },
+     { id: 'pagos',     titulo: 'Mis Pagos',            icon: 'bi-journal-text' },
     { id: 'logistica',     titulo: 'Logística',            icon: 'bi-journal-text' },
 
   

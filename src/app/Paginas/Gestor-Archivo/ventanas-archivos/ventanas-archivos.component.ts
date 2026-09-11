@@ -15,6 +15,7 @@ type Ventana = "Principal" | "Compartidos";
 import { SelectModule } from 'primeng/select';
 import { RadioButtonModule } from 'primeng/radiobutton';
 
+import { firstValueFrom } from 'rxjs';
 @Component({
   selector: 'app-ventanas-archivos',
   standalone: true,
@@ -37,8 +38,8 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 })
 export class VentanasArchivosComponent implements OnInit, AfterViewInit {
   tipoCargaArchivo = "PC"
-   tipoCarga = 'CREAR';
-   compartir = 'NO';
+  tipoCarga = 'CREAR';
+  compartir = 'NO';
   mostrarModalCarpeta = false
   mostrarModalRenombrar = false
   permisosVisualizacion = [
@@ -125,7 +126,7 @@ export class VentanasArchivosComponent implements OnInit, AfterViewInit {
       id_archivo_padre: this.archivoPadreActual ? this.archivoPadreActual.id_archivo : null
 
     }
-   
+
 
     this.archivos = []
     this._ServicioBackendService.sacarHijosDeArchivosCompartidos(p).subscribe({
@@ -151,6 +152,7 @@ export class VentanasArchivosComponent implements OnInit, AfterViewInit {
     this.sacarCategorias();
 
     this.sacarTodalasUnidades()
+
     this.itemsClickDerecho = [
       {
         label: 'Nueva Carpeta',
@@ -171,13 +173,64 @@ export class VentanasArchivosComponent implements OnInit, AfterViewInit {
         separator: true
       },
       {
-        label: 'Mover aquí',
+        label: 'Mover aquí ',
         icon: 'pi pi-arrow-down',
-        disabled: this.ArchivoSeleccionadoMover === undefined,
-        command: () => {
-          this.moverAqui();
+        disabled:  this.archivosSeleccionadosExplorer.length >=1 ,
+
+        command: async () => {
+       
+          
+          if (this.archivosSeleccionadosExplorer.length >= 1) {
+
+            // mover varios
+            this._ServiciosMensajeService.show("Moviendo archivos...");
+            for (const archivo of this.archivosSeleccionadosExplorer) {
+
+                           
+              await this.moverAquiVarios(archivo.id_archivo);
+
+            }
+            this._ServiciosMensajeService.hide();
+            this.modoSeleccionMultipleExplorer = false
+            this.archivosSeleccionadosExplorer = []
+            this.cargarContenido();
+
+
+          } else {
+           this._ServiciosMensajeService.mensajeAdvertencia("Seleccione un archivo para mover")
+                 
+           
+               //   this.moverAqui();
+                     
+          }
+
         }
+      },
+       {
+        label: 'Compartir',
+        icon: 'pi pi-share-alt',
+        disabled:  this.archivosSeleccionadosExplorer.length >=1 ,
+
+        command: async () => {
+          if(this.archivosSeleccionadosExplorer.length === 0) return this._ServiciosMensajeService.mensajeAdvertencia("Seleccione al menos un archivo para compartir")
+
+               this.mostrarDialogCompartirVarios = true
+              
+        }
+      },
+        {
+        separator: true
+      },
+       {
+        label: 'Seleccionar Varios',
+        icon: 'pi pi-check-square',
+        command: () => {
+          this.archivosSeleccionadosExplorer = []
+         this.modoSeleccionMultipleExplorer = !this.modoSeleccionMultipleExplorer
+        }
+
       }
+          
 
     ];
 
@@ -189,9 +242,9 @@ export class VentanasArchivosComponent implements OnInit, AfterViewInit {
     const mover = this.itemsClickDerecho.find(
       item => item.label === 'Mover aquí'
     );
- 
+//verifica
     if (mover) {
-      mover.disabled = this.ArchivoSeleccionadoMover === undefined;
+      mover.disabled = this.archivosSeleccionadosExplorer.length === 0? false: true;
     }
   }
 
@@ -403,7 +456,7 @@ export class VentanasArchivosComponent implements OnInit, AfterViewInit {
     return null;
 
   }
-  @ViewChild("FormNombre")FormNombre:NgForm
+  @ViewChild("FormNombre") FormNombre: NgForm
   crear_archivo_documento(form) {
     if (!this.usuarioLoguiado.idunidad_direccion) return this._ServiciosMensajeService.mensajeMalo("Para usar este servicio debe de estar en una Direccin/Depto o Sección")
 
@@ -469,8 +522,8 @@ export class VentanasArchivosComponent implements OnInit, AfterViewInit {
   archivoPadreActual
   historial = []
   async abrir(item: any) {
-
     if (item.tipo !== 'CARPETA') {
+      this.descargarArchivo(item)
       return;
     }
 
@@ -631,7 +684,14 @@ export class VentanasArchivosComponent implements OnInit, AfterViewInit {
 
           command: () =>
             this.SeleccionarmoverArchivo()
+        },
+         {
+        label: 'Compartir',
+        icon: 'pi pi-share-alt',
+        command: () => {
+          this.verCompartidos();
         }
+      }
       ];
 
       return;
@@ -674,12 +734,21 @@ export class VentanasArchivosComponent implements OnInit, AfterViewInit {
         }
       },
 
-      {
+     /* {
         label: 'Mover',
         icon: 'pi pi-arrows-v',
-        command: () =>
-          this.SeleccionarmoverArchivo()
-      }
+        command: () => {
+          //jossy
+          if (this.archivosSeleccionadosExplorer.length > 1) {
+            // Lógica para mover varios archivos
+          } else {
+            console.log("Seleccionado");
+            this.SeleccionarmoverArchivo()
+
+          }
+
+        }
+      }*/
     ];
   }
 
@@ -689,27 +758,24 @@ export class VentanasArchivosComponent implements OnInit, AfterViewInit {
   SeleccionarmoverArchivo() {
     this.ArchivoSeleccionadoMover = this.archivoSeleccionado
     this.verificarDesbloqueoMover()
- 
-    
-
   }
-  moverAqui() {
-    
-    
+  async moverAqui() {
+
+
     let p = {
       idArchivo: this.ArchivoSeleccionadoMover.id_archivo,
       idArchivoPadreNuevo: this.archivoPadreActual ? this.archivoPadreActual.id_archivo : null
     }
 
-    
+
 
 
     this._ServiciosMensajeService.show();
 
     this._ServicioBackendService.moverArchivo(p).subscribe({
       next: (response: any) => {
-    
-        
+
+
         this._ServiciosMensajeService.hide();
         this.ArchivoSeleccionadoMover = undefined
         if (!response.ok) return this._ServiciosMensajeService.mensajeMalo(response.mensaje);
@@ -726,6 +792,43 @@ export class VentanasArchivosComponent implements OnInit, AfterViewInit {
 
 
   }
+
+
+  async moverAquiVarios(id_archivo: number) {
+
+    let p = {
+      idArchivo: id_archivo,
+      idArchivoPadreNuevo: this.archivoPadreActual
+        ? this.archivoPadreActual.id_archivo
+        : null
+    };
+
+    this._ServiciosMensajeService.show();
+
+    try {
+
+      const response: any = await firstValueFrom(
+        this._ServicioBackendService.moverArchivo(p)
+      );
+
+      this.ArchivoSeleccionadoMover = undefined;
+
+      if (!response.ok) {
+        this._ServiciosMensajeService.mensajeMalo(response.mensaje);
+        return;
+      }
+
+    } catch (err) {
+
+      this._ServiciosMensajeService.mensajeerrorServer();
+
+    } finally {
+
+      this._ServiciosMensajeService.hide();
+
+    }
+  }
+
   editar() {
     if (this.archivoSeleccionado.usuario_creacion !== this.usuarioLoguiado.identidad) return this._ServiciosMensajeService.mensajeMalo("Solo el usuario que subio el archivo puede eliminarlo")
     this.mostrarModalRenombrar = true
@@ -766,13 +869,12 @@ export class VentanasArchivosComponent implements OnInit, AfterViewInit {
     };
 
 
-    this._ServiciosMensajeService.show();
+ 
 
     this._ServicioBackendService.modificarNombreArchivo(payload).subscribe({
       next: (response: any) => {
 
-        this._ServiciosMensajeService.hide();
-
+        this._ServiciosMensajeService.hide(); 
         if (response.error) {
           this._ServiciosMensajeService.mensajeMalo(response.error);
           return;
@@ -799,8 +901,7 @@ export class VentanasArchivosComponent implements OnInit, AfterViewInit {
 
       error: (err) => {
 
-
-        this._ServiciosMensajeService.hide();
+ 
         this._ServiciosMensajeService.mensajeerrorServer();
       }
     });
@@ -875,14 +976,14 @@ export class VentanasArchivosComponent implements OnInit, AfterViewInit {
   crearCarpetaHija() {
     this.mostrarModalCarpeta = true
   }
-  limpiarCarpetas(){
-    this.archivosCarpeta =[]
+  limpiarCarpetas() {
+    this.archivosCarpeta = []
 
   }
 
   crearCarpeta() {
     this.mostrarModalCarpeta = true;
-    this.archivosCarpeta =[]
+    this.archivosCarpeta = []
   }
 
   menuRaiz(event: any) {
@@ -1152,7 +1253,7 @@ export class VentanasArchivosComponent implements OnInit, AfterViewInit {
         "Descripción de máximo 400 caracteres"
       );
     }
-    
+
     if (!this.archivo_documento || this.archivo_documento.length === 0) {
 
       this._ServiciosMensajeService.mensajeAdvertencia(
@@ -1214,7 +1315,7 @@ export class VentanasArchivosComponent implements OnInit, AfterViewInit {
       this.usuarioLoguiado.idunidad_direccion
     );
 
-    
+
     this._ServiciosMensajeService.show();
 
     this._ServicioBackendService
@@ -1249,7 +1350,7 @@ export class VentanasArchivosComponent implements OnInit, AfterViewInit {
       this.formArchivo.reset();
       this.archivo_documento = [];
       this.archivo.nativeElement.value = '';
-   
+
     }, 300)
 
   }
@@ -1354,9 +1455,6 @@ export class VentanasArchivosComponent implements OnInit, AfterViewInit {
       return;
     }
 
-
-
-
     if (!this.unidadesSeleccionadas?.length) {
       return;
     }
@@ -1391,6 +1489,126 @@ export class VentanasArchivosComponent implements OnInit, AfterViewInit {
       }
     });
   }
+
+
+async iniciarCompartirVarios(){
+if(this.archivosSeleccionadosExplorer.length === 0){
+  this.mostrarDialogCompartirVarios = false
+  return this._ServiciosMensajeService.mensajeMalo("Seleccione al menos un archivo para compartir")
+}  
+
+  this._ServiciosMensajeService.show("Iniciando proceso de compartir archivos...");
+  for (const archivo of this.archivosSeleccionadosExplorer) {
+  let r =   await this.compartirArchivoVarios(archivo.id_archivo);
+  }
+
+  this._ServiciosMensajeService.hide();
+ //nasser
+ 
+  this.mostrarDialogCompartirVarios = false;
+  this.modoSeleccionMultipleExplorer =false
+  this.archivosSeleccionadosExplorer = []; 
+
+  this._ServiciosMensajeService.mensajeBueno(
+    "Archivos compartidos correctamente 1111"
+  );
+}
+
+ 
+async compartirArchivoVarios(id_archivo: number) {
+
+  try {
+
+    if (!id_archivo) {
+      this._ServiciosMensajeService.mensajeMalo(
+        'No se recibió un archivo válido para compartir.'
+      );
+      return;
+    }
+
+    const idUnidadUsuario = Number(
+      this.usuarioLoguiado?.idunidad_direccion
+    );
+
+    if (!Array.isArray(this.unidadesSeleccionadas) ||
+        this.unidadesSeleccionadas.length === 0) {
+
+      this._ServiciosMensajeService.mensajeMalo(
+        'Debe seleccionar al menos una unidad para compartir el archivo.'
+      );
+      return;
+    }
+
+   
+
+    const unidadPropiaSeleccionada = this.unidadesSeleccionadas.find(
+      (seleccionada: any) =>
+        Number(seleccionada?.key) === idUnidadUsuario
+    );
+
+    if (unidadPropiaSeleccionada) {
+
+      this._ServiciosMensajeService.mensajeMalo(
+        'Su unidad ya tiene acceso automáticamente al archivo.'
+      );
+
+      return;
+    }
+
+ 
+
+    const unidades = this.unidadesSeleccionadas
+      .map((item: any) => Number(item?.key))
+      .filter((id: number) => !isNaN(id));
+
+    if (unidades.length === 0) {
+      this._ServiciosMensajeService.mensajeMalo(
+        'No se encontraron unidades válidas para compartir.'
+      );
+
+      return;
+    }
+
+    const unidades_completas = this.unidadesSeleccionadas.map(
+      (item: any) => item?.data
+    );
+
+    const data = {
+      idarchivo: id_archivo,
+      unidades: unidades,
+      usuario: this.usuarioLoguiado,
+      unidades_detalle: unidades_completas,
+      archivo_seleccionado: this.archivoSeleccionado
+    };
+
+
+    const resp: any = await firstValueFrom(
+      this._ServicioBackendService.compartir_recompartir_Archivo(data)
+    );
+
+    if (!resp || !resp.ok) {
+
+      this._ServicioBackendService.mensajeError(
+        resp?.mensaje || 'No fue posible compartir el archivo.'
+      );
+
+      return;
+    }
+
+    this._ServiciosMensajeService.mensajeBueno(
+      resp.mensaje || 'Archivo compartido correctamente.'
+    );
+ 
+
+  } catch (error) {
+ 
+
+    this._ServiciosMensajeService.mensajeMalo(
+      'Ocurrió un error al compartir el archivo.'
+    );
+
+  }
+}
 
 
   eliminarCompartido(item) {
@@ -1432,7 +1650,7 @@ export class VentanasArchivosComponent implements OnInit, AfterViewInit {
   sacarScanner() {
     this._ServicioBackendService.obtenerEscaneres().subscribe({
       next: (respuesta) => {
-      
+
         this.escaneres = respuesta.scanners;
       },
       error: (error) => {
@@ -1447,87 +1665,87 @@ export class VentanasArchivosComponent implements OnInit, AfterViewInit {
 
   escanearDocumento(): void {
 
-  if (!this.escanerSeleccionado) {
+    if (!this.escanerSeleccionado) {
 
-    this._ServiciosMensajeService.mensajeMalo(
-      'Seleccione un escáner'
-    );
+      this._ServiciosMensajeService.mensajeMalo(
+        'Seleccione un escáner'
+      );
 
-    return;
+      return;
+    }
+
+    if (this.archivo_documento.length >= 5) {
+
+      this._ServiciosMensajeService.mensajeMalo(
+        'Máximo 5 archivos a la vez'
+      );
+
+      return;
+    }
+
+    if (this.escaneando) {
+      return;
+    }
+
+    let source = 'auto';
+    let duplex = false;
+
+    if (this.modoEscaneo === 'adf') {
+
+      source = 'adf';
+      duplex = false;
+
+    }
+
+    if (this.modoEscaneo === 'adf-duplex') {
+
+      source = 'adf';
+      duplex = true;
+
+    }
+
+    this.escaneando = true;
+
+
+
+
+    this._ServicioBackendService
+      .escanearDocumento(
+        this.escanerSeleccionado.id,
+        source,
+        duplex
+      )
+      .subscribe({
+
+        next: (blob) => {
+
+          const archivo = new File(
+            [blob],
+            `documento_escaneado_${this.archivo_documento.length + 1}.pdf`,
+            {
+              type: 'application/pdf'
+            }
+          );
+
+          this.archivo_documento.push(archivo);
+
+
+          this.escaneando = false;
+
+        },
+
+        error: (error) => {
+          this.escaneando = false;
+
+          this._ServiciosMensajeService.mensajeMalo(
+            'No fue posible escanear el documento'
+          );
+
+        }
+
+      });
+
   }
-
-  if (this.archivo_documento.length >= 5) {
-
-    this._ServiciosMensajeService.mensajeMalo(
-      'Máximo 5 archivos a la vez'
-    );
-
-    return;
-  }
-
-  if (this.escaneando) {
-    return;
-  }
-
-  let source = 'auto';
-  let duplex = false;
-
-  if (this.modoEscaneo === 'adf') {
-
-    source = 'adf';
-    duplex = false;
-
-  }
-
-  if (this.modoEscaneo === 'adf-duplex') {
-
-    source = 'adf';
-    duplex = true;
-
-  }
-
-  this.escaneando = true;
-
-
-  
-
-  this._ServicioBackendService
-    .escanearDocumento(
-      this.escanerSeleccionado.id,
-      source,
-      duplex
-    )
-    .subscribe({
-
-      next: (blob) => {
-               
-        const archivo = new File(
-          [blob],
-          `documento_escaneado_${this.archivo_documento.length + 1}.pdf`,
-          {
-            type: 'application/pdf'
-          }
-        );
-
-        this.archivo_documento.push(archivo);
-    
-        
-        this.escaneando = false;
-
-      },
-
-      error: (error) => {
-        this.escaneando = false;
-
-        this._ServiciosMensajeService.mensajeMalo(
-          'No fue posible escanear el documento'
-        );
-
-      }
-
-    });
-
-}
   eliminarArchivoEscaneado(index: number): void {
 
     this.archivo_documento.splice(index, 1);
@@ -1552,138 +1770,173 @@ export class VentanasArchivosComponent implements OnInit, AfterViewInit {
       label: 'ADF - varias hojas',
       value: 'adf'
     },
-   /* {
-      label: 'ADF - varias hojas doble cara',
-      value: 'adf-duplex'
-    }*/
+    /* {
+       label: 'ADF - varias hojas doble cara',
+       value: 'adf-duplex'
+     }*/
   ];
 
 
-archivosCarpeta: File[] = [];
+  archivosCarpeta: File[] = [];
 
-seleccionarCarpeta(event: any) {
+  seleccionarCarpeta(event: any) {
 
-  if (event.target.files && event.target.files.length > 0) {
+    if (event.target.files && event.target.files.length > 0) {
 
-    this.archivosCarpeta = Array.from(event.target.files) as File[];
-
-    
-
-    this.archivosCarpeta.forEach((archivo: File) => {
-
-      
-
-    });
-
-  }
-
-}
- 
-
-@ViewChild('inputCarpeta') inputCarpeta!: ElementRef;
-
-subiendoCarpeta = false;
- 
-
-async subirCarpeta() {
-
-  if (this.subiendoCarpeta) return;
-
-  if (!this.archivosCarpeta || this.archivosCarpeta.length === 0) {
-    return this._ServiciosMensajeService.mensajeAdvertencia(
-      'Seleccione una carpeta'
-    );
-  }
-
-  const r = await this._ServiciosMensajeService.mensajePregunta(
-    '¿Está seguro de subir la carpeta completa?'
-  );
-
-  if (!r) return;
-
-  this.subiendoCarpeta = true;
-
-  const formData = new FormData();
-
-  formData.append(
-    'id_archivo_padre',
-    this.archivoPadreActual?.id_archivo?.toString() ?? ''
-  );
-
-  formData.append(
-    'id_categoria',
-    this.categoriaSeleccionada
-      ? this.categoriaSeleccionada.data.id_categoria
-      : ''
-  );
-
-  formData.append(
-    'descripcion',
-    this.formArchivo.value.descripcion || ''
-  );
-
-  formData.append(
-    'usuario_creacion',
-    this.usuarioLoguiado.identidadusuario
-  );
-
-  formData.append('estado', 'ACTIVO');
-
-  formData.append(
-    'idunidad_direccion',
-    this.usuarioLoguiado.idunidad_direccion
-  );
-
-  formData.append('tipo', 'CARPETA_COMPLETA');
-
-  const rutas = this.archivosCarpeta.map((archivo: File) => ({
-    nombre: archivo.name,
-    ruta: archivo.webkitRelativePath
-  }));
-
-  formData.append(
-    'rutas_relativas',
-    JSON.stringify(rutas)
-  );
-
-  this.archivosCarpeta.forEach((archivo: File) => {
-    formData.append('archivos', archivo);
-  });
+      this.archivosCarpeta = Array.from(event.target.files) as File[];
 
 
-  
 
-  
-  
-
-this._ServiciosMensajeService.show()
-
-this._ServicioBackendService
-  .crear_archivo_documentos(formData)
-  .subscribe({
-    next: (respuesta) => {
-  this._ServiciosMensajeService.hide()
-      
-      this.subiendoCarpeta = false;
-      this.archivosCarpeta = [];
-      if (this.inputCarpeta) {
-        this.inputCarpeta.nativeElement.value = '';
-      }
-      this.cargarContenido();
-      this.modalSubirArchivo = false;
-      this.formArchivo.reset();
-  },
-    error: (error) => {
-  this._ServiciosMensajeService.hide()
+      this.archivosCarpeta.forEach((archivo: File) => {
 
 
-      this.subiendoCarpeta = false;
 
-      this._ServiciosMensajeService.mensajeerrorServer();
+      });
 
     }
-  });
 
-}
+  }
+
+
+  @ViewChild('inputCarpeta') inputCarpeta!: ElementRef;
+
+  subiendoCarpeta = false;
+
+
+  async subirCarpeta() {
+
+    if (this.subiendoCarpeta) return;
+
+    if (!this.archivosCarpeta || this.archivosCarpeta.length === 0) {
+      return this._ServiciosMensajeService.mensajeAdvertencia(
+        'Seleccione una carpeta'
+      );
+    }
+
+    const r = await this._ServiciosMensajeService.mensajePregunta(
+      '¿Está seguro de subir la carpeta completa?'
+    );
+
+    if (!r) return;
+
+    this.subiendoCarpeta = true;
+
+    const formData = new FormData();
+
+    formData.append(
+      'id_archivo_padre',
+      this.archivoPadreActual?.id_archivo?.toString() ?? ''
+    );
+
+    formData.append(
+      'id_categoria',
+      this.categoriaSeleccionada
+        ? this.categoriaSeleccionada.data.id_categoria
+        : ''
+    );
+
+    formData.append(
+      'descripcion',
+      this.formArchivo.value.descripcion || ''
+    );
+
+    formData.append(
+      'usuario_creacion',
+      this.usuarioLoguiado.identidadusuario
+    );
+
+    formData.append('estado', 'ACTIVO');
+
+    formData.append(
+      'idunidad_direccion',
+      this.usuarioLoguiado.idunidad_direccion
+    );
+
+    formData.append('tipo', 'CARPETA_COMPLETA');
+
+    const rutas = this.archivosCarpeta.map((archivo: File) => ({
+      nombre: archivo.name,
+      ruta: archivo.webkitRelativePath
+    }));
+
+    formData.append(
+      'rutas_relativas',
+      JSON.stringify(rutas)
+    );
+
+    this.archivosCarpeta.forEach((archivo: File) => {
+      formData.append('archivos', archivo);
+    });
+
+
+
+
+
+
+
+    this._ServiciosMensajeService.show()
+
+    this._ServicioBackendService
+      .crear_archivo_documentos(formData)
+      .subscribe({
+        next: (respuesta) => {
+          this._ServiciosMensajeService.hide()
+
+          this.subiendoCarpeta = false;
+          this.archivosCarpeta = [];
+          if (this.inputCarpeta) {
+            this.inputCarpeta.nativeElement.value = '';
+          }
+          this.cargarContenido();
+          this.modalSubirArchivo = false;
+          this.formArchivo.reset();
+        },
+        error: (error) => {
+          this._ServiciosMensajeService.hide()
+
+
+          this.subiendoCarpeta = false;
+
+          this._ServiciosMensajeService.mensajeerrorServer();
+
+        }
+      });
+
+  }
+
+
+
+
+
+
+
+
+
+
+  /**Seleccionar varios */
+  archivosSeleccionadosExplorer: any[] = [];
+
+  modoSeleccionMultipleExplorer = false;
+
  
+  
+
+  seleccionarItemExplorer(item: any): void {
+
+    
+    const indice = this.archivosSeleccionadosExplorer.indexOf(item);
+
+    if (indice >= 0) {
+      this.archivosSeleccionadosExplorer.splice(indice, 1);
+
+    } else {
+
+      this.archivosSeleccionadosExplorer.push(item);
+
+    }
+
+  }
+
+
+  mostrarDialogCompartirVarios = false
 }

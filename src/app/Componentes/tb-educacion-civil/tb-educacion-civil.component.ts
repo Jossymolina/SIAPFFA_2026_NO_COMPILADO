@@ -5,10 +5,11 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
  import { DialogModule } from 'primeng/dialog';
  import { ButtonModule } from 'primeng/button';
+ import { SelectModule } from 'primeng/select';
 @Component({
   selector: 'app-tb-educacion-civil',
   standalone:true,
-  imports: [CommonModule,FormsModule,DialogModule,ButtonModule],
+  imports: [CommonModule,FormsModule,DialogModule,ButtonModule,SelectModule],
   templateUrl: './tb-educacion-civil.component.html',
   styleUrl: './tb-educacion-civil.component.css',
 })
@@ -19,7 +20,9 @@ export class TbEducacionCivilComponent {
   arregloUniversidades = new Array()
   arregloProfesionPersona = new Array();
   usuariologuiado;
- 
+ profesionSelected: any = null;
+ paisSelected
+ centroEducativoSelected
   @ViewChild("formularioEducacion") formularioEducacion: NgForm
   @Input("identidad") identidad;
  
@@ -48,6 +51,7 @@ export class TbEducacionCivilComponent {
   this._ServiciosMensajeService.show()
     this._DatospersonalesService.sacarnivelesEducativos().subscribe(
       Response => {
+        console.log(Response)
 this._ServiciosMensajeService.hide()
 
         if (Response.error) {
@@ -191,7 +195,7 @@ this._ServiciosMensajeService.hide()
       Response => {
       this._ServiciosMensajeService.hide()
 
-
+console.log(Response)
         if (Response.error) {
           this._DatospersonalesService.mensajeError(Response.error)
         } else {

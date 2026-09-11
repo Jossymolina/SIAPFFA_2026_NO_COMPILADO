@@ -285,6 +285,7 @@ arregloOrganizacionCompletaFiltrado: any[] = [];
       idunidad:form.value.seccion.idunidad
     }
     
+   
 
     this.arregloBajas = []
     this._ServiciosMensajeService.show();
@@ -374,23 +375,22 @@ arregloOrganizacionCompletaFiltrado: any[] = [];
   }
  
 sacarOrganizacion(form:NgForm,objeto){
+   
 this.arregloOrganizacionCompleta =[]
 let q={cadena:``,data:{} as any}
-   if(objeto === "fuerza"){
-     q.cadena=` and ua.idfuerza=${form.value.fuerza.idfuerza}  and nivel in (${form.value.categoria.nivel }) `
-   }else if(objeto === "unidad"){
-     q.cadena=` and ua.idunidad=${form.value.unidad.idunidad}`
-      q.data.cadena = ` and idunidad  =${form.value.unidad.idunidad} ` 
-   } else  if(objeto === "seccion"){
-      q.data.idunidad = Number(form.value.seccion.key);
-   }
+if(objeto === "fuerza"){
+       q.data.unidad_tipo = form.value.seccion.data.unidad_tipo
+       q.data.idunidad =  form.value.seccion.idunidad
+       console.log("fuerza",q)
 
+} 
    this.ejecucatarConsultaOrganizacion(q)
+ 
 }
 
 ejecucatarConsultaOrganizacion(p){
  
-
+console.log("Consulta organizacion", p)
    this._ServiciosMensajeService.show("Buscando personal.....");
    this._ServicioBackendService.sacarOrganizacionCompleta(p).subscribe({
     next: (response) => {

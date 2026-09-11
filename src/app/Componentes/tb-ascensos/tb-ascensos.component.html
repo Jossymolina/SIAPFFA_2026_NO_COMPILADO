@@ -13,49 +13,175 @@
       </div>
     </div>
 
-    <!-- Mensaje si no hay datos -->
-    <label
-      *ngIf="arregloAscensos.length === 0"
-      style="color: red; font-size: 0.8rem;"
-    >
-      * No contiene registro de ascenso *
-    </label>
+ 
+<!-- =====================================================
+     ASCENSOS REGISTRADOS
+     ===================================================== -->
 
-    <!-- Tabla -->
-    <div class="table-responsive mt-2">
-      <table class="table table-sm table-hover table-bordered align-middle" style="font-size: 13.5px;">
-        <thead class="table-light">
-          <tr>
-            <th style="width: 40px;">#</th>
-            <th>Fuerza</th>
-            <th>Número de acuerdo</th>
-            <th>Grado</th>
-            <th>Activo</th>
-            <th>Fecha de ascenso</th>
-          </tr>
-        </thead>
+<div class="tabla-ascensos-wrapper">
 
-        <tbody>
-          <tr *ngFor="let y of arregloAscensos; let index = index">
-            <td>{{ index + 1 }}</td>
-            <td>{{ y.nombre }}</td>
-            <td>{{ y.numeroAcuerdo }}</td>
-            <td>{{ y._grado }}</td>
+  <!-- SIN REGISTROS -->
+  <div
+    *ngIf="arregloAscensos.length === 0"
+    class="ascensos-vacio"
+  >
 
-            <td>
-              <span
-                class="badge"
-                [ngClass]="y.activo === 1 ? 'bg-success' : 'bg-secondary'"
-              >
-                {{ y.activo === 1 ? 'Sí' : 'No' }}
-              </span>
-            </td>
-
-            <td>{{ y?.fechaformatAscenso }}</td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="ascensos-vacio-icono">
+      <i class="pi pi-arrow-up"></i>
     </div>
+
+    <div class="ascensos-vacio-texto">
+
+      <strong>
+        No contiene registros de ascenso
+      </strong>
+
+      <span>
+        Los ascensos registrados aparecerán en esta sección.
+      </span>
+
+    </div>
+
+  </div>
+
+
+  <!-- TABLA -->
+  <div
+    class="table-responsive"
+    *ngIf="arregloAscensos.length > 0"
+  >
+
+    <table class="table tabla-ascensos align-middle">
+
+      <thead>
+        <tr>
+
+          <th class="col-numero">
+            #
+          </th>
+
+          <th>
+            Fuerza
+          </th>
+
+          <th>
+            Número de acuerdo
+          </th>
+
+          <th>
+            Grado
+          </th>
+
+          <th class="col-activo">
+            Activo
+          </th>
+
+          <th>
+            Fecha de ascenso
+          </th>
+
+        </tr>
+      </thead>
+
+
+      <tbody>
+
+        <tr
+          *ngFor="let y of arregloAscensos; let index = index"
+        >
+
+          <!-- NÚMERO -->
+          <td class="numero-fila">
+            {{ index + 1 }}
+          </td>
+
+
+          <!-- FUERZA -->
+          <td>
+
+            <div class="dato-ascenso">
+
+              <div class="dato-ascenso-icono">
+                <i class="pi pi-shield"></i>
+              </div>
+
+              <span>
+                {{ y.nombre }}
+              </span>
+
+            </div>
+
+          </td>
+
+
+          <!-- NÚMERO DE ACUERDO -->
+          <td>
+            <span class="dato-acuerdo">
+              {{ y.numeroAcuerdo }}
+            </span>
+          </td>
+
+
+          <!-- GRADO -->
+          <td>
+            <span class="dato-grado">
+              {{ y._grado }}
+            </span>
+          </td>
+
+
+          <!-- ACTIVO -->
+          <td>
+
+            <span
+              class="estado-ascenso"
+              [ngClass]="
+                y.activo === 1
+                  ? 'estado-activo'
+                  : 'estado-inactivo'
+              "
+            >
+
+              <i
+                class="pi"
+                [ngClass]="
+                  y.activo === 1
+                    ? 'pi-check-circle'
+                    : 'pi-minus-circle'
+                "
+              ></i>
+
+              {{ y.activo === 1 ? 'Sí' : 'No' }}
+
+            </span>
+
+          </td>
+
+
+          <!-- FECHA -->
+          <td>
+
+            <div class="fecha-ascenso">
+
+              <i class="pi pi-calendar"></i>
+
+              <span>
+                {{ y?.fechaformatAscenso }}
+              </span>
+
+            </div>
+
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
 
   </div>
 </div>

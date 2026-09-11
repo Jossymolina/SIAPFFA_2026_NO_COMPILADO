@@ -129,13 +129,29 @@
 
           <!-- PESTAÑAS TIPO CARPETA -->
           <div class="folders-tabs">
-            <div *ngFor="let tab of tabs; let i = index" class="folder-tab" [class.active]="tab.id === activeTab"
+            <ng-container *ngFor="let tab of tabs; let i = index" >
+            
+              @if(tab.id==='pagos'){
+         <div  class="folder-tab" [class.active]="tab.id === activeTab"
+         style="background-color: rgb(96, 161, 21); color:#000000"
               [style.zIndex]="tabs.length - i" (click)="setActiveTab(tab.id, $event)">
               <span class="folder-tab-label">
                 <i class="bi" [ngClass]="tab.icon"></i>
                 {{ tab.titulo }}
               </span>
             </div>
+              }@else {
+                <div  class="folder-tab" [class.active]="tab.id === activeTab"
+              [style.zIndex]="tabs.length - i" (click)="setActiveTab(tab.id, $event)">
+              <span class="folder-tab-label">
+                <i class="bi" [ngClass]="tab.icon"></i>
+                {{ tab.titulo }}
+              </span>
+            </div>
+              }
+
+            </ng-container>
+            
           </div>
 
           <!-- CUERPO DEL FOLDER ACTIVO -->
@@ -403,6 +419,7 @@
                 <app-tb-ascensos [identidad]="objetoConsultado.identidad"></app-tb-ascensos>
 
               </div>
+
               <div *ngSwitchCase="'controlDisciplinario'">
                 <div class="section-title">
                   <span class="section-line"></span>
@@ -411,6 +428,8 @@
                 <app-tb-control-disciplinario [identidad]="objetoConsultado.identidad"></app-tb-control-disciplinario>
 
               </div>
+
+
               <div *ngSwitchCase="'asignaciones'">
                 <div class="section-title">
                   <span class="section-line"></span>
@@ -439,6 +458,7 @@
                 <app-tb-logistica [identidad]="objetoConsultado.identidad"></app-tb-logistica>
 
               </div>
+
               <div *ngSwitchCase="'archivos'">
                 <div class="section-title">
                   <span class="section-line"></span>
@@ -448,6 +468,16 @@
 
               </div>
 
+            <div *ngSwitchCase="'pagos'" class="pagos-section">
+
+                  <div class="section-title">
+                    <span class="section-line"></span>
+                    <span>Mis pagos</span>
+                  </div>
+                 
+                  <app-tb-historial-sueldos  [identidad]="objetoConsultado.identidad" [personaBuscada]="objetoConsultado" ></app-tb-historial-sueldos>
+ 
+                </div>
 
 
 

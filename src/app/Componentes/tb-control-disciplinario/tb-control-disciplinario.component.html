@@ -11,12 +11,7 @@
           Registro de arrestos y documentos asociados
         </div>
       </div>
-<!-- *ngIf="
-          _DatospersonalesService.verificarPermisos(1) ||
-          _DatospersonalesService.verificarPermisos(2) ||
-          _DatospersonalesService.verificarPermisos(3) ||
-          _DatospersonalesService.verificarPermisos(4)
-        "-->
+ 
       <button
        *ngIf="agregarArestoT"
         type="button"
@@ -30,99 +25,162 @@
       </button>
     </div>
 
-    <!-- MENSAJE SIN REGISTROS -->
-    <label
-      *ngIf="arregloArestos.length === 0"
-      style="color: red; font-size: 0.8rem;"
-    >
-      *No tiene control disciplinario*
-    </label>
+   <!-- CONTROL DISCIPLINARIO -->
+<div class="tabla-arrestos-wrapper">
 
-    <!-- TABLA -->
-    <div class="table-responsive mt-2">
-      <table
-        class="table table-sm table-hover table-bordered table-striped align-middle"
-        style="font-size: 13.5px;"
-      >
-        <thead class="table-light">
+  <!-- ENCABEZADO -->
+  <div class="tabla-seccion-header">
+    <div class="titulo-con-icono">
+      <div class="titulo-icono titulo-icono-rojo">
+        <i class="pi pi-shield"></i>
+      </div>
+
+      <div>
+        <h5 class="titulo-principal">Control disciplinario</h5>
+        <p class="form-subtitle">
+          Registro de arrestos y medidas disciplinarias
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIN REGISTROS -->
+  <div
+    *ngIf="arregloArestos.length === 0"
+    class="arrestos-vacio"
+  >
+    <i class="pi pi-check-circle"></i>
+    <span>No tiene control disciplinario registrado</span>
+  </div>
+
+  <!-- TABLA -->
+  <div
+    *ngIf="arregloArestos.length > 0"
+    class="table-responsive"
+  >
+    <table class="table table-hover align-middle tabla-arrestos">
+      <thead>
+        <tr>
+          <th class="col-numero">#</th>
+          <th>Fecha</th>
+          <th>Concepto</th>
+          <th>Tiempo</th>
+          <th>Por orden de</th>
+          <th class="col-archivo">Archivo</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <ng-container
+          *ngFor="let f of arregloArestos; let index = index"
+        >
           <tr>
-            <th style="width: 40px">#</th>
-            <th>Fecha</th>
-            <th>Concepto</th>
-            <th>Tiempo</th>
-            <th>Por orden de</th>
-            <th style="width: 120px;">Archivo</th>
-          </tr>
-        </thead>
-        <tbody>
-          <ng-container *ngFor="let f of arregloArestos; let index = index">
-            <tr>
-              <td>{{ index + 1 }}</td>
-              <td>{{ f.fecha }}</td>
-              <td>{{ f.motivo }}</td>
-              <td>{{formatearHoras( f.horas)  }}</td>
-              <td>{{ f.nombres }} {{ f.apellidos }}</td>
-              <td>
-                <!-- SIN ARCHIVO: SUBIR       *ngIf="
-                    _DatospersonalesService.verificarPermisos(1) ||
-                    _DatospersonalesService.verificarPermisos(2) ||
-                    _DatospersonalesService.verificarPermisos(3) ||
-                    _DatospersonalesService.verificarPermisos(4)
-                  " -->
-                <ng-container
-            
+            <!-- NUMERO -->
+            <td class="numero-registro">
+              {{ index + 1 }}
+            </td>
+
+            <!-- FECHA -->
+            <td>
+              <div class="dato-arresto">
+                <span class="dato-icono">
+                  <i class="pi pi-calendar"></i>
+                </span>
+                <span>{{ f.fecha }}</span>
+              </div>
+            </td>
+
+            <!-- CONCEPTO -->
+            <td>
+              <div class="dato-concepto">
+                {{ f.motivo }}
+              </div>
+            </td>
+
+            <!-- TIEMPO -->
+            <td>
+              <span class="tiempo-arresto">
+                <i class="pi pi-clock"></i>
+                {{ formatearHoras(f.horas) }}
+              </span>
+            </td>
+
+            <!-- POR ORDEN DE -->
+            <td>
+              <div class="dato-arresto">
+                <span class="dato-icono">
+                  <i class="pi pi-user"></i>
+                </span>
+
+                <span>
+                  {{ f.nombres }} {{ f.apellidos }}
+                </span>
+              </div>
+            </td>
+
+            <!-- ARCHIVO -->
+            <td class="acciones-archivo">
+
+              <!-- SIN ARCHIVO -->
+              <ng-container>
+                <button
+                  *ngIf="f.archivo === null; else archivoCargado"
+                  type="button"
+                  class="btn btn-sm boton-subir-archivo"
+                  title="Subir documento"
+                  (click)="ver(f); mostrarModalDocumentoArresto = true"
                 >
+                  <i
+                    class="pi pi-upload"
+                    aria-hidden="true"
+                  ></i>
+                </button>
+              </ng-container>
+
+              <!-- CON ARCHIVO -->
+              <ng-template #archivoCargado>
+
+                <!-- VER -->
+                <a
+                  *ngIf="f.archivo !== null"
+                  title="Ver el documento"
+                  target="_blank"
+                  download
+                  class="btn btn-sm boton-ver-archivo"
+                  [href]="_DatospersonalesService.url2 + 'sacarfoto/' + f?.archivo"
+                >
+                  <i
+                    class="pi pi-eye"
+                    aria-hidden="true"
+                  ></i>
+                </a>
+
+                <!-- ELIMINAR -->
+                <ng-container>
                   <button
-                    *ngIf="f.archivo === null; else archivoCargado"
+                    *ngIf="f.archivo !== null"
                     type="button"
-                    class="btn btn-sm btn-warning"
-                    title="Subir documento"
-                    style="margin-left: 3px;"
-                    (click)="ver(f); mostrarModalDocumentoArresto = true"
+                    title="Eliminar el documento"
+                    class="btn btn-sm boton-eliminar-archivo"
+                    (click)="deleteDocumentoArresto(f.idarrestos, f.archivo)"
                   >
-                    <i class="pi pi-folder" aria-hidden="true"></i>
+                    <i
+                      class="pi pi-trash"
+                      aria-hidden="true"
+                    ></i>
                   </button>
                 </ng-container>
 
-                <!-- CON ARCHIVO: VER / ELIMINAR -->
-                <ng-template #archivoCargado>
-                  <a
-                    *ngIf="f.archivo !== null"
-                    title="Ver el documento"
-                    target="_blank"
-                    download
-                    class="btn btn-sm btn-danger"
-                    [href]="_DatospersonalesService.url2 + 'sacarfoto/' + f?.archivo"
-                  >
-                    <i class="pi pi-eye" aria-hidden="true"></i>
-                  </a>
-<!--    *ngIf="
-                      _DatospersonalesService.verificarPermisos(1) ||
-                      _DatospersonalesService.verificarPermisos(2) ||
-                      _DatospersonalesService.verificarPermisos(3) ||
-                      _DatospersonalesService.verificarPermisos(4)
-                    "-->
-                  <ng-container
-                
-                  >
-                    <button
-                      *ngIf="f.archivo !== null"
-                      type="button"
-                      title="Eliminar el documento"
-                      class="btn btn-sm btn-success"
-                      style="margin-left: 2px;"
-                      (click)="deleteDocumentoArresto(f.idarrestos, f.archivo)"
-                    >
-                      <i class="pi pi-trash" aria-hidden="true"></i>
-                    </button>
-                  </ng-container>
-                </ng-template>
-              </td>
-            </tr>
-          </ng-container>
-        </tbody>
-      </table>
-    </div>
+              </ng-template>
+
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+
+</div>
 
   </div>
 </div>

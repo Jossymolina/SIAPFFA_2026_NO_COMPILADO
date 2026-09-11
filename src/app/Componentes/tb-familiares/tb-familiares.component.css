@@ -1,0 +1,878 @@
+/* =========================================================
+   TABLA PADRES
+   ========================================================= */
+
+.tabla-familia-wrapper {
+  width: 100%;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 10px;
+
+  background: #ffffff;
+
+  overflow: hidden;
+}
+
+
+/* =========================================================
+   TABLA
+   ========================================================= */
+
+.tabla-familia {
+  margin: 0;
+
+  min-width: 800px;
+}
+
+.tabla-familia thead th {
+  padding: 12px 14px;
+
+  border-bottom: 1px solid #e5e7eb;
+
+  background: #f8fafc;
+
+  color: #6b7280;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.03em;
+
+  white-space: nowrap;
+}
+
+.tabla-familia tbody td {
+  padding: 13px 14px;
+
+  border-bottom: 1px solid #f1f5f9;
+
+  font-size: 13px;
+
+  color: #374151;
+}
+
+.tabla-familia tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.tabla-familia tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.tabla-familia tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+
+/* =========================================================
+   COLUMNAS
+   ========================================================= */
+
+.tabla-familia .col-numero {
+  width: 50px;
+}
+
+.tabla-familia .col-opcion {
+  width: 80px;
+}
+
+
+/* =========================================================
+   NÚMERO
+   ========================================================= */
+
+.tabla-familia .numero-fila {
+  color: #9ca3af;
+
+  font-size: 12px;
+
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   IDENTIDAD
+   ========================================================= */
+
+.dato-familia {
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  white-space: nowrap;
+}
+
+.dato-familia-icono {
+  width: 32px;
+  height: 32px;
+
+  min-width: 32px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  background: #eff6ff;
+
+  color: #2563eb;
+
+  font-size: 13px;
+}
+
+.dato-identidad {
+  font-weight: 600;
+
+  color: #374151;
+}
+
+
+/* =========================================================
+   NOMBRES / APELLIDOS
+   ========================================================= */
+
+.dato-texto {
+  color: #374151;
+
+  font-weight: 500;
+}
+
+
+/* =========================================================
+   TIPO DE SANGRE
+   ========================================================= */
+
+.tipo-sangre {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-width: 45px;
+
+  padding: 5px 9px;
+
+  border-radius: 7px;
+
+  background: #f3f4f6;
+
+  color: #374151;
+
+  font-size: 12px;
+
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   OPCIONES
+   ========================================================= */
+
+.opcion-cell {
+  text-align: center;
+}
+
+.boton-eliminar-familia {
+  width: 34px;
+  height: 34px;
+
+  padding: 0;
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+}
+
+.boton-eliminar-familia i {
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   SIN REGISTROS
+   ========================================================= */
+
+.familia-vacia {
+  display: flex;
+
+  align-items: center;
+
+  gap: 13px;
+
+  padding: 15px 16px;
+
+  background: #fafafa;
+}
+
+.familia-vacia-icono {
+  width: 38px;
+  height: 38px;
+
+  min-width: 38px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 9px;
+
+  background: #f3f4f6;
+
+  color: #9ca3af;
+
+  font-size: 15px;
+}
+
+.familia-vacia-texto {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.familia-vacia-texto strong {
+  font-size: 13px;
+
+  font-weight: 600;
+
+  color: #374151;
+}
+
+.familia-vacia-texto span {
+  font-size: 11px;
+
+  color: #6b7280;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 576px) {
+
+  .familia-vacia {
+    align-items: flex-start;
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =========================================================
+   TABLA CÓNYUGE
+   ========================================================= */
+
+.tabla-conyugue-wrapper {
+  width: 100%;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 10px;
+
+  background: #ffffff;
+
+  overflow: hidden;
+}
+
+
+/* =========================================================
+   TABLA
+   ========================================================= */
+
+.tabla-conyugue {
+  margin: 0;
+
+  min-width: 800px;
+}
+
+.tabla-conyugue thead th {
+  padding: 12px 14px;
+
+  border-bottom: 1px solid #e5e7eb;
+
+  background: #f8fafc;
+
+  color: #6b7280;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.03em;
+
+  white-space: nowrap;
+}
+
+.tabla-conyugue tbody td {
+  padding: 13px 14px;
+
+  border-bottom: 1px solid #f1f5f9;
+
+  font-size: 13px;
+
+  color: #374151;
+}
+
+.tabla-conyugue tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.tabla-conyugue tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.tabla-conyugue tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+
+/* =========================================================
+   COLUMNAS
+   ========================================================= */
+
+.tabla-conyugue .col-numero {
+  width: 50px;
+}
+
+.tabla-conyugue .col-opcion {
+  width: 80px;
+}
+
+
+/* =========================================================
+   NÚMERO
+   ========================================================= */
+
+.tabla-conyugue .numero-fila {
+  color: #9ca3af;
+
+  font-size: 12px;
+
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   IDENTIDAD
+   ========================================================= */
+
+.dato-conyugue {
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  white-space: nowrap;
+}
+
+.dato-conyugue-icono {
+  width: 32px;
+  height: 32px;
+
+  min-width: 32px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  background: #eff6ff;
+
+  color: #2563eb;
+
+  font-size: 13px;
+}
+
+.dato-identidad {
+  font-weight: 600;
+
+  color: #374151;
+}
+
+
+/* =========================================================
+   NOMBRES / APELLIDOS
+   ========================================================= */
+
+.dato-texto-conyugue {
+  color: #374151;
+
+  font-weight: 500;
+}
+
+
+/* =========================================================
+   TIPO DE SANGRE
+   ========================================================= */
+
+.tipo-sangre-conyugue {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-width: 45px;
+
+  padding: 5px 9px;
+
+  border-radius: 7px;
+
+  background: #f3f4f6;
+
+  color: #374151;
+
+  font-size: 12px;
+
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   OPCIONES
+   ========================================================= */
+
+.opcion-cell {
+  text-align: center;
+}
+
+.boton-eliminar-conyugue {
+  width: 34px;
+  height: 34px;
+
+  padding: 0;
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+}
+
+.boton-eliminar-conyugue i {
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   SIN REGISTRO
+   ========================================================= */
+
+.conyugue-vacio {
+  display: flex;
+
+  align-items: center;
+
+  gap: 13px;
+
+  padding: 15px 16px;
+
+  background: #fafafa;
+}
+
+.conyugue-vacio-icono {
+  width: 38px;
+  height: 38px;
+
+  min-width: 38px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 9px;
+
+  background: #f3f4f6;
+
+  color: #9ca3af;
+
+  font-size: 15px;
+}
+
+.conyugue-vacio-texto {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.conyugue-vacio-texto strong {
+  font-size: 13px;
+
+  font-weight: 600;
+
+  color: #374151;
+}
+
+.conyugue-vacio-texto span {
+  font-size: 11px;
+
+  color: #6b7280;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 576px) {
+
+  .conyugue-vacio {
+    align-items: flex-start;
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =========================================================
+   TABLA HIJOS
+   ========================================================= */
+
+.tabla-hijos-wrapper {
+  width: 100%;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 10px;
+
+  background: #ffffff;
+
+  overflow: hidden;
+}
+
+
+/* =========================================================
+   TABLA
+   ========================================================= */
+
+.tabla-hijos {
+  margin: 0;
+
+  min-width: 800px;
+}
+
+.tabla-hijos thead th {
+  padding: 12px 14px;
+
+  border-bottom: 1px solid #e5e7eb;
+
+  background: #f8fafc;
+
+  color: #6b7280;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.03em;
+
+  white-space: nowrap;
+}
+
+.tabla-hijos tbody td {
+  padding: 13px 14px;
+
+  border-bottom: 1px solid #f1f5f9;
+
+  font-size: 13px;
+
+  color: #374151;
+}
+
+.tabla-hijos tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.tabla-hijos tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.tabla-hijos tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+
+/* =========================================================
+   COLUMNAS
+   ========================================================= */
+
+.tabla-hijos .col-numero {
+  width: 50px;
+}
+
+.tabla-hijos .col-opcion {
+  width: 80px;
+}
+
+
+/* =========================================================
+   NÚMERO
+   ========================================================= */
+
+.tabla-hijos .numero-fila {
+  color: #9ca3af;
+
+  font-size: 12px;
+
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   IDENTIDAD
+   ========================================================= */
+
+.dato-hijo {
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  white-space: nowrap;
+}
+
+.dato-hijo-icono {
+  width: 32px;
+  height: 32px;
+
+  min-width: 32px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  background: #eff6ff;
+
+  color: #2563eb;
+
+  font-size: 13px;
+}
+
+.dato-identidad-hijo {
+  font-weight: 600;
+
+  color: #374151;
+}
+
+
+/* =========================================================
+   NOMBRES / APELLIDOS
+   ========================================================= */
+
+.dato-texto-hijo {
+  color: #374151;
+
+  font-weight: 500;
+}
+
+
+/* =========================================================
+   TIPO DE SANGRE
+   ========================================================= */
+
+.tipo-sangre-hijo {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-width: 45px;
+
+  padding: 5px 9px;
+
+  border-radius: 7px;
+
+  background: #f3f4f6;
+
+  color: #374151;
+
+  font-size: 12px;
+
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   OPCIONES
+   ========================================================= */
+
+.opcion-cell {
+  text-align: center;
+}
+
+.boton-eliminar-hijo {
+  width: 34px;
+  height: 34px;
+
+  padding: 0;
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+}
+
+.boton-eliminar-hijo i {
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   SIN REGISTROS
+   ========================================================= */
+
+.hijos-vacio {
+  display: flex;
+
+  align-items: center;
+
+  gap: 13px;
+
+  padding: 15px 16px;
+
+  background: #fafafa;
+}
+
+.hijos-vacio-icono {
+  width: 38px;
+  height: 38px;
+
+  min-width: 38px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 9px;
+
+  background: #f3f4f6;
+
+  color: #9ca3af;
+
+  font-size: 15px;
+}
+
+.hijos-vacio-texto {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.hijos-vacio-texto strong {
+  font-size: 13px;
+
+  font-weight: 600;
+
+  color: #374151;
+}
+
+.hijos-vacio-texto span {
+  font-size: 11px;
+
+  color: #6b7280;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 576px) {
+
+  .hijos-vacio {
+    align-items: flex-start;
+  }
+
+}

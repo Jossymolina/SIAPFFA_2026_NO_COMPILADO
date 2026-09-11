@@ -614,6 +614,7 @@ export class TbAsignacionesComponent {
   sacarPermisoTransferencia() {
     this.permisoTrnsferencia = this._DatospersonalesService.verificarPermisos(['A_0004'])
     //console.log( JSON.parse(localStorage.getItem("permisos") || "[]") as any[])
+
   }
 
   insertarBajoControl(form) {
