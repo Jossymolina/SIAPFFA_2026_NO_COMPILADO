@@ -30,7 +30,20 @@
           </div>
 
         </div>
-        <div class="info-box" style="margin-bottom: 4px;">
+        @if( [7,5,6,8,9,10,11].includes( objetoConsultado.grado_pertenece_a)){
+             <div class="info-box" style="margin-bottom: 4px;" >
+          <div class="info-icon">
+            <i class="pi pi-info-circle"></i>
+          </div>
+
+          <div class="info-content">
+            <h6 class="info-title">Contrato no tiene derecho a vacaciones</h6>
+           </div>
+        </div>
+
+
+        }@else {
+       <div class="info-box" style="margin-bottom: 4px;" >
           <div class="info-icon">
             <i class="pi pi-info-circle"></i>
           </div>
@@ -59,7 +72,10 @@
               </div>
             </div>
           </div>
+
         </div>
+        }
+        
 
 
 
