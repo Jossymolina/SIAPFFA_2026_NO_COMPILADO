@@ -132,7 +132,7 @@ export class CuerpoPrincipalComponent {
       description: 'Módulo encargado de realizar encuestas de satisfacción y recopilar opiniones de los usuarios para mejorar los servicios.',
       icon: 'pi pi-list-check',
       stilos:"",
-      route: '/menu/motor-encuestas',
+      route: '/motor-encuestas',
       code:['Enc_0001']
     } 
 ,

@@ -301,7 +301,7 @@ export const routes: Routes = [
        {
         path: 'motor-encuestas',
         canActivate: [],
-        data: { permisos: ['Enc_0001'] },
+        data: { permisos: [] },
         loadComponent: () =>
           import('./Paginas/encuestas/encuesta-deducciones/encuesta-deducciones.component')
             .then(m => m.EncuestaDeduccionesComponent)

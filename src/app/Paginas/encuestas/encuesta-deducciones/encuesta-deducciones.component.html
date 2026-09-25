@@ -1,353 +1,801 @@
-<div>                                      <!-- PRINCIPAL -->
-    <div>                                  <!-- ENCABEZADO -->
+<div> <!-- PRINCIPAL -->
+
+    <div> <!-- ENCABEZADO -->
         <label>SIAPFFAA AUTORIZACIÓN-MEDIA MARATON</label>
     </div>
 
-    <div>                                  <!-- CONTENIDO -->
+
+    <!-- CONTENIDO -->
+    <div>
+
         <div class="media-maraton-form" style="border-radius: 10px;">
-         <div class="media-maraton-form">
 
-    <!-- ENCABEZADO -->
-    <div class="maraton-banner">
-        <div class="banner-icon">
-            <i class="pi pi-heart-fill"></i>
-        </div>
+            <div class="media-maraton-form">
 
-        <div class="banner-content">
-            <span>MEDIA MARATÓN</span>
-            <h2>Juntos llegamos más lejos</h2>
-            <p>
-                Tu colaboración nos ayuda a hacer posible esta gran iniciativa.
-            </p>
-        </div>
-    </div>
+                <!-- ENCABEZADO -->
+                <div class="maraton-banner">
 
-
-    <!-- IDENTIDAD -->
-     @if(!personaBuscada){
- <div class="identidad-section">
-
-        <div class="section-heading">
-            <div class="heading-icon">
-                <i class="pi pi-id-card"></i>
-            </div>
-
-            <div>
-                <span>IDENTIFICACIÓN</span>
-                <h3>Buscar colaborador</h3>
-            </div>
-        </div>
-
-        <div class="identidad-input">
-
-            <input
-                pInputText
-                id="identidad"
-                name="identidad"
-                [(ngModel)]="identidad"
-                placeholder="Ingrese el número de identidad"
-                maxlength="13"
-                autocomplete="off"
-                inputmode="numeric"
-                (input)="validarIdentidad($event)"
-                (keyup.enter)="buscarPersonaIdentidad(identidad)"
-            />
-
-            <button
-                pButton
-                type="button"
-                icon="pi pi-search"
-                class="btn-buscar"
-                [disabled]="!identidad || identidad.length !== 13"
-                (click)="buscarPersonaIdentidad(identidad)"
-            ></button>
-
-   
-        </div>
-
-        <small class="identidad-ayuda">
-            <i class="pi pi-info-circle"></i>
-            Ingrese los 13 dígitos de su número de identidad.
-        </small>
-
-    </div>
-
-     }@else {
-        @if(!this.tokenValido){
-  <div class="identidad-section">
-
-                <div class="section-heading">
-                    <div class="heading-icon">
-                        <i class="pi pi-id-card"></i>
+                    <div class="banner-icon">
+                        <i class="pi pi-heart-fill"></i>
                     </div>
 
-                    <div>
-                        <span>TOKEN</span>
-                        <h3>VALIDAR TOKEN</h3>
-                    </div>
-                </div>
-        
-                <div class="identidad-input">
+                    <div class="banner-content">
+                        <span>MEDIA MARATÓN</span>
 
-                    <input
-                        pInputText
-                        id="identidad"
-                        name="identidad"
-                        [(ngModel)]="token"
-                        placeholder="Ingrese el Token de 8 digitos"
-                        maxlength="8"
-                        autocomplete="off"
-                        inputmode="numeric"
-                        minlength="8"
-                        maxlength="8"
-                        (keyup.enter)="validandoToken()"
-                    />
-
-                
-
-                    
-                    <button
-                        pButton
-                        type="button"
-                        icon="pi pi-check-circle"
-                        class="btn-buscar"
-                        
-                        (click)="validandoToken()"
-                    ></button>
-                </div>
-
-                <small class="identidad-ayuda">
-                    <i class="pi pi-info-circle"></i>
-                    Ingrese los 8 dígitos del token enviado a su correo registrado en SIAPFFAA.
-                </small>
-
-            </div>
-        }
-      
-     }
-   
-    
-
-
-    @if (personaBuscada && tokenValido) {
-
-        <!-- INFORMACIÓN PERSONA -->
-        <div class="persona-card">
-
-            <div class="persona-avatar">
-                <i class="pi pi-user"></i>
-            </div>
-
-            <div class="persona-info">
-
-                <span class="persona-label">
-                    COLABORADOR IDENTIFICADO
-                </span>
-
-                <h3>
-                    {{ personaBuscada.nombres }}
-                    {{ personaBuscada.apellidos }}
-                </h3>
-
-                <div class="persona-meta">
-                    <span>
-                        <i class="pi pi-id-card"></i>
-                        {{ personaBuscada.categoria }}
-                    </span>
-                </div>
-
-            </div>
-
-            <div class="persona-check">
-                <i class="pi pi-check-circle"></i>
-            </div>
-
-        </div>
-
-
-        <!-- PREGUNTA -->
-        @if (!mostrarMontos && !mostrarGracias) {
-
-            <div class="causa-card">
-
-                <div class="causa-icon">
-                    <i class="pi pi-heart-fill"></i>
-                </div>
-
-                <div class="causa-content">
-
-                    <span class="causa-label">
-                        UNA PEQUEÑA DECISIÓN
-                    </span>
-
-                    <h3>
-                        ¿Desea apoyar la Media Maratón?
-                    </h3>
-
-                    <p>
-                        Su aporte nos permitirá seguir impulsando esta
-                        importante actividad y contribuir a una causa
-                        que nos une como Institución.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <!-- BENEFICIOS -->
-            <div class="beneficios">
-
-                <div class="beneficio">
-                    <div class="beneficio-icon salud">
-                        <i class="pi pi-heart"></i>
-                    </div>
-
-                    <div>
-                        <strong>Más bienestar</strong>
-                        <span>Apoyamos iniciativas para personas que lo necesitan.</span>
-                    </div>
-                </div>
-
-                <div class="beneficio">
-                    <div class="beneficio-icon comunidad">
-                        <i class="pi pi-users"></i>
-                    </div>
-
-                    <div>
-                        <strong>Más unión</strong>
-                        <span>Juntos fortalecemos nuestra comunidad.</span>
-                    </div>
-                </div>
-
-                <div class="beneficio">
-                    <div class="beneficio-icon futuro">
-                        <i class="pi pi-star"></i>
-                    </div>
-
-                    <div>
-                        <strong>Más oportunidades</strong>
-                        <span>Tu colaboración genera un impacto positivo.</span>
-                    </div>
-                </div>
-
-            </div>
-
-
-            <!-- BOTONES -->
-            <div class="acciones-iniciales">
-
-                <button
-                    pButton
-                    type="button"
-                    label="Sí, quiero apoyar"
-                    icon="pi pi-heart-fill"
-                    class="btn-apoyar"
-                    (click)="aceptarDonacion()"
-                ></button>
-
-                <button
-                    pButton
-                    type="button"
-                    label="Ahora no puedo"
-                    icon="pi pi-times"
-                    class="p-button-secondary p-button-outlined btn-cancelar"
-                    (click)="rechazarDonacion()"
-                ></button>
-
-            </div>
-
-        }
-
-
-        <!-- MONTOS -->
-        @if (mostrarMontos) {
-
-            <div class="donacion-section">
-
-                <div class="donacion-heading">
-
-                    <div class="donacion-heading-icon">
-                        <i class="pi pi-gift"></i>
-                    </div>
-
-                    <div>
-                        <span>SU CONTRIBUCIÓN</span>
-
-                        <h3>
-                            Seleccione el monto de su aporte
-                        </h3>
+                        <h2>
+                            Juntos llegamos más lejos
+                        </h2>
 
                         <p>
-                            Seleccione una de las opciones disponibles
-                            para su categoría.
+                            Tu colaboración nos ayuda a hacer posible esta gran iniciativa.
                         </p>
                     </div>
 
                 </div>
 
 
-                <!-- CATEGORÍA -->
-                <div class="categoria-badge">
-                    <i class="pi pi-star-fill"></i>
-                    {{ personaBuscada.categoria }}
+
+
+
+
+
+
+                <!-- IDENTIDAD -->
+                @if(!personaBuscada){
+                      <div class="aviso-tropa" style="margin-bottom: 10px;">
+  <span class="pulso"></span>
+  <i class="pi pi-info-circle"></i>
+  <span>
+    <strong>Para el personal de Tropa:</strong> en esta versión no requiere token.
+  </span>
+</div>
+                <div class="identidad-section">
+
+                    <div class="section-heading">
+
+                        <div class="heading-icon">
+                            <i class="pi pi-id-card"></i>
+                        </div>
+
+                        <div>
+                            <span>IDENTIFICACIÓN</span>
+                            <h3>Buscar colaborador</h3>
+                        </div>
+
+                    </div>
+
+
+                    <div class="identidad-input">
+
+                        <input pInputText id="identidad" name="identidad" [(ngModel)]="identidad"
+                            placeholder="Ingrese el número de identidad" maxlength="13" autocomplete="off"
+                            inputmode="numeric" (input)="validarIdentidad($event)"
+                            (keyup.enter)="buscarPersonaIdentidad(identidad)" />
+
+
+                        <button pButton type="button" icon="pi pi-search" class="btn-buscar"
+                            [disabled]="!identidad || identidad.length !== 13"
+                            (click)="buscarPersonaIdentidad(identidad)"></button>
+
+                    </div>
+
+
+                    <small class="identidad-ayuda">
+                        <i class="pi pi-info-circle"></i>
+                        Ingrese los 13 dígitos de su número de identidad.
+                    </small>
+
                 </div>
 
 
+                <!-- ================================================= -->
+                <!-- CONTADORES                                        -->
+                <!-- ================================================= -->
+                <div class="section-heading">
+
+
+
+                    <div>
+
+                        <h3>Resumen / Estado de Autorizaciones</h3>
+                    </div>
+
+                </div>
+                <div class="media-maraton-contadores">
+
+
+                    <!-- AUTORIZADOS -->
+                    <div class="contador-card contador-autorizados">
+
+                        <div class="contador-icon">
+                            <i class="pi pi-check-circle"></i>
+                        </div>
+
+                        <div class="contador-info">
+
+                            <span>
+                                AUTORIZADOS
+                            </span>
+
+                            <strong>
+                                {{contarRresultado.autorizado}}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- NO AUTORIZADOS -->
+                    <div class="contador-card contador-no-autorizados">
+
+                        <div class="contador-icon">
+                            <i class="pi pi-times-circle"></i>
+                        </div>
+
+                        <div class="contador-info">
+
+                            <span>
+                                NO AUTORIZADOS
+                            </span>
+
+                            <strong>
+                                {{contarRresultado.noAutorizado}}
+
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                } @else {
+                @if([4,5,6,0].includes(personaBuscada.nivel)){
+                @if(!this.tokenValido ){
+                <label for="">Encuestas</label>
+                <div class="authenticator-help" style="margin-top: 5px; margin-bottom: 10px;">
+                    <div class="authenticator-help-icon">
+                        <i class="pi pi-mobile"></i>
+                    </div>
+
+                    <div class="authenticator-help-content">
+                        <div class="authenticator-help-title">
+                            Código de verificación
+                        </div>
+
+                        <div class="authenticator-help-text">
+                            Abra <strong>Google Authenticator</strong> en su teléfono e ingrese
+                            el código de <strong>6 dígitos</strong> generado para <strong>SIAPFFA</strong>.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="identidad-section">
+
+                    <div class="section-heading">
+
+                        <div class="heading-icon">
+                            <i class="pi pi-id-card"></i>
+                        </div>
+
+                        <div>
+                            <span>TOKEN</span>
+                            <h3>VALIDAR TOKEN</h3>
+                        </div>
+
+                    </div>
+
+
+                    <div class="identidad-input">
+
+                        <input pInputText id="identidad" name="identidad" [(ngModel)]="token"
+                            placeholder="Ingrese el Token de 6 digitos" maxlength="6" autocomplete="off"
+                            inputmode="numeric" minlength="6" (keyup.enter)="validandoToken()" />
+
+
+                        <button pButton type="button" icon="pi pi-check-circle" class="btn-buscar"
+                            (click)="validandoToken()"></button>
+
+                    </div>
+
+
+                    <small class="identidad-ayuda">
+
+                        <i class="pi pi-info-circle"></i>
+
+                        Ingrese los 6 dígitos del token, de Google Authenticator
+
+                    </small>
+
+                </div>
+
+                }
+                }
+                }
+
+
+                <!-- INFORMACIÓN PERSONA -->
+                @if (personaBuscada ) {
+                
+
+                @if([4,5,6,0].includes(personaBuscada.nivel)){
+                        @if (tokenValido) {
+                            <div class="persona-card">
+
+                            <div class="persona-avatar">
+                                <i class="pi pi-user"></i>
+                            </div>
+
+
+                            <div class="persona-info">
+
+                                <span class="persona-label">
+                                    COLABORADOR IDENTIFICADO
+                                </span>
+
+                                <h3>
+                                    {{ personaBuscada.nombres }}
+                                    {{ personaBuscada.apellidos }}
+                                </h3>
+
+
+                                <div class="persona-meta">
+
+                                    <span>
+                                        <i class="pi pi-id-card"></i>
+                                        {{ personaBuscada.categoria }}
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="persona-check">
+                                <i class="pi pi-check-circle"></i>
+                            </div>
+
+                        </div>
+                        <!-- PREGUNTA -->
+                        @if (!mostrarMontos && !mostrarGracias) {
+
+                        <div class="causa-card">
+
+                            <div class="causa-icon">
+                                <i class="pi pi-heart-fill"></i>
+                            </div>
+
+
+                            <div class="causa-content">
+
+                                <span class="causa-label">
+                                    UNA PEQUEÑA DECISIÓN
+                                </span>
+
+                                <h3>
+                                    ¿Desea apoyar la Media Maratón?
+                                </h3>
+
+                                <p>
+                                    Su aporte nos permitirá seguir impulsando esta
+                                    importante actividad y contribuir a una causa
+                                    que nos une como Institución.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- BENEFICIOS -->
+                        <div class="beneficios">
+
+                            <div class="beneficio">
+
+                                <div class="beneficio-icon salud">
+                                    <i class="pi pi-heart"></i>
+                                </div>
+
+                                <div>
+                                    <strong>Más bienestar</strong>
+
+                                    <span>
+                                        Apoyamos iniciativas para personas que lo necesitan.
+                                    </span>
+                                </div>
+
+                            </div>
+
+
+                            <div class="beneficio">
+
+                                <div class="beneficio-icon comunidad">
+                                    <i class="pi pi-users"></i>
+                                </div>
+
+                                <div>
+                                    <strong>Más unión</strong>
+
+                                    <span>
+                                        Juntos fortalecemos nuestra comunidad.
+                                    </span>
+                                </div>
+
+                            </div>
+
+
+                            <div class="beneficio">
+
+                                <div class="beneficio-icon futuro">
+                                    <i class="pi pi-star"></i>
+                                </div>
+
+                                <div>
+                                    <strong>Más oportunidades</strong>
+
+                                    <span>
+                                        Tu colaboración genera un impacto positivo.
+                                    </span>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- BOTONES -->
+                        <div class="acciones-iniciales">
+
+                            <button pButton type="button" label="Sí, quiero apoyar" icon="pi pi-heart-fill" class="btn-apoyar"
+                                (click)="aceptarDonacion()"></button>
+
+
+                            <button pButton type="button" label="Ahora no puedo" icon="pi pi-times"
+                                class="p-button-secondary p-button-outlined btn-cancelar" (click)="rechazarDonacion()"></button>
+
+                        </div>
+
+                        }
+
+
+                        <!-- MONTOS -->
+                        @if (mostrarMontos) {
+
+                        <div class="donacion-section">
+
+                            <div class="donacion-heading">
+
+                                <div class="donacion-heading-icon">
+                                    <i class="pi pi-gift"></i>
+                                </div>
+
+
+                                <div>
+
+                                    <span>SU CONTRIBUCIÓN</span>
+
+                                    <h3>
+                                        Seleccione el monto de su aporte
+                                    </h3>
+
+                                    <p>
+                                        Seleccione una de las opciones disponibles
+                                        para su categoría.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- CATEGORÍA -->
+                            <div class="categoria-badge">
+
+                                <i class="pi pi-star-fill"></i>
+
+                                {{ personaBuscada.categoria }}
+
+                            </div>
+
+
+                            <!-- MONTOS -->
+                            <div class="montos-grid">
+
+                                @for (monto of montosPorCategoria; track monto) {
+
+                                <button type="button" class="monto-card"
+                                    [class.monto-seleccionado]="montoSeleccionado === monto" (click)="seleccionarMonto(monto)">
+
+                                    <span>
+                                        L.
+                                    </span>
+
+                                    <strong>
+                                        {{ monto | number:'1.0-2' }}
+                                    </strong>
+
+
+                                    @if (montoSeleccionado === monto) {
+
+                                    <div class="monto-check">
+                                        <i class="pi pi-check"></i>
+                                    </div>
+
+                                    }
+
+                                </button>
+
+                                }
+
+
+                                <!-- OTRO MONTO -->
+                                <button type="button" class="monto-card otro-monto"
+                                    [class.monto-seleccionado]="mostrarOtroMonto" (click)="seleccionarOtroMonto()">
+
+                                    <div class="otro-icon">
+                                        <i class="pi pi-plus"></i>
+                                    </div>
+
+                                    <strong>
+                                        Otro monto
+                                    </strong>
+
+                                </button>
+
+                            </div>
+
+
+                            <!-- INPUT OTRO MONTO -->
+                            @if (mostrarOtroMonto) {
+
+                            <div class="otro-monto">
+
+                                <label for="otroMonto">
+                                    ¿Cuánto desea aportar?
+                                </label>
+
+                                <p-inputnumber [(ngModel)]="otroMonto" inputId="otroMonto" mode="currency" currency="HNL"
+                                    locale="es-HN" [min]="1" [minFractionDigits]="2" [maxFractionDigits]="2"
+                                    placeholder="Ingrese el monto" />
+
+                            </div>
+
+                            }
+
+
+                            <!-- RESUMEN -->
+                            @if (montoSeleccionado || otroMonto) {
+
+                            <div class="resumen">
+
+                                <div class="resumen-icon">
+                                    <i class="pi pi-heart-fill"></i>
+                                </div>
+
+
+                                <div class="resumen-info">
+
+                                    <span>
+                                        SU APORTE
+                                    </span>
+
+                                    <strong>
+                                        L.
+                                        {{
+                                        (otroMonto || montoSeleccionado)
+                                        | number:'1.2-2'
+                                        }}
+                                    </strong>
+
+                                </div>
+
+
+                                <i class="pi pi-check-circle resumen-check"></i>
+
+                            </div>
+
+                            }
+
+
+                            <!-- ACCIONES -->
+                            <div class="acciones-donacion">
+
+                                <button pButton type="button" label="Confirmar mi aporte" icon="pi pi-check"
+                                    class="btn-confirmar" [disabled]="!montoSeleccionado && !otroMonto"
+                                    (click)="confirmarDonacion()"></button>
+
+
+                                <button pButton type="button" label="Cancelar" icon="pi pi-times"
+                                    class="p-button-secondary p-button-outlined btn-cancelar" (click)="cancelar()"></button>
+
+                            </div>
+
+
+                            <div class="confidencialidad">
+
+                                <i class="pi pi-lock"></i>
+
+                                <span>
+                                    Fuerzas Armadas de Honduras, C-1
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        }
+
+
+                        <!-- GRACIAS -->
+                        @if (mostrarGracias) {
+
+                        <div class="gracias">
+
+                            <div class="gracias-icon">
+                                <i class="pi pi-heart-fill"></i>
+                            </div>
+
+
+                            <span class="gracias-label">
+                                GRACIAS POR SU TIEMPO
+                            </span>
+
+
+                            <h3>
+                                Cada gesto cuenta
+                            </h3>
+
+
+                            <p>
+                                Agradecemos sinceramente su tiempo y disposición.
+                                Su participación ayuda a fortalecer iniciativas
+                                que nos unen.
+                            </p>
+
+
+                            <div class="gracias-separador"></div>
+
+
+                            <small>
+                                Media Maratón · Juntos llegamos más lejos
+                            </small>
+
+                        </div>
+
+                        }
+
+                        }
+                }@else if([1].includes(personaBuscada.nivel)){
+
+                    <div class="persona-card">
+
+                    <div class="persona-avatar">
+                        <i class="pi pi-user"></i>
+                    </div>
+
+
+                    <div class="persona-info">
+
+                        <span class="persona-label">
+                            COLABORADOR IDENTIFICADO
+                        </span>
+
+                        <h3>
+                            {{ personaBuscada.nombres }}
+                            {{ personaBuscada.apellidos }}
+                        </h3>
+
+
+                        <div class="persona-meta">
+
+                            <span>
+                                <i class="pi pi-id-card"></i>
+                                {{ personaBuscada.categoria }}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="persona-check">
+                        <i class="pi pi-check-circle"></i>
+                    </div>
+
+                </div>
+                <!-- PREGUNTA -->
+                @if (!mostrarMontos && !mostrarGracias) {
+
+                <div class="causa-card">
+
+                    <div class="causa-icon">
+                        <i class="pi pi-heart-fill"></i>
+                    </div>
+
+
+                    <div class="causa-content">
+
+                        <span class="causa-label">
+                            UNA PEQUEÑA DECISIÓN
+                        </span>
+
+                        <h3>
+                            ¿Desea apoyar la Media Maratón?
+                        </h3>
+
+                        <p>
+                            Su aporte nos permitirá seguir impulsando esta
+                            importante actividad y contribuir a una causa
+                            que nos une como Institución.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- BENEFICIOS -->
+                <div class="beneficios">
+
+                    <div class="beneficio">
+
+                        <div class="beneficio-icon salud">
+                            <i class="pi pi-heart"></i>
+                        </div>
+
+                        <div>
+                            <strong>Más bienestar</strong>
+
+                            <span>
+                                Apoyamos iniciativas para personas que lo necesitan.
+                            </span>
+                        </div>
+
+                    </div>
+
+
+                    <div class="beneficio">
+
+                        <div class="beneficio-icon comunidad">
+                            <i class="pi pi-users"></i>
+                        </div>
+
+                        <div>
+                            <strong>Más unión</strong>
+
+                            <span>
+                                Juntos fortalecemos nuestra comunidad.
+                            </span>
+                        </div>
+
+                    </div>
+
+
+                    <div class="beneficio">
+
+                        <div class="beneficio-icon futuro">
+                            <i class="pi pi-star"></i>
+                        </div>
+
+                        <div>
+                            <strong>Más oportunidades</strong>
+
+                            <span>
+                                Tu colaboración genera un impacto positivo.
+                            </span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- BOTONES -->
+                <div class="acciones-iniciales">
+
+                    <button pButton type="button" label="Sí, quiero apoyar" icon="pi pi-heart-fill" class="btn-apoyar"
+                        (click)="aceptarDonacion()"> </button>
+
+
+                    <button pButton type="button" label="Ahora no puedo" icon="pi pi-times"
+                        class="p-button-secondary p-button-outlined btn-cancelar" (click)="rechazarDonacionTropa()"></button>
+
+                </div>
+
+                }
+
+
                 <!-- MONTOS -->
-                <div class="montos-grid">
+                @if (mostrarMontos) {
 
-                    @for (monto of montosPorCategoria; track monto) {
+                <div class="donacion-section">
 
-                        <button
-                            type="button"
-                            class="monto-card"
-                            [class.monto-seleccionado]="montoSeleccionado === monto"
-                            (click)="seleccionarMonto(monto)"
-                        >
+                    <div class="donacion-heading">
 
-                            <span>L.</span>
+                        <div class="donacion-heading-icon">
+                            <i class="pi pi-gift"></i>
+                        </div>
+
+
+                        <div>
+
+                            <span>SU CONTRIBUCIÓN</span>
+
+                            <h3>
+                                Seleccione el monto de su aporte
+                            </h3>
+
+                            <p>
+                                Seleccione una de las opciones disponibles
+                                para su categoría.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- CATEGORÍA -->
+                    <div class="categoria-badge">
+
+                        <i class="pi pi-star-fill"></i>
+
+                        {{ personaBuscada.categoria }}
+
+                    </div>
+
+
+                    <!-- MONTOS -->
+                    <div class="montos-grid">
+
+                        @for (monto of montosPorCategoria; track monto) {
+
+                        <button type="button" class="monto-card"
+                            [class.monto-seleccionado]="montoSeleccionado === monto" (click)="seleccionarMonto(monto)">
+
+                            <span>
+                                L.
+                            </span>
 
                             <strong>
                                 {{ monto | number:'1.0-2' }}
                             </strong>
 
+
                             @if (montoSeleccionado === monto) {
 
-                                <div class="monto-check">
-                                    <i class="pi pi-check"></i>
-                                </div>
+                            <div class="monto-check">
+                                <i class="pi pi-check"></i>
+                            </div>
 
                             }
 
                         </button>
 
-                    }
+                        }
 
 
-                    <!-- OTRO MONTO -->
-                    <button
-                        type="button"
-                        class="monto-card otro-monto"
-                        [class.monto-seleccionado]="mostrarOtroMonto"
-                        (click)="seleccionarOtroMonto()"
-                    >
+                        <!-- OTRO MONTO -->
+                        <button type="button" class="monto-card otro-monto"
+                            [class.monto-seleccionado]="mostrarOtroMonto" (click)="seleccionarOtroMonto()">
 
-                        <div class="otro-icon">
-                            <i class="pi pi-plus"></i>
-                        </div>
+                            <div class="otro-icon">
+                                <i class="pi pi-plus"></i>
+                            </div>
 
-                        <strong>
-                            Otro monto
-                        </strong>
+                            <strong>
+                                Otro monto
+                            </strong>
 
-                    </button>
+                        </button>
 
-                </div>
+                    </div>
 
 
-                <!-- INPUT OTRO MONTO -->
-                @if (mostrarOtroMonto) {
+                    <!-- INPUT OTRO MONTO -->
+                    @if (mostrarOtroMonto) {
 
                     <div class="otro-monto">
 
@@ -355,25 +803,17 @@
                             ¿Cuánto desea aportar?
                         </label>
 
-                        <p-inputnumber
-                            [(ngModel)]="otroMonto"
-                            inputId="otroMonto"
-                            mode="currency"
-                            currency="HNL"
-                            locale="es-HN"
-                            [min]="1"
-                            [minFractionDigits]="2"
-                            [maxFractionDigits]="2"
-                            placeholder="Ingrese el monto"
-                        />
+                        <p-inputnumber [(ngModel)]="otroMonto" inputId="otroMonto" mode="currency" currency="HNL"
+                            locale="es-HN" [min]="1" [minFractionDigits]="2" [maxFractionDigits]="2"
+                            placeholder="Ingrese el monto" />
 
                     </div>
 
-                }
+                    }
 
 
-                <!-- RESUMEN -->
-                @if (montoSeleccionado || otroMonto) {
+                    <!-- RESUMEN -->
+                    @if (montoSeleccionado || otroMonto) {
 
                     <div class="resumen">
 
@@ -381,97 +821,208 @@
                             <i class="pi pi-heart-fill"></i>
                         </div>
 
+
                         <div class="resumen-info">
-                            <span>SU APORTE</span>
+
+                            <span>
+                                SU APORTE
+                            </span>
 
                             <strong>
                                 L.
                                 {{
-                                    (otroMonto || montoSeleccionado)
-                                    | number:'1.2-2'
+                                (otroMonto || montoSeleccionado)
+                                | number:'1.2-2'
                                 }}
                             </strong>
+
                         </div>
+
 
                         <i class="pi pi-check-circle resumen-check"></i>
 
                     </div>
 
+                    }
+
+
+                    <!-- ACCIONES -->
+                    <div class="acciones-donacion">
+
+                        <button pButton type="button" label="Confirmar mi aporte" icon="pi pi-check"
+                            class="btn-confirmar" [disabled]="!montoSeleccionado && !otroMonto"
+                            (click)="confirmarDonacionTropa()"> </button>
+
+
+                        <button pButton type="button"
+                         label="Cancelar" icon="pi pi-times"
+                            class="p-button-secondary p-button-outlined btn-cancelar" (click)="cancelar()"></button>
+
+                    </div>
+
+
+                    <div class="confidencialidad">
+
+                        <i class="pi pi-lock"></i>
+
+                        <span>
+                            Fuerzas Armadas de Honduras, C-1
+                        </span>
+
+                    </div>
+
+                </div>
+
                 }
 
 
-                <!-- ACCIONES -->
-                <div class="acciones-donacion">
+                <!-- GRACIAS -->
+                @if (mostrarGracias) {
 
-                    <button
-                        pButton
-                        type="button"
-                        label="Confirmar mi aporte"
-                        icon="pi pi-check"
-                        class="btn-confirmar"
-                        [disabled]="!montoSeleccionado && !otroMonto"
-                        (click)="confirmarDonacion()"
-                    ></button>
+                <div class="gracias">
 
-                    <button
-                        pButton
-                        type="button"
-                        label="Cancelar"
-                        icon="pi pi-times"
-                        class="p-button-secondary p-button-outlined btn-cancelar"
-                        (click)="cancelar()"
-                    ></button>
+                    <div class="gracias-icon">
+                        <i class="pi pi-heart-fill"></i>
+                    </div>
+
+
+                    <span class="gracias-label">
+                        GRACIAS POR SU TIEMPO
+                    </span>
+
+
+                    <h3>
+                        Cada gesto cuenta
+                    </h3>
+
+
+                    <p>
+                        Agradecemos sinceramente su tiempo y disposición.
+                        Su participación ayuda a fortalecer iniciativas
+                        que nos unen.
+                    </p>
+
+
+                    <div class="gracias-separador"></div>
+
+
+                    <small>
+                        Media Maratón · Juntos llegamos más lejos
+                    </small>
 
                 </div>
 
+                }
 
-                <div class="confidencialidad">
-                    <i class="pi pi-lock"></i>
-                    <span>Fuerzas Armadas de Honduras, C-1</span>
-                </div>
+                }@else {
+                <h1>Categoria no identificada</h1>
+                }
+
+
+
+                }
 
             </div>
 
-        }
+        </div>
+
+    </div>
+
+</div>
 
 
-        <!-- GRACIAS -->
-        @if (mostrarGracias) {
+<!-- ========================================================= -->
+<!-- ESTILOS DE LOS CONTADORES                                -->
+<!-- ========================================================= -->
 
-            <div class="gracias">
+<style>
+    .media-maraton-contadores {
+        display: flex;
+        gap: 14px;
+        width: 100%;
+        margin-top: 16px;
+    }
 
-                <div class="gracias-icon">
-                    <i class="pi pi-heart-fill"></i>
-                </div>
 
-                <span class="gracias-label">
-                    GRACIAS POR SU TIEMPO
-                </span>
+    .contador-card {
+        flex: 1;
 
-                <h3>
-                    Cada gesto cuenta
-                </h3>
+        display: flex;
+        align-items: center;
 
-                <p>
-                    Agradecemos sinceramente su tiempo y disposición.
-                    Su participación ayuda a fortalecer iniciativas
-                    que nos unen.
-                </p>
+        gap: 14px;
 
-                <div class="gracias-separador"></div>
+        padding: 13px 18px;
 
-                <small>
-                    Media Maratón · Juntos llegamos más lejos
-                </small>
+        border-radius: 14px;
 
-            </div>
+        background: rgba(255, 255, 255, 0.82);
 
+        border: 1px solid rgba(255, 255, 255, 0.75);
+
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.07);
+
+        backdrop-filter: blur(8px);
+    }
+
+
+    .contador-icon {
+        width: 42px;
+        height: 42px;
+
+        min-width: 42px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 12px;
+
+        font-size: 19px;
+    }
+
+
+    .contador-info {
+        display: flex;
+        flex-direction: column;
+
+        gap: 3px;
+    }
+
+
+    .contador-info span {
+        font-size: 10px;
+
+        font-weight: 800;
+
+        letter-spacing: 0.6px;
+    }
+
+
+    .contador-info strong {
+        font-size: 24px;
+
+        line-height: 1;
+
+        font-weight: 800;
+    }
+
+
+    .contador-autorizados .contador-icon {
+        background: rgba(52, 211, 153, 0.15);
+    }
+
+
+    .contador-no-autorizados .contador-icon {
+        background: rgba(239, 68, 68, 0.12);
+    }
+
+
+    @media (max-width: 600px) {
+
+        .media-maraton-contadores {
+            flex-direction: column;
         }
 
     }
-
-</div>
-        </div>
-    </div>
-</div>
-
+</style>
