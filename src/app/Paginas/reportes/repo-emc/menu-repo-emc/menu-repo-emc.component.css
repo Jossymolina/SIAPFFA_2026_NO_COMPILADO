@@ -986,3 +986,85 @@
         justify-content: flex-start;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.fila-postergada > td {
+    background-color: #f80909bd !important;
+}
+
+
+.alerta-postergas {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 14px 18px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #fff5f5, #ffecec);
+    border: 1px solid #f1b5b5;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.alerta-postergas-icono {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #e46e6e;
+    color: white;
+    font-size: 20px;
+}
+
+.alerta-postergas-contenido {
+    flex: 1;
+}
+
+.alerta-postergas-titulo {
+    font-weight: 700;
+    font-size: 15px;
+    color: #8b1e1e;
+    margin-bottom: 3px;
+}
+
+.alerta-postergas-texto {
+    font-size: 14px;
+    color: #5f5f5f;
+}
+
+.cantidad-postergas {
+    color: #b42323;
+    font-size: 16px;
+}
+
+.texto-rojo {
+    color: #c62828;
+    font-weight: 700;
+}
+
+.indicador-rojo {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin: 0 5px;
+    border-radius: 3px;
+    background-color: #e46e6ebd;
+    border: 1px solid #d85c5c;
+    vertical-align: middle;
+}

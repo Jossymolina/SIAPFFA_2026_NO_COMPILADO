@@ -83,7 +83,7 @@ export const routes: Routes = [
       {
         path: 'menu-actualizaciones',
         canActivate: [permisosGuard],
-        data: { permisos: ["A_0001", "A_0002", "A_0003"] },
+        data: { permisos: ["A_0001", "A_0002", "A_0003","A_0007"] },
         loadComponent: () =>
           import('./Paginas/actualizaciones/menu-actualizaciones/menu-actualizaciones.component')
             .then(m => m.MenuActualizacionesComponent)
@@ -95,6 +95,14 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./Paginas/actualizaciones/ascensos/ascensos.component')
             .then(m => m.AscensosComponent)
+      },
+       {
+        path: 'registrar-posterga',
+        canActivate: [permisosGuard],
+        data: { permisos: ["A_0001"] },
+        loadComponent: () =>
+          import('./Paginas/actualizaciones/registrar-postergas/registrar-postergas.component')
+            .then(m => m.RegistrarPostergasComponent)
       },
       {
         path: 'modificar-perfil',
@@ -297,7 +305,7 @@ export const routes: Routes = [
       import('./Paginas/login/autenticarse/autenticarse.component')
         .then(m => m.AutenticarseComponent)
   },
-  ,
+ /* ,
        {
         path: 'motor-encuestas',
         canActivate: [],
@@ -305,9 +313,9 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./Paginas/encuestas/encuesta-deducciones/encuesta-deducciones.component')
             .then(m => m.EncuestaDeduccionesComponent)
-      },
+      },*/
 
-  // 👇 ESTA SIEMPRE AL FINAL
+ 
   {
     path: '**',
     redirectTo: 'menu/menu-principal'

@@ -49,7 +49,7 @@ type Reporte = {
 })
 export class MenuRepoEmcComponent implements OnInit,OnDestroy {
  usuarioLoguiado
- /**El nivel id es la categoria */
+ cantidadPostergas = 0; /**El nivel id es la categoria */
  unidadesTree: any[] = [];
  unidadSeleccionada: any = null;
 categoriasSeleccionadas: any[] = [];
@@ -536,10 +536,12 @@ categoriasSeleccionadas: any[] = [];
    }
    this._ServicioBackendService.sacarPersonalAscenso(parametro).subscribe({
     next: (response) => {
+      console.log(response)
       this._ServiciosMensajeService.hide()
       if (response.error) return this._ServiciosMensajeService.mensajeMalo(response.error);
       if (response.mensaje) return this._ServiciosMensajeService.mensajeMalo(response.mensaje);
       this.arregloListaAscenso = response.resultado[0];
+      this.cantidadPostergas = this.arregloListaAscenso  .filter(x => x.es_posterga == '1')  .length;
     }, error: (error) => {
       this._ServiciosMensajeService.hide()
       this._ServiciosMensajeService.mensajeerrorServer();
@@ -556,7 +558,7 @@ categoriasSeleccionadas: any[] = [];
  
      sheet.columns = [
        
-       { header: 'Identidad', key: 'Identidad', width: 20 },
+       { header: 'Identidad', key: 'identidad', width: 20 },
        { header: 'Grado', key: 'Grado', width: 15 },
          { header: 'Categoría', key: 'Categoria', width: 18 },
        { header: 'Nombres', key: 'Nombre', width: 22 },
@@ -590,7 +592,7 @@ categoriasSeleccionadas: any[] = [];
        const row = sheet.getRow(excelRowIndex);
  
  
-       row.getCell('B').value = i.Identidad;
+       row.getCell('B').value = i.identidad;
        row.getCell('C').value = i.Grado;
   
        row.getCell('D').value = i.Categoria;
@@ -909,6 +911,7 @@ this._ServiciosMensajeService.show("Cargando Direcciones y Secciones.....");
 verperfil =false
 personaSeleccionada = null
 seleccionarPersonal(personal){
+  
   this.verperfil = true
 this.personaSeleccionada = personal
 
@@ -1033,6 +1036,249 @@ this.personaSeleccionada = personal
        saveAs(blob, 'resultados_consulta_combinada.xlsx');
    
      }
+
+
+
+
+      async exportarpersonalBaja(_idTabla?: string) {
+       //let preguntas = await this._ServiciosMensajesService.mensajePregunta("¿Desea exportar con las fotos?")
+      // if (!preguntas) return this.exportarSinfoto(_idTabla);
+   
+       this._ServiciosMensajeService.show()
+       const workbook = new ExcelJS.Workbook();
+       const sheet = workbook.addWorksheet('Resultados');
+   
+       sheet.columns = [
+         { header: 'Cuenta', key: 'cuenta', width: 18 },
+         { header: 'Identidad', key: 'identidad', width: 20 },
+         { header: 'Grado', key: 'grado', width: 15 },
+         { header: 'Arma', key: 'arma', width: 18 },
+         { header: 'Categoría', key: 'categoria', width: 18 },
+         { header: 'Nombres', key: 'nombres', width: 22 },
+         { header: 'Apellidos', key: 'apellidos', width: 22 },
+         { header: 'Cargo', key: 'cargo', width: 25 },
+         { header: 'Serie', key: 'serie', width: 14 },
+         { header: 'Estado', key: 'estado', width: 12 },
+         { header: 'Combatiente', key: 'combatiente', width: 14 },
+         { header: 'Asignación', key: 'asignacion', width: 22 },
+         { header: 'Fecha Asignación', key: 'fecha_asignacion', width: 18 },
+         { header: 'Tiempo Asignación', key: 'tiempo_asignacion', width: 18 },
+         { header: 'Pasaporte', key: 'pasaporte', width: 18 },
+         { header: 'Religión', key: 'religion', width: 18 },
+         { header: 'Sangre', key: 'sangre', width: 12 },
+         { header: 'Género', key: 'genero', width: 12 },
+         { header: 'Fecha Nac.', key: 'fecha_nacimiento', width: 18 },
+         { header: 'Edad', key: 'edad', width: 8 },
+         { header: 'Idioma', key: 'idioma', width: 22 },
+       ];
+   
+       // Insertamos columna Foto como primera
+       sheet.spliceColumns(1, 0, { header: 'Foto', key: 'foto' } as any);
+       sheet.getColumn(1).width = 14;
+   
+       sheet.getRow(1).font = { bold: true };
+       sheet.getRow(1).alignment = {
+         vertical: 'middle',
+         horizontal: 'center',
+       };
+       sheet.getRow(1).height = 22;
+   
+       const datos = this.arregloListaAscenso || [];
+   
+       let excelRowIndex = 2;
+   
+       for (const i of datos) {
+         const row = sheet.getRow(excelRowIndex);
+   
+         row.getCell('B').value = i.cuenta;
+         row.getCell('C').value = i.identidad;
+         row.getCell('D').value = i.grado;
+         row.getCell('E').value = i.nombre_arma;
+         row.getCell('F').value = i.categoria;
+         row.getCell('G').value = i.nombre;
+         row.getCell('H').value = i.apellido;
+         row.getCell('I').value = i.Nombre_Puesto;
+         row.getCell('J').value = i.serie;
+         row.getCell('K').value = i.activo === 1 ? 'Activo' : 'Baja';
+         row.getCell('L').value = i.combatiente === 1 ? 'Sí' : 'No';
+         row.getCell('M').value = i.unidad_asignado;
+         row.getCell('N').value = i.fecha_asignacion;
+         row.getCell('O').value = i.tiempo_asignacion;
+         row.getCell('P').value = i.pasaporte;
+         row.getCell('Q').value = i.religion;
+         row.getCell('R').value = i.sangre;
+         row.getCell('S').value = i.sexo;
+         row.getCell('T').value = i.fecha_nacimiento;
+         row.getCell('U').value = i.edad;
+         row.getCell('V').value = i.idiomas;
+   
+         row.height = 52;
+   
+         if (i.foto) {
+           const urlFoto =  this._ServicioBackendService.url2 + 'sacarfoto/' + i.foto;
+           const buffer = await this.descargarImagenComoArrayBuffer(urlFoto);
+           if (buffer) {
+             const imageId = workbook.addImage({
+               buffer: buffer,
+               extension: 'jpeg', // o 'png'
+             });
+   
+             sheet.addImage(imageId, {
+               tl: { col: 0.2, row: excelRowIndex - 0.8 },
+               ext: { width: 48, height: 48 },
+               editAs: 'oneCell',
+             });
+           }
+         }
+   
+         excelRowIndex++;
+       }
+   
+       sheet.eachRow((row) => {
+         row.eachCell((cell) => {
+           cell.border = {
+             top: { style: 'thin', color: { argb: 'FFE5E7EB' } },
+             left: { style: 'thin', color: { argb: 'FFE5E7EB' } },
+             bottom: { style: 'thin', color: { argb: 'FFE5E7EB' } },
+             right: { style: 'thin', color: { argb: 'FFE5E7EB' } },
+           };
+         });
+       });
+   
+       const bufferExcel = await workbook.xlsx.writeBuffer();
+       const blob = new Blob([bufferExcel], {
+         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+       });
+       this._ServiciosMensajeService.hide()
+       saveAs(blob, 'resultados_consulta_combinada.xlsx');
+   
+     }
+
+
+
+
+
+
+
+
+      async exportarPersonalAcenso(_idTabla?: string) {
+       //let preguntas = await this._ServiciosMensajesService.mensajePregunta("¿Desea exportar con las fotos?")
+      // if (!preguntas) return this.exportarSinfoto(_idTabla);
+   
+       this._ServiciosMensajeService.show()
+       const workbook = new ExcelJS.Workbook();
+       const sheet = workbook.addWorksheet('Resultados');
+   
+       sheet.columns = [
+   
+         { header: 'Estado', key: 'estado', width: 18 },
+         { header: 'Identidad', key: 'identidad', width: 20 },
+         { header: 'Categoria', key: 'categoria', width: 15 },
+         { header: 'Grado', key: 'grado', width: 18 },
+         { header: 'Nombres', key: 'nombres', width: 18 },
+         { header: 'Serie', key: 'series', width: 22 },
+         { header: 'Fuerza', key: 'fuerza', width: 22 },
+         { header: 'Genero', key: 'genero', width: 25 },
+         { header: 'Ultimo Ascenso', key: 'ultimo_ascenso', width: 14 },
+         { header: 'Fecha Ingreso', key: 'fecha_ingreso', width: 12 },
+         { header: 'Antiguedad', key: 'antiguedad', width: 14 },
+       ];
+   
+       // Insertamos columna Foto como primera
+       sheet.spliceColumns(1, 0, { header: 'Foto', key: 'foto' } as any);
+       sheet.getColumn(1).width = 14;
+   
+       sheet.getRow(1).font = { bold: true };
+       sheet.getRow(1).alignment = {
+         vertical: 'middle',
+         horizontal: 'center',
+       };
+       sheet.getRow(1).height = 22;
+   
+       const datos = this.arregloListaAscenso || [];
+       let excelRowIndex = 2;
+   
+       for (const i of datos) {
+         const row = sheet.getRow(excelRowIndex);
+   
+         row.getCell('B').value = i.es_posterga=== 1 ? 'Postergado' : 'Aprobado';
+         row.getCell('C').value = i.identidad;
+         row.getCell('D').value = i.Categoria;
+         row.getCell('E').value = i.Grado;
+         row.getCell('F').value = i.Nombre;
+         row.getCell('G').value = i.Serie;
+         row.getCell('H').value = i.Fuerza;
+         row.getCell('I').value = i.Genero;
+         row.getCell('J').value = i.Fecha_Ascenso;
+         row.getCell('K').value = i.Fecha_Ingreso ;
+         row.getCell('L').value = i.Antiguedad;
+          
+   
+         row.height = 52;
+   
+         if (i.Foto) {
+           const urlFoto =  this._ServicioBackendService.url2 + 'sacarfoto/' + i.Foto;
+           console.log(urlFoto)
+           const buffer = await this.descargarImagenComoArrayBuffer(urlFoto);
+           if (buffer) {
+             const imageId = workbook.addImage({
+               buffer: buffer,
+               extension: 'jpeg', // o 'png'
+             });
+   
+             sheet.addImage(imageId, {
+               tl: { col: 0.2, row: excelRowIndex - 0.8 },
+               ext: { width: 48, height: 48 },
+               editAs: 'oneCell',
+             });
+           }
+         }
+   
+         excelRowIndex++;
+       }
+   
+       sheet.eachRow((row) => {
+         row.eachCell((cell) => {
+           cell.border = {
+             top: { style: 'thin', color: { argb: 'FFE5E7EB' } },
+             left: { style: 'thin', color: { argb: 'FFE5E7EB' } },
+             bottom: { style: 'thin', color: { argb: 'FFE5E7EB' } },
+             right: { style: 'thin', color: { argb: 'FFE5E7EB' } },
+           };
+         });
+       });
+   
+       const bufferExcel = await workbook.xlsx.writeBuffer();
+       const blob = new Blob([bufferExcel], {
+         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+       });
+       this._ServiciosMensajeService.hide()
+       saveAs(blob, 'resultados_consulta_combinada.xlsx');
+   
+     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 async exportexcelOrganizacion() {
 
   let r = await this._ServiciosMensajeService.mensajePregunta("¿Desea exportar con las fotos?")

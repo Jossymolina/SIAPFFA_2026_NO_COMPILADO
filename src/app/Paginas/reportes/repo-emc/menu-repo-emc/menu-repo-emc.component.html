@@ -737,70 +737,122 @@
         </div>
 
         <div class="col-auto">
-          <button class="btn btn-sm btn-success" (click)="exportexcel2('tablaAscensos')">
+          <button class="btn btn-sm btn-success" (click)="exportarPersonalAcenso('tablaAscensos')">
             <i class="bi bi-file-earmark-excel me-1"></i>
             Exportar
           </button>
         </div>
       </div>
 
+      
+
+
+<div class="alerta-postergas mb-3" *ngIf="arregloListaAscenso.length!==0">
+
+    <div class="alerta-postergas-icono">
+        <i class="pi pi-info-circle"></i>
+    </div>
+
+    <div class="alerta-postergas-contenido">
+
+        <div class="alerta-postergas-titulo">
+            Personal con posterga
+        </div>
+
+        <div class="alerta-postergas-texto">
+            Se encontraron
+            <strong class="cantidad-postergas">
+                {{ cantidadPostergas }}
+            </strong>
+            registro(s) con posterga.
+            
+            Las filas correspondientes están
+        
+            <strong class="texto-rojo">
+                marcadas en rojo
+            </strong>.
+        </div>
+
+    </div>
+
+</div>
+
 
 
       <!-- TABLA -->
       <div class="table-responsive">
-        <label for="">Total {{ arregloBajas.length }}</label>
-        <table id="tablaAscensos" class="table table-bordered table-hover table-sm align-middle">
-          <thead class="table-light">
-            <tr>
-              <th style="width:60px">#</th>
-              <th>Foto</th>
+        <label for="">Total {{ arregloListaAscenso.length }}</label>
+     <table id="tablaAscensos" class="table table-sm table-hover table-bordered" >
 
-              <th>Identidad</th>
-              <th>Categoria</th>
-              <th>Grado</th>
-              <th>Nombres</th>
-              <th>Series</th>
-              <th>Fuerza</th>
-              <th>Genero</th>
-              <th>Fecha ultimo Ascenso</th>
-              <th>Fecha Ingreaso</th>
-              <th>Antiguedad</th>
+    <thead class="table-light" >
+        <tr>
+            <th style="width:60px;">#</th>
+            <th>Foto</th>
+            <th>Estado</th>
+            <th>Identidad</th>
+            <th>Categoria</th>
+            <th>Grado</th>
+            <th>Nombres</th>
+            <th>Series</th>
+            <th>Fuerza</th>
+            <th>Genero</th>
+            <th>Fecha ultimo Ascenso</th>
+            <th>Fecha Ingreaso</th>
+            <th>Antiguedad</th>
+        </tr>
+    </thead>
 
+    <tbody>
+
+        <ng-container *ngFor="let r of arregloListaAscenso; let i = index">
+
+            <tr
+                [class.fila-postergada]="r.es_posterga === 1"
+                style="cursor: pointer; "
+                (click)="seleccionarPersonal(r)"
+            >
+
+                <td>{{ i + 1 }}</td>
+
+                <td>
+                    <img
+                        [src]="_ServicioBackendService.url2 + 'sacarfoto/' + r.Foto"
+                        style="height: 50px; width: 50px;"
+                        alt=""
+                    >
+                </td>
+                <td>
+                  {{r.es_posterga ===1? 'Postergado':"Aprobado"}}
+                </td>
+
+
+                <td>
+                    {{ r.identidad }} 
+                </td>
+
+                <td>{{ r.Categoria }}</td>
+                <td>{{ r.Grado }}</td>
+                <td>{{ r.Nombre }}</td>
+                <td>{{ r.Serie }}</td>
+                <td>{{ r.Fuerza }}</td>
+                <td>{{ r.Genero }}</td>
+                <td>{{ r.Fecha_Ascenso }}</td>
+                <td>{{ r.Fecha_Ingreso }}</td>
+                <td>{{ r.Antiguedad }}</td>
 
             </tr>
-          </thead>
 
-          <tbody>
-            <tr  style="cursor: pointer;" (click)="seleccionarPersonal(r)" *ngFor="let r of arregloListaAscenso; let i = index">
-              <td>{{ i + 1 }}</td>
-              <td>
-                <img src="{{ _ServicioBackendService.url2 + 'sacarfoto/' + r.Foto }}" style="height: 50px; width: 50px;"
-                  alt="">
+        </ng-container>
 
-              </td>
-              <td>{{ r.Identidad }}</td>
-              <td>{{ r.Categoria }}</td>
-              <td>{{ r.Grado }}</td>
-              <td>{{ r.Nombre }}</td>
-              <td>{{ r.Serie }}</td>
-              <td>{{ r.Fuerza }}</td>
-              <td>{{ r.Genero }}</td>
-              <td>{{ r.Fecha_Ascenso }}</td>
-              <td>{{ r.Fecha_Ingreso }}</td>
-              <td>{{ r.Antiguedad }}</td>
-
-
-            </tr>
-
-            <tr *ngIf="arregloBajas?.length === 0">
-              <td colspan="12" class="text-center text-muted py-3">
+        <tr *ngIf="arregloListaAscenso?.length === 0">
+            <td colspan="12" class="text-center text-muted py-3">
                 No hay datos para mostrar
-              </td>
-            </tr>
-          </tbody>
+            </td>
+        </tr>
 
+    </tbody>
 
-        </table>
+</table>
       </div>
 
     </div>

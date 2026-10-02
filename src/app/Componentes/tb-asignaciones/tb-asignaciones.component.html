@@ -109,7 +109,7 @@
             <td class="text-center">
               @if(permisoTrnsferencia){
               <i class="estado-icon" (click)="desactivarBajoControlPorUnidad(item)"
-                [class]="item.estado === 'activo' ? 'pi pi-thumbs-up-fill' : 'pi pi-thumbs-down-fill'"
+                [class]="item.estado === 'activo' ? 'pi pi-thumbs-down-fill ' : 'pi pi-thumbs-up-fill'"
                 aria-hidden="true"></i>
               }@else {
               <p>No Administrador</p>
@@ -427,7 +427,7 @@
           <form #ngFromsituacion="ngForm" class="row g-2">
             <div class="col-md-6">
               <label class="form-label fw-semibold">
-                Situación:
+                Situación :
               </label>
               <select (change)="sacarDetalleSicuacion(ngFromsituacion)" name="situacion" #situacion="ngModel" ngModel
                 required class="form-control">
@@ -459,56 +459,7 @@
               </p-treeselect>
  
             </div>
-<!--
-            <div class="col-md-6">
-              <label class="form-label fw-semibold">
-                Seleccione la Fuerza:
-              </label>
-              <select class="form-control" required #fuerzaSelected="ngModel" ngModel required
-                (change)="sacarUnidadBajoControl(ngFromsituacion)" name="fuerzaSelected">
-                <ng-container *ngIf="objetoConsultado?.idfuerza === 2">
-                  <ng-container *ngFor="let y of arregloFuerzas">
-                    <option [ngValue]="y" *ngIf="y.idfuerza !== 3 && y.idfuerza !== 4">
-                      {{ y.nombre }}
-                    </option>
-                  </ng-container>
-                </ng-container>
-                <ng-container *ngIf="objetoConsultado?.idfuerza === 3">
-                  <ng-container *ngFor="let y of arregloFuerzas">
-                    <option [ngValue]="y" *ngIf="y.idfuerza !== 2 && y.idfuerza !== 4">
-                      {{ y.nombre }}
-                    </option>
-                  </ng-container>
-                </ng-container>
-                <ng-container *ngIf="objetoConsultado?.idfuerza === 4">
-                  <ng-container *ngFor="let y of arregloFuerzas">
-                    <option [ngValue]="y" *ngIf="y.idfuerza !== 2 && y.idfuerza !== 3">
-                      {{ y.nombre }}
-                    </option>
-                  </ng-container>
-                </ng-container>
-                <ng-container *ngIf="objetoConsultado?.idfuerza === 6">
-                  <ng-container *ngFor="let y of arregloFuerzas">
-                    <option [ngValue]="y" *ngIf="y.idfuerza === 6">
-                      {{ y.nombre }}
-                    </option>
-                  </ng-container>
-                </ng-container>
-              </select>
-            </div>
-       
-
-            <div class="col-md-6">
-              <label class="form-label fw-semibold">
-                Seleccione la unidad:
-              </label>
-              <select [(ngModel)]="unidadSelected" required name="unidadSelected" class="form-control">
-                <option *ngFor="let y of ArregloUnidades" [ngValue]="y">
-                  {{ y.unidad }}
-                </option>
-              </select>
-            </div>
- -->
+ 
             <div class="col-md-6">
               <label class="form-label fw-semibold">
                 Fecha Inicio:
@@ -547,7 +498,7 @@
 
               <button class="btn btn-success" *ngIf="ngFromsituacion.value.situacion?.idsituacion !== 17"
                 [disabled]="!ngFromsituacion.valid" (click)="guardarSituacion(ngFromsituacion)">
-                Guardar
+                Guardar  
               </button>
             </div>
           </form>

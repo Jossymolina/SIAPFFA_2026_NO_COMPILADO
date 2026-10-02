@@ -835,3 +835,171 @@ tr1:nth-child(odd) {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.postergaciones-container {
+    padding: 5px;
+}
+
+.postergaciones-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.postergaciones-header h5 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.postergaciones-header h5 i {
+    margin-right: 8px;
+    color: #3b82f6;
+}
+
+.postergaciones-header span {
+    display: block;
+    margin-top: 5px;
+    color: #6b7280;
+    font-size: 13px;
+}
+
+.total-postergaciones {
+    background: #eff6ff;
+    color: #2563eb;
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.tabla-postergaciones {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.tabla-postergaciones thead {
+    background: #f8fafc;
+}
+
+.tabla-postergaciones th {
+    padding: 12px 10px;
+    text-align: left;
+    color: #475569;
+    font-weight: 600;
+    border-bottom: 2px solid #e2e8f0;
+    white-space: nowrap;
+}
+
+.tabla-postergaciones td {
+    padding: 12px 10px;
+    border-bottom: 1px solid #e5e7eb;
+    color: #374151;
+    white-space: nowrap;
+}
+
+.tabla-postergaciones tbody tr:hover {
+    background: #f8fafc;
+}
+
+.numero-registro {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #f1f5f9;
+    color: #475569;
+    font-weight: 600;
+}
+
+.tipo-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #eff6ff;
+    color: #2563eb;
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-weight: 600;
+}
+
+.detalle-postergacion {
+    font-weight: 600;
+    color: #374151;
+}
+
+.estado-postergacion {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #ecfdf5;
+    color: #15803d;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.estado-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #22c55e;
+}
+
+.sin-postergaciones {
+    text-align: center !important;
+    padding: 40px !important;
+}
+
+.sin-postergaciones i {
+    display: block;
+    font-size: 35px;
+    color: #94a3b8;
+    margin-bottom: 10px;
+}
+
+.sin-postergaciones strong {
+    display: block;
+    color: #475569;
+}
+
+.sin-postergaciones span {
+    display: block;
+    margin-top: 5px;
+    color: #94a3b8;
+}

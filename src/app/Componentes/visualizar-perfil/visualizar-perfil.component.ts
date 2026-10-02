@@ -16,7 +16,7 @@ import { jsPDF } from "jspdf";
 import { FormsModule, NgForm } from '@angular/forms';
 import { PromocionesComponent } from '../promociones/promociones.component';
 import { TbHistorialSueldosComponent } from '../tb-historial-sueldos/tb-historial-sueldos.component';
-
+import { ButtonModule } from 'primeng/button';
 interface Persona {
   nombreCompleto: string;
   identidad: string;
@@ -54,7 +54,9 @@ DialogModule,
 TarjetaCarpetasComponent,
 PromocionesComponent,
 TbHistorialSueldosComponent,
-FormsModule],
+FormsModule,
+ButtonModule
+],
   templateUrl: './visualizar-perfil.component.html',
   styleUrl: './visualizar-perfil.component.css',
 })
@@ -153,34 +155,43 @@ sacarVacacionSegunTabla(antigedad){
 objetoConsultado
 armaobjetoConsultado
 fecha_detallado
-calcularAntiguedad(fecha: string | Date): string {
-  const inicio = new Date(fecha);
-  const hoy = new Date();
 
-  let años = hoy.getFullYear() - inicio.getFullYear();
-  let meses = hoy.getMonth() - inicio.getMonth();
-  let dias = hoy.getDate() - inicio.getDate();
+calcularAntiguedad(fecha: string | Date): {
+    anos: number;
+    meses: number;
+    dias: number;
+} {
+    const inicio = new Date(fecha);
+    const hoy = new Date();
 
-  // Ajustar días negativos
-  if (dias < 0) {
-    meses--;
+    let anos = hoy.getFullYear() - inicio.getFullYear();
+    let meses = hoy.getMonth() - inicio.getMonth();
+    let dias = hoy.getDate() - inicio.getDate();
 
-    const ultimoDiaMesAnterior = new Date(
-      hoy.getFullYear(),
-      hoy.getMonth(),
-      0
-    ).getDate();
+    // Ajustar días negativos
+    if (dias < 0) {
+        meses--;
 
-    dias += ultimoDiaMesAnterior;
-  }
+        const ultimoDiaMesAnterior = new Date(
+            hoy.getFullYear(),
+            hoy.getMonth(),
+            0
+        ).getDate();
 
-  // Ajustar meses negativos
-  if (meses < 0) {
-    años--;
-    meses += 12;
-  }
+        dias += ultimoDiaMesAnterior;
+    }
 
-  return `${años} año${años !== 1 ? 's' : ''}, ${meses} mes${meses !== 1 ? 'es' : ''} y ${dias} día${dias !== 1 ? 's' : ''}`;
+    // Ajustar meses negativos
+    if (meses < 0) {
+        anos--;
+        meses += 12;
+    }
+
+    return {
+        anos,
+        meses,
+        dias
+    };
 }
  buscarporIdentidad() {
     let parametro = {
@@ -194,7 +205,6 @@ calcularAntiguedad(fecha: string | Date): string {
    this._ServiciosMensajesService.hide()
    
    if (Response.error) {
-   
             this._DatospersonalesService.mensajeError(Response.error.sqlMessage + "BUSC")
           } else {
             if (Response.mensaje) {
@@ -204,6 +214,7 @@ calcularAntiguedad(fecha: string | Date): string {
               this.objetoConsultado = Response.resultado[0];
              
                   this.fecha_detallado = this.calcularAntiguedad(this.objetoConsultado.fechaPrimerIngreso.split("T")[0])
+
               let anio_anti = this.calcularano(this.objetoConsultado.fecha.split("T")[0]) 
 
             let r = this.sacarVacacionSegunTabla(anio_anti) /*(anio_anti)<=5 ? 15 : (((anio_anti)>=6 && anio_anti<=10?20:
@@ -211,6 +222,7 @@ calcularAntiguedad(fecha: string | Date): string {
              
              this.dia_vacacion_ley =r
               this.armaobjetoConsultado = Response.arma[0]
+              this.buscarPosterga()
             }
           }
         },error:() => {
@@ -809,9 +821,55 @@ mostrarToast(mensaje: string) {
 porposionventana = false
 
 
+arregloPostergas = []
 
-
-
-
+  buscarPosterga() {
+    this._ServiciosMensajesService.show()
+    this.arregloPostergas = []
+    let data = {
+      identidad: this.objetoConsultado.identidad,
+      idgrados: this.objetoConsultado.grado
+    }
+    this._DatospersonalesService.sacarPostergasPersonal(data).subscribe({
+      next: (response) => {
+        this._ServiciosMensajesService.hide()
+        this.arregloPostergas = response.data
+        this.sumaPostergas()
+      }, error: () => {
+        this._ServiciosMensajesService.hide()
+        this._ServiciosMensajesService.mensajeerrorServer()
+      }
+    })
+  }
+  anosPosterga  = 0
+  mesesposterga  = 0
+  sumaPostergas(){
+    if(this.arregloPostergas.length!==0){
+      let anos =  this.arregloPostergas.reduce((acumulador,item)=>{ 
+              if(item.tipo_posterga==="LIC_EXTRAORDINARIA"){
+                return acumulador+item.ano
+              }else{
+                return acumulador+0
+              }
+           },0)
+      let mes =  this.arregloPostergas.reduce((acumulador,item)=>{
+         if(item.tipo_posterga==="LIC_EXTRAORDINARIA"){
+                 return acumulador+item.mes
+              }else{
+                 return acumulador+0
+              }
+        
+        
+        },0)
+       this.anosPosterga  = anos
+      this.mesesposterga  = mes
+    }
+  }
+  mostrarPostergas = false
+  verPostergas() {
+    if (this.arregloPostergas.length !== 0) {
+      this.mostrarPostergas = true
+    }
+  }
 
 }

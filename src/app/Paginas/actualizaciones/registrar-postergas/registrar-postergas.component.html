@@ -1,0 +1,814 @@
+@if(controlVentana===0){
+<div class="formulario-busqueda">
+
+    <div class="card-busqueda">
+
+        <div class="card-body">
+
+            <div class="header-busqueda">
+
+                <div class="header-icon">
+                    <i class="pi pi-id-card"></i>
+                </div>
+
+                <h5>Buscar Personal</h5>
+
+                <p>
+                    Ingrese el número de identidad para continuar
+                </p>
+
+            </div>
+
+            <form #formBuscar="ngForm" (ngSubmit)="buscarPerosnas()">
+
+                <div class="form-busqueda">
+
+                    <div class="campo-identidad">
+
+                        <label for="identidad">
+                            Número de Identidad
+                            <span class="text-danger">*</span>
+                        </label>
+
+                        <input id="texto" name="identidad" type="text" class="input-identidad"
+                            placeholder="DNI ó Nombre" [(ngModel)]="textobusqueda" #identidadInput="ngModel" required
+                            maxlength="15" autocomplete="off">
+
+                        <div class="error-identidad" *ngIf="identidadInput.invalid && identidadInput.touched">
+                            Ingrese el número de identidad.
+                        </div>
+
+                    </div>
+
+                    <button type="submit" class="btn-buscar" [disabled]="formBuscar.invalid || buscando">
+
+                        <i class="pi" [ngClass]="
+                                buscando
+                                ? 'pi-spin pi-spinner'
+                                : 'pi-search'
+                            "></i>
+
+                        {{ buscando ? 'Buscando...' : 'Buscar' }}
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+}
+
+
+@if(controlVentana===1){
+<div class="tabla-personal-card">
+
+    <div class="tabla-header">
+        <div>
+            <h5>
+                <i class="pi pi-users"></i>
+                Personal encontrado
+            </h5>
+            <span>Información registrada del personal</span>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 10px;">
+
+            <div class="total-registros">
+                {{ pesonasEncontradas.length }} registro{{ pesonasEncontradas.length !== 1 ? 's' : '' }}
+            </div>
+
+            <button type="button" class="btn btn-danger" (click)="cambioVentana('atras')">
+                <i class="pi pi-times"></i>
+                Cancelar
+            </button>
+
+        </div>
+    </div>
+
+    <div class="tabla-responsive">
+
+        <table class="tabla-personal">
+
+            <thead>
+                <tr>
+                    <th>Personal</th>
+                    <th>Identidad</th>
+                    <th>Grado</th>
+                    <th>Categoría</th>
+                    <th>Unidad</th>
+                    <th>Asignación</th>
+                    <th>Edad</th>
+                    <th>Sangre</th>
+                    <th>Ingreso</th>
+                    <th>Ascenso</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr *ngFor="let item of pesonasEncontradas" style="cursor: pointer;" title="Ver persona"
+                    (click)="seleccionarPersona(item)">
+
+                    <!-- Personal -->
+                    <td>
+                        <div class="personal-cell">
+
+                            <img *ngIf="item.foto" src="{{_ServicioBackendService.url2 + 'sacarfoto/' + item?.foto}}"
+                                class="foto-tabla" alt="Foto">
+
+                            <div>
+                                <strong>
+                                    {{ item.nombre }} {{ item.apellido }}
+                                </strong>
+
+                                <small>
+                                    {{ item.sexo === 'M' ? 'Masculino' : 'Femenino' }}
+                                </small>
+                            </div>
+
+                        </div>
+                    </td>
+
+                    <!-- Identidad -->
+                    <td>
+                        <span class="identidad">
+                            {{ item.identidad }}
+                        </span>
+                    </td>
+
+                    <!-- Grado -->
+                    <td>
+                        <span class="grado-badge">
+                            <i class="pi pi-shield"></i>
+                            {{ item.grado }}
+                        </span>
+                    </td>
+
+                    <!-- Categoría -->
+                    <td>
+                        {{ item.categoria }}
+                    </td>
+
+                    <!-- Unidad -->
+                    <td>
+                        <span class="unidad">
+                            {{ item.unidad_asignado }}
+                        </span>
+                    </td>
+
+                    <!-- Asignación -->
+                    <td>
+                        <span class="asignacion">
+                            {{ item.direccion_asignacion }}
+                        </span>
+                    </td>
+
+                    <!-- Edad -->
+                    <td>
+                        {{ item.edad }} años
+                    </td>
+
+                    <!-- Sangre -->
+                    <td>
+                        <span class="sangre-badge">
+                            {{ item.sangre }}
+                        </span>
+                    </td>
+
+                    <!-- Ingreso -->
+                    <td>
+                        {{ item.fecha_ingreso | date:'dd/MM/yyyy' }}
+                    </td>
+
+                    <!-- Ascenso -->
+                    <td>
+                        {{ item.fecha_ascenso | date:'dd/MM/yyyy' }}
+                    </td>
+
+                    <!-- Estado -->
+                    <td>
+                        <span class="estado-badge" [ngClass]="
+                                item.activo == 1
+                                    ? 'estado-activo'
+                                    : 'estado-inactivo'
+                            ">
+                            <span class="estado-dot"></span>
+
+                            {{ item.activo == 1 ? 'Activo' : 'Inactivo' }}
+                        </span>
+                    </td>
+
+                </tr>
+
+                <tr *ngIf="!personal || personal.length === 0">
+
+                    <td colspan="11" class="sin-registros">
+
+                        <i class="pi pi-inbox"></i>
+
+                        <strong>No hay registros</strong>
+
+                        <span>
+                            No se encontró información para mostrar.
+                        </span>
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+}
+
+
+
+
+
+@if(controlVentana===2){
+@if(personal){
+
+<div class="postergacion-container">
+
+    <!-- =====================================================
+         CABECERA DEL PROCESO
+    ====================================================== -->
+
+    <div class="proceso-header">
+
+        <div class="proceso-header-icon">
+            <i class="pi pi-file-edit"></i>
+        </div>
+
+        <div class="proceso-header-info">
+
+            <h4>Registro de Posterga</h4>
+
+            <p>
+                Gestión de postergaciones y licencias extraordinarias
+                del personal.
+            </p>
+
+        </div>
+
+        <div class="proceso-status">
+
+            <span class="status-dot"></span>
+
+            Personal identificado
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         INFORMACIÓN DEL PERSONAL
+    ====================================================== -->
+
+    <section class="personal-resumen">
+
+        <!-- FOTO -->
+
+        <div class="personal-foto-wrapper">
+
+            <img src="{{_ServicioBackendService.url2 + 'sacarfoto/' + personal?.foto}}" alt="Foto del personal"
+                class="personal-foto">
+
+        </div>
+
+
+        <!-- DATOS PRINCIPALES -->
+
+        <div class="personal-identificacion">
+
+            <span class="personal-estado">
+
+                <span class="estado-dot" [ngClass]="
+                        personal.activo == 1
+                        ? 'activo'
+                        : 'inactivo'
+                    "></span>
+
+                {{ personal.activo == 1 ? 'ACTIVO' : 'INACTIVO' }}
+
+            </span>
+
+
+            <h2>
+                {{ personal.nombre }} {{ personal.apellido }}
+            </h2>
+
+
+            <div class="personal-grado">
+
+                <i class="pi pi-shield"></i>
+
+                {{ personal.grado }}
+
+                <span class="separador">•</span>
+
+                {{ personal.categoria }}
+
+            </div>
+
+
+            <div class="personal-identidad">
+
+                <i class="pi pi-id-card"></i>
+
+                {{ personal.identidad }}
+
+            </div>
+
+        </div>
+
+
+        <!-- INFORMACIÓN DESTACADA -->
+
+        <div class="personal-destacados">
+
+            <div class="destacado">
+
+                <span>Unidad</span>
+
+                <strong>
+                    {{ personal.unidad_asignado }}
+                </strong>
+
+            </div>
+
+
+            <div class="destacado">
+
+                <span>Asignación</span>
+
+                <strong>
+                    {{ personal.direccion_asignacion }}
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         DATOS COMPLEMENTARIOS
+    ====================================================== -->
+
+    <section class="datos-complementarios">
+
+        <div class="dato-mini">
+
+            <i class="pi pi-calendar"></i>
+
+            <div>
+
+                <span>Fecha de ingreso</span>
+
+                <strong>
+                    {{ personal.fecha_ingreso | date:'dd/MM/yyyy' }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="dato-mini">
+
+            <i class="pi pi-angle-double-up"></i>
+
+            <div>
+
+                <span>Fecha de ascenso</span>
+
+                <strong>
+                    {{ personal.fecha_ascenso | date:'dd/MM/yyyy' }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="dato-mini">
+
+            <i class="pi pi-user"></i>
+
+            <div>
+
+                <span>Edad</span>
+
+                <strong>
+                    {{ personal.edad }} años
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="dato-mini">
+
+            <i class="pi pi-heart"></i>
+
+            <div>
+
+                <span>Sangre</span>
+
+                <strong class="tipo-sangre">
+                    {{ personal.sangre }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="dato-mini">
+
+            <i class="pi pi-book"></i>
+
+            <div>
+
+                <span>Pasaporte</span>
+
+                <strong>
+                    {{ personal.pasaporte || 'No registrado' }}
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         DIVISOR / TÍTULO DEL FORMULARIO
+    ====================================================== -->
+
+    <div class="formulario-separador">
+
+        <div class="separador-icon">
+            <i class="pi pi-pencil"></i>
+        </div>
+
+        <div>
+
+            <h5>Información de la Posterga</h5>
+
+            <span>
+                Complete los datos correspondientes al registro.
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         FORMULARIO
+    ====================================================== -->
+
+    <form #formPostergacion="ngForm" (ngSubmit)="registrarPostergacion()" class="formulario-postergacion">
+
+        <!-- FILA PRINCIPAL -->
+
+        <div class="form-grid-principal">
+
+
+            <!-- TIPO -->
+<!-- TIPO DE POSTERGA -->
+<div class="campo-form">
+    <label>
+        Tipo de registro
+        <span>*</span>
+    </label>
+
+    <div class="input-icon-wrapper">
+        <i class="pi pi-list"></i>
+
+        <select
+            name="tipo_posterga"
+            [(ngModel)]="postergacion.tipo_posterga"
+            (ngModelChange)="onTipoPostergaChange($event)"
+            required
+            #tipoPosterga="ngModel">
+
+            <option [ngValue]="null">
+                Seleccione el tipo
+            </option>
+
+            <option
+                *ngFor="let t of tipos_postergas"
+                [ngValue]="t">
+                {{ t.nombre }}
+            </option>
+        </select>
+    </div>
+
+    <small
+        class="form-error"
+        *ngIf="tipoPosterga.invalid && tipoPosterga.touched">
+        Seleccione el tipo de registro.
+    </small>
+</div>
+
+
+<!-- DETALLE DE POSTERGA -->
+<div class="campo-form">
+    <label>
+        Detalle de posterga
+        <span>*</span>
+    </label>
+
+    <div class="input-icon-wrapper">
+        <i class="pi pi-list"></i>
+
+        <select
+            name="detalla_posterga"
+            [(ngModel)]="postergacion.detalla_posterga"
+            required
+            #detallePosterga="ngModel">
+
+            <option [ngValue]="null">
+                Seleccione el detalle de posterga
+            </option>
+
+            <option
+                *ngFor="let d of postergaSelect.detalle"
+                [ngValue]="d.nombre">
+                {{ d.nombre }}
+            </option>
+        </select>
+    </div>
+
+    <small
+        class="form-error"
+        *ngIf="detallePosterga.invalid && detallePosterga.touched">
+        Seleccione el detalle de posterga.
+    </small>
+</div>
+
+            <!-- FECHA INICIO -->
+
+            <div class="campo-form">
+
+                <label>
+
+                    Fecha de inicio
+
+                    <span>*</span>
+
+                </label>
+
+
+                <div class="input-icon-wrapper">
+
+                    <i class="pi pi-calendar"></i>
+
+                    <input type="date" name="fecha_inicio" [(ngModel)]="postergacion.fecha_inicio" required
+                        #fechaInicio="ngModel">
+
+                </div>
+
+
+                <small class="form-error" *ngIf="
+                        fechaInicio.invalid &&
+                        fechaInicio.touched
+                    ">
+                    Seleccione la fecha de inicio.
+                </small>
+
+            </div>
+
+
+            <!-- FECHA FIN -->
+
+            <div class="campo-form">
+
+                <label>
+
+                    Fecha de finalización
+
+                    <span>*</span>
+
+                </label>
+
+
+                <div class="input-icon-wrapper">
+
+                    <i class="pi pi-calendar"></i>
+
+                    <input type="date" name="fecha_fin" [(ngModel)]="postergacion.fecha_fin" required
+                        #fechaFin="ngModel">
+
+                </div>
+
+
+                <small class="form-error" *ngIf="
+                        fechaFin.invalid &&
+                        fechaFin.touched
+                    ">
+                    Seleccione la fecha de finalización.
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <!-- OBSERVACIÓN -->
+
+        <div class="campo-form campo-observacion">
+
+            <label>
+                Observación
+            </label>
+
+
+            <div class="textarea-wrapper">
+
+                <i class="pi pi-comment"></i>
+
+                <textarea name="observacion" [(ngModel)]="postergacion.observacion" maxlength="1000" rows="4"
+                    placeholder="Ingrese la observación o detalle relacionado con la posterga..."></textarea>
+
+            </div>
+
+            <div class="contador-texto">
+
+                Máximo 1000 caracteres
+
+            </div>
+
+        </div>
+
+
+        <!-- DOCUMENTO -->
+
+        <div class="campo-form">
+
+            <label>
+
+                Documento de respaldo
+
+                <span>*</span>
+
+            </label>
+
+
+            <div class="documento-area" [class.documento-seleccionado]="archivoDocumento">
+
+                <input type="file" id="documentoPostergacion" name="documento" accept=".pdf,.jpg,.jpeg,.png"
+                    (change)="seleccionarDocumento($event)" hidden>
+
+
+                <label for="documentoPostergacion" class="documento-contenido">
+
+                    <div class="documento-icono">
+
+                        <i class="pi" [ngClass]="
+                                archivoDocumento
+                                ? 'pi-file-check'
+                                : 'pi-cloud-upload'
+                            "></i>
+
+                    </div>
+
+
+                    <div class="documento-detalle">
+
+                        <strong *ngIf="!archivoDocumento">
+                            Adjuntar documento de respaldo
+                        </strong>
+
+
+                        <strong *ngIf="archivoDocumento">
+                            {{ archivoDocumento.name }}
+                        </strong>
+
+
+                        <span *ngIf="!archivoDocumento">
+                            PDF, JPG, JPEG o PNG
+                        </span>
+
+
+                        <span *ngIf="archivoDocumento">
+                            {{ obtenerTamanoArchivo(archivoDocumento.size) }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="documento-accion">
+
+                        {{
+                        archivoDocumento
+                        ? 'Cambiar documento'
+                        : 'Seleccionar archivo'
+                        }}
+
+                    </div>
+
+                </label>
+
+            </div>
+
+
+            <small class="form-ayuda">
+
+                <i class="pi pi-info-circle"></i>
+
+                Adjunte el documento que respalda la posterga.
+
+            </small>
+
+        </div>
+
+
+        <!-- =================================================
+             RESUMEN ANTES DE GUARDAR
+        ================================================== -->
+
+        <div class="confirmacion-registro">
+
+            <div class="confirmacion-icono">
+
+                <i class="pi pi-info-circle"></i>
+
+            </div>
+
+
+            <div>
+
+                <strong>
+                    Verifique la información
+                </strong>
+
+                <span>
+                    Confirme que las fechas, el tipo de registro
+                    y el documento sean correctos antes de guardar.
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             BOTONES
+        ================================================== -->
+
+        <div class="formulario-footer">
+
+            <button type="button" class="btn-cancelar" (click)="cancelarPostergacion()">
+
+                <i class="pi pi-times"></i>
+
+                Cancelar
+
+            </button>
+
+            <button type="submit" class="btn-guardar" [disabled]="
+                    formPostergacion.invalid ||
+                    !archivoDocumento ||
+                    guardando
+                ">
+
+                <i class="pi" [ngClass]="
+                        guardando
+                        ? 'pi-spin pi-spinner'
+                        : 'pi-check'
+                    "></i>
+
+                {{
+                guardando
+                ? 'Registrando...'
+                : 'Registrar posterga'
+                }}
+
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+}
+}

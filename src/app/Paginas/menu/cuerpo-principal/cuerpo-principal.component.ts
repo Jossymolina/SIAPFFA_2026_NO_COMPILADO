@@ -62,7 +62,7 @@ export class CuerpoPrincipalComponent {
       description: 'Actualizacion, cambio de categoria y ascensos',
       icon: 'pi pi-chart-bar',
       route: '/menu/menu-actualizaciones',
-       code:['A_0001','A_0002','A_0003']
+       code:['A_0001','A_0002','A_0003','A_0007']
 
     },
     {
@@ -135,7 +135,15 @@ export class CuerpoPrincipalComponent {
       route: '/motor-encuestas',
       code:['Enc_0001']
     } 
-,
+, {
+      title: 'Tramites',
+      description: 'Módulo para gestionar y realizar trámites administrativos de manera eficiente, permitiendo a los usuarios completar solicitudes, enviar documentos y recibir notificaciones sobre el estado de sus trámites.',
+      icon: 'pi pi-send',
+      stilos:"",
+      route: '/motor-encuestas',
+      code:['PF_0001']
+    } 
+
     
   ];
     constructor(private router: Router,private _ServicioBackendService:ServicioBackendService) {

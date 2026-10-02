@@ -32,7 +32,7 @@ export class MenuBusquedasComponent {
       code:['B_0001']
     },
     {
-      title: 'Buequeda DNI/Nombre',
+      title: 'Busqueda DNI/Nombre',
       description: 'Busqueda solo por DNI o Nombre.',
       icon: 'pi pi-search-minus',
       route: '/menu/busqueda-dni-nombre',

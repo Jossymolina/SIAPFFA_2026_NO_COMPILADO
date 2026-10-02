@@ -203,8 +203,27 @@
                   </div>
                 </div>
 
-                <div class="row g-3 ficha-compacta">
+                <div class="row g-3 ficha-compacta"     >
                   <div class="col-md-6">
+                    <div class="mini-block"
+                    *ngIf="arregloPostergas.length!==0"
+                    (click)="verPostergas()"
+                     
+                    [style]="arregloPostergas.length===0?'background-color: rgb(239, 243, 241);':'background-color: rgb(165, 238, 195); cursor:pointer;'">
+                   
+                     <div
+                          class="mini-value"
+                          [style]="arregloPostergas.length === 0
+                              ? 'color: black;'
+                              : 'color: black;  '">
+
+                          {{ arregloPostergas.length === 0 ? 'No está postergado' : 'Está Postergado (Ver Documento)' }}
+
+                      </div>
+                 
+                      
+                    </div>
+
                     <div class="mini-block">
                       <div class="mini-label">Identidad</div>
                       <div class="mini-value">{{ objetoConsultado.identidad }}</div>
@@ -260,8 +279,15 @@
 
                     <div class="mini-block" *ngIf="objetoConsultado.activo === 1">
                       <div class="mini-label" style="color: black;">ANTIGUEDAD EN EL GRADO</div>
-                      <div class="mini-value">
-                         {{ objetoConsultado?.fechaPrimerIngreso | date:'yyyy-MM-dd' }} -> ({{fecha_detallado}}) 
+                      <div class="mini-value" [style]="(anosPosterga|| mesesposterga)?'color:red':''">
+                         {{ objetoConsultado?.fechaPrimerIngreso | date:'yyyy-MM-dd' }} ->
+                          ({{(fecha_detallado?.anos - anosPosterga)  }} {{(fecha_detallado?.anos - anosPosterga )<=1 ? "Año":"Años"}} 
+
+                           con {{(fecha_detallado?.meses - mesesposterga )}} {{(fecha_detallado?.meses - mesesposterga )<=1? "Mes":"Meses"}} y 
+                           
+                           {{fecha_detallado?.dias }} {{fecha_detallado?.dias<=1?"Dia":"Dias"}}
+                           
+                           ) {{(anosPosterga|| mesesposterga) ? 'POSTERGADO':''}}
                       </div>
                     </div>
 
@@ -367,7 +393,7 @@
                       *ngIf="objetoConsultado.activo !== 1">
                       <div class="mini-label">Observacion de la Baja
                         <button pButton type="button" icon="pi pi-download" label="Descargar documento"
-                          class="p-button-rounded p-button-success" (click)="sacarDocumentosBajas()">Doc. Baja
+                          class="p-button-rounded p-button-success" (click)="sacarDocumentosBajas()">
                         </button>
 
 
@@ -989,3 +1015,166 @@
 </p-dialog>
 
 
+<p-dialog
+    header="Posterga del personal"
+    [(visible)]="mostrarPostergas"
+    [modal]="true"
+    [style]="{ width: '90vw', maxWidth: '1200px' }"
+    [draggable]="false"
+    [resizable]="false"
+    [closable]="true">
+
+    <div class="postergaciones-container">
+
+        <!-- Encabezado -->
+        <div class="postergaciones-header">
+
+            <div>
+                <h5>
+                    <i class="pi pi-history"></i>
+                    Historial de Posterga
+                </h5>
+
+                <span>
+                    Registro histórico de Posterga del personal
+                </span>
+            </div>
+
+            <div class="total-postergaciones">
+                {{ arregloPostergas.length }}
+                registro{{ arregloPostergas.length !== 1 ? 's' : '' }}
+            </div>
+
+        </div>
+
+        <!-- Tabla -->
+        <div class="table-responsive">
+
+            <table class="tabla-postergaciones">
+
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Tipo</th>
+                        <th>Detalle</th>
+                   
+                        <th>Fecha inicio</th>
+                        <th>Fecha final</th>
+                        <th>Años</th>
+                        <th>Meses</th>
+                        <th>Fecha Registro</th>
+                        <th>Estado</th>
+                        <th>Documento</th>
+
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr *ngFor="let item of arregloPostergas; let i = index">
+
+                        <td>
+                            <span class="numero-registro">
+                                {{ i + 1 }}
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="tipo-badge">
+                                <i class="pi pi-file"></i>
+                                {{ item.tipo_posterga }}
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="detalle-postergacion">
+                                {{ item.detalle_posterga }}
+                            </span>
+                        </td>
+
+                      
+
+                        <td>
+                            {{ item.fecha_inicio | date:'dd/MM/yyyy' }}
+                        </td>
+
+                        <td>
+                            {{ item.fecha_fin | date:'dd/MM/yyyy' }}
+                        </td>
+
+                        <td>
+                            {{ item.ano || 0 }}
+                        </td>
+
+                        <td>
+                            {{ item.mes || 0 }}
+                        </td> 
+<td>
+                            {{ item.fecha_registro | date:'dd/MM/yyyy' }}
+                        </td>
+               
+                        <td>
+                            <span class="estado-postergacion">
+                                <span class="estado-dot"></span>
+                                Registrada
+                            </span>
+                        </td>
+
+                             <td>
+                     <a
+                      class="dropdown-item"
+                      style="color: blue; cursor: pointer;"
+                      href="{{_DatospersonalesService.url2 + 'sacarfoto/' + item?.documento}}"
+                      target="_blank"
+                      (click)="$event.stopPropagation()">
+
+                      <i class="pi pi-file-pdf" aria-hidden="true"></i>
+                      Ver documento
+
+                  </a>
+                  </td>
+
+                    </tr>
+
+                    <!-- Sin registros -->
+                    <tr *ngIf="arregloPostergas.length === 0">
+
+                        <td colspan="10" class="sin-postergaciones">
+
+                            <i class="pi pi-inbox"></i>
+
+                            <strong>
+                                No existen postergaciones
+                            </strong>
+
+                            <span>
+                                Este personal no tiene postergaciones registradas.
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <ng-template pTemplate="footer">
+
+        <button
+            pButton
+            type="button"
+            label="Cerrar"
+            icon="pi pi-times"
+            class="p-button-secondary"
+            (click)="mostrarPostergas = false">
+        </button>
+
+    </ng-template>
+
+</p-dialog>

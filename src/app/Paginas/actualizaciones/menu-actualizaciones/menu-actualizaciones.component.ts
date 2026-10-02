@@ -43,7 +43,14 @@ export class MenuActualizacionesComponent {
       icon: 'pi pi-reddit',
       route: '/menu/modificar-perfil',
       code:['A_0003']
-    }  
+    }  ,
+     {
+      title: 'Postergar',
+      description: 'Aqui  se registran las postergas',
+      icon: 'pi pi-reddit',
+      route: '/menu/registrar-posterga',
+      code:['A_0007']
+    } 
  
   ];
     constructor(private router: Router,private _ServicioBackendService:ServicioBackendService) {
